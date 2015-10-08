@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NoteShare</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="splashText">UrbanShopping</string>
+    <string name="menu">sliding menu</string>
+    <string name="open_drawer">sliding menu</string>
+    <string name="close_drawer">sliding menu</string>
+    <string name="login">LOGIN</string>
+    <string name="createaccount">I DO NOT HAVE ACCOUNT</string>
+    <string name="createanaccount">CRETAE AN ACCOUNT</string>
+    <string name="proaccount">PRO</string>
+    <string name="ok">OK</string>
+    <string name="upgradetopro">Upgrade to Pro</string>
+
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="enter_fields">Please enter all fields!</string>
+
+    <!-- Social Strings -->
+    <string name="facebook_app_id">1472088566454558</string>
+    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_revoke_access">Revoke Access</string>
+    <string name="fb_unable_to_connect">Unable to connect to Facebook, Please try again!</string>
+    <string name="gp_unable_to_connect">Unable to connect to Google Plus, Please try again!</string>
+
+    <string-array name="navigation_drawer_items_array">
+        <item>Home</item>
+        <item>Profile Setting</item>
+        <item>Favorite</item>
+        <item>Manage Shoping</item>
+        <item>Manage Sale</item>
+        <item>Game</item>
+        <item>Sign Out</item>
+        <item>Login</item>
+    </string-array>
+
+    <string name="resturent">Resturent</string>
+    <string name="country_prompt">Choose a Item</string>
+
+    <string-array name="country_arrays">
+        <item>Choose a Item</item>
+        <item>item 0</item>
+        <item>item 1</item>
+        <item>item 2</item>
+        <item>item 3</item>
+        <item>item 4</item>
+        <item>item 5</item>
+        <item>item 6</item>
+        <item>item 7</item>
+    </string-array>
+
+    <string name="start_new">New</string>
+    <string name="brush">Brush</string>
+    <string name="erase">Erase</string>
+    <string name="save">Save</string>
+    <string name="paint">Paint</string>
+    <string name="sml">Small</string>
+    <string name="med">Medium</string>
+    <string name="lrg">Large</string>
+
+    <string-array name="colors">
+        <item>RED</item>
+        <item>GREEN</item>
+        <item>CYAN</item>
+        <item>BLUE</item>
+        <item>BLACK</item>
+    </string-array>
+    <string-array name="Typeface">
+        <item>NORMAL</item>
+        <item>BOLD</item>
+        <item>ITALIC</item>
+    </string-array>
+    <string-array name="Font_Size">
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>24</item>
+        <item>26</item>
+        <item>28</item>
+        <item>30</item>
+        <item>32</item>
+        <item>34</item>
+        <item>36</item>
+        <item>38</item>
+        <item>40</item>
+        <item>42</item>
+        <item>44</item>
+    </string-array>
+    <string-array name="Font_Size_px">
+        <item>8 px</item>
+        <item>9 px</item>
+        <item>10 px</item>
+        <item>12 px</item>
+        <item>14 px</item>
+        <item>16 px</item>
+        <item>18 px</item>
+        <item>20 px</item>
+        <item>22 px</item>
+        <item>24 px</item>
+        <item>26 px</item>
+        <item>28 px</item>
+        <item>30 px</item>
+        <item>32 px</item>
+        <item>34 px</item>
+        <item>36 px</item>
+        <item>38 px</item>
+        <item>40 px</item>
+        <item>42 px</item>
+        <item>44 px</item>
+    </string-array>
+
+    <!--
+Arial
+Times new roman
+Helvetica 
+Monotype corsiva 
+Edwardian 
+Mongolian baiti 
+Sakkal majalla 
+Batang 
+DOSIS BOOK (Note font)
+DANCING SCRIPT (Share font)
+
+Eras medium ITC 
+CINZEL DECORATIVE 
+DYNALIGHT REGULAR 
+JUNCTION 
+LINDEN HILL 
+PACIFICO 
+WINDSONG
+    -->
+    <string-array name="Font_Name_Display">
+        <item>Arial</item>
+        <item>Times new roman</item>
+        <item>Helvetica</item>
+        <item>Monotype corsiva</item>
+        <item>Edwardian</item>
+        <item>Mongolian baiti</item>
+        <item>Sakkal majalla</item>
+        <item>DOSIS BOOK</item>
+        <item>DANCING SCRIPT</item>
+        <item>Eras medium ITC</item>
+        <item>CINZEL DECORATIVE</item>
+        <item>JUNCTION</item>
+        <item>LINDEN HILL</item>
+        <item>PACIFICO</item>
+        <item>WINDSONG</item>
+    </string-array>
+
+    <style name="CustomTheme" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+   
+
+</resources>

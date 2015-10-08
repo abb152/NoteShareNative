@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutAlertbox"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/eaeaea"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewTitleAlert"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="0dp"
+        android:background="@color/header_bg"
+        android:gravity="center"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewTitleTakePicture"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="TAKE A PICTURE"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/light_gray_999999"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginRight="5dp"
+         android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/textViewTitlechosserfromgallary"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="CHOOSE FROM GALLARY"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/light_gray_999999"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+          android:layout_marginRight="5dp"
+         android:layout_marginLeft="5dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/buttonAlertCancel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="CANCEL"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/light_gray_999999"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        
+        android:background="@android:color/darker_gray" />
+
+    <!--
+         <LinearLayout
+        android:padding="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@android:color/white"
+        android:weightSum="1" >
+
+        <Button
+            android:id="@+id/buttonAlertCancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="CANCEL" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/darker_gray" />
+    </LinearLayout>
+    -->
+
+</LinearLayout>

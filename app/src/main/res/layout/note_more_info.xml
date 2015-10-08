@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:id="@+id/layout_note_more_Info"
+    android:layout_height="wrap_content"
+    android:background="@color/eaeaea"
+    android:layout_gravity="bottom"
+    android:orientation="vertical" >
+    
+     <View
+        android:layout_width="fill_parent"
+        android:background="@color/eaeaea"
+        android:visibility="visible"
+        android:layout_height="1dp" />
+
+    <Button
+        android:id="@+id/buttonLock"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/light_gray_666666"
+        android:background="@android:color/transparent"
+        android:textSize="18sp"
+        android:text="Lock" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp" />
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="fill_parent"
+        android:textColor="@color/light_gray_666666"
+        android:layout_height="40dp"
+         android:textSize="18sp"
+        android:background="@android:color/transparent"
+        android:text="Delete" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp" />
+    <Button
+        android:id="@+id/buttonRemind"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/light_gray_666666"
+        android:background="@android:color/transparent"
+         android:textSize="18sp"
+        android:text="Remind" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp" />
+       <Button
+        android:id="@+id/buttonTimeBomb"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/light_gray_666666"
+        android:background="@android:color/transparent"
+         android:textSize="18sp"
+        android:text="Time Bomb" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp" />
+    
+     <Button
+        android:id="@+id/buttonAttach"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/light_gray_666666"
+        android:background="@android:color/transparent"
+         android:textSize="18sp"
+        android:text="Attach" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        android:layout_height="1dp" />
+    
+    
+
+</LinearLayout>

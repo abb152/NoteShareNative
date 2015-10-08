@@ -1,0 +1,56 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Brush sizes -->
+    <dimen name="small_brush">10dp</dimen>
+
+    <integer name="small_size">10</integer>
+
+    <dimen name="small_brush_12">12dp</dimen>
+
+    <integer name="small_size_12">12</integer>
+
+    <dimen name="small_brush_14">14dp</dimen>
+
+    <integer name="small_size_14">14</integer>
+
+    <dimen name="small_brush_16">16dp</dimen>
+
+    <integer name="small_size_16">16</integer>
+
+    <dimen name="small_brush_18">18dp</dimen>
+
+    <integer name="small_size_18">18</integer>
+
+    <dimen name="medium_brush">20dp</dimen>
+    <integer name="medium_size">20</integer>
+    
+       <dimen name="medium_brush_22">22dp</dimen>
+    <integer name="medium_size_22">22</integer>
+       <dimen name="medium_brush_24">24dp</dimen>
+    <integer name="medium_size_24">24</integer>
+       <dimen name="medium_brush_26">26dp</dimen>
+    <integer name="medium_size_26">26</integer>
+       <dimen name="medium_brush_28">28dp</dimen>
+    <integer name="medium_size_28">28</integer>
+    
+
+    <dimen name="large_brush">30dp</dimen>
+    <integer name="large_size">30</integer>
+    
+      <dimen name="large_brush_32">32dp</dimen>
+    <integer name="large_size_32">32</integer>
+    
+      <dimen name="large_brush_34">34dp</dimen>
+    <integer name="large_size_34">34</integer>
+    
+      <dimen name="large_brush_36">36dp</dimen>
+    <integer name="large_size_36">36</integer>
+    
+      <dimen name="large_brush_38">38dp</dimen>
+    <integer name="large_size_38">38</integer>
+
+</resources>

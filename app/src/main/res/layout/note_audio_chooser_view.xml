@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/audioControls"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="0dp"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:background="@color/header_bg"
+    android:weightSum="7" >
+
+    <ImageButton
+        android:id="@+id/imageButtondrawback"
+        android:layout_width="20dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/scrbble_back" />
+
+    <ImageButton
+        android:id="@+id/imageButtondrawnew"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:scaleType="fitCenter"
+          android:background="@android:color/transparent"
+        android:src="@drawable/audio_icon_1" />
+
+    <ImageButton
+        android:id="@+id/imageButtondrawdraw"
+        android:layout_width="40dp"
+          android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:src="@drawable/scrbble_draw" />
+
+    <ImageButton
+        android:id="@+id/imageButtondrawcolors"
+        android:layout_width="40dp"
+          android:layout_weight="1"
+          android:scaleType="fitCenter"
+           android:visibility="gone"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/scrbble_undo" />
+
+    <ImageButton
+        android:id="@+id/imageButtondrawbrushsize"
+        android:layout_width="40dp"
+          android:layout_weight="1"
+          android:scaleType="fitCenter"
+           android:visibility="gone"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/scrbble_highlight" />
+
+    <ImageButton
+        android:id="@+id/imageButtondrawerase"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
+          android:layout_weight="1"
+           android:visibility="gone"
+        android:src="@drawable/scrbble_erase" />
+
+    <ImageButton
+        android:id="@+id/imageButtondrawMore"
+        android:layout_width="40dp"
+        android:scaleType="fitCenter"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+          android:layout_weight="1"
+           android:visibility="gone"
+        android:src="@drawable/scrbble_more" />
+
+</LinearLayout>

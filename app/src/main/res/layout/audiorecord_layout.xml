@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@drawable/borderframe" >
+
+    <LinearLayout
+        android:id="@+id/layrecored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/buttonRecord"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/recording_status"
+            android:text=""
+            android:textColor="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/buttonRecordPause"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pause_audio"
+            android:text=""
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/buttonStop"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/layrecored"
+        android:background="@android:color/transparent"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/stop_audio"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/buttonPlay"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/transparent"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/play_audio"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/buttonPause"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/buttonPlay"
+        android:background="@android:color/transparent"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pause_audio"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
+
+    <SeekBar
+        android:id="@+id/progressRecord1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/layrecored"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="30dp"
+        android:background="@android:color/transparent"
+        android:maxHeight="3dp"
+        android:minHeight="3dp"
+        android:progressDrawable="@drawable/progress"
+        android:thumb="@drawable/thumb"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/progressRecordtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/layrecored"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="30dp"
+        android:background="@android:color/transparent"
+        android:text=""
+        android:textColor="@color/light_gray_666666" />
+
+    <ImageButton
+        android:id="@+id/audioClose"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/cross_audio" />
+
+    <TextView
+        android:id="@+id/textViewDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/progressRecord1"
+        android:layout_below="@+id/progressRecord1"
+        android:layout_marginRight="14dp"
+        android:text=""
+        android:textSize="10sp" />
+
+</RelativeLayout>

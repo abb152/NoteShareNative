@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/eaeaea"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewTitleAlert"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="0dp"
+        android:background="@color/header_bg"
+        android:gravity="center"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/bottomlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/eaeaea"
+        android:orientation="vertical" >
+
+        <!-- Top Row -->
+
+        <LinearLayout
+            android:id="@+id/paint_colors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/colorbutton1"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF660000"
+                android:contentDescription="@string/paint"
+                android:tag="#FF660000" />
+
+            <ImageButton
+                android:id="@+id/colorbutton2"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF6600cc"
+                android:contentDescription="@string/paint"
+                android:tag="#FF6600cc" />
+
+            <ImageButton
+                android:id="@+id/colorbutton3"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FFFF0000"
+                android:contentDescription="@string/paint"
+                android:tag="#FFFF0000" />
+
+            <ImageButton
+                android:id="@+id/colorbutton4"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FFFF6600"
+                android:contentDescription="@string/paint"
+                android:tag="#FFFF6600" />
+
+            <ImageButton
+                android:id="@+id/colorbutton5"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FFFFCC00"
+                android:contentDescription="@string/paint"
+                android:tag="#FFFFCC00" />
+
+            <ImageButton
+                android:id="@+id/colorbutton6"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF009900"
+                android:contentDescription="@string/paint"
+                android:tag="#FF009900" />
+
+            <ImageButton
+                android:id="@+id/colorbutton7"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF009999"
+                android:contentDescription="@string/paint"
+                android:tag="#FF009999" />
+        </LinearLayout>
+        <!-- Bottom Row -->
+
+        <LinearLayout
+            android:id="@+id/paint_colors1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/colorbutton8"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF0000FF"
+                android:contentDescription="@string/paint"
+                android:tag="#FF0000FF" />
+
+            <ImageButton
+                android:id="@+id/colorbutton9"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF990099"
+                android:contentDescription="@string/paint"
+                android:tag="#FF990099" />
+
+            <ImageButton
+                android:id="@+id/colorbutton10"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#66666666"
+                android:contentDescription="@string/paint"
+                android:tag="#66666666" />
+
+            <ImageButton
+                android:id="@+id/colorbutton11"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#6666FFFF"
+                android:contentDescription="@string/paint"
+                android:tag="#6666FFFF" />
+
+            <ImageButton
+                android:id="@+id/colorbutton12"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF787878"
+                android:contentDescription="@string/paint"
+                android:tag="#FF787878" />
+
+            <ImageButton
+                android:id="@+id/colorbutton13"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#FF000000"
+                android:contentDescription="@string/paint"
+                android:tag="#FF000000" />
+
+            <ImageButton
+                android:id="@+id/colorbutton14"
+                android:layout_width="@dimen/large_brush"
+                android:layout_height="@dimen/large_brush"
+                android:layout_margin="2dp"
+                android:background="#aa556666"
+                android:contentDescription="@string/paint"
+                android:tag="#aa556666" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+</LinearLayout>

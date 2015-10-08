@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:background="@color/header_bg"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/header_bg"
+        android:visibility="gone"
+        android:src="@drawable/tutmain_screen" />
+
+    <LinearLayout
+        android:id="@+id/layoutButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/previous"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/dee2e5"
+            android:text="PREVIOUS"
+            android:textColor="@color/header_bg"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/dee2e5"
+            android:text="NEXT"
+            android:textColor="@color/header_bg"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/layoutButton" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/screen1" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/screen2" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/screen3" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/screen4" />
+        </RelativeLayout>
+         <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/screen5" />
+        </RelativeLayout>
+    </ViewFlipper>
+
+</RelativeLayout>

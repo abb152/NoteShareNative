@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/mainHeadermenue"
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        layout="@layout/menu_header_2" />
+
+    <include
+        android:id="@+id/titleHeaderview1"
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        layout="@layout/title_header_view"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/invite_small_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/header_bg"
+             android:text="INVITE FRIENDS"
+             android:layout_marginLeft="5sp"
+             android:gravity="center_vertical"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/light_gray"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/titleHeaderviewViaWhatsApp"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            layout="@layout/invitefriendsrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/light_gray_999999" />
+
+        <include
+            android:id="@+id/titleHeaderviewViaFacebookmessanger"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            layout="@layout/invitefriendsrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/light_gray_999999" />
+
+        <include
+            android:id="@+id/titleHeaderviewViaEmail"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            layout="@layout/invitefriendsrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/light_gray_999999" />
+
+        <include
+            android:id="@+id/titleHeaderviewViaSMS"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            layout="@layout/invitefriendsrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/light_gray_999999" />
+    </LinearLayout>
+
+</LinearLayout>

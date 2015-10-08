@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent" >
+
+    <ImageView
+        android:id="@+id/imageViewSlidemenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:padding="7dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/note_menu_icon" />
+
+    <TextView
+        android:id="@+id/textViewSlideMenuName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:text="txtnote" />
+
+    <include
+        android:id="@+id/LayoutAudioRecording"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/mainHeadermenue"
+        android:layout_margin="10dp"
+        layout="@layout/audiorecord_layout"
+        android:visibility="gone" />
+
+</RelativeLayout>

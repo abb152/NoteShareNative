@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/PintrestViews"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="0dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/PintrestSubViews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textViewSlideMenuName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/light_gray_666666"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/textViewSlideMenuNameSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/light_gray_999999"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/layoutsepreter"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/ffffff" />
+
+</LinearLayout>
