@@ -1,9 +1,5 @@
 package com.tilak.noteshare;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +31,10 @@ import com.tilak.adpters.NewNoteFolderAdapter;
 import com.tilak.adpters.NewNoteFolderGridAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 enum SORTTYPE_NEW {
 	ALPHABET, COLOURS, CREATED_TIME, MODIFIED_TIME, REMINDER_TIME, TIME_BOMB
@@ -91,14 +91,14 @@ public class NewFolderMainActivity extends DrawerActivity {
 		textViewheaderTitle = (TextView) layoutHeader
 				.findViewById(R.id.textViewheaderTitle);
 
-		imageButtoncalander = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtoncalander);
+		/*imageButtoncalander = (ImageButton) layoutHeader
+				.findViewById(R.id.imageButtoncalander);*/
 		imageButtonHamburg = (ImageButton) layoutHeader
 				.findViewById(R.id.imageButtonHamburg);
-		imageButtonsquence = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtonsquence);
+		/*imageButtonsquence = (ImageButton) layoutHeader
+				.findViewById(R.id.imageButtonsquence);*/
 
-		imageButtonsquence.setVisibility(View.GONE);
+		//imageButtonsquence.setVisibility(View.GONE);
 
 		textNoteSort = (TextView) findViewById(R.id.textNoteSort);
 		textNoteView = (TextView) findViewById(R.id.textNoteView);
@@ -373,16 +373,11 @@ public class NewFolderMainActivity extends DrawerActivity {
 			}
 		});
 
-		imageButtoncalander.setOnClickListener(new OnClickListener() {
-
+		/*imageButtoncalander.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+			public void onClick(View v) {}
+		});*/
 		imageButtonHamburg.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -390,25 +385,21 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 			}
 		});
-		imageButtonsquence.setOnClickListener(new OnClickListener() {
+		/*imageButtonsquence.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
 			}
-		});
+		});*/
 		textViewAdd.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
 				// startActivity(new Intent(context, NoteMainActivity.class));
-
 				// create folder here
-
 				showAlertWithEditText(NewFolderMainActivity.this);
-
 			}
 		});
 

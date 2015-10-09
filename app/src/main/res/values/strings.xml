@@ -21,9 +21,20 @@
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="enter_fields">Please enter all fields!</string>
+    <string name="connect_with">Connect via</string>
+
+    <string name="size">Size</string>
+    <string name="zero">0</string>
+
+    <!-- Buttons -->
+    <string name="btn_fb">Facebook</string>
+    <string name="btn_tw">Twitter</string>
+    <string name="btn_gp">Google+</string>
 
     <!-- Social Strings -->
     <string name="facebook_app_id">1472088566454558</string>
+    <string name="twitter_consumer_key">IXJatdtzC4fdYGyAdtCiG2y6g</string>
+    <string name="twitter_consumer_secret">350C1gs7fztdZRZvAL6MI7cLYwX6PFHVlvvqqE4qXamjIukxt8</string>
     <string name="btn_logout_from_google">Logout from Google</string>
     <string name="btn_revoke_access">Revoke Access</string>
     <string name="fb_unable_to_connect">Unable to connect to Facebook, Please try again!</string>

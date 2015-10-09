@@ -1,29 +1,5 @@
 package com.tilak.noteshare;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import com.tilak.adpters.NotesListAdapter;
-import com.tilak.adpters.TextFont_Size_ChooseAdapter;
-import com.tilak.dataAccess.DataManager;
-import com.tilak.datamodels.NOTETYPE;
-import com.tilak.datamodels.NoteListDataModel;
-import com.tilak.db.Note;
-import com.tilak.db.NoteElement;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -43,24 +19,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
-//import android.support.annotation.Keep;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -74,6 +41,27 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tilak.adpters.NotesListAdapter;
+import com.tilak.adpters.TextFont_Size_ChooseAdapter;
+import com.tilak.dataAccess.DataManager;
+import com.tilak.datamodels.NOTETYPE;
+import com.tilak.datamodels.NoteListDataModel;
+import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+//import android.support.annotation.Keep;
 
 public class NoteMainActivity extends DrawerActivity implements OnClickListener {
 
@@ -154,6 +142,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
 	public String[] fontSizes;
 	ImageView background_bg;
+
+
+	public SeekBar seekbar;
+	public TextView number;
 
 	// 8b241b selected bg
 
@@ -525,18 +517,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 					System.out.println("file playing path:" + outputFile);
 					mediaPlayer.setDataSource(outputFile);
-				}
-
-				catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 
 				try {
 					mediaPlayer.prepare();
 
-				}
-
-				catch (IOException e) {
+				} catch (IOException e) {
 
 					e.printStackTrace();
 				}
@@ -631,15 +619,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 					myAudioRecorder.prepare();
 					myAudioRecorder.start();
-					
-				}
 
-				catch (IllegalStateException e) {
+				} catch (IllegalStateException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-
-				catch (IOException e) {
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -1130,7 +1114,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+									long arg3) {
 				// TODO Auto-generated method stub
 				NoteListDataModel notelistitem = arrNoteListData.get(arg2);
 				Toast.makeText(getApplicationContext(), "clicke",
@@ -1139,45 +1123,44 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						+ notelistitem.noteType);
 
 				switch (notelistitem.noteType) {
-				case TEXTMODE:
-				{
-					Toast.makeText(getApplicationContext(), "Text mode",
-							Toast.LENGTH_SHORT).show();
-					
-					DataManager.sharedDataManager().setNotelistData(
-							notelistitem);
+					case TEXTMODE: {
+						Toast.makeText(getApplicationContext(), "Text mode",
+								Toast.LENGTH_SHORT).show();
 
-					startActivity(new Intent(NoteMainActivity.this,
-							NoteTextIItemFullScreen.class));
-					
-				}
-					break;
-				case IMAGEMODE: {
-					Toast.makeText(getApplicationContext(), "Image mode",
-							Toast.LENGTH_SHORT).show();
-					DataManager.sharedDataManager().setNotelistData(
-							notelistitem);
+						DataManager.sharedDataManager().setNotelistData(
+								notelistitem);
 
-					startActivity(new Intent(NoteMainActivity.this,
-							NoteItemFullScreen.class));
-				}
-					break;
-				case SCRIBBLEMODE: {
-					Toast.makeText(getApplicationContext(), "scribble mode",
-							Toast.LENGTH_SHORT).show();
-					DataManager.sharedDataManager().setNotelistData(
-							notelistitem);
-				}
-					break;
-				case AUDIOMODE: {
-					Toast.makeText(getApplicationContext(), "audio mode",
-							Toast.LENGTH_SHORT).show();
+						startActivity(new Intent(NoteMainActivity.this,
+								NoteTextIItemFullScreen.class));
 
-				}
+					}
+					break;
+					case IMAGEMODE: {
+						Toast.makeText(getApplicationContext(), "Image mode",
+								Toast.LENGTH_SHORT).show();
+						DataManager.sharedDataManager().setNotelistData(
+								notelistitem);
+
+						startActivity(new Intent(NoteMainActivity.this,
+								NoteItemFullScreen.class));
+					}
+					break;
+					case SCRIBBLEMODE: {
+						Toast.makeText(getApplicationContext(), "scribble mode",
+								Toast.LENGTH_SHORT).show();
+						DataManager.sharedDataManager().setNotelistData(
+								notelistitem);
+					}
+					break;
+					case AUDIOMODE: {
+						Toast.makeText(getApplicationContext(), "audio mode",
+								Toast.LENGTH_SHORT).show();
+
+					}
 					break;
 
-				default:
-					break;
+					default:
+						break;
 				}
 
 			}
@@ -1886,7 +1869,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				});
 
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(false);
+		dialog.setCancelable(true);
 		dialog.setContentView(contentView);
 		dialog.show();
 
@@ -1933,7 +1916,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(false);
+		dialog.setCancelable(true);
 		dialog.setContentView(contentView);
 		dialog.show();
 
@@ -1943,11 +1926,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	void showBrushSizeDialog(boolean iserase) {
 
 		brushDialog1 = new Dialog(NoteMainActivity.this);
-
 		isErase = iserase;
-
 		brushDialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		brushDialog1.setCancelable(false);
+		brushDialog1.setCancelable(true);
 		brushDialog1.setContentView(R.layout.brush_chooser);
 		TextView textViewSizesHeader = (TextView) brushDialog1
 				.findViewById(R.id.textViewSizesHeader);
@@ -1957,7 +1938,31 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			textViewSizesHeader.setText("BRUSH SIZES");
 		}
 
-		ImageButton smallBtn = (ImageButton) brushDialog1
+		seekbar = (SeekBar) findViewById(R.id.seekBar);
+		number = (TextView) findViewById(R.id.number);
+		number.setText("1");
+
+		seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			int progress_value;
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				progress_value = progress;
+				number.setText(seekbar.getProgress());
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				number.setText(seekbar.getProgress());
+			}
+		});
+
+
+		//seekbar();
+
+		/*ImageButton smallBtn = (ImageButton) brushDialog1
 				.findViewById(R.id.small_brush);
 		ImageButton smallBtn_12 = (ImageButton) brushDialog1
 				.findViewById(R.id.small_brush_12);
@@ -1966,9 +1971,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		ImageButton smallBtn_16 = (ImageButton) brushDialog1
 				.findViewById(R.id.small_brush_16);
 		ImageButton smallBtn_18 = (ImageButton) brushDialog1
-				.findViewById(R.id.small_brush_18);
+				.findViewById(R.id.small_brush_18);*/
 
-		smallBtn.setOnClickListener(new OnClickListener() {
+		/*smallBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 
@@ -2143,14 +2148,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setBrushSize(smallBrush);
 				brushDialog1.dismiss();
 			}
-		});
+		});*/
 
 		brushDialog1.show();
 
 	}
 
 	/************* Erase control Here ************/
-	void showEraserDialog() {
+	/*void showEraserDialog() {
 
 		final Dialog brushDialog1 = new Dialog(NoteMainActivity.this);
 
@@ -2163,7 +2168,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		textViewSizesHeader.setText("ERASER SIZES");
 
-		ImageButton smallBtn = (ImageButton) brushDialog1
+		*//*ImageButton smallBtn = (ImageButton) brushDialog1
 				.findViewById(R.id.small_brush);
 
 		smallBtn.setOnClickListener(new OnClickListener() {
@@ -2194,10 +2199,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setBrushSize(largeBrush);
 				brushDialog1.dismiss();
 			}
-		});
+		});*//*
 		brushDialog1.show();
 
-	}
+	}*/
+
 
 	/************* text control Here ************/
 	void showTextNoteDialog() {
@@ -2712,7 +2718,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(false);
+		dialog.setCancelable(true);
 		dialog.setContentView(contentView);
 		dialog.show();
 
@@ -2819,7 +2825,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(false);
+		dialog.setCancelable(true);
 		dialog.setContentView(contentView);
 		dialog.show();
 

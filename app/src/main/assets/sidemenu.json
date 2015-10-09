@@ -41,12 +41,8 @@
       "menuid": "11"
     },
     {
-      "menuName": "Login",
-      "menuid": "12"
-    },
-    {
       "menuName": "Logout",
-      "menuid": "13"
+      "menuid": "12"
     }
   ]
 }

@@ -1,10 +1,15 @@
 package com.tilak.noteshare;
 
-import android.app.ProgressDialog;
-import android.content.Context;
+/*
+import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-<<<<<<< Updated upstream
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
@@ -36,7 +41,7 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends Activity implements OnClickListener,
+public class LoginActivity2 extends Activity implements OnClickListener,
 		GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 	private static final int RC_SIGN_IN = 0;
@@ -78,7 +83,8 @@ public class LoginActivity extends Activity implements OnClickListener,
 
 	}
 
-	public void initlizeUIElement(View contentview) {
+	*/
+/*public void initlizeUIElement(View contentview) {
 		btnSignIn=(Button) findViewById(R.id.btnloginsignin);
 		btnsignUP=(Button) findViewById(R.id.btnloginsignup);
 		loginPassowrd = (EditText)findViewById(R.id.loginpassword);
@@ -88,7 +94,8 @@ public class LoginActivity extends Activity implements OnClickListener,
 		btnGoogleSignIn = (SignInButton) findViewById(R.id.google_login);
 
 		addlistners();
-	}
+	}*//*
+
 
 	public void addlistners() {
 		btnSignIn.setOnClickListener(new OnClickListener() {
@@ -100,17 +107,15 @@ public class LoginActivity extends Activity implements OnClickListener,
 
 				email = email.trim();
 				password = password.trim();
-				startActivity(new Intent(getApplicationContext(), MainActivity.class));
-				finish();
 
-//				if (email.equals("") || password.equals("")) {
-//					Toast.makeText(getApplication(), R.string.enter_fields, Toast.LENGTH_LONG).show();
-//				} else if (!isValidEmail(email)) {
-//					loginEmail.setError("Invalid Email");
-//				} else {
-//					Log.v(TAG, "Email: " + email +
-//								"/n Password: " + password);
-//				}
+				if (email.equals("") || password.equals("")) {
+					Toast.makeText(getApplication(), R.string.enter_fields, Toast.LENGTH_LONG).show();
+				} else if (!isValidEmail(email)) {
+					loginEmail.setError("Invalid Email");
+				} else {
+					Log.v(TAG, "Email: " + email +
+								"/n Password: " + password);
+				}
 			}
 		});
 		btnsignUP.setOnClickListener(new OnClickListener() {
@@ -148,7 +153,11 @@ public class LoginActivity extends Activity implements OnClickListener,
 		};
 		mProfileTracker = new ProfileTracker() {
 			@Override
-			protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {}
+			protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+				if(newProfile != null) {}
+				else
+					Toast.makeText(getApplication(), "Something went wrong, please try again!", Toast.LENGTH_LONG).show();
+			}
 		};
 		mTracker.startTracking();
 		mProfileTracker.startTracking();
@@ -182,35 +191,43 @@ public class LoginActivity extends Activity implements OnClickListener,
 			token = loginResult.getAccessToken();
 			Profile profile = Profile.getCurrentProfile();
 			//displayProfile(profile);
-			String fbId = profile.getId();
-			String fbFirstName = profile.getFirstName();
-			String fbLastName = profile.getLastName();
-			Uri fbProfileUri = profile.getProfilePictureUri(250, 250);
-			//final String[] fbEmail = new String[1];
+			if(profile != null) {
+				String fbId = profile.getId();
+				String fbFirstName = profile.getFirstName();
+				String fbLastName = profile.getLastName();
+				Uri fbProfileUri = profile.getProfilePictureUri(250, 250);
+				final String[] fbEmail = new String[1];
 
-			// Facebook Graph Class
-			/*GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-				@Override
-				public void onCompleted(JSONObject user, GraphResponse response) {
-					try {
-						fbEmail[0] = user.getString("email");
-					} catch (JSONException e) {
-						e.printStackTrace();
+				// Facebook Graph Class
+				*/
+/*GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+					@Override
+					public void onCompleted(JSONObject user, GraphResponse response) {
+						try {
+							fbEmail[0] = user.getString("email");
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
 					}
-				}
-			}).executeAsync();*/
+				}).executeAsync();*//*
 
-			/*Log.v(TAG, "Facebook Id: " + fbId +
+
+			*/
+/*Log.v(TAG, "Facebook Id: " + fbId +
 						"/nFacebook First Name: " + fbFirstName +
 						"/nFacebbok Last name: " + fbLastName +
 						"/nFacebook Email: " + fbEmail[0] +
-						"/nFacebook Profile Pic Url: " + fbProfileUri.toString());*/
+						"/nFacebook Profile Pic Url: " + fbProfileUri.toString());*//*
 
-			Toast.makeText(getApplication(), "Facebook Id: " + fbId +
-					", Facebook First Name: " + fbFirstName +
-					", Facebbok Last name: " + fbLastName +
-					", Facebook Email: " + null +
-					", Facebook Profile Pic Url: " + fbProfileUri.toString(), Toast.LENGTH_LONG).show();
+
+				Toast.makeText(getApplication(), "Facebook Id: " + fbId +
+						", Facebook First Name: " + fbFirstName +
+						", Facebbok Last name: " + fbLastName +
+						", Facebook Email: " + null +
+						", Facebook Profile Pic Url: " + fbProfileUri.toString(), Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(getApplication(), "Something went wrong, please try again!", Toast.LENGTH_LONG).show();
+			}
 
 		}
 
@@ -253,13 +270,15 @@ public class LoginActivity extends Activity implements OnClickListener,
 		updateUI(false);
 	}
 
-	@Override
+	*/
+/*@Override
 	public void onClick(View v) {
 		int id = v.getId();
 		if(id == R.id.google_login) {
 			signInWithGplus();
 		}
-	}
+	}*//*
+
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
@@ -281,7 +300,9 @@ public class LoginActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	/** Method to resolve any signin errors **/
+	*/
+/** Method to resolve any signin errors **//*
+
 	private void resolveSignInError() {
 		if (mConnectionResult.hasResolution()) {
 			try {
@@ -294,9 +315,11 @@ public class LoginActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	/**
+	*/
+/**
 	 * Updating the UI, showing/hiding buttons and profile layout
-	 * */
+	 * *//*
+
 	private void updateUI(boolean isSignedIn) {
 		if (isSignedIn) { btnSignIn.setVisibility(View.GONE); }
 		else { btnSignIn.setVisibility(View.VISIBLE); }
@@ -349,9 +372,11 @@ public class LoginActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	/**
+	*/
+/**
 	 * Background Async task to load user profile picture from url
-	 * */
+	 * *//*
+
 	private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
 		ImageView bmImage;
 
@@ -376,69 +401,6 @@ public class LoginActivity extends Activity implements OnClickListener,
 			bmImage.setImageBitmap(result);
 		}
 	}
-=======
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-
-
-public class LoginActivity extends FragmentActivity implements FragmentManager.OnBackStackChangedListener {
-
-    public static final String SOCIAL_NETWORK_TAG = "SocialIntegrationMain.SOCIAL_NETWORK_TAG";
-    private static ProgressDialog pd;
-    static Context context;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
-
-        context = this;
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
-        //homeAsUpByBackStack();
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new LoginFragment())
-                    .commit();
-        }
-
-    }
-
-    @Override
-    public void onBackStackChanged() { homeAsUpByBackStack(); }
-
-    private void homeAsUpByBackStack() {
-        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
-        if (backStackEntryCount > 0) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-    }
-
-    protected static void showProgress(String message) {
-        pd = new ProgressDialog(context);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage(message);
-        pd.setCancelable(false);
-        pd.setCanceledOnTouchOutside(false);
-        pd.show();
-    }
-
-    protected static void hideProgress() {
-        pd.dismiss();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SOCIAL_NETWORK_TAG);
-        if (fragment != null) {
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }
-    }
->>>>>>> Stashed changes
 
 }
+*/

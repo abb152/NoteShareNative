@@ -119,9 +119,6 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			case 12:
 				items.setResourceId(R.drawable.logout_icon);
 				break;
-			case 13:
-				items.setResourceId(R.drawable.logout_icon);
-				break;
 			default:
 				break;
 			}
@@ -145,12 +142,9 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				// TODO Auto-generated method stub
-
 				mDrawerLayout.closeDrawers();
 				// mTitleTextView.setText(mNavigationDrawerItemTitles[position]);
-
 				openActivity(position);
-
 				/*
 				 * Bundle args = new Bundle(); args.putString("Menu",
 				 * mNavigationDrawerItemTitles[position]); DetailFragment detail
@@ -166,7 +160,6 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		});
 
 		if (isLaunch) {
-
 			isLaunch = false;
 			openinitilaActivity(0);
 		}
@@ -174,23 +167,18 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 	}
 
 	protected void openinitilaActivity(int position1) {
-
 		System.out.println("initail launch");
 		startActivity(new Intent(this, MainActivity.class));
 		finish();
 	}
 
 	protected void openActivity(int position1) {
-
 		position = position1;
-
 		if (position1 == 0) {
-
 			// Profile setting
 			startActivity(new Intent(this, ProfileSettingActivity.class));
 			System.out.println("profile setting");
 			//finish();
-
 		} else {
 			SideMenuitems modeldata = arrMenu.get(position1 - 1);
 
@@ -198,158 +186,113 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 
 			switch (menuid) {
 			case 2: {
-
 				// openinitilaActivity(0);
 				System.out.println("check list");
 				startActivity(new Intent(this, CheckListActivity.class));
 				// finish();
 			}
-
 				break;
 
 			case 1: {
-
 				System.out.println("notes");
 				openinitilaActivity(0);
-
 			}
 				break;
 			case 3: {
 				System.out.println("folder");
-
 				startActivity(new Intent(this, NewFolderMainActivity.class));
 				// finish();
 			}
 				break;
 
 			case 4: {
-
 				System.out.println("about note share");
 				startActivity(new Intent(this, AboutNoteShareActivity.class));
 				// finish();
-
 			}
 				break;
 			case 5: {
 				System.out.println("terms and conditions");
 				startActivity(new Intent(this, TermsAndConditionsActivity.class));
 				// finish();
-
 			}
 				break;
 			case 6: {
-
 				System.out.println("notification center");
 				startActivity(new Intent(this, NotificationCenterActivity.class));
-
 				// finish();
 			}
 				break;
 			case 7: {
 				System.out.println("rate us");
-
 				startActivity(new Intent(this, RateUsActivity.class));
 				// finish();
-
 			}
 				break;
 			case 8: {
 				System.out.println("like us on facebook");
 				startActivity(new Intent(this, LikeUsOnFacebookActivity.class));
 				// finish();
-
 			}
 				break;
 			case 9: {
 				System.out.println(" send feed back");
 				startActivity(new Intent(this, SendFeedbackActivity.class));
 				// finish();
-
 			}
 				break;
 			case 10: {
-
 				System.out.println("invites friends");
 				startActivity(new Intent(this, InviteFriendsActivity.class));
 				// finish();
-
 			}
 				break;
 			case 11: {
-
 				System.out.println("setting");
-
 				startActivity(new Intent(this, SettingActivity.class));
 				// finish();
-
 			}
 				break;
 			case 12: {
-
-				System.out.println("login");
-
-				startActivity(new Intent(this, LoginActivity.class));
-
-			}
-				break;
-			case 13: {
-
 				System.out.println("logout");
-
 			}
 				break;
-
-			default: {
-
-			}
+			default: {}
 				break;
 			}
 		}
 
 	}
 
-	public void addListners() {
-
-	}
+	public void addListners() {}
 
 	public String loadJSONFromAsset() {
 		String json = null;
 		try {
-
 			InputStream is = getAssets().open("sidemenu.json");
 			// InputStream is=getResources().openRawResource(R.raw.sidemenu);
-
 			int size = is.available();
-
 			byte[] buffer = new byte[size];
-
 			is.read(buffer);
-
 			is.close();
-
 			json = new String(buffer, "UTF-8");
-
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			return null;
 		}
 		return json;
-
 	}
 
 	@Override
 	public void openSlideMenu() {
 		// TODO Auto-generated method stub
-
 		if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
 			mDrawerLayout.closeDrawer(mDrawerList);
 		} else {
 			mDrawerLayout.openDrawer(mDrawerList);
 		}
-
 		//Toast.makeText(getApplicationContext(), "menu Clicked!",
 				//Toast.LENGTH_LONG).show();
-
 	}
 
 	/*

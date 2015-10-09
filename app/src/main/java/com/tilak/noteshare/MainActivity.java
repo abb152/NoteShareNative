@@ -90,16 +90,6 @@ public class MainActivity extends DrawerActivity {
 		DataManager.sharedDataManager().setSelectedIndex(-1);
 		initlizeUIElement(contentView);
 
-//		Note.deleteAll(Note.class);
-//		NoteElement.deleteAll(NoteElement.class);
-//
-//		for(int i=1; i<6; i++) {
-//			Note note=new Note("Test Note "+i, "", "#CDFFF"+i, "", "", "", "", "", "", "");
-//			note.save();
-//			NoteElement n = new NoteElement(i+"", i, "Note Content "+i, "text", "0");
-//			n.save();
-//		}
-
 		getDeafultNote();
 		createDirectory();
 
@@ -109,13 +99,11 @@ public class MainActivity extends DrawerActivity {
 	public void	 btnCallbacks(Object data)
 	{
 		System.out.println("the tag us"+data);
-		
 		DataManager.sharedDataManager().setSelectedIndex(-1);
 		adapter.notifyDataSetChanged();
 	}
 
 	void initlizeUIElement(View contentview) {
-
 		DataManager.sharedDataManager().setTypeofListView(false);
 
 		layoutHeader = (RelativeLayout) contentview
@@ -124,12 +112,12 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewheaderTitle);
 		//textViewheaderTitle.setTypeface(NoteShareFonts.asTypeface(MainActivity.this, NoteShareFonts.arial));
 
-		imageButtoncalander = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtoncalander);
+		/*imageButtoncalander = (ImageButton) layoutHeader
+				.findViewById(R.id.imageButtoncalander);*/
 		imageButtonHamburg = (ImageButton) layoutHeader
 				.findViewById(R.id.imageButtonHamburg);
-		imageButtonsquence = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtonsquence);
+		/*imageButtonsquence = (ImageButton) layoutHeader
+				.findViewById(R.id.imageButtonsquence);*/
 
 		textNoteSort = (TextView) findViewById(R.id.textNoteSort);
 		textNoteView = (TextView) findViewById(R.id.textNoteView);
@@ -161,9 +149,6 @@ public class MainActivity extends DrawerActivity {
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		// inflate your activity layout here!
-		
-		
-		
 		sortingArray();
 		Layout1.removeAllViews();
 		Layout2.removeAllViews();
@@ -353,49 +338,37 @@ public class MainActivity extends DrawerActivity {
 			}
 		});
 		textNoteView.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				showActionSheet(v);
-				
-				
-
 			}
 		});
 
-		imageButtoncalander.setOnClickListener(new OnClickListener() {
-
+		/*imageButtoncalander.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+			public void onClick(View v) {}
+		});*/
 		imageButtonHamburg.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				openSlideMenu();
-
 			}
 		});
-		imageButtonsquence.setOnClickListener(new OnClickListener() {
+		/*imageButtonsquence.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
 			}
-		});
+		});*/
 		textViewAdd.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
 				startActivity(new Intent(context, NoteMainActivity.class));
-
 			}
 		});
 
@@ -415,16 +388,12 @@ public class MainActivity extends DrawerActivity {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				// TODO Auto-generated method stub
-				if (DataManager.sharedDataManager().getSelectedIndex()==arg2)
-				{
+				if (DataManager.sharedDataManager().getSelectedIndex()==arg2) {
 					DataManager.sharedDataManager().setSelectedIndex(-1);
 				}
-				else
-				{
+				else {
 					DataManager.sharedDataManager().setSelectedIndex(arg2);
 				}
-				
-				
 				adapter.notifyDataSetChanged();
 				return true;
 			}
@@ -433,10 +402,8 @@ public class MainActivity extends DrawerActivity {
 
 	@Override
 	public void onBackPressed() {
-
 		showAlertWith("Are you sure,Do you want to quit the app?",
 				MainActivity.this);
-
 	}
 
 	void showAlertWith(String message, Context context) {

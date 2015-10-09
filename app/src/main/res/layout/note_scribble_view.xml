@@ -19,15 +19,6 @@
         android:src="@drawable/scrbble_back" />
 
     <ImageButton
-        android:id="@+id/imageButtondrawnew"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-          android:layout_weight="1"
-          android:scaleType="fitCenter"
-          android:background="@android:color/transparent"
-        android:src="@drawable/scrbble_newdraw" />
-
-    <ImageButton
         android:id="@+id/imageButtondrawdraw"
         android:layout_width="40dp"
           android:layout_weight="1"
@@ -62,6 +53,15 @@
         android:background="@android:color/transparent"
           android:layout_weight="1"
         android:src="@drawable/scrbble_erase" />
+
+    <ImageButton
+        android:id="@+id/imageButtondrawnew"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
+        android:src="@drawable/scrbble_newdraw" />
 
     <ImageButton
         android:id="@+id/imageButtondrawMore"

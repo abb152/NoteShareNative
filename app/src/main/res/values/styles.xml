@@ -16,16 +16,18 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+
     <color name="background_color">#01bbd4</color>
     <color name="actionbarbg">#000</color>
     <color name="facebookbuttonbg">#3b5998</color>
-    <color name="googleplusbuttonbg">#e43c3d</color>
-     <color name="textfieldbg">#fff</color>
-     <color name="header_bg">#ff5a60</color>
-     <color name="light_gray">#eeeeee</color>
-     <color name="light_gray_666666">#666666</color>
-     <color name="light_gray_999999">#999999</color>
-     <color  name="selected_bg_color">#a84443</color>
+    <color name="googleplusbuttonbg">#dc4e41</color>
+    <color name="twitterbuttonbg">#55acee</color>
+    <color name="textfieldbg">#fff</color>
+    <color name="header_bg">#ff5a60</color>
+    <color name="light_gray">#eeeeee</color>
+    <color name="light_gray_666666">#666666</color>
+    <color name="light_gray_999999">#999999</color>
+    <color  name="selected_bg_color">#a84443</color>
      
      
      
@@ -41,9 +43,9 @@
      <color name="C58FAD0">#58FAD0</color>
      <color name="ffffff">#ffffff</color>
      <color name="A8b241b">#8b241b</color>
-      <color name="eaeaea">#eaeaea</color>
-      <color name="static_text_color">#636363</color>
-        <color name="dee2e5">#dee2e5</color>
+     <color name="eaeaea">#eaeaea</color>
+     <color name="static_text_color">#636363</color>
+     <color name="dee2e5">#dee2e5</color>
 
          <style name="MyListBackContent">
         <item name="android:layout_width">fill_parent</item>
@@ -65,8 +67,7 @@
         <item name="android:layout_height">30dp</item>
      
     </style>
-    
-      
+
       <style name="MyListImage">
         <item name="android:layout_width">64dp</item>
         <item name="android:layout_height">64dp</item>

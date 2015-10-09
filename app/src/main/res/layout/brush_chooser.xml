@@ -17,7 +17,50 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
-   <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:text="@string/size"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/zero"
+            android:gravity="center"/>
+
+        <SeekBar
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:id="@+id/seekBar"
+            android:layout_margin="10dp"
+            android:padding="20dp"
+            android:max="100"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:thumb="@drawable/thumb"
+            android:progressDrawable="@layout/progress_drawable"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:text="@string/app_name"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+   <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="5dp"
@@ -191,7 +234,7 @@
             android:contentDescription="@string/lrg"
             android:src="@drawable/brush_38" />
         
-    </LinearLayout>
+    </LinearLayout>-->
 
    <View
        android:id="@+id/view1"

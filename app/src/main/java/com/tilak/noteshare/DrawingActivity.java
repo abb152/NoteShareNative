@@ -1,7 +1,5 @@
 package com.tilak.noteshare;
 
-import java.util.UUID;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,13 +10,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.UUID;
 
 public class DrawingActivity extends Activity implements OnClickListener {
 
@@ -98,7 +98,7 @@ public class DrawingActivity extends Activity implements OnClickListener {
 					.findViewById(R.id.textViewSizesHeader);
 			textViewSizesHeader.setText("BRUSH SIZES");
 
-			ImageButton smallBtn = (ImageButton) brushDialog
+			/*ImageButton smallBtn = (ImageButton) brushDialog
 					.findViewById(R.id.small_brush);
 			smallBtn.setOnClickListener(new OnClickListener() {
 				@Override
@@ -107,9 +107,9 @@ public class DrawingActivity extends Activity implements OnClickListener {
 					drawView.setLastBrushSize(smallBrush);
 					brushDialog.dismiss();
 				}
-			});
+			});*/
 
-			ImageButton mediumBtn = (ImageButton) brushDialog
+			/*ImageButton mediumBtn = (ImageButton) brushDialog
 					.findViewById(R.id.medium_brush);
 			mediumBtn.setOnClickListener(new OnClickListener() {
 				@Override
@@ -118,9 +118,9 @@ public class DrawingActivity extends Activity implements OnClickListener {
 					drawView.setLastBrushSize(mediumBrush);
 					brushDialog.dismiss();
 				}
-			});
+			});*/
 
-			ImageButton largeBtn = (ImageButton) brushDialog
+			/*ImageButton largeBtn = (ImageButton) brushDialog
 					.findViewById(R.id.large_brush);
 			largeBtn.setOnClickListener(new OnClickListener() {
 				@Override
@@ -129,7 +129,7 @@ public class DrawingActivity extends Activity implements OnClickListener {
 					drawView.setLastBrushSize(largeBrush);
 					brushDialog.dismiss();
 				}
-			});
+			});*/
 
 			brushDialog.show();
 
@@ -144,7 +144,7 @@ public class DrawingActivity extends Activity implements OnClickListener {
 			TextView textViewSizesHeader = (TextView) brushDialog1
 					.findViewById(R.id.textViewSizesHeader);
 
-			textViewSizesHeader.setText("ERASER SIZES");
+			/*textViewSizesHeader.setText("ERASER SIZES");
 			ImageButton smallBtn = (ImageButton) brushDialog1
 					.findViewById(R.id.small_brush);
 
@@ -176,7 +176,7 @@ public class DrawingActivity extends Activity implements OnClickListener {
 					drawView.setBrushSize(largeBrush);
 					brushDialog1.dismiss();
 				}
-			});
+			});*/
 			brushDialog1.show();
 
 		} else if (view.getId() == R.id.new_btn) {
