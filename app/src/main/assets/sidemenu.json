@@ -1,0 +1,52 @@
+{
+  "sideMenuitems": [
+    {
+      "menuName": "Notes",
+      "menuid": "1"
+    },
+    {
+      "menuName": "Folders",
+      "menuid": "3"
+    },
+    {
+      "menuName": "About NoteShare",
+      "menuid": "4"
+    },
+    {
+      "menuName": "Terms & Conditions",
+      "menuid": "5"
+    },
+    {
+      "menuName": "Notification Center",
+      "menuid": "6"
+    },
+    {
+      "menuName": "Rate us",
+      "menuid": "7"
+    },
+    {
+      "menuName": "Like us on Facebook",
+      "menuid": "8"
+    },
+    {
+      "menuName": "Send Feedback",
+      "menuid": "9"
+    },
+    {
+      "menuName": "Invite Friends",
+      "menuid": "10"
+    },
+    {
+      "menuName": "Settings",
+      "menuid": "11"
+    },
+    {
+      "menuName": "Login",
+      "menuid": "12"
+    },
+    {
+      "menuName": "Logout",
+      "menuid": "13"
+    }
+  ]
+}

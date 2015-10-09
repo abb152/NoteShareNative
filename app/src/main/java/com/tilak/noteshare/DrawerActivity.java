@@ -1,15 +1,5 @@
 package com.tilak.noteshare;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.tilak.adpters.MenuOpenInterface;
-import com.tilak.adpters.SlideMenuAdapter;
-import com.tilak.datamodels.SideMenuitems;
-import com.tilak.datamodels.SlideMenu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -20,6 +10,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.tilak.adpters.MenuOpenInterface;
+import com.tilak.adpters.SlideMenuAdapter;
+import com.tilak.datamodels.SideMenuitems;
+import com.tilak.datamodels.SlideMenu;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 public class DrawerActivity extends Activity implements MenuOpenInterface {
 	// private static String TAG = MainActivity.class.getSimpleName();
@@ -45,7 +47,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sliding_sctivity);
+		setContentView(R.layout.sliding_activity);
 
 		// DataManager.sharedDataManager().printname();
 
