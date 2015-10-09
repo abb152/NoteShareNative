@@ -35,6 +35,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
+import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
 
  enum SORTTYPE
 {
@@ -84,12 +88,16 @@ public class MainActivity extends DrawerActivity {
 		mDrawerLayout.addView(contentView, 0);
 		DataManager.sharedDataManager().setSelectedIndex(-1);
 		initlizeUIElement(contentView);
-		getDeafultNote();
 
+//		for(int i=1; i<6; i++) {
+//			NoteElement n = new NoteElement(i+"", i, "Note Content "+i, "text", "0");
+//			n.save();
+//		}
+
+		getDeafultNote();
 		createDirectory();
 
 		//FacebookSdk.sdkInitialize(getApplicationContext());
-
 	}
 	
 	public void	 btnCallbacks(Object data)
@@ -253,67 +261,70 @@ public class MainActivity extends DrawerActivity {
 
 		String desText = "Lorem ipsum is simply dummy text of the printing and type setting industry.";
 		String desText2 = "Lorem ipsum is simply dummy text of the printing and type setting industry.Lorem ipsum is simply dummy text of the printing and type setting industry.";
+		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note ORDER BY ID DESC");
+		for(Note currentnote : allnotes){
+			NoteElement notedetails = NoteElement.findById(NoteElement.class, currentnote.getId());
+			Log.e("Note Details",notedetails.toString());
+			SideMenuitems item1 = new SideMenuitems();
+			item1.setMenuName(currentnote.getTitle());
+			item1.setMenuNameDetail(notedetails.getContent());
+			item1.setMenuid("10");
+			item1.setColours(currentnote.getColor());
+			arrDataNote.add(item1);
+		}
 
-		SideMenuitems item1 = new SideMenuitems();
-		item1.setMenuName("BOTANY: THE CLASSIFICATION OF Plants");
-		item1.setMenuNameDetail(desText);
-		item1.setMenuid("10");
-		item1.setColours("#E2A9F3");
-		arrDataNote.add(item1);
-
-		SideMenuitems item2 = new SideMenuitems();
-		item2.setMenuName("Physics Theory Links");
-		item2.setMenuNameDetail(desText2);
-		item2.setColours("#D8CEF6");
-		arrDataNote.add(item2);
-
-		SideMenuitems item3 = new SideMenuitems();
-		item3.setMenuName("Maths");
-		item3.setMenuNameDetail(desText);
-		item3.setColours("#F5A9BC");
-		arrDataNote.add(item3);
-
-		SideMenuitems item4 = new SideMenuitems();
-		item4.setMenuName("Computer Science");
-		item4.setMenuNameDetail(desText2);
-		item4.setColours("#D8CEF6");
-		arrDataNote.add(item4);
-
-		SideMenuitems item5 = new SideMenuitems();
-		item5.setMenuName("Graphics");
-		item5.setMenuNameDetail(desText2);
-		item5.setColours("#F5F6CE");
-		arrDataNote.add(item5);
-
-		SideMenuitems item6 = new SideMenuitems();
-		item6.setMenuName("Adbobe Links");
-		item6.setColours("#ffffff");
-		item6.setMenuNameDetail(desText);
-		
-		arrDataNote.add(item6);
-
-		SideMenuitems item7 = new SideMenuitems();
-		item7.setMenuName("YouTube video Links");
-		item7.setMenuNameDetail("");
-		item7.setColours("#ffffff");
-		arrDataNote.add(item7);
-
-		SideMenuitems item8 = new SideMenuitems();
-		item8.setMenuName("Note 8");
-		item8.setMenuNameDetail(desText2);
-		item8.setColours("#F5F6CE");
-		arrDataNote.add(item8);
-
-		SideMenuitems item9 = new SideMenuitems();
-		item9.setMenuName("Note 9");
-		item9.setMenuNameDetail(desText);
-		item9.setColours("#58FAD0");
-		arrDataNote.add(item9);
+//		SideMenuitems item2 = new SideMenuitems();
+//		item2.setMenuName("Physics Theory Links");
+//		item2.setMenuNameDetail(desText2);
+//		item2.setColours("#D8CEF6");
+//		arrDataNote.add(item2);
+//
+//		SideMenuitems item3 = new SideMenuitems();
+//		item3.setMenuName("Maths");
+//		item3.setMenuNameDetail(desText);
+//		item3.setColours("#F5A9BC");
+//		arrDataNote.add(item3);
+//
+//		SideMenuitems item4 = new SideMenuitems();
+//		item4.setMenuName("Computer Science");
+//		item4.setMenuNameDetail(desText2);
+//		item4.setColours("#D8CEF6");
+//		arrDataNote.add(item4);
+//
+//		SideMenuitems item5 = new SideMenuitems();
+//		item5.setMenuName("Graphics");
+//		item5.setMenuNameDetail(desText2);
+//		item5.setColours("#F5F6CE");
+//		arrDataNote.add(item5);
+//
+//		SideMenuitems item6 = new SideMenuitems();
+//		item6.setMenuName("Adbobe Links");
+//		item6.setColours("#ffffff");
+//		item6.setMenuNameDetail(desText);
+//		arrDataNote.add(item6);
+//
+//		SideMenuitems item7 = new SideMenuitems();
+//		item7.setMenuName("YouTube video Links");
+//		item7.setMenuNameDetail("");
+//		item7.setColours("#ffffff");
+//		arrDataNote.add(item7);
+//
+//		SideMenuitems item8 = new SideMenuitems();
+//		item8.setMenuName("Note 8");
+//		item8.setMenuNameDetail(desText2);
+//		item8.setColours("#F5F6CE");
+//		arrDataNote.add(item8);
+//
+//		SideMenuitems item9 = new SideMenuitems();
+//		item9.setMenuName("Note 9");
+//		item9.setMenuNameDetail(desText);
+//		item9.setColours("#58FAD0");
+//		arrDataNote.add(item9);
 
 		adapter.notifyDataSetChanged();
 		String strCout = "(" + arrDataNote.size() + ")";
 		textViewheaderTitle.setText("NOTE" + strCout);
-sortType=SORTTYPE.ALPHABET;
+		sortType=SORTTYPE.ALPHABET;
 		updateGridView();
 		updatePintrestView();
 

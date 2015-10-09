@@ -104,15 +104,17 @@ public class LoginActivity extends Activity implements OnClickListener,
 
 				email = email.trim();
 				password = password.trim();
+				startActivity(new Intent(getApplicationContext(), MainActivity.class));
+				finish();
 
-				if (email.equals("") || password.equals("")) {
-					Toast.makeText(getApplication(), R.string.enter_fields, Toast.LENGTH_LONG).show();
-				} else if (!isValidEmail(email)) {
-					loginEmail.setError("Invalid Email");
-				} else {
-					Log.v(TAG, "Email: " + email +
-								"/n Password: " + password);
-				}
+//				if (email.equals("") || password.equals("")) {
+//					Toast.makeText(getApplication(), R.string.enter_fields, Toast.LENGTH_LONG).show();
+//				} else if (!isValidEmail(email)) {
+//					loginEmail.setError("Invalid Email");
+//				} else {
+//					Log.v(TAG, "Email: " + email +
+//								"/n Password: " + password);
+//				}
 			}
 		});
 		btnsignUP.setOnClickListener(new OnClickListener() {
