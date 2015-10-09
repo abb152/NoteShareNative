@@ -30,6 +30,8 @@ import com.tilak.adpters.NoteFolderAdapter;
 import com.tilak.adpters.NoteFolderGridAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
+import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,10 +39,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.tilak.db.Note;
-import com.tilak.db.NoteElement;
-
- enum SORTTYPE
+enum SORTTYPE
 {
 	ALPHABET,
 	COLOURS,
@@ -89,10 +88,15 @@ public class MainActivity extends DrawerActivity {
 		DataManager.sharedDataManager().setSelectedIndex(-1);
 		initlizeUIElement(contentView);
 
-//		for(int i=1; i<6; i++) {
-//			NoteElement n = new NoteElement(i+"", i, "Note Content "+i, "text", "0");
-//			n.save();
-//		}
+		Note.deleteAll(Note.class);
+		NoteElement.deleteAll(NoteElement.class);
+
+		for(int i=1; i<6; i++) {
+			Note note=new Note("Test Note "+i, "", "#CDFFF"+i, "", "", "", "", "", "", "");
+			note.save();
+			NoteElement n = new NoteElement(i+"", i, "Note Content "+i, "text", "0");
+			n.save();
+		}
 
 		getDeafultNote();
 		createDirectory();
@@ -261,14 +265,13 @@ public class MainActivity extends DrawerActivity {
 
 		String desText = "Lorem ipsum is simply dummy text of the printing and type setting industry.";
 		String desText2 = "Lorem ipsum is simply dummy text of the printing and type setting industry.Lorem ipsum is simply dummy text of the printing and type setting industry.";
-		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note ORDER BY ID DESC");
+		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
 		for(Note currentnote : allnotes){
 			NoteElement notedetails = NoteElement.findById(NoteElement.class, currentnote.getId());
-			Log.e("Note Details",notedetails.toString());
+			Log.e("Note Details",notedetails.getContent());
 			SideMenuitems item1 = new SideMenuitems();
 			item1.setMenuName(currentnote.getTitle());
 			item1.setMenuNameDetail(notedetails.getContent());
-			item1.setMenuid("10");
 			item1.setColours(currentnote.getColor());
 			arrDataNote.add(item1);
 		}

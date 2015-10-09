@@ -25,7 +25,7 @@
         <meta-data android:name="DATABASE" android:value="noteshare.db" />
         <meta-data android:name="VERSION" android:value="3" />
         <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.tilak.noteshare" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.tilak.db" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
