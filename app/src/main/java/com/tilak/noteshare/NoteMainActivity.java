@@ -9,6 +9,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +21,8 @@ import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.NOTETYPE;
 import com.tilak.datamodels.NoteListDataModel;
+import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -1201,21 +1204,32 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					NoteListDataModel model = new NoteListDataModel();
 					model.noteType = NOTETYPE.TEXTMODE;
 					model.stringtext = new SpannableString(txtViewer.getText());
-					;
+					Log.d("Note Text",txtViewer.getText().toString());
+					//get all notes
+					List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
+					int incremented = allnotes.size() + 1;
+
+					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String currentDateStr = formatter.format(new Date());
+
+					Note note = new Note("Test Note "+ incremented, "", "#FFFFFF", "", "", "", "", currentDateStr, "", "");
+					note.save();
+
+					NoteElement noteElem = new NoteElement(incremented + "", 1,txtViewer.getText().toString() , "text", "yes");
+					noteElem.save();
+
+					finish();
+					startActivity(new Intent(context, MainActivity.class));
 
 					arrNoteListData.add(model);
 					adapter.notifyDataSetChanged();
 					listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
-
 				}
 				updateHeaderControls(-1);
 				;
 				textNoteControls.setVisibility(View.GONE);
 				LayoutTextWritingView.setVisibility(View.GONE);
 				isTextmodeSelected=false;
-
-				
-
 			}
 		});
 
@@ -2892,14 +2906,19 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	/************* Update text Here ************/
 
-	void updatedText(boolean undrLine, boolean bold, boolean italic,
-			int fontSize, int textcolor, String text) {
+	void updatedText(boolean undrLine, boolean bold, boolean italic, int fontSize, int textcolor, String text) {
 
 		spanUpdted = new SpannableString(text);
+		if (txtViewer.getText().length() > 0) {
+			spanold = new SpannableString(txtViewer.getText());
+			txtViewer.setText(TextUtils.concat(spanold, " ", spanUpdted));
+		} else {
+			txtViewer.setText(TextUtils.concat(spanUpdted));
+		}
 
-		String strFaimly = NoteShareFonts.arial;
+//		String strFaimly = NoteShareFonts.arial;
 
-		if (text.length() > 0) {
+		/*if (text.length() > 0) {
 			Typeface typeface;
 			if (currentFontTypeface.length() > 0)
 
@@ -2921,40 +2940,40 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			typefacae = Typeface.NORMAL;
 			if (bold == true && italic == true) {
 				typefacae = Typeface.BOLD_ITALIC;
-				
+
 			} else if (bold == false && italic == true) {
 				typefacae = Typeface.ITALIC;
 			} else if (bold == true && italic == false) {
 				typefacae = Typeface.BOLD;
 			}
 
-		
+
 			//FONT SIZE ADDED
-			
+
 			spanUpdted.setSpan(new AbsoluteSizeSpan(fontSize * 2, true), 0,
 					spanUpdted.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
 			//FONT STYLE
-			
+
 			spanUpdted.setSpan(new StyleSpan(typefacae), 0,
 					spanUpdted.length(), 0);
-			
+
 			//CUSTOM FONT ADDED
-			
+
 			spanUpdted.setSpan(new CustomTypefaceSpan("", typeface), 0,
 					spanUpdted.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
 			//UNDERLINE ADDED
-			
-			if (undrLine) 
+
+			if (undrLine)
 			{
 				spanUpdted.setSpan(new UnderlineSpan(), 0, spanUpdted.length(),
 						0);
 			}
 
 			{
-				// spanUpdted.setSpan(new BackgroundColorSpan(textbgxcolor), 0,
-				// spanUpdted.length(), 0);
+				 spanUpdted.setSpan(new BackgroundColorSpan(textbgxcolor), 0,
+				 spanUpdted.length(), 0);
 			}
 
 			{
@@ -2979,7 +2998,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				}
 			});
 
-		}
+		}*/
 
 	}
 
