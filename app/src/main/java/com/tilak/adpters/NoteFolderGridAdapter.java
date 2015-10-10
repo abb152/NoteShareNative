@@ -1,10 +1,5 @@
 package com.tilak.adpters;
 
-import java.util.ArrayList;
-
-import com.tilak.datamodels.SideMenuitems;
-import com.tilak.noteshare.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -14,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tilak.datamodels.SideMenuitems;
+import com.tilak.noteshare.R;
+
+import java.util.ArrayList;
 
 public class NoteFolderGridAdapter extends BaseAdapter {
 
@@ -71,7 +71,7 @@ public class NoteFolderGridAdapter extends BaseAdapter {
 			holder.layoutsepreter = (View) vi.findViewById(R.id.layoutsepreter);
 			holder.textViewSlideMenuNameSubTitle=(TextView)vi.findViewById(R.id.textViewSlideMenuNameSubTitle);
 			holder.layoutnotefolderAdapter=(LinearLayout)vi.findViewById(R.id.layoutnotefolderAdapter);
-			holder.layoutshareAndDelete=(LinearLayout)vi.findViewById(R.id.layoutshareAndDelete);
+			//holder.layoutshareAndDelete=(LinearLayout)vi.findViewById(R.id.layoutshareAndDelete);
 			
 			/************ Set holder with LayoutInflater ************/
 			vi.setTag(holder);
@@ -84,7 +84,7 @@ public class NoteFolderGridAdapter extends BaseAdapter {
 
 		holder.layoutsepreter.setVisibility(View.GONE);
 		holder.layoutnotefolderAdapter.setBackgroundColor(Color.parseColor(model.getColours()));;//activity.getResources().getColor(model.getColours())
-		holder.layoutshareAndDelete.setBackgroundColor(Color.parseColor(model.getColours()));;
+		//holder.layoutshareAndDelete.setBackgroundColor(Color.parseColor(model.getColours()));;
 
 		return vi;
 	}

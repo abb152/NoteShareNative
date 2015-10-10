@@ -64,31 +64,6 @@
                 android:textStyle="normal" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layoutshareAndDelete"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_gravity="left"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/delete_icon" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/share_small_icon" />
-        </LinearLayout>
-
         <View
             android:id="@+id/layoutsepreter1"
             android:layout_width="match_parent"
