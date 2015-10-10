@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="NOTE (20)"
+            android:text="NOTE"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:textSize="14sp"

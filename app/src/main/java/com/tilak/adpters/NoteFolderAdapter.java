@@ -3,6 +3,7 @@ package com.tilak.adpters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -90,6 +91,8 @@ public class NoteFolderAdapter extends BaseAdapter {
 					.findViewById(R.id.btnclose1);
 			holder.btnclose2=(ImageButton) vi
 					.findViewById(R.id.btnclose2);
+			holder.btndelete=(ImageButton) vi.findViewById(R.id.btndelete);
+
 			/************ Set holder with LayoutInflater ************/
 			vi.setTag(holder);
 		} else
@@ -158,15 +161,15 @@ public class NoteFolderAdapter extends BaseAdapter {
 		
 		holder.btnclose1.setTag(position);
 		holder.btnclose2.setTag(position);
-		holder.btnclose1.setOnClickListener(new OnClickListener()
-		{
-			
+		holder.btndelete.setTag(position);
+		holder.btnclose1.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
+
 				btnClicks(arg0.getTag());
-				
+
 			}
 		});
 		holder.btnclose2.setOnClickListener(new OnClickListener()
@@ -176,6 +179,15 @@ public class NoteFolderAdapter extends BaseAdapter {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				btnClicks(arg0.getTag());
+			}
+		});
+
+		holder.btndelete.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Log.e("on btndelete",v.getTag().toString());
+				btnClicks(v.getTag());
 			}
 		});
 		

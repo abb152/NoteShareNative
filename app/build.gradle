@@ -31,4 +31,5 @@ dependencies {
     compile 'com.github.asne:asne-twitter:0.3.3'
     compile 'com.github.asne:asne-googleplus:0.3.3'
     compile 'com.squareup.picasso:picasso:2.5.0'
+    compile project(':slideDateTimePicker')
 }

@@ -98,8 +98,9 @@ public class MainActivity extends DrawerActivity {
 	
 	public void	 btnCallbacks(Object data)
 	{
-		System.out.println("the tag us"+data);
+		System.out.println("the tag us" + data);
 		DataManager.sharedDataManager().setSelectedIndex(-1);
+
 		adapter.notifyDataSetChanged();
 	}
 
@@ -376,7 +377,7 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+									int position, long id) {
 
 				startActivity(new Intent(context, NoteMainActivity.class));
 			}
@@ -398,6 +399,8 @@ public class MainActivity extends DrawerActivity {
 				return true;
 			}
 		});
+
+
 	}
 
 	@Override

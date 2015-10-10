@@ -88,7 +88,6 @@
         android:layout_marginTop="0dp"
         android:background="@color/header_bg"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:weightSum="7" >
 
         <ImageButton
@@ -103,45 +102,50 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="15dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_option_lock" />
+            android:src="@drawable/image_option_lock2" />
 
         <ImageButton
             android:id="@+id/btntimebomb"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="15dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_option_timebomb" />
+            android:src="@drawable/image_option_timebomb2" />
 
         <ImageButton
             android:id="@+id/btnmove"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="10dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_option_move" />
+            android:src="@drawable/image_option_move2" />
 
         <ImageButton
             android:id="@+id/btndelete"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="15dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_option_delete" />
+            android:src="@drawable/image_option_delete2" />
 
         <ImageButton
             android:id="@+id/btnshare"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="12dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_option_share" />
+            android:src="@drawable/image_option_share2" />
 
         <ImageButton
             android:id="@+id/btnclose2"
