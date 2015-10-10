@@ -31,10 +31,14 @@ import com.tilak.adpters.NewNoteFolderAdapter;
 import com.tilak.adpters.NewNoteFolderGridAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
+import com.tilak.db.Folder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 enum SORTTYPE_NEW {
 	ALPHABET, COLOURS, CREATED_TIME, MODIFIED_TIME, REMINDER_TIME, TIME_BOMB
@@ -287,61 +291,69 @@ public class NewFolderMainActivity extends DrawerActivity {
 		String desText = "Folder 1 Detail";
 		String desText2 = "Folder 1 Detail";
 
-		SideMenuitems item1 = new SideMenuitems();
-		item1.setMenuName("FOLDER 1");
-		item1.setMenuNameDetail(desText);
-		item1.setMenuid("10");
-		item1.setColours("#ffffff");
-		arrDataNote.add(item1);
+		List<Folder> allfolders = Folder.findWithQuery(Folder.class, "Select * from Folder");
+		for(Folder currentFolder : allfolders){
+			try {
+				SideMenuitems item1 = new SideMenuitems();
+				item1.setMenuName(currentFolder.getName());
+//				item1.setMenuNameDetail(currentFolder.get);
+				item1.setMenuid("10");
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date createDate = formatter.parse(currentFolder.getCreationtime());
+				item1.setCreatedTime(createDate);
+				item1.setColours("#ffffff");
+				arrDataNote.add(item1);
+			}catch (Exception e){}
+		}
 
-		SideMenuitems item2 = new SideMenuitems();
-		item2.setMenuName("FOLDER 2");
-		item2.setMenuNameDetail(desText2);
-		item2.setColours("#ffffff");
-		arrDataNote.add(item2);
-
-		SideMenuitems item3 = new SideMenuitems();
-		item3.setMenuName("FOLDER 2");
-		item3.setMenuNameDetail(desText);
-		item3.setColours("#ffffff");
-		arrDataNote.add(item3);
-
-		SideMenuitems item4 = new SideMenuitems();
-		item4.setMenuName("FOLDER 3");
-		item4.setMenuNameDetail(desText2);
-		item4.setColours("#ffffff");
-		arrDataNote.add(item4);
-
-		SideMenuitems item5 = new SideMenuitems();
-		item5.setMenuName("FOLDER 4");
-		item5.setMenuNameDetail(desText2);
-		item5.setColours("#ffffff");
-		arrDataNote.add(item5);
-
-		SideMenuitems item6 = new SideMenuitems();
-		item6.setMenuName("FOLDER 5");
-		item6.setColours("#ffffff");
-		item6.setMenuNameDetail(desText);
-
-		arrDataNote.add(item6);
-
-		SideMenuitems item7 = new SideMenuitems();
-		item7.setMenuName("FOLDER 6");
-		item7.setMenuNameDetail("");
-		item7.setColours("#ffffff");
-		arrDataNote.add(item7);
-
-		SideMenuitems item8 = new SideMenuitems();
-		item8.setMenuName("FOLDER 7");
-		item8.setMenuNameDetail(desText2);
-		item8.setColours("#ffffff");
-		arrDataNote.add(item8);
-
-		SideMenuitems item9 = new SideMenuitems();
-		item9.setMenuName("FOLDER 8");
-		item9.setMenuNameDetail(desText);
-		item9.setColours("#ffffff");
-		arrDataNote.add(item9);
+//		SideMenuitems item2 = new SideMenuitems();
+//		item2.setMenuName("FOLDER 2");
+//		item2.setMenuNameDetail(desText2);
+//		item2.setColours("#ffffff");
+//		arrDataNote.add(item2);
+//
+//		SideMenuitems item3 = new SideMenuitems();
+//		item3.setMenuName("FOLDER 2");
+//		item3.setMenuNameDetail(desText);
+//		item3.setColours("#ffffff");
+//		arrDataNote.add(item3);
+//
+//		SideMenuitems item4 = new SideMenuitems();
+//		item4.setMenuName("FOLDER 3");
+//		item4.setMenuNameDetail(desText2);
+//		item4.setColours("#ffffff");
+//		arrDataNote.add(item4);
+//
+//		SideMenuitems item5 = new SideMenuitems();
+//		item5.setMenuName("FOLDER 4");
+//		item5.setMenuNameDetail(desText2);
+//		item5.setColours("#ffffff");
+//		arrDataNote.add(item5);
+//
+//		SideMenuitems item6 = new SideMenuitems();
+//		item6.setMenuName("FOLDER 5");
+//		item6.setColours("#ffffff");
+//		item6.setMenuNameDetail(desText);
+//
+//		arrDataNote.add(item6);
+//
+//		SideMenuitems item7 = new SideMenuitems();
+//		item7.setMenuName("FOLDER 6");
+//		item7.setMenuNameDetail("");
+//		item7.setColours("#ffffff");
+//		arrDataNote.add(item7);
+//
+//		SideMenuitems item8 = new SideMenuitems();
+//		item8.setMenuName("FOLDER 7");
+//		item8.setMenuNameDetail(desText2);
+//		item8.setColours("#ffffff");
+//		arrDataNote.add(item8);
+//
+//		SideMenuitems item9 = new SideMenuitems();
+//		item9.setMenuName("FOLDER 8");
+//		item9.setMenuNameDetail(desText);
+//		item9.setColours("#ffffff");
+//		arrDataNote.add(item9);
 
 		adapter.notifyDataSetChanged();
 		String strCout = "(" + arrDataNote.size() + ")";
@@ -544,7 +556,13 @@ public class NewFolderMainActivity extends DrawerActivity {
 				// TODO Auto-generated method stub
 				if (textViewTitleAlertMessage.getText().toString().length()>0)
 				{
-					updateFolder(textViewTitleAlertMessage.getText().toString());
+//					updateFolder(textViewTitleAlertMessage.getText().toString());
+					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String currentDateStr = formatter.format(new Date());
+
+					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "", currentDateStr, "");
+					folder.save();
+					getDeafultNote();
 					dialog.dismiss();
 				}
 			
