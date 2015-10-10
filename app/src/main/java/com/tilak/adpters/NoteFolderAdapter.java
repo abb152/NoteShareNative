@@ -1,12 +1,5 @@
 package com.tilak.adpters;
 
-import java.util.ArrayList;
-
-import com.tilak.dataAccess.DataManager;
-import com.tilak.datamodels.SideMenuitems;
-import com.tilak.noteshare.MainActivity;
-import com.tilak.noteshare.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -19,6 +12,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.tilak.dataAccess.DataManager;
+import com.tilak.datamodels.SideMenuitems;
+import com.tilak.noteshare.MainActivity;
+import com.tilak.noteshare.R;
+
+import java.util.ArrayList;
 
 public class NoteFolderAdapter extends BaseAdapter {
 

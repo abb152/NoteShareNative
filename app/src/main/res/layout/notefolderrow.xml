@@ -60,27 +60,6 @@
                 android:text="01.04.15"
                 android:textColor="@color/light_gray_999999"
                 android:textSize="10sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:background="@android:color/transparent" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/delete_icon" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/share_small_icon" />
-            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -109,6 +88,7 @@
         android:layout_marginTop="0dp"
         android:background="@color/header_bg"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:weightSum="7" >
 
         <ImageButton

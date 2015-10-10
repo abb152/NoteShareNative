@@ -492,6 +492,7 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.imageViewSlidemenu);
 		layoutPintrestImageView.setImageResource(R.drawable.pintrest_view_logo);
 		layoutPintrestTextView.setText("Shuffle");
+		layoutPintrest.setVisibility(LinearLayout.GONE);
 
 		LinearLayout layoutGrid = (LinearLayout) myDialog
 				.findViewById(R.id.layoutGrid);
@@ -509,9 +510,8 @@ public class MainActivity extends DrawerActivity {
 				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.VISIBLE);
 				notefoleserList.setVisibility(View.GONE);
-				notefoleserPintrestList.setVisibility(View.GONE);
+				//notefoleserPintrestList.setVisibility(View.GONE);
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -540,7 +540,7 @@ public class MainActivity extends DrawerActivity {
 				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.GONE);
 				notefoleserList.setVisibility(View.VISIBLE);
-				notefoleserPintrestList.setVisibility(View.GONE);
+				//notefoleserPintrestList.setVisibility(View.GONE);
 				
 				DataManager.sharedDataManager().setSelectedIndex(-1);
 				adapter.notifyDataSetChanged();
@@ -558,7 +558,7 @@ public class MainActivity extends DrawerActivity {
 				adapter.notifyDataSetChanged();
 				notefoleserGridList.setVisibility(View.GONE);
 				notefoleserList.setVisibility(View.VISIBLE);
-				notefoleserPintrestList.setVisibility(View.GONE);
+				//notefoleserPintrestList.setVisibility(View.GONE);
 				DataManager.sharedDataManager().setSelectedIndex(-1);
 				adapter.notifyDataSetChanged();
 				myDialog.dismiss();
