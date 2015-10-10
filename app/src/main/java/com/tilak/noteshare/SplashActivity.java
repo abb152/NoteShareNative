@@ -36,9 +36,7 @@ public class SplashActivity extends Activity
      			
      			
      		}*/
-     		
-     		
-     		
+
         imageviewSplashLogo=(ImageView) findViewById(R.id.imgsplashLogo);
         
         Animation hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.fadeout);
@@ -54,26 +52,21 @@ public class SplashActivity extends Activity
             @Override
             public void run() 
             {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-            	SharedPreferences preferences = SplashActivity.this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE); 
-            	boolean finish = preferences.getBoolean("FINISHED", false);  
-            	
-            	if (finish==true)
-            	{
-            		Intent i = new Intent(SplashActivity.this, LoginActivity.class);
-                    startActivity(i);
-				}else
-				{
-					
-					//Intent i = new Intent(SplashActivity.this, InteroductionActivity.class);
-					Intent i = new Intent(SplashActivity.this, LoginActivity.class);
-					startActivity(i);
-				}
-                
- 
-                // close this activity
-                finish();
+			// This method will be executed once the timer is over
+			// Start your app main activity
+			SharedPreferences preferences = SplashActivity.this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+			boolean finish = preferences.getBoolean("FINISHED", false);
+
+			if (finish==true) {
+				Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+				startActivity(i);
+			} else {
+				//Intent i = new Intent(SplashActivity.this, InteroductionActivity.class);
+				Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+				startActivity(i);
+			}
+			// close this activity
+			finish();
             }
         }, SPLASH_TIME_OUT);
     }}

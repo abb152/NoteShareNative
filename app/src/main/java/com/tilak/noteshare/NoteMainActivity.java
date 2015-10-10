@@ -162,6 +162,29 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		mDrawerLayout.addView(contentView, 0);
 		initlizeUIElement(contentView);
 
+		seekbar = (SeekBar) findViewById(R.id.seekBar);
+		number = (TextView) findViewById(R.id.number);
+		//number.setText(R.string.zero);
+
+		/*seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			int progress_value;
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				progress_value = progress;
+				number.setText(seekbar.getProgress());
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				number.setText(seekbar.getProgress());
+			}
+		});*/
+
 	}
 
 	void initlizeUIElement(View contentview) {
@@ -1938,27 +1961,27 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			textViewSizesHeader.setText("BRUSH SIZES");
 		}
 
-		seekbar = (SeekBar) findViewById(R.id.seekBar);
-		number = (TextView) findViewById(R.id.number);
-		number.setText("1");
-
-		seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+		SeekBar.OnSeekBarChangeListener yourSeekBarListener = new SeekBar.OnSeekBarChangeListener() {
 			int progress_value;
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				progress_value = progress;
-				number.setText(seekbar.getProgress());
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
-
-			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				number.setText(seekbar.getProgress());
+				//add code here
+				//number.setText(seekbar.getProgress());
 			}
-		});
 
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				//add code here
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBark, int progress, boolean fromUser) {
+				//add code here
+				/*progress_value = progress;
+				number.setText(seekbar.getProgress());*/
+			}
+		};
+		//seekbar.setOnSeekBarChangeListener(yourSeekBarListener);
 
 		//seekbar();
 

@@ -50,13 +50,18 @@
             android:thumb="@drawable/thumb"
             android:progressDrawable="@layout/progress_drawable"/>
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginRight="10dp"
             android:text="@string/app_name"
-            android:gravity="center"/>
+            android:gravity="center"/>-->
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/brush_28"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 
