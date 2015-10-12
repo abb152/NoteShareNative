@@ -357,7 +357,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		adapter.notifyDataSetChanged();
 		String strCout = "(" + arrDataNote.size() + ")";
-		textViewheaderTitle.setText("FOLDER" + strCout);
+		textViewheaderTitle.setText("FOLDER " + strCout);
 		sortType = SORTTYPE_NEW.ALPHABET;
 		updateGridView();
 		updatePintrestView();

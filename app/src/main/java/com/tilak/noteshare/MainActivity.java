@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -26,19 +24,22 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NoteFolderAdapter;
 import com.tilak.adpters.NoteFolderGridAdapter;
+import com.tilak.adpters.Test;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Note;
-import com.tilak.db.NoteElement;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 enum SORTTYPE
@@ -60,7 +61,9 @@ public class MainActivity extends DrawerActivity {
 
 	public ImageButton textViewAdd;
 	public ListView notefoleserList;
-	public GridView notefoleserGridList;
+    //public SwipeListView notefoleserList;
+
+    public GridView notefoleserGridList;
 	public ScrollView notefoleserPintrestList;
 
 	public LinearLayout Layout1;
@@ -73,6 +76,13 @@ public class MainActivity extends DrawerActivity {
 	public TextView textNoteSort, textNoteView;
 	
 	public SORTTYPE sortType;
+
+
+
+	private ArrayList<HashMap<String,String>> list;
+
+
+
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -88,12 +98,16 @@ public class MainActivity extends DrawerActivity {
 				.inflate(R.layout.activity_main, null, false);
 		mDrawerLayout.addView(contentView, 0);
 		DataManager.sharedDataManager().setSelectedIndex(-1);
-		initlizeUIElement(contentView);
 
-		getDeafultNote();
+		try {
+			initlizeUIElement(contentView);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		//getDeafultNote();
 		createDirectory();
 
-		//FacebookSdk.sdkInitialize(getApplicationContext());
 	}
 	
 	public void	 btnCallbacks(Object data)
@@ -104,27 +118,23 @@ public class MainActivity extends DrawerActivity {
 		adapter.notifyDataSetChanged();
 	}
 
-	void initlizeUIElement(View contentview) {
+	void initlizeUIElement(View contentview) throws ParseException{
 		DataManager.sharedDataManager().setTypeofListView(false);
 
 		layoutHeader = (RelativeLayout) contentview
 				.findViewById(R.id.mainHeadermenue);
 		textViewheaderTitle = (TextView) layoutHeader
 				.findViewById(R.id.textViewheaderTitle);
-		//textViewheaderTitle.setTypeface(NoteShareFonts.asTypeface(MainActivity.this, NoteShareFonts.arial));
 
-		/*imageButtoncalander = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtoncalander);*/
 		imageButtonHamburg = (ImageButton) layoutHeader
 				.findViewById(R.id.imageButtonHamburg);
-		/*imageButtonsquence = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtonsquence);*/
+
 
 		textNoteSort = (TextView) findViewById(R.id.textNoteSort);
 		textNoteView = (TextView) findViewById(R.id.textNoteView);
 
 		textViewAdd = (ImageButton) findViewById(R.id.textViewAdd);
-		notefoleserList = (ListView) findViewById(R.id.notefoleserList);
+
 		arrDataNote = new ArrayList<SideMenuitems>();
 
 		notefoleserGridList = (GridView) findViewById(R.id.notefoleserGridList);
@@ -134,16 +144,37 @@ public class MainActivity extends DrawerActivity {
 
 		// Grid adapter
 
-		gridAdapter = new NoteFolderGridAdapter(this, arrDataNote);
-		notefoleserGridList.setAdapter(gridAdapter);
+		//gridAdapter = new NoteFolderGridAdapter(this, arrDataNote);
+		//notefoleserGridList.setAdapter(gridAdapter);
 
 		// list adapter
 
-		adapter = new NoteFolderAdapter(this, arrDataNote);
-		notefoleserList.setAdapter(adapter);
+		//adapter = new NoteFolderAdapter(this, arrDataNote);
+		//notefoleserList.setAdapter(adapter);
+
 
 		addlistners();
 		// getDeafultNote();
+
+		checkTimeClicked();
+		populate();
+
+		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+
+		Test testAdapter = new Test(this,list);
+		listView.setOffsetLeft(200L);
+		listView.setOffsetRight(100L);
+		listView.setAdapter(testAdapter);
+
+		listView.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+				//do your stuff here
+				Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+				startActivity(intent);
+				return true;
+			}
+		});
+
 	}
 
 	void updatePintrestView() {
@@ -249,83 +280,6 @@ public class MainActivity extends DrawerActivity {
 		gridAdapter.notifyDataSetChanged();
 	}
 
-	void getDeafultNote() {
-
-		String desText = "Lorem ipsum is simply dummy text of the printing and type setting industry.";
-		String desText2 = "Lorem ipsum is simply dummy text of the printing and type setting industry.Lorem ipsum is simply dummy text of the printing and type setting industry.";
-		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
-		for(Note currentnote : allnotes){
-			try {
-				NoteElement notedetails = NoteElement.findById(NoteElement.class, currentnote.getId());
-				Log.e("Note Details", notedetails.getContent());
-				SideMenuitems item1 = new SideMenuitems();
-				item1.setMenuName(currentnote.getTitle());
-				item1.setMenuNameDetail(notedetails.getContent());
-				item1.setColours(currentnote.getColor());
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date createDate = formatter.parse(currentnote.getCreationtime());
-				item1.setCreatedTime(createDate);
-				item1.setModifiedTime(createDate);
-				arrDataNote.add(item1);
-			}catch (Exception e){}
-		}
-
-//		SideMenuitems item2 = new SideMenuitems();
-//		item2.setMenuName("Physics Theory Links");
-//		item2.setMenuNameDetail(desText2);
-//		item2.setColours("#D8CEF6");
-//		arrDataNote.add(item2);
-//
-//		SideMenuitems item3 = new SideMenuitems();
-//		item3.setMenuName("Maths");
-//		item3.setMenuNameDetail(desText);
-//		item3.setColours("#F5A9BC");
-//		arrDataNote.add(item3);
-//
-//		SideMenuitems item4 = new SideMenuitems();
-//		item4.setMenuName("Computer Science");
-//		item4.setMenuNameDetail(desText2);
-//		item4.setColours("#D8CEF6");
-//		arrDataNote.add(item4);
-//
-//		SideMenuitems item5 = new SideMenuitems();
-//		item5.setMenuName("Graphics");
-//		item5.setMenuNameDetail(desText2);
-//		item5.setColours("#F5F6CE");
-//		arrDataNote.add(item5);
-//
-//		SideMenuitems item6 = new SideMenuitems();
-//		item6.setMenuName("Adbobe Links");
-//		item6.setColours("#ffffff");
-//		item6.setMenuNameDetail(desText);
-//		arrDataNote.add(item6);
-//
-//		SideMenuitems item7 = new SideMenuitems();
-//		item7.setMenuName("YouTube video Links");
-//		item7.setMenuNameDetail("");
-//		item7.setColours("#ffffff");
-//		arrDataNote.add(item7);
-//
-//		SideMenuitems item8 = new SideMenuitems();
-//		item8.setMenuName("Note 8");
-//		item8.setMenuNameDetail(desText2);
-//		item8.setColours("#F5F6CE");
-//		arrDataNote.add(item8);
-//
-//		SideMenuitems item9 = new SideMenuitems();
-//		item9.setMenuName("Note 9");
-//		item9.setMenuNameDetail(desText);
-//		item9.setColours("#58FAD0");
-//		arrDataNote.add(item9);
-
-		adapter.notifyDataSetChanged();
-		String strCout = "(" + arrDataNote.size() + ")";
-		textViewheaderTitle.setText("NOTE" + strCout);
-		sortType=SORTTYPE.ALPHABET;
-		updateGridView();
-		updatePintrestView();
-
-	}
 
 	void addlistners() {
 
@@ -352,12 +306,12 @@ public class MainActivity extends DrawerActivity {
 		});*/
 		imageButtonHamburg.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				openSlideMenu();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                openSlideMenu();
+            }
+        });
 		/*imageButtonsquence.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -367,95 +321,42 @@ public class MainActivity extends DrawerActivity {
 			}
 		});*/
 		textViewAdd.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(context, NoteMainActivity.class));
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, NoteMainActivity.class));
+            }
+        });
 
-		notefoleserList.setOnItemClickListener(new OnItemClickListener() {
+		/*notefoleserList.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-									int position, long id) {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
 
-				startActivity(new Intent(context, NoteMainActivity.class));
-			}
-		});
+                startActivity(new Intent(context, NoteMainActivity.class));
+            }
+        });
 		
 		notefoleserList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				if (DataManager.sharedDataManager().getSelectedIndex()==arg2) {
-					DataManager.sharedDataManager().setSelectedIndex(-1);
-				}
-				else {
-					DataManager.sharedDataManager().setSelectedIndex(arg2);
-				}
-				adapter.notifyDataSetChanged();
-				return true;
-			}
-		});
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                if (DataManager.sharedDataManager().getSelectedIndex() == arg2) {
+                    DataManager.sharedDataManager().setSelectedIndex(-1);
+                } else {
+                    DataManager.sharedDataManager().setSelectedIndex(arg2);
+                }
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        });*/
 
 
 	}
 
-	@Override
-	public void onBackPressed() {
-		showAlertWith("Are you sure,Do you want to quit the app?",
-				MainActivity.this);
-	}
 
-	void showAlertWith(String message, Context context) {
-
-		final Dialog dialog = new Dialog(context);
-
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.alert_view, null, false);
-
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("ALERT");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-		TextView textViewTitleAlertMessage = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlertMessage);
-		textViewTitleAlertMessage.setText(message);
-
-		Button buttonAlertCancel = (Button) contentView
-				.findViewById(R.id.buttonAlertCancel);
-		Button buttonAlertOk = (Button) contentView
-				.findViewById(R.id.buttonAlertOk);
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
-
-			}
-		});
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				System.exit(0);
-
-			}
-		});
-
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(false);
-
-		dialog.setContentView(contentView);
-		dialog.show();
-
-	}
 
 	// showActionSheet
 	// ---------------------------------------------------------------------------------------
@@ -527,7 +428,7 @@ public class MainActivity extends DrawerActivity {
 				notefoleserList.setVisibility(View.GONE);
 				notefoleserPintrestList.setVisibility(View.VISIBLE);
 				
-				updatePintrestView();
+				//updatePintrestView();
 				myDialog.dismiss();
 
 			}
@@ -584,6 +485,9 @@ public class MainActivity extends DrawerActivity {
 		myDialog.getWindow().setGravity(Gravity.BOTTOM);
 
 	}
+
+
+    /******* bottom sorting menu start *******/
 
 	public void showActionSheet_sort(View v) {
 
@@ -761,8 +665,76 @@ public class MainActivity extends DrawerActivity {
 
 	}
 
-	// ---------------------------------------------------------------------------------------
-	// showActionSheet end
+    /******* bottom sorting menu end *******/
+
+
+
+
+
+    /******* onBackPressed start *******/
+
+    @Override
+    public void onBackPressed() {
+        showAlertWith("Are you sure,Do you want to quit the app?",
+                MainActivity.this);
+    }
+
+    void showAlertWith(String message, Context context) {
+
+        final Dialog dialog = new Dialog(context);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflate your activity layout here!
+        View contentView = inflater.inflate(R.layout.alert_view, null, false);
+
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("ALERT");
+        textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlertMessage = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlertMessage);
+        textViewTitleAlertMessage.setText(message);
+
+        Button buttonAlertCancel = (Button) contentView
+                .findViewById(R.id.buttonAlertCancel);
+        Button buttonAlertOk = (Button) contentView
+                .findViewById(R.id.buttonAlertOk);
+        buttonAlertCancel.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+
+            }
+        });
+        buttonAlertOk.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                System.exit(0);
+
+            }
+        });
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+
+        dialog.setContentView(contentView);
+        dialog.show();
+
+    }
+
+    /******* onBackPressed end *******/
+
+
+
+    /******* create directory start *******/
+
+    // create directory NoteShare in internal memory
+    // and Images and Audio folder inside NoteShare folder for images, profile picture and audio notes
 
 	public void createDirectory() {
 		// To be safe, you should check that the SDCard is mounted
@@ -811,4 +783,54 @@ public class MainActivity extends DrawerActivity {
 		}
 	}
 
+    /******* create directory end *******/
+
+
+
+	void populate() {
+
+		list=new ArrayList<HashMap<String, String>>();
+		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1'");
+		for(Note currentnote : allnotes){
+
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("tvTitle", currentnote.getTitle());
+			map.put("tvCreate", currentnote.getCreationtime());
+			list.add(map);
+
+		}
+
+		//adapter.notifyDataSetChanged();
+		String strCout = "(" + list.size() + ")";
+		textViewheaderTitle.setText("NOTE " + strCout);
+		//sortType=SORTTYPE.ALPHABET;
+		//updateGridView();
+		//updatePintrestView();
+
+	}
+
+	public void checkTimeClicked() throws ParseException {
+
+		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE timebomb IS NOT NULL AND timebomb != ''");
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		String currentDateStr = formatter.format(new Date());
+
+		Date currentDate = formatter.parse(currentDateStr);
+
+		for (Note currentnote : allnotes) {
+			String timebomb_time = currentnote.getTimebomb();
+
+			Date timebomb = formatter.parse(timebomb_time);
+			if (currentDate.compareTo(timebomb) >= 0) {
+				currentnote.setShownote("0");
+				currentnote.save();
+			} else {
+				currentnote.setShownote("1");
+				currentnote.save();
+			}
+
+		}
+	}
 }

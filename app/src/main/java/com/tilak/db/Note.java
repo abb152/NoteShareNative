@@ -14,12 +14,13 @@ public class Note extends SugarRecord {
     public String creationtime;
     public String modificationtime;
     public String serverid;
+    public String shownote;
 
     public Note() {
         super();
     }
 
-    public Note(String title, String tags, String color, String folder, String remindertime, String timebomb, String background, String creationtime, String modificationtime, String serverid) {
+    public Note(String title, String tags, String color, String folder, String remindertime, String timebomb, String background, String creationtime, String modificationtime, String serverid, String shownote) {
         this.title = title;
         this.tags = tags;
         this.color = color;
@@ -30,6 +31,7 @@ public class Note extends SugarRecord {
         this.creationtime = creationtime;
         this.modificationtime = modificationtime;
         this.serverid = serverid;
+        this.shownote = shownote;
     }
 
     public String getTitle() {
@@ -110,5 +112,13 @@ public class Note extends SugarRecord {
 
     public void setServerid(String serverid) {
         this.serverid = serverid;
+    }
+
+    public String getShownote() {
+        return shownote;
+    }
+
+    public void setShownote(String shownote) {
+        this.shownote = shownote;
     }
 }
