@@ -1,7 +1,6 @@
 package com.tilak.adpters;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +59,7 @@ public class OurFolderListAdapter extends BaseAdapter {
             convertView=inflater.inflate(R.layout.our_folder_list,null); //change the name of the layout
             holder=new ViewHolder();
 
-            holder.linearLayout= (LinearLayout) convertView.findViewById(R.id.folderfront);
+            holder.linearLayout= (LinearLayout) convertView.findViewById(R.id.front);
             holder.txtFolderName= (TextView) convertView.findViewById(R.id.tvFolderName); //find the different Views
             holder.txtFolderDesc = (TextView) convertView.findViewById(R.id.tvFolderDesc);
             holder.txtFolderDate= (TextView) convertView.findViewById(R.id.tvFolderDate);
@@ -75,7 +74,6 @@ public class OurFolderListAdapter extends BaseAdapter {
         holder.txtFolderDesc.setText(map.get("folderDesc"));
         holder.txtFolderDate.setText(map.get("folderDate"));
         holder.tvIdHidden.setText(map.get("folderId"));
-        holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("folderBgColor")));
 
         return convertView;
     }

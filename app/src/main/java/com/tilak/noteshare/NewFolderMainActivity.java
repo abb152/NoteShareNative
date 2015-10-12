@@ -2,7 +2,6 @@ package com.tilak.noteshare;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,13 +21,14 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NewNoteFolderAdapter;
 import com.tilak.adpters.NewNoteFolderGridAdapter;
+import com.tilak.adpters.OurFolderListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Folder;
@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 enum SORTTYPE_NEW {
@@ -52,7 +53,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 	public RelativeLayout layoutHeader;
 
 	public ImageButton textViewAdd;
-	public ListView notefoleserList;
+
 	public GridView notefoleserGridList;
 	public ScrollView notefoleserPintrestList;
 
@@ -66,6 +67,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 	public TextView textNoteSort, textNoteView;
 
 	public SORTTYPE_NEW sortType;
+	private ArrayList<HashMap<String,String>> list;
 
 	public Dialog dialogColor;
 	public ImageButton searchbuttonclick;
@@ -82,7 +84,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 				null, false);
 		mDrawerLayout.addView(contentView, 0);
 		initlizeUIElement(contentView);
-		getDeafultNote();
+//		getDeafultNote();
 
 	}
 
@@ -108,7 +110,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 		textNoteView = (TextView) findViewById(R.id.textNoteView);
 
 		textViewAdd = (ImageButton) findViewById(R.id.textViewAdd);
-		notefoleserList = (ListView) findViewById(R.id.notefoleserList);
 		arrDataNote = new ArrayList<SideMenuitems>();
 
 		notefoleserGridList = (GridView) findViewById(R.id.notefoleserGridList);
@@ -118,15 +119,15 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		// Grid adapter
 
-		gridAdapter = new NewNoteFolderGridAdapter(this, arrDataNote);
-		notefoleserGridList.setAdapter(gridAdapter);
-		notefoleserGridList.setLongClickable(true);
+//		gridAdapter = new NewNoteFolderGridAdapter(this, arrDataNote);
+//		notefoleserGridList.setAdapter(gridAdapter);
+//		notefoleserGridList.setLongClickable(true);
 
 		// list adapter
 
-		adapter = new NewNoteFolderAdapter(this, arrDataNote);
-		notefoleserList.setAdapter(adapter);
-		notefoleserList.setLongClickable(true);
+//		adapter = new NewNoteFolderAdapter(this, arrDataNote);
+//		notefoleserList.setAdapter(adapter);
+//		notefoleserList.setLongClickable(true);
 		
 		//search
 		searchbuttonclick=(ImageButton) contentview.findViewById(R.id.searchbuttonclick);
@@ -135,12 +136,22 @@ public class NewFolderMainActivity extends DrawerActivity {
 		
 		addlistners();
 		// getDeafultNote();
-		addClickListneres();
+//		addClickListneres();
+
+		populate();
+		swipeListView();
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		populate();
+		swipeListView();
 	}
 
 	void addClickListneres() {
 
-		notefoleserList.setOnItemClickListener(new OnItemClickListener() {
+		/*notefoleserList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -150,7 +161,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 				
 				// ((SwipeLayout)(notefoleserList.getChildAt(position - notefoleserList.getFirstVisiblePosition()))).open(true);
 			}
-		});
+		});*/
 
 		notefoleserGridList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -162,7 +173,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 			}
 		});
 
-		notefoleserList
+		/*notefoleserList
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 					public boolean onItemLongClick(AdapterView<?> arg0,
@@ -175,7 +186,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 						return true;
 					}
-				});
+				});*/
 
 		notefoleserGridList
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -306,54 +317,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 			}catch (Exception e){}
 		}
 
-//		SideMenuitems item2 = new SideMenuitems();
-//		item2.setMenuName("FOLDER 2");
-//		item2.setMenuNameDetail(desText2);
-//		item2.setColours("#ffffff");
-//		arrDataNote.add(item2);
-//
-//		SideMenuitems item3 = new SideMenuitems();
-//		item3.setMenuName("FOLDER 2");
-//		item3.setMenuNameDetail(desText);
-//		item3.setColours("#ffffff");
-//		arrDataNote.add(item3);
-//
-//		SideMenuitems item4 = new SideMenuitems();
-//		item4.setMenuName("FOLDER 3");
-//		item4.setMenuNameDetail(desText2);
-//		item4.setColours("#ffffff");
-//		arrDataNote.add(item4);
-//
-//		SideMenuitems item5 = new SideMenuitems();
-//		item5.setMenuName("FOLDER 4");
-//		item5.setMenuNameDetail(desText2);
-//		item5.setColours("#ffffff");
-//		arrDataNote.add(item5);
-//
-//		SideMenuitems item6 = new SideMenuitems();
-//		item6.setMenuName("FOLDER 5");
-//		item6.setColours("#ffffff");
-//		item6.setMenuNameDetail(desText);
-//
-//		arrDataNote.add(item6);
-//
-//		SideMenuitems item7 = new SideMenuitems();
-//		item7.setMenuName("FOLDER 6");
-//		item7.setMenuNameDetail("");
-//		item7.setColours("#ffffff");
-//		arrDataNote.add(item7);
-//
-//		SideMenuitems item8 = new SideMenuitems();
-//		item8.setMenuName("FOLDER 7");
-//		item8.setMenuNameDetail(desText2);
-//		item8.setColours("#ffffff");
-//		arrDataNote.add(item8);
-//
-//		SideMenuitems item9 = new SideMenuitems();
-//		item9.setMenuName("FOLDER 8");
-//		item9.setMenuNameDetail(desText);
-//		item9.setColours("#ffffff");
-//		arrDataNote.add(item9);
 
 		adapter.notifyDataSetChanged();
 		String strCout = "(" + arrDataNote.size() + ")";
@@ -415,15 +378,15 @@ public class NewFolderMainActivity extends DrawerActivity {
 			}
 		});
 
-		notefoleserList.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-
-				startActivity(new Intent(context, NoteMainActivity.class));
-			}
-		});
+//		notefoleserList.setOnItemClickListener(new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//
+//				startActivity(new Intent(context, NoteMainActivity.class));
+//			}
+//		});
 		
 		
 		
@@ -562,7 +525,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "", currentDateStr, "");
 					folder.save();
-					getDeafultNote();
+					onRestart();
 					dialog.dismiss();
 				}
 			
@@ -645,7 +608,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.VISIBLE);
-				notefoleserList.setVisibility(View.GONE);
+				//notefoleserList.setVisibility(View.GONE);
 				notefoleserPintrestList.setVisibility(View.GONE);
 				myDialog.dismiss();
 
@@ -658,7 +621,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.GONE);
-				notefoleserList.setVisibility(View.GONE);
+				//notefoleserList.setVisibility(View.GONE);
 				notefoleserPintrestList.setVisibility(View.VISIBLE);
 
 				updatePintrestView();
@@ -676,7 +639,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 				adapter.notifyDataSetChanged();
 				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.GONE);
-				notefoleserList.setVisibility(View.VISIBLE);
+				//notefoleserList.setVisibility(View.VISIBLE);
 				notefoleserPintrestList.setVisibility(View.GONE);
 				myDialog.dismiss();
 
@@ -691,7 +654,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 				DataManager.sharedDataManager().setTypeofListView(true);
 				adapter.notifyDataSetChanged();
 				notefoleserGridList.setVisibility(View.GONE);
-				notefoleserList.setVisibility(View.VISIBLE);
+				//notefoleserList.setVisibility(View.VISIBLE);
 				notefoleserPintrestList.setVisibility(View.GONE);
 				myDialog.dismiss();
 
@@ -1109,6 +1072,41 @@ public class NewFolderMainActivity extends DrawerActivity {
 	void filterWithSearchString(String filterString)
 	{
 		
+	}
+	void populate() {
+		list=new ArrayList<HashMap<String, String>>();
+		List<Folder> allfolders = Folder.findWithQuery(Folder.class, "Select * from Folder");
+		for(Folder currentfolder : allfolders){
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("folderName", currentfolder.getName());
+			map.put("folderDesc", currentfolder.getName()); // change this later
+			map.put("folderDate", currentfolder.getCreationtime());
+			map.put("folderId", currentfolder.getId().toString());
+			list.add(map);
+		}
+
+		//adapter.notifyDataSetChanged();
+		String strCout = "(" + list.size() + ")";
+		textViewheaderTitle.setText("FOLDER " + strCout);
+		//sortType=SORTTYPE.ALPHABET;
+		//updateGridView();
+		//updatePintrestView();
+	}
+
+	void swipeListView(){
+		SwipeListView listView = (SwipeListView) findViewById(R.id.notefolderList);
+
+		OurFolderListAdapter testAdapter = new OurFolderListAdapter(this,list);
+		listView.setOffsetLeft(700L);
+		listView.setAdapter(testAdapter);
+
+		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+				//do your stuff here
+//				showColorAlert(NewFolderMainActivity.this);
+				return true;
+			}
+		});
 	}
 	
 }
