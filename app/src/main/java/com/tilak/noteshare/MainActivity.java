@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NoteFolderAdapter;
 import com.tilak.adpters.NoteFolderGridAdapter;
-import com.tilak.adpters.Test;
+import com.tilak.adpters.OurNoteListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Note;
@@ -77,12 +77,8 @@ public class MainActivity extends DrawerActivity {
 	
 	public SORTTYPE sortType;
 
-
-
 	private ArrayList<HashMap<String,String>> list;
-
-
-
+	public Dialog dialogColor;
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -161,16 +157,14 @@ public class MainActivity extends DrawerActivity {
 
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 
-		Test testAdapter = new Test(this,list);
-		listView.setOffsetLeft(200L);
-		listView.setOffsetRight(100L);
+		OurNoteListAdapter testAdapter = new OurNoteListAdapter(this,list);
+		listView.setOffsetLeft(180L);
 		listView.setAdapter(testAdapter);
 
-		listView.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
+		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
 				//do your stuff here
-				Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-				startActivity(intent);
+				showColorAlert(MainActivity.this);
 				return true;
 			}
 		});
@@ -792,12 +786,13 @@ public class MainActivity extends DrawerActivity {
 		list=new ArrayList<HashMap<String, String>>();
 		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1'");
 		for(Note currentnote : allnotes){
-
 			HashMap<String,String> map = new HashMap<String,String>();
-			map.put("tvTitle", currentnote.getTitle());
-			map.put("tvCreate", currentnote.getCreationtime());
+			map.put("noteName", currentnote.getTitle());
+			map.put("noteDesc", currentnote.getTitle()); // change this later
+			map.put("noteDate", currentnote.getCreationtime());
+			map.put("noteId", currentnote.getId().toString());
+			map.put("noteBgColor",currentnote.getBackground());
 			list.add(map);
-
 		}
 
 		//adapter.notifyDataSetChanged();
@@ -830,6 +825,191 @@ public class MainActivity extends DrawerActivity {
 				currentnote.setShownote("1");
 				currentnote.save();
 			}
+
+		}
+	}
+
+	private void showColorAlert(Context context) {
+		dialogColor = new Dialog(context);
+		LayoutInflater inflater = getLayoutInflater();
+		View contentView = inflater.inflate(R.layout.paintcolor, null, false);
+		LinearLayout paintLayout = (LinearLayout) contentView.findViewById(R.id.paint_colors);
+		LinearLayout paintLayout1 = (LinearLayout) contentView.findViewById(R.id.paint_colors1);
+
+		ImageButton colorbutton1 = (ImageButton) paintLayout
+				.findViewById(R.id.colorbutton1);
+		ImageButton colorbutton2 = (ImageButton) paintLayout
+				.findViewById(R.id.colorbutton2);
+		ImageButton colorbutton3 = (ImageButton) paintLayout
+				.findViewById(R.id.colorbutton3);
+		ImageButton colorbutton4 = (ImageButton) paintLayout
+				.findViewById(R.id.colorbutton4);
+		ImageButton colorbutton5 = (ImageButton) paintLayout
+				.findViewById(R.id.colorbutton5);
+		ImageButton colorbutton6 = (ImageButton) paintLayout
+				.findViewById(R.id.colorbutton6);
+		ImageButton colorbutton7 = (ImageButton) paintLayout
+				.findViewById(R.id.colorbutton7);
+		ImageButton colorbutton8 = (ImageButton) paintLayout1
+				.findViewById(R.id.colorbutton8);
+		ImageButton colorbutton9 = (ImageButton) paintLayout1
+				.findViewById(R.id.colorbutton9);
+		ImageButton colorbutton10 = (ImageButton) paintLayout1
+				.findViewById(R.id.colorbutton10);
+		ImageButton colorbutton11 = (ImageButton) paintLayout1
+				.findViewById(R.id.colorbutton11);
+		ImageButton colorbutton12 = (ImageButton) paintLayout1
+				.findViewById(R.id.colorbutton12);
+		ImageButton colorbutton13 = (ImageButton) paintLayout1
+				.findViewById(R.id.colorbutton13);
+		ImageButton colorbutton14 = (ImageButton) paintLayout1
+				.findViewById(R.id.colorbutton14);
+
+		colorbutton1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+
+			}
+		});
+		colorbutton2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+
+			}
+		});
+		colorbutton3.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+
+			}
+		});
+		colorbutton4.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton5.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton6.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton7.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+
+		colorbutton8.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+
+		colorbutton9.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton10.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton11.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton12.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton13.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+		colorbutton14.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				paintClicked(v);
+			}
+		});
+
+		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("SELECT COLOR");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialogColor.setCancelable(true);
+		dialogColor.setContentView(contentView);
+		dialogColor.show();
+	}
+
+	public void paintClicked(View view) {
+		// use chosen color
+		ImageButton currPaint = null;
+		if (view != currPaint) {
+			// update color
+			ImageButton imgView = (ImageButton) view;
+			String color = view.getTag().toString();
+
+			imgView.setImageDrawable(getResources().getDrawable(
+					R.drawable.paint_pressed));
+			// currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
+			// currPaint = (ImageButton) view;
+			System.out.println("selected color:" + color);
+
+			int colorCode = Color.parseColor(color);
+			dialogColor.dismiss();
+			//listView.setDrawColor(colorCode);
 
 		}
 	}

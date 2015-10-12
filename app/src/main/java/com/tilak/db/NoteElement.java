@@ -4,7 +4,7 @@ import com.orm.SugarRecord;
 
 public class NoteElement extends SugarRecord {
 
-    public int noteid;
+    public long noteid;
     public int ordernumber;
     public String content;
     public String type;
@@ -14,19 +14,11 @@ public class NoteElement extends SugarRecord {
         super();
     }
 
-    public NoteElement(int noteid, int ordernumber, String content, String type, String isSync) {
-        this.noteid = noteid;
-        this.ordernumber = ordernumber;
-        this.content = content;
-        this.type = type;
-        this.isSync = isSync;
-    }
-
-    public int getNoteid() {
+    public long getNoteid() {
         return noteid;
     }
 
-    public void setNoteid(int noteid) {
+    public void setNoteid(long noteid) {
         this.noteid = noteid;
     }
 
@@ -60,5 +52,14 @@ public class NoteElement extends SugarRecord {
 
     public void setIsSync(String isSync) {
         this.isSync = isSync;
+    }
+
+    public NoteElement(long noteid, int ordernumber, String isSync, String type, String content) {
+
+        this.noteid = noteid;
+        this.ordernumber = ordernumber;
+        this.isSync = isSync;
+        this.type = type;
+        this.content = content;
     }
 }
