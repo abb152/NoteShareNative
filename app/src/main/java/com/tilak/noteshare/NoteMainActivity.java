@@ -75,7 +75,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	MediaPlayer mediaPlayer;// = new MediaPlayer();
 	public int typefacae = Typeface.NORMAL;
 
-	public TextView textViewheaderTitle,progressRecordtext;
+	public TextView progressRecordtext;
+	EditText textViewheaderTitle;
 	public RelativeLayout layoutHeader;
 
 	public int currentAudioIndex = 0;
@@ -178,7 +179,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		imageButtoncalander = (ImageButton) layoutHeader
 
 		.findViewById(R.id.imageButtoncalander);
-		textViewheaderTitle = (TextView) layoutHeader
+		textViewheaderTitle = (EditText) layoutHeader
 				.findViewById(R.id.textViewheaderTitle);
 		imageButtonHamburg = (ImageButton) layoutHeader
 				.findViewById(R.id.imageButtonHamburg);
@@ -221,7 +222,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		imageButtonMoreMode = (ImageButton) contentview
 				.findViewById(R.id.imageButtonMoreMode);
 		textViewheaderTitle.setText("NOTE");
-
+		
 		LayoutTextWritingView = (RelativeLayout) contentview
 				.findViewById(R.id.LayoutTextWritingView);
 		LayoutTextWritingView.setVisibility(View.GONE);
