@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:id="@+id/folderback"
+        android:tag="back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:background="@color/header_bg"
+        android:orientation="horizontal"
+        android:weightSum="7"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/tvIdFolderHidden"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/btnfolderdelete"
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/image_option_delete2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/folderfront"
+        android:tag="front"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFolderName"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFolderDesc"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFolderDate"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+</FrameLayout>
