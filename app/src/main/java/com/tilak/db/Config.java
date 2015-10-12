@@ -6,7 +6,7 @@ package com.tilak.db;
 
 import com.orm.SugarRecord;
 
-public class Conifg extends SugarRecord {
+public class Config extends SugarRecord {
 
     public String firstname;
     public String lastname;
@@ -20,11 +20,11 @@ public class Conifg extends SugarRecord {
     public String deviceid;
     public String serverid;
 
-    public Conifg() {
+    public Config() {
         super();
     }
 
-    public Conifg(String firstname, String lastname, String email, String password, String fbid, String googleid, int passcode, String profilepic, String username, String deviceid, String serverid) {
+    public Config(String firstname, String lastname, String email, String password, String fbid, String googleid, int passcode, String profilepic, String username, String deviceid, String serverid) {
         super();
         this.firstname = firstname;
         this.lastname = lastname;

@@ -1,6 +1,7 @@
 package com.tilak.noteshare;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class SettingActivity extends DrawerActivity {public RelativeLayout layoutHeder;
-public ImageButton btnheaderMenu,btnsequence,btncalander;
-public TextView textheadertitle,textViewSubHeaderTitle;
-public LinearLayout layoutTitleHeaderview;
+public class SettingActivity extends DrawerActivity {
+
+	public RelativeLayout layoutHeder;
+	public ImageButton btnheaderMenu,btnsequence,btncalander;
+	public TextView textheadertitle,textViewSubHeaderTitle;
+	public LinearLayout layoutTitleHeaderview;
 
 
 protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public void addListners() {
 	// TODO Auto-generated method stub
 	super.addListners();
 	btnheaderMenu.setOnClickListener(new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
@@ -61,4 +64,8 @@ public void addListners() {
 		}
 	});
 	
-}}
+}
+	public void setPasscode(View v){
+		startActivity(new Intent(this,PasscodeActivity.class));
+	}
+}

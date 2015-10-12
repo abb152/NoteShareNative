@@ -15,6 +15,16 @@
         android:layout_width="fill_parent"
         android:layout_height="44dp"
         layout="@layout/title_header_view" />
-    
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Set Passcode"
+        android:id="@+id/tvPasscode"
+        android:gravity="center"
+        android:textColor="@color/note"
+        android:onClick="setPasscode" />
+
 
 </LinearLayout>
