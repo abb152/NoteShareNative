@@ -1195,10 +1195,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String currentDateStr = formatter.format(new Date());
 
-					Note note = new Note("Test Note "+ incremented, "", "#FFFFFF", "", "", "", "", currentDateStr, currentDateStr , "","1");
+					Note note = new Note("Test Note "+ incremented, "", "", "", "", "", "#FFFFFF", currentDateStr, currentDateStr , "","1");
 					note.save();
 
-					NoteElement noteElem = new NoteElement(incremented + "", 1,txtViewer.getText().toString() , "text", "yes");
+					NoteElement noteElem = new NoteElement(note.getId(), 1,txtViewer.getText().toString() , "text", "yes");
 					noteElem.save();
 
 					finish();
