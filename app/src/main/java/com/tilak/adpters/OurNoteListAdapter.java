@@ -78,7 +78,7 @@ public class OurNoteListAdapter extends BaseAdapter {
         holder.txtNoteName.setText(map.get("noteName")); //set the hash maps
         holder.txtNoteDesc.setText(map.get("noteDesc"));
         holder.txtNoteDate.setText(map.get("noteDate"));
-        //holder.tvIdHidden.setText(map.get("noteId"));
+        holder.tvIdHidden.setText(map.get("noteId"));
         holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
         if(map.get("noteLock").equalsIgnoreCase("1")){
             holder.btnLock.setImageResource(R.drawable.image_option_lock2);

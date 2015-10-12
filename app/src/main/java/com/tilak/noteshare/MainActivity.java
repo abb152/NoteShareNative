@@ -834,7 +834,7 @@ public class MainActivity extends DrawerActivity {
 		}
 	}
 
-	private void showColorAlert(Context context) {
+	private void showColorAlert(Context context,final int nid) {
 		dialogColor = new Dialog(context);
 		LayoutInflater inflater = getLayoutInflater();
 		View contentView = inflater.inflate(R.layout.paintcolor, null, false);
@@ -875,7 +875,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 
 			}
 		});
@@ -884,7 +884,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 
 			}
 		});
@@ -893,7 +893,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 
 			}
 		});
@@ -902,7 +902,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton5.setOnClickListener(new OnClickListener() {
@@ -910,7 +910,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton6.setOnClickListener(new OnClickListener() {
@@ -918,7 +918,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton7.setOnClickListener(new OnClickListener() {
@@ -926,7 +926,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 
@@ -935,7 +935,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 
@@ -944,7 +944,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton10.setOnClickListener(new OnClickListener() {
@@ -952,7 +952,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton11.setOnClickListener(new OnClickListener() {
@@ -960,7 +960,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton12.setOnClickListener(new OnClickListener() {
@@ -968,7 +968,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton13.setOnClickListener(new OnClickListener() {
@@ -976,7 +976,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v, nid);
 			}
 		});
 		colorbutton14.setOnClickListener(new OnClickListener() {
@@ -984,7 +984,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v);
+				paintClicked(v,nid);
 			}
 		});
 
@@ -993,12 +993,12 @@ public class MainActivity extends DrawerActivity {
 		textViewTitleAlert.setTextColor(Color.WHITE);
 
 		dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialogColor.setCancelable(true);
+		dialogColor.setCancelable(false);
 		dialogColor.setContentView(contentView);
 		dialogColor.show();
 	}
 
-	public void paintClicked(View view) {
+	public void paintClicked(View view,int nid) {
 		// use chosen color
 		ImageButton currPaint = null;
 		if (view != currPaint) {
@@ -1013,6 +1013,11 @@ public class MainActivity extends DrawerActivity {
 			System.out.println("selected color:" + color);
 
 			int colorCode = Color.parseColor(color);
+
+			Note n = Note.findById(Note.class,(long) nid);
+			n.background = color;
+			n.save();
+			onRestart();
 			dialogColor.dismiss();
 			//listView.setDrawColor(colorCode);
 
@@ -1022,7 +1027,6 @@ public class MainActivity extends DrawerActivity {
 	public void deleteNote(View v){
 
 		String id = v.getTag().toString();
-		tvIdHidden = (TextView) findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();
 
@@ -1039,9 +1043,14 @@ public class MainActivity extends DrawerActivity {
 		listView.setAdapter(testAdapter);
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				//do your stuff here
-				showColorAlert(MainActivity.this);
+
+				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+
+				int nid = Integer.parseInt(map.get("noteId"));
+
+				showColorAlert(MainActivity.this,nid);
 				return true;
 			}
 		});
