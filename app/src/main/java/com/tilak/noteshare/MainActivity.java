@@ -79,6 +79,7 @@ public class MainActivity extends DrawerActivity {
 
 	private ArrayList<HashMap<String,String>> list;
 	public Dialog dialogColor;
+	public Dialog move;
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -1079,13 +1080,50 @@ public class MainActivity extends DrawerActivity {
 		startActivity(intent);
 	}
 
+	/*public void showMenuAlert(Context context){
+
+		move = new Dialog(context);
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.movefiletofolder, null, false);
+
+		TextView textViewTitleAlert = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("Move to");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		ListView lvFolder = (ListView) findViewById(R.id.lvFolder);
+
+		ArrayAdapter<String> listAdapter ;
+		ArrayList<String> folderList = new ArrayList<String>();
+
+		List<Folder> folder = Folder.findWithQuery(Folder.class, "Select * from Folder");
+		for(Folder folderloop : folder){
+			folderList.add(folderloop.getName());
+			Log.e("Folder name: ", folderloop.getName());
+		}
+		listAdapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,folderList);
+
+		lvFolder.setAdapter(listAdapter);
+		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		move.setCancelable(false);
+
+		move.setContentView(contentView);
+		move.show();
+	}
+
+	public void move(View v){
+		showMenuAlert(this);
+	}*/
+
 
 	public void swipeListView(){
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 
-		OurNoteListAdapter testAdapter = new OurNoteListAdapter(this,list);
+		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list);
 		listView.setOffsetLeft(170L);
-		listView.setAdapter(testAdapter);
+		listView.setAdapter(noteAdapter);
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {

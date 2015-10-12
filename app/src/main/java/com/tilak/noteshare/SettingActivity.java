@@ -25,7 +25,7 @@ protected void onCreate(Bundle savedInstanceState) {
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	// inflate your activity layout here!
 	View contentView = inflater
-			.inflate(R.layout.checklist_activity, null, false);
+			.inflate(R.layout.activity_setting, null, false);
 	mDrawerLayout.addView(contentView, 0);
 	initlizeUIElement(contentView);
 }

@@ -201,56 +201,56 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			case 3: {
 				System.out.println("folder");
 				startActivity(new Intent(this, NewFolderMainActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 
 			case 4: {
 				System.out.println("about note share");
 				startActivity(new Intent(this, AboutNoteShareActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 			case 5: {
 				System.out.println("terms and conditions");
 				startActivity(new Intent(this, TermsAndConditionsActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 			case 6: {
 				System.out.println("notification center");
 				startActivity(new Intent(this, NotificationCenterActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 			case 7: {
 				System.out.println("rate us");
 				startActivity(new Intent(this, RateUsActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 			case 8: {
 				System.out.println("like us on facebook");
 				startActivity(new Intent(this, LikeUsOnFacebookActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 			case 9: {
 				System.out.println(" send feed back");
 				startActivity(new Intent(this, SendFeedbackActivity.class));
-				// finish();
+				 finish();
 			}
 				break;
 			case 10: {
 				System.out.println("invites friends");
 				startActivity(new Intent(this, InviteFriendsActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 			case 11: {
 				System.out.println("setting");
 				startActivity(new Intent(this, SettingActivity.class));
-				// finish();
+				//finish();
 			}
 				break;
 			case 12: {
