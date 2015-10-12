@@ -42,8 +42,8 @@ public class OurNoteListAdapter extends BaseAdapter {
 
     private class ViewHolder{
         //all the fields in layout specified
-        TextView txtNoteName,txtNoteDesc,txtNoteDate;
-        ImageButton button,btnHidden;
+        TextView txtNoteName,txtNoteDesc,txtNoteDate, tvIdHidden;
+        ImageButton button;
         LinearLayout linearLayout;
     }
 
@@ -62,7 +62,7 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.txtNoteName= (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
             holder.txtNoteDesc = (TextView) convertView.findViewById(R.id.tvNoteDesc);
             holder.txtNoteDate= (TextView) convertView.findViewById(R.id.tvNoteDate);
-            holder.btnHidden = (ImageButton) convertView.findViewById(R.id.btnHidden);
+            holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdHidden);
             convertView.setTag(holder);
         }else{
             holder= (ViewHolder) convertView.getTag();
@@ -72,7 +72,7 @@ public class OurNoteListAdapter extends BaseAdapter {
         holder.txtNoteName.setText(map.get("noteName")); //set the hash maps
         holder.txtNoteDesc.setText(map.get("noteDesc"));
         holder.txtNoteDate.setText(map.get("noteDate"));
-        holder.btnHidden.setId(Integer.parseInt(map.get("noteId")));
+        holder.tvIdHidden.setText(map.get("noteId"));
         holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
 
         return convertView;

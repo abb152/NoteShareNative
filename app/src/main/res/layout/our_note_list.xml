@@ -13,8 +13,8 @@
         android:weightSum="7"
         android:gravity="right">
 
-        <ImageButton
-            android:id="@+id/btnHidden"
+        <TextView
+            android:id="@+id/tvIdHidden"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -28,7 +28,8 @@
             android:padding="15dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_option_lock2" />
+            android:src="@drawable/image_option_lock2"
+            android:onClick="deleteNote"/>
 
         <ImageButton
             android:id="@+id/btntimebomb"

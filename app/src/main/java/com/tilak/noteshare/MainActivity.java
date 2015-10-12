@@ -56,7 +56,7 @@ public class MainActivity extends DrawerActivity {
 
 	public ImageButton imageButtonHamburg, imageButtoncalander,
 			imageButtonsquence;
-	public TextView textViewheaderTitle;
+	public TextView textViewheaderTitle, tvIdHidden;
 	public RelativeLayout layoutHeader;
 
 	public ImageButton textViewAdd;
@@ -105,7 +105,19 @@ public class MainActivity extends DrawerActivity {
 		createDirectory();
 
 	}
-	
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+
+		try {
+			checkTimeClicked();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		populate();
+	}
+
 	public void	 btnCallbacks(Object data)
 	{
 		System.out.println("the tag us" + data);
@@ -158,7 +170,7 @@ public class MainActivity extends DrawerActivity {
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 
 		OurNoteListAdapter testAdapter = new OurNoteListAdapter(this,list);
-		listView.setOffsetLeft(180L);
+		listView.setOffsetLeft(170L);
 		listView.setAdapter(testAdapter);
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -300,12 +312,12 @@ public class MainActivity extends DrawerActivity {
 		});*/
 		imageButtonHamburg.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                openSlideMenu();
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				openSlideMenu();
+			}
+		});
 		/*imageButtonsquence.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -315,11 +327,11 @@ public class MainActivity extends DrawerActivity {
 			}
 		});*/
 		textViewAdd.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(context, NoteMainActivity.class));
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(context, NoteMainActivity.class));
+			}
+		});
 
 		/*notefoleserList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -783,6 +795,7 @@ public class MainActivity extends DrawerActivity {
 
 	void populate() {
 
+
 		list=new ArrayList<HashMap<String, String>>();
 		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1'");
 		for(Note currentnote : allnotes){
@@ -1012,5 +1025,18 @@ public class MainActivity extends DrawerActivity {
 			//listView.setDrawColor(colorCode);
 
 		}
+	}
+
+	public void deleteNote(View v){
+		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+		startActivity(intent);
+
+		tvIdHidden = (TextView) findViewById(R.id.tvIdHidden);
+		//Long noteid = (long) tvIdHidden.getText();
+		String id = tvIdHidden.getText().toString();
+
+		Note n = Note.findById(Note.class, Long.parseLong(id));
+		n.delete();
+		onRestart();
 	}
 }
