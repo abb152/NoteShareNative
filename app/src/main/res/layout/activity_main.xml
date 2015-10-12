@@ -87,7 +87,12 @@
         swipe:swipeDrawableChecked="@drawable/choice_selected"
         swipe:swipeDrawableUnchecked="@drawable/choice_unselected"
         swipe:swipeCloseAllItemsWhenMoveList="true"
+<<<<<<< Updated upstream
         swipe:swipeMode="left" />
+=======
+        swipe:swipeMode="right"
+        swipe:swipeOpenOnLongPress="false"/>
+>>>>>>> Stashed changes
 
     <GridView
         android:id="@+id/notefoleserGridList"
