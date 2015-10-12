@@ -1097,7 +1097,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefolderList);
 
 		OurFolderListAdapter testAdapter = new OurFolderListAdapter(this,list);
-		listView.setOffsetLeft(700L);
+		listView.setOffsetLeft(600L);
 		listView.setAdapter(testAdapter);
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -1108,5 +1108,4 @@ public class NewFolderMainActivity extends DrawerActivity {
 			}
 		});
 	}
-	
 }
