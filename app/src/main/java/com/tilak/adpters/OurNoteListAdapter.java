@@ -80,6 +80,7 @@ public class OurNoteListAdapter extends BaseAdapter {
         holder.txtNoteDate.setText(map.get("noteDate"));
         holder.tvIdHidden.setText(map.get("noteId"));
         holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
+
         if(map.get("noteLock").equalsIgnoreCase("1")){
             holder.btnLock.setImageResource(R.drawable.image_option_lock2);
         }

@@ -29,7 +29,7 @@
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/image_option_unlock"
-            android:onClick="deleteNote"/>
+            android:onClick="passCode"/>
 
         <ImageButton
             android:id="@+id/btntimebomb"
@@ -59,7 +59,8 @@
             android:padding="15dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_option_delete2" />
+            android:src="@drawable/image_option_delete2"
+            android:onClick="deleteNote" />
 
         <ImageButton
             android:id="@+id/btnshare"

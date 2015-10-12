@@ -482,7 +482,6 @@ public class MainActivity extends DrawerActivity {
 
 	}
 
-
     /******* bottom sorting menu start *******/
 
 	public void showActionSheet_sort(View v) {
@@ -672,10 +671,10 @@ public class MainActivity extends DrawerActivity {
     @Override
     public void onBackPressed() {
         showAlertWith("Are you sure,Do you want to quit the app?",
-                MainActivity.this);
+                MainActivity.this, "exit","");
     }
 
-    void showAlertWith(String message, Context context) {
+    void showAlertWith(String message, Context context, final String type, final String id) {
 
         final Dialog dialog = new Dialog(context);
 
@@ -710,8 +709,17 @@ public class MainActivity extends DrawerActivity {
             @Override
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
-                System.exit(0);
-
+				if (type.equals("exit")) {
+					System.exit(0);
+				}
+				if (type.equals("delete")){
+					delete(id);
+					dialog.dismiss();
+				}
+				if (type.equals("passcode")){
+					removePasscode(id);
+					dialog.dismiss();
+				}
             }
         });
 
@@ -984,7 +992,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				paintClicked(v,nid);
+				paintClicked(v, nid);
 			}
 		});
 
@@ -1012,7 +1020,7 @@ public class MainActivity extends DrawerActivity {
 			// currPaint = (ImageButton) view;
 			System.out.println("selected color:" + color);
 
-			int colorCode = Color.parseColor(color);
+			//int colorCode = Color.parseColor(color);
 
 			Note n = Note.findById(Note.class,(long) nid);
 			n.background = color;
@@ -1024,16 +1032,57 @@ public class MainActivity extends DrawerActivity {
 		}
 	}
 
+	public void delete(String id){
+
+		Note n = Note.findById(Note.class, Long.parseLong(id));
+		n.delete();
+		onRestart();
+
+	}
+
 	public void deleteNote(View v){
 
 		String id = v.getTag().toString();
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();
+		showAlertWith("Are you sure you want to delete ?",
+				MainActivity.this, "delete", id);
+	}
+
+	public void passCode(View v){
+
+		String id = v.getTag().toString();
 
 		Note n = Note.findById(Note.class, Long.parseLong(id));
-		n.delete();
+		if(n.islocked == 1){
+			//remove passCode
+			showAlertWith("Are you sure you want to remove Pass Code?", MainActivity.this, "passcode", id);
+
+		}else{
+			setPasscode(id);
+		}
+	}
+
+	public void removePasscode(String id){
+
+		Note n = Note.findById(Note.class, Long.parseLong(id));
+		n.islocked = 0;
+		n.save();
 		onRestart();
 	}
+
+	public void setPasscode(String id){
+
+
+		Intent intent = new Intent(MainActivity.this, MainActivity.class);
+		intent.putExtra("File Id", id);
+		intent.putExtra("Check", 1);
+		Note n = Note.findById(Note.class,Long.parseLong(id));
+		n.islocked = 1;
+		n.save();
+		onRestart();
+	}
+
 
 	public void swipeListView(){
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
