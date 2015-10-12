@@ -66,6 +66,9 @@ public void addListners() {
 	
 }
 	public void setPasscode(View v){
-		startActivity(new Intent(this,PasscodeActivity.class));
+		Intent intent = new Intent(SettingActivity.this, PasscodeActivity.class);
+		intent.putExtra("FileId", "");
+		intent.putExtra("Check", "0");
+		startActivity(intent);
 	}
 }

@@ -1073,14 +1073,10 @@ public class MainActivity extends DrawerActivity {
 
 	public void setPasscode(String id){
 
-
-		Intent intent = new Intent(MainActivity.this, MainActivity.class);
-		intent.putExtra("File Id", id);
-		intent.putExtra("Check", 1);
-		Note n = Note.findById(Note.class,Long.parseLong(id));
-		n.islocked = 1;
-		n.save();
-		onRestart();
+		Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
+		intent.putExtra("FileId", id);
+		intent.putExtra("Check", "1");
+		startActivity(intent);
 	}
 
 
