@@ -44,7 +44,7 @@ public class OurFolderListAdapter extends BaseAdapter {
     private class ViewHolder{
         //all the fields in layout specified
         TextView txtFolderName,txtFolderDesc,txtFolderDate,tvIdHidden;
-        ImageButton button;
+        ImageButton btnDelete;
         LinearLayout linearLayout;
     }
 
@@ -64,6 +64,8 @@ public class OurFolderListAdapter extends BaseAdapter {
             holder.txtFolderDesc = (TextView) convertView.findViewById(R.id.tvFolderDesc);
             holder.txtFolderDate= (TextView) convertView.findViewById(R.id.tvFolderDate);
             holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdFolderHidden);
+
+            holder.btnDelete = (ImageButton) convertView.findViewById(R.id.btnfolderdelete);
             convertView.setTag(holder);
         }else{
             holder= (ViewHolder) convertView.getTag();
@@ -74,6 +76,8 @@ public class OurFolderListAdapter extends BaseAdapter {
         holder.txtFolderDesc.setText(map.get("folderDesc"));
         holder.txtFolderDate.setText(map.get("folderDate"));
         holder.tvIdHidden.setText(map.get("folderId"));
+
+        holder.btnDelete.setTag(map.get("folderId"));
 
         return convertView;
     }

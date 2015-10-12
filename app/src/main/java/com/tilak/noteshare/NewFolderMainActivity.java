@@ -49,7 +49,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 	public ImageButton imageButtonHamburg, imageButtoncalander,
 			imageButtonsquence;
-	public TextView textViewheaderTitle;
+	public TextView textViewheaderTitle,tvIdHidden;
 	public RelativeLayout layoutHeader;
 
 	public ImageButton textViewAdd;
@@ -1107,5 +1107,16 @@ public class NewFolderMainActivity extends DrawerActivity {
 				return true;
 			}
 		});
+	}
+
+	public void deleteNote(View v){
+		String id = v.getTag().toString();
+		tvIdHidden = (TextView) v.findViewById(R.id.tvIdHidden);
+		//Long noteid = (long) tvIdHidden.getText();
+		//String id = tvIdHidden.getText().toString();
+
+		Folder f = Folder.findById(Folder.class, Long.parseLong(id));
+		f.delete();
+		onRestart();
 	}
 }
