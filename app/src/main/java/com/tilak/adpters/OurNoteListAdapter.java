@@ -43,7 +43,7 @@ public class OurNoteListAdapter extends BaseAdapter {
     private class ViewHolder{
         //all the fields in layout specified
         TextView txtNoteName,txtNoteDesc,txtNoteDate, tvIdHidden;
-        ImageButton button;
+        ImageButton btnLock, btnTimebomb, btnMove, btnDelete ,btnShare;
         LinearLayout linearLayout;
     }
 
@@ -63,6 +63,12 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.txtNoteDesc = (TextView) convertView.findViewById(R.id.tvNoteDesc);
             holder.txtNoteDate= (TextView) convertView.findViewById(R.id.tvNoteDate);
             holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdHidden);
+
+            holder.btnLock = (ImageButton) convertView.findViewById(R.id.btnlock);
+            holder.btnTimebomb = (ImageButton) convertView.findViewById(R.id.btntimebomb);
+            holder.btnMove = (ImageButton) convertView.findViewById(R.id.btnmove);
+            holder.btnDelete = (ImageButton) convertView.findViewById(R.id.btndelete);
+            holder.btnShare = (ImageButton) convertView.findViewById(R.id.btnshare);
             convertView.setTag(holder);
         }else{
             holder= (ViewHolder) convertView.getTag();
@@ -72,8 +78,18 @@ public class OurNoteListAdapter extends BaseAdapter {
         holder.txtNoteName.setText(map.get("noteName")); //set the hash maps
         holder.txtNoteDesc.setText(map.get("noteDesc"));
         holder.txtNoteDate.setText(map.get("noteDate"));
-        holder.tvIdHidden.setText(map.get("noteId"));
+        //holder.tvIdHidden.setText(map.get("noteId"));
         holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
+        if(map.get("noteLock").equalsIgnoreCase("1")){
+            holder.btnLock.setImageResource(R.drawable.image_option_lock2);
+        }
+
+        holder.btnLock.setTag(map.get("noteId"));
+        holder.btnTimebomb.setTag(map.get("noteId"));
+        holder.btnMove.setTag(map.get("noteId"));
+        holder.btnDelete.setTag(map.get("noteId"));
+        holder.btnShare.setTag(map.get("noteId"));
+
 
         return convertView;
     }

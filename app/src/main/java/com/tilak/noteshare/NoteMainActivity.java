@@ -1196,7 +1196,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String currentDateStr = formatter.format(new Date());
 
-					Note note = new Note("Test Note "+ incremented, "", "", "", "", "", "#FFFFFF", currentDateStr, currentDateStr , "","1");
+					Note note = new Note("Test Note "+ incremented, "", "", "", "", "", "#FFFFFF", currentDateStr, currentDateStr , "","1",0);
 					note.save();
 
 					NoteElement noteElem = new NoteElement(note.getId(), 1,txtViewer.getText().toString() , "text", "yes");
@@ -1210,7 +1210,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
 				}
 				updateHeaderControls(-1);
-				;
 				textNoteControls.setVisibility(View.GONE);
 				LayoutTextWritingView.setVisibility(View.GONE);
 				isTextmodeSelected=false;

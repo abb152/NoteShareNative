@@ -116,7 +116,9 @@ public class MainActivity extends DrawerActivity {
 			e.printStackTrace();
 		}
 		populate();
+		swipeListView();
 	}
+
 
 	public void	 btnCallbacks(Object data)
 	{
@@ -167,19 +169,7 @@ public class MainActivity extends DrawerActivity {
 		checkTimeClicked();
 		populate();
 
-		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
-
-		OurNoteListAdapter testAdapter = new OurNoteListAdapter(this,list);
-		listView.setOffsetLeft(170L);
-		listView.setAdapter(testAdapter);
-
-		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-				//do your stuff here
-				showColorAlert(MainActivity.this);
-				return true;
-			}
-		});
+		swipeListView();
 
 	}
 
@@ -805,6 +795,8 @@ public class MainActivity extends DrawerActivity {
 			map.put("noteDate", currentnote.getCreationtime());
 			map.put("noteId", currentnote.getId().toString());
 			map.put("noteBgColor",currentnote.getBackground());
+			map.put("noteLock", String.valueOf(currentnote.getIslocked()));
+			//map.put("noteLock", String.valueOf(currentnote.getIslocked()));
 			list.add(map);
 		}
 
@@ -1028,15 +1020,30 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void deleteNote(View v){
-		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-		startActivity(intent);
 
+		String id = v.getTag().toString();
 		tvIdHidden = (TextView) findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();
-		String id = tvIdHidden.getText().toString();
+		//String id = tvIdHidden.getText().toString();
 
 		Note n = Note.findById(Note.class, Long.parseLong(id));
 		n.delete();
 		onRestart();
+	}
+
+	public void swipeListView(){
+		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+
+		OurNoteListAdapter testAdapter = new OurNoteListAdapter(this,list);
+		listView.setOffsetLeft(170L);
+		listView.setAdapter(testAdapter);
+
+		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+				//do your stuff here
+				showColorAlert(MainActivity.this);
+				return true;
+			}
+		});
 	}
 }
