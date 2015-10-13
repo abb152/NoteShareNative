@@ -16,6 +16,8 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -25,6 +27,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
@@ -88,6 +91,8 @@ public class MainActivity extends DrawerActivity {
 	public Dialog move;
 
 	public List<Note> sortallnotes;
+
+	public String setListView = "detail";
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -442,9 +447,8 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				notefoleserGridList.setVisibility(View.VISIBLE);
-				notefoleserList.setVisibility(View.GONE);
-				//notefoleserPintrestList.setVisibility(View.GONE);
+				setListView = "grid";
+				swipeListView();
 				myDialog.dismiss();
 			}
 		});
@@ -454,11 +458,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				notefoleserGridList.setVisibility(View.GONE);
-				notefoleserList.setVisibility(View.GONE);
-				notefoleserPintrestList.setVisibility(View.VISIBLE);
-				
-				//updatePintrestView();
+
 				myDialog.dismiss();
 
 			}
@@ -469,15 +469,17 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 
-				DataManager.sharedDataManager().setTypeofListView(false);
+				/*DataManager.sharedDataManager().setTypeofListView(false);
 				adapter.notifyDataSetChanged();
 				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.GONE);
 				notefoleserList.setVisibility(View.VISIBLE);
 				//notefoleserPintrestList.setVisibility(View.GONE);
-				
+
 				DataManager.sharedDataManager().setSelectedIndex(-1);
-				adapter.notifyDataSetChanged();
+				adapter.notifyDataSetChanged();*/
+				setListView = "detail";
+				swipeListView();
 				myDialog.dismiss();
 
 			}
@@ -488,13 +490,15 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				DataManager.sharedDataManager().setTypeofListView(true);
+				/*DataManager.sharedDataManager().setTypeofListView(true);
 				adapter.notifyDataSetChanged();
 				notefoleserGridList.setVisibility(View.GONE);
 				notefoleserList.setVisibility(View.VISIBLE);
 				//notefoleserPintrestList.setVisibility(View.GONE);
 				DataManager.sharedDataManager().setSelectedIndex(-1);
-				adapter.notifyDataSetChanged();
+				adapter.notifyDataSetChanged();*/
+				setListView = "list";
+				swipeListView();
 				myDialog.dismiss();
 
 			}
@@ -655,6 +659,9 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+
+				sortType=SORTTYPE.TIME_BOMB;
+				sortingArray();
 
 				Toast.makeText(getApplicationContext(), "Time Bomb",
 						Toast.LENGTH_SHORT).show();
@@ -1127,7 +1134,7 @@ public class MainActivity extends DrawerActivity {
 	public void swipeListView(){
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 
-		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list);
+		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, setListView);
 		listView.setOffsetLeft(170L);
 		listView.setAdapter(noteAdapter);
 
@@ -1281,5 +1288,106 @@ public class MainActivity extends DrawerActivity {
 	public void move(View v){
 		String noteid = v.getTag().toString();
 		showMenuAlert(this, noteid);
+	}
+
+	public void timeBomb(View v){
+		String id = v.getTag().toString();
+		showDate(this, id);
+	}
+
+	public void showDate(Context context, final String noteid ){
+
+		move = new Dialog(context);
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.datetime, null, false);
+
+		LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
+		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("Date Time");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
+		TimePicker tp = (TimePicker) contentView.findViewById(R.id.tp);
+
+
+		//final int[1] hour;/* = tp.getCurrentHour();*/
+		final int[] time = new int[2];
+		time[0] = tp.getCurrentHour();
+		time[1] = tp.getCurrentMinute();
+
+		final int[] date = new int[3];
+		date[0] = dp.getDayOfMonth();
+		date[1] = dp.getMonth() +1;
+		date[2] = dp.getYear();
+
+
+		tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+				time[0] = hourOfDay;
+				time[1] = minute;
+			}
+		});
+
+		Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+		Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
+
+		dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
+
+		dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+			@Override
+			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+				//Log.d("tag", "finally found the listener, the date is: year " + year + ", month " + month + ", dayOfMonth " + dayOfMonth);
+				date[0] = dayOfMonth;
+				date[1] = month + 1;
+				date[2] = year;
+			}
+		});
+
+		buttonAlertOk.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
+
+				String timebombTime = check(date[2])+"-"+check(date[1])+"-"+check(date[0])+" "+check(time[0])+":"+check(time[1])+":00";
+
+				Note n = Note.findById(Note.class, Long.valueOf(noteid));
+				n.timebomb = timebombTime;
+				n.save();
+
+				move.dismiss();
+				Toast.makeText(getApplication(),"Date Time: " + timebombTime ,Toast.LENGTH_LONG).show();
+			}
+		});
+
+		buttonAlertCancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				move.dismiss();
+			}
+		});
+
+
+		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		move.setCancelable(true);
+
+		move.setContentView(contentView);
+		move.show();
+	}
+
+	public String check(int value){
+		String newvalue;
+		if (value < 10) // minute
+			newvalue = "0" + String.valueOf(value);
+		else
+			newvalue =  String.valueOf(value);
+		return newvalue;
 	}
 }
