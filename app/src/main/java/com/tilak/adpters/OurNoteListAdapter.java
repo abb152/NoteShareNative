@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,12 +18,15 @@ import java.util.HashMap;
 
 public class OurNoteListAdapter extends BaseAdapter {
     public ArrayList<HashMap<String,String>> list;
+    String listview = "";
     Activity activity;
+    TextView noteDesc;
 
-    public OurNoteListAdapter(Activity activity,ArrayList<HashMap<String,String>> list){
+    public OurNoteListAdapter(Activity activity,ArrayList<HashMap<String,String>> list, String listwiew){
         super();
         this.activity=activity;
         this.list=list;
+        this.listview = listwiew;
     }
 
     @Override
@@ -45,6 +49,7 @@ public class OurNoteListAdapter extends BaseAdapter {
         TextView txtNoteName,txtNoteDesc,txtNoteDate, tvIdHidden;
         ImageButton btnLock, btnTimebomb, btnMove, btnDelete ,btnShare;
         LinearLayout linearLayout;
+        FrameLayout frame;
     }
 
     @Override
@@ -53,16 +58,25 @@ public class OurNoteListAdapter extends BaseAdapter {
         ViewHolder holder;
 
         LayoutInflater inflater=activity.getLayoutInflater();
-
         if(convertView == null){
             convertView=inflater.inflate(R.layout.our_note_list,null); //change the name of the layout
             holder=new ViewHolder();
 
-            holder.linearLayout= (LinearLayout) convertView.findViewById(R.id.front);
-            holder.txtNoteName= (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
+            holder.frame = (FrameLayout) convertView.findViewById(R.id.frame);
+            holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.front);
+            holder.txtNoteName = (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
             holder.txtNoteDesc = (TextView) convertView.findViewById(R.id.tvNoteDesc);
-            holder.txtNoteDate= (TextView) convertView.findViewById(R.id.tvNoteDate);
+            holder.txtNoteDate = (TextView) convertView.findViewById(R.id.tvNoteDate);
             holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdHidden);
+
+            if(listview == "list") {
+                holder.txtNoteName.setTextSize(18F);
+                holder.txtNoteDesc.setVisibility(View.GONE);
+                holder.txtNoteDate.setVisibility(View.GONE);
+                holder.linearLayout.setPadding(20,30,20,20);
+            } else if(listview == "grid") {
+                holder.frame.setLayoutParams(new FrameLayout.LayoutParams(50,100));
+            }
 
             holder.btnLock = (ImageButton) convertView.findViewById(R.id.btnlock);
             holder.btnTimebomb = (ImageButton) convertView.findViewById(R.id.btntimebomb);
