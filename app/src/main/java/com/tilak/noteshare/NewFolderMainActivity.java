@@ -167,7 +167,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+									long arg3) {
 				// TODO Auto-generated method stub
 				Log.v("Grid  clicked", "pos: " + arg2);
 			}
@@ -192,7 +192,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 					public boolean onItemLongClick(AdapterView<?> arg0,
-							View arg1, int pos, long id) {
+												   View arg1, int pos, long id) {
 						// TODO Auto-generated method stub
 
 						Log.v("Grid long clicked", "pos: " + pos);
@@ -391,40 +391,39 @@ public class NewFolderMainActivity extends DrawerActivity {
 		
 		
 		searchbuttonclick.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				//search Click
-				if (editTextsearchNote.getText().toString().length()>0)
-				{
+				if (editTextsearchNote.getText().toString().length() > 0) {
 					filterWithSearchString(editTextsearchNote.getText().toString());
 				}
-				
+
 			}
 		});
 		
 		
 		// Add Text Change Listener to EditText
 	    editTextsearchNote.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// TODO Auto-generated method stub
 				// adapter.getFilter().filter(s.toString());
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+										  int after) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		
@@ -486,6 +485,55 @@ public class NewFolderMainActivity extends DrawerActivity {
 		dialog.show();
 
 	}
+
+	void showDeleteAlert(String message, Context context, final String folderid) {
+
+		final Dialog dialog = new Dialog(context);
+
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.alert_view, null, false);
+
+		TextView textViewTitleAlert = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("ALERT");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+		TextView textViewTitleAlertMessage = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlertMessage);
+		textViewTitleAlertMessage.setText(message);
+
+		Button buttonAlertCancel = (Button) contentView
+				.findViewById(R.id.buttonAlertCancel);
+		Button buttonAlertOk = (Button) contentView
+				.findViewById(R.id.buttonAlertOk);
+		buttonAlertCancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+
+			}
+		});
+		buttonAlertOk.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				delete(folderid);
+				dialog.dismiss();
+			}
+		});
+
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(true);
+
+		dialog.setContentView(contentView);
+		dialog.show();
+
+	}
+
 
 	void showAlertWithEditText(Context context) {
 
@@ -1109,14 +1157,20 @@ public class NewFolderMainActivity extends DrawerActivity {
 		});
 	}
 
+	public void delete(String id){
+
+		Folder f = Folder.findById(Folder.class, Long.parseLong(id));
+		f.delete();
+		onRestart();
+
+	}
+
 	public void deleteFolder(View v){
 		String id = v.getTag().toString();
 		tvIdHidden = (TextView) v.findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();
-
-		Folder f = Folder.findById(Folder.class, Long.parseLong(id));
-		f.delete();
-		onRestart();
+		showDeleteAlert("Are you sure you want to delete ?",
+				NewFolderMainActivity.this, id);
 	}
 }

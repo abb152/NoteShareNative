@@ -36,6 +36,7 @@ import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Folder;
 import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
 
 import java.io.File;
 import java.text.ParseException;
@@ -844,9 +845,14 @@ public class MainActivity extends DrawerActivity {
 		if(list.size()>0)
 			list.clear();
 		for(Note currentnote : sortallnotes){
+			String noteDesc = "";
+			List<NoteElement> noteElements = NoteElement.findWithQuery(NoteElement.class, "SELECT DISTINCT TYPE FROM NOTE_ELEMENT WHERE NOTEID = " + currentnote.getId());
+			for (NoteElement currentNoteElement : noteElements){
+				noteDesc += currentNoteElement.getType().toUpperCase() + " ";
+			}
 			HashMap<String,String> map = new HashMap<String,String>();
 			map.put("noteName", currentnote.getTitle());
-			map.put("noteDesc", currentnote.getTitle()); // change this later
+			map.put("noteDesc", noteDesc); // change this later
 			map.put("noteDate", currentnote.getCreationtime());
 			map.put("noteId", currentnote.getId().toString());
 			map.put("noteBgColor",currentnote.getBackground());
