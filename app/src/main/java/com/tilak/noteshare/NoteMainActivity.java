@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -47,6 +48,7 @@ import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.NOTETYPE;
 import com.tilak.datamodels.NoteListDataModel;
+import com.tilak.db.Folder;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 

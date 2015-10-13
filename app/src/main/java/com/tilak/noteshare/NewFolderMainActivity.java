@@ -1097,7 +1097,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefolderList);
 
 		OurFolderListAdapter testAdapter = new OurFolderListAdapter(this,list);
-		listView.setOffsetLeft(600L);
+		listView.setOffsetLeft(400L);
 		listView.setAdapter(testAdapter);
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -1109,7 +1109,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		});
 	}
 
-	public void deleteNote(View v){
+	public void deleteFolder(View v){
 		String id = v.getTag().toString();
 		tvIdHidden = (TextView) v.findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();

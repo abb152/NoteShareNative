@@ -30,9 +30,11 @@ import android.widget.Toast;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NoteFolderAdapter;
 import com.tilak.adpters.NoteFolderGridAdapter;
+import com.tilak.adpters.OurMoveMenuAdapter;
 import com.tilak.adpters.OurNoteListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
+import com.tilak.db.Folder;
 import com.tilak.db.Note;
 
 import java.io.File;
@@ -115,17 +117,16 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where TITLE LIKE ?","%" + editTextsearchNote.getText().toString() + "%");
+				sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				if(sortallnotes.toString()=="[]") {
+				if (sortallnotes.toString() == "[]") {
 					putInList();
 					swipeListView();
 //					d.setText("Nothing to display"); set your message
-				}
-				else {
+				} else {
 					putInList();
 					swipeListView();
 				}
@@ -703,7 +704,7 @@ public class MainActivity extends DrawerActivity {
     @Override
     public void onBackPressed() {
         showAlertWith("Are you sure,Do you want to quit the app?",
-                MainActivity.this, "exit","");
+				MainActivity.this, "exit", "");
     }
 
     void showAlertWith(String message, Context context, final String type, final String id) {
@@ -1170,7 +1171,7 @@ public class MainActivity extends DrawerActivity {
 
 				int nid = Integer.parseInt(map.get("noteId"));
 
-				showColorAlert(MainActivity.this,nid);
+				showColorAlert(MainActivity.this, nid);
 				return true;
 			}
 		});
@@ -1249,5 +1250,68 @@ public class MainActivity extends DrawerActivity {
 				return c2.getTimebomb().compareTo(c1.getTimebomb());
 			}
 		}
+	}
+
+	public void showMenuAlert(Context context,String noteid ){
+
+		move = new Dialog(context);
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.movefiletofolder, null, false);
+
+		LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
+		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("Move to");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		ListView lvFolder = (ListView) contentView.findViewById(R.id.lvFolder);
+
+		ArrayList<HashMap<String,String>> folderList = new ArrayList<HashMap<String, String>>();
+
+		List<Folder> folder = Folder.findWithQuery(Folder.class, "Select * from Folder ORDER BY ID DESC");
+		for(Folder folderloop : folder){
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("folderName", folderloop.getName());
+			map.put("folderId", String.valueOf(folderloop.getId()));
+			map.put("noteId",noteid);
+			folderList.add(map);
+		}
+
+		OurMoveMenuAdapter moveMenuAdapter = new OurMoveMenuAdapter(this,folderList);
+		lvFolder.setAdapter(moveMenuAdapter);
+
+		lvFolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+				int itemPosition = position;
+				String folderid = null, foldername=null;
+				Long noteid;
+
+				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+
+				folderid = map.get("folderId");
+				foldername = map.get("folderName");
+				noteid = Long.parseLong(map.get("noteId"));
+
+				Note n = Note.findById(Note.class,noteid);
+				n.folder = folderid;
+				n.save();
+				move.dismiss();
+				Toast.makeText(getApplicationContext(), "Note "+ n.getTitle() + " moved to " + foldername +" folder.", Toast.LENGTH_SHORT).show();
+			}
+		});
+
+		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		move.setCancelable(true);
+
+		move.setContentView(contentView);
+		move.show();
+	}
+
+	public void move(View v){
+		String noteid = v.getTag().toString();
+		showMenuAlert(this, noteid);
 	}
 }
