@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,9 +13,8 @@ import android.widget.TextView;
 public class TermsAndConditionsActivity extends DrawerActivity {
 	public RelativeLayout layoutHeder;
 	public ImageButton btnheaderMenu, btnsequence, btncalander;
-	public TextView textheadertitle, textViewSubHeaderTitle;
+	public TextView textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
-	public EditText editTexttermsAndCondition;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,13 +50,6 @@ public class TermsAndConditionsActivity extends DrawerActivity {
 		textViewSubHeaderTitle = (TextView) layoutTitleHeaderview
 				.findViewById(R.id.textViewHeaderTitle1);
 		textViewSubHeaderTitle.setText("Terms & Conditions".toUpperCase());
-		
-		
-		editTexttermsAndCondition=(EditText) contentView.findViewById(R.id.editTexttermsAndCondition);
-		editTexttermsAndCondition.setText(getTandC());
-		editTexttermsAndCondition.setKeyListener(null);
-		editTexttermsAndCondition.setEnabled(false);
-		editTexttermsAndCondition.setSelected(false);
 
 		addListners();
 	}
@@ -76,13 +67,5 @@ public class TermsAndConditionsActivity extends DrawerActivity {
 			}
 		});
 
-	}
-	
-	String getTandC()
-	{
-		
-		String str="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries but also the leap into electronic typesetting remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. \n\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-	
-		return str;
 	}
 }
