@@ -81,6 +81,8 @@ public class MainActivity extends DrawerActivity {
 	public Dialog dialogColor;
 	public Dialog move;
 
+	public List<Note> sortallnotes;
+
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	@Override
@@ -166,12 +168,10 @@ public class MainActivity extends DrawerActivity {
 
 		addlistners();
 		// getDeafultNote();
-
+		sortType = SORTTYPE.ALPHABET;
 		checkTimeClicked();
 		populate();
-
 		swipeListView();
-
 	}
 
 	void updatePintrestView() {
@@ -223,37 +223,38 @@ public class MainActivity extends DrawerActivity {
 		switch (sortType) {
 		case ALPHABET:
 		{
-			Collections.sort(arrDataNote, new Comparator<SideMenuitems>() {
-
-				@Override
-				public int compare(SideMenuitems lhs, SideMenuitems rhs) {
-					// TODO Auto-generated method stub
-				return lhs.getMenuName().compareToIgnoreCase(rhs.getMenuName());
-				}
-			});
-			
+			Collections.sort(sortallnotes, new TitleComparator());
+			putInList();
+			swipeListView();
 		}
 			break;
 		case COLOURS:
 		{
-			Collections.sort(arrDataNote, new Comparator<SideMenuitems>() {
-
-				@Override
-				public int compare(SideMenuitems lhs, SideMenuitems rhs) {
-					// TODO Auto-generated method stub
-				return lhs.getColours().compareToIgnoreCase(rhs.getColours());
-				}
-			});
+			Collections.sort(sortallnotes, new colorComparator());
+			putInList();
+			swipeListView();
+//			Collections.sort(arrDataNote, new Comparator<SideMenuitems>() {
+//
+//				@Override
+//				public int compare(SideMenuitems lhs, SideMenuitems rhs) {
+//					// TODO Auto-generated method stub
+//				return lhs.getColours().compareToIgnoreCase(rhs.getColours());
+//				}
+//			});
 		}
 			break;
 		case CREATED_TIME:
 		{
-			
+			Collections.sort(sortallnotes, new creationTimeComparator());
+			putInList();
+			swipeListView();
 		}
 			break;
 		case MODIFIED_TIME:
 		{
-			
+			Collections.sort(sortallnotes, new modifiedTimeComparator());
+			putInList();
+			swipeListView();
 		}
 			break;
 		case REMINDER_TIME:
@@ -263,7 +264,9 @@ public class MainActivity extends DrawerActivity {
 			break;
 		case TIME_BOMB:
 		{
-			
+			Collections.sort(sortallnotes, new timebombComparator());
+			putInList();
+			swipeListView();
 		}
 			break;
 
@@ -603,7 +606,7 @@ public class MainActivity extends DrawerActivity {
 				// TODO Auto-generated method stub
 				
 			
-				adapter.notifyDataSetChanged();
+//				adapter.notifyDataSetChanged();
 				
 				
 				sortType=SORTTYPE.ALPHABET;
@@ -793,11 +796,25 @@ public class MainActivity extends DrawerActivity {
 
 
 	void populate() {
-
-
 		list=new ArrayList<HashMap<String, String>>();
-		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1'");
-		for(Note currentnote : allnotes){
+		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' ORDER BY ID DESC");
+		sortallnotes = allnotes;
+//		sortingArray();
+		putInList();
+
+		//adapter.notifyDataSetChanged();
+		String strCout = "(" + list.size() + ")";
+		textViewheaderTitle.setText("NOTE " + strCout);
+		//sortType=SORTTYPE.ALPHABET;
+		//updateGridView();
+		//updatePintrestView();
+
+	}
+
+	void putInList(){
+		if(list.size()>0)
+			list.clear();
+		for(Note currentnote : sortallnotes){
 			HashMap<String,String> map = new HashMap<String,String>();
 			map.put("noteName", currentnote.getTitle());
 			map.put("noteDesc", currentnote.getTitle()); // change this later
@@ -808,14 +825,6 @@ public class MainActivity extends DrawerActivity {
 			//map.put("noteLock", String.valueOf(currentnote.getIslocked()));
 			list.add(map);
 		}
-
-		//adapter.notifyDataSetChanged();
-		String strCout = "(" + list.size() + ")";
-		textViewheaderTitle.setText("NOTE " + strCout);
-		//sortType=SORTTYPE.ALPHABET;
-		//updateGridView();
-		//updatePintrestView();
-
 	}
 
 	public void checkTimeClicked() throws ParseException {
@@ -1002,7 +1011,7 @@ public class MainActivity extends DrawerActivity {
 		textViewTitleAlert.setTextColor(Color.WHITE);
 
 		dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialogColor.setCancelable(false);
+		dialogColor.setCancelable(true);
 		dialogColor.setContentView(contentView);
 		dialogColor.show();
 	}
@@ -1137,5 +1146,80 @@ public class MainActivity extends DrawerActivity {
 				return true;
 			}
 		});
+	}
+	class TitleComparator implements Comparator<Note> {
+
+		public int compare(Note c1, Note c2) {
+			Log.d("rohan","difference "+(c1.getTitle().compareTo(c2.getTitle())));
+			return c1.getTitle().compareTo(c2.getTitle());
+		}
+	}
+	class colorComparator implements Comparator<Note> {
+
+		public int compare(Note c1, Note c2) {
+			return c1.getBackground().compareTo(c2.getBackground());
+		}
+	}
+	class remindComparator implements Comparator<Note> {
+
+		public int compare(Note c1, Note c2) {
+			return c1.getRemindertime().compareTo(c2.getRemindertime());
+		}
+	}
+	class creationTimeComparator implements Comparator<Note> {
+
+		public int compare(Note c1, Note c2) {
+			try{
+				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String creationtime1 = c1.getCreationtime();
+				Log.d("rohan", creationtime1);
+				Date creation1 = formatter.parse(creationtime1);
+				String creationtime2 = c2.getCreationtime();
+				Log.d("rohan", creationtime2);
+				Date creation2 = formatter.parse(creationtime2);
+				Log.d("rohan","difference "+(creationtime1.compareTo(creationtime2)));
+				return creationtime2.compareTo(creationtime1);
+			}catch (Exception e) {
+			}
+			finally {
+				return c1.getCreationtime().compareTo(c2.getCreationtime());
+			}
+		}
+	}
+	class modifiedTimeComparator implements Comparator<Note> {
+
+		public int compare(Note c1, Note c2) {
+			try{
+				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String modifiedtime1 = c1.getModificationtime();
+				Date modification1 = formatter.parse(modifiedtime1);
+				String modifiedtime2 = c2.getCreationtime();
+				Date modification2 = formatter.parse(modifiedtime2);
+				return modification1.compareTo(modification2);
+			}
+			catch (Exception e) {
+			}
+			finally {
+				return c2.getModificationtime().compareTo(c1.getModificationtime());
+			}
+		}
+	}
+	class timebombComparator implements Comparator<Note> {
+
+		public int compare(Note c1, Note c2) {
+			try{
+				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String timebomb1 = c1.getModificationtime();
+				Date timebombdate1 = formatter.parse(timebomb1);
+				String timebomb2 = c2.getCreationtime();
+				Date timebombdate2 = formatter.parse(timebomb2);
+				return timebombdate1.compareTo(timebombdate2);
+			}catch (Exception e) {
+
+			}
+			finally {
+				return c2.getTimebomb().compareTo(c1.getTimebomb());
+			}
+		}
 	}
 }
