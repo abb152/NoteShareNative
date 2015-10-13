@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,7 +61,7 @@ public class MainActivity extends DrawerActivity {
 			imageButtonsquence;
 	public TextView textViewheaderTitle, tvIdHidden;
 	public RelativeLayout layoutHeader;
-
+	public EditText editTextsearchNote;
 	public ImageButton textViewAdd;
 	public ListView notefoleserList;
     //public SwipeListView notefoleserList;
@@ -103,6 +106,31 @@ public class MainActivity extends DrawerActivity {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		editTextsearchNote = (EditText)findViewById(R.id.editTextsearchNote);
+		editTextsearchNote.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where TITLE LIKE ?","%" + editTextsearchNote.getText().toString() + "%");
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if(sortallnotes.toString()=="[]") {
+					putInList();
+					swipeListView();
+//					d.setText("Nothing to display"); set your message
+				}
+				else {
+					putInList();
+					swipeListView();
+				}
+			}
+		});
 
 		//getDeafultNote();
 		createDirectory();
