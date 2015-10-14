@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -15,9 +14,8 @@ public class AboutNoteShareActivity extends DrawerActivity {
 
 	public RelativeLayout layoutHeder;
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
-	public TextView textheadertitle,textViewSubHeaderTitle;
+	public TextView textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
-	public EditText editTexttermsAndCondition;
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +46,6 @@ public class AboutNoteShareActivity extends DrawerActivity {
 		layoutTitleHeaderview=(LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
 		textViewSubHeaderTitle=(TextView) layoutTitleHeaderview.findViewById(R.id.textViewHeaderTitle1);
 		textViewSubHeaderTitle.setText("About".toUpperCase());
-		
-		
-		editTexttermsAndCondition=(EditText) contentView.findViewById(R.id.editTexttermsAndCondition);
-		editTexttermsAndCondition.setText(getTandC());
-		editTexttermsAndCondition.setKeyListener(null);
-		editTexttermsAndCondition.setEnabled(false);
-		editTexttermsAndCondition.setSelected(false);
 		
 		addListners();
 	}

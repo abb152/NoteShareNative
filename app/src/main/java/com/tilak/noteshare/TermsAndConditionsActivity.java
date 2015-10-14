@@ -8,12 +8,10 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class TermsAndConditionsActivity extends DrawerActivity {
 	public RelativeLayout layoutHeder;
 	public ImageButton btnheaderMenu, btnsequence, btncalander;
-	public TextView textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +45,6 @@ public class TermsAndConditionsActivity extends DrawerActivity {
 
 		layoutTitleHeaderview = (LinearLayout) contentView
 				.findViewById(R.id.titleHeaderview1);
-		textViewSubHeaderTitle = (TextView) layoutTitleHeaderview
-				.findViewById(R.id.textViewHeaderTitle1);
-		textViewSubHeaderTitle.setText("Terms & Conditions".toUpperCase());
 
 		addListners();
 	}

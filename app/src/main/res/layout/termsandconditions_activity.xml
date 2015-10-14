@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:text="@string/tctitle"
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:textSize="16sp"/>
 
         <TextView
@@ -33,12 +34,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="@string/tcgeneraltitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textColor="@color/black"
             android:text="@string/tcgeneralbody"/>
 
         <TextView
@@ -46,12 +49,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="@string/tcdefinitionstitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textColor="@color/black"
             android:text="@string/tcdefinitionsbody"/>
 
         <TextView
@@ -59,128 +64,148 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="@string/tcdataprotectiontitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="@string/tcdataprotectionbody1" />
+            android:text="@string/tcdataprotectionbody1"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="@string/tcdataprotectionbody2" />
+            android:text="@string/tcdataprotectionbody2"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="@string/tcelectitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcelecbody"/>
+            android:text="@string/tcelecbody"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="@string/tcthirdpartytitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcthirdpartybody" />
+            android:text="@string/tcthirdpartybody"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="@string/tcreversetitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcreversebody" />
+            android:text="@string/tcreversebody"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="@string/tcupdatestitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcupdatesbody" />
+            android:text="@string/tcupdatesbody"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="@string/tcusetitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcusebody" />
+            android:text="@string/tcusebody"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="@string/tcsystemtitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcsystembody1" />
+            android:text="@string/tcsystembody1"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcsystembody2" />
+            android:text="@string/tcsystembody2"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tcsystembody3" />
+            android:text="@string/tcsystembody3"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:text="@string/tclimittitle"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tclimitbody1" />
+            android:text="@string/tclimitbody1"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:text="@string/tclimitbody2" />
+            android:text="@string/tclimitbody2"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

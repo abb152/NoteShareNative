@@ -3,5 +3,6 @@
 
     <color name="white">#FFFFFF</color>
     <color name="note">#FF5A60</color>
+    <color name="black">#000000</color>
 
 </resources>
