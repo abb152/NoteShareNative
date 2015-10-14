@@ -1,84 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/front"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:background="@android:color/transparent"
     android:orientation="horizontal"
     android:weightSum="2" >
 
-    <LinearLayout
-        android:id="@+id/front"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-
         <LinearLayout
             android:id="@+id/layoutnotefolderAdapter"
             android:layout_width="match_parent"
-            android:layout_height="162dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginTop="1dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:orientation="vertical" >
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="3dp"
                 android:background="@android:color/transparent"
                 android:id="@+id/tvNoteDate"
-                android:textColor="@color/light_gray_666666"
-                android:textSize="12sp" />
+                android:text="01 JAN 2015"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/tvNoteName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
                 android:background="@android:color/transparent"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/light_gray_666666"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:text="BOTANY: THE CLASSIFICATION"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvNoteDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
                 android:background="@android:color/transparent"
-                android:lines="4"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/light_gray_999999"
-                android:textSize="14sp"
-                android:textStyle="normal" />
+                android:text="LOrejdshsdcvsdhjvhjsdvsvdjkvbdsjkvghcghcgctchgcgtcdgcghytycgctydytcty"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
         </LinearLayout>
-
-        <View
-            android:id="@+id/layoutsepreter1"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/ffffff"
-            android:visibility="visible" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/layoutsepreter"
-        android:layout_width="2dp"
-        android:layout_height="190dp"
-        android:layout_gravity="end"
-        android:layout_weight="1"
-        android:background="@color/ffffff"
-        android:visibility="visible" />
 
 </LinearLayout>
