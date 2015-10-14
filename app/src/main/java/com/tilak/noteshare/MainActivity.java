@@ -123,7 +123,7 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
 			}
 
 			@Override
@@ -447,6 +447,9 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				notefoleserGridList.setVisibility(View.VISIBLE);
+				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+				listView.setVisibility(View.GONE);
 				setListView = "grid";
 				swipeListView();
 				myDialog.dismiss();
@@ -468,7 +471,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-
 				/*DataManager.sharedDataManager().setTypeofListView(false);
 				adapter.notifyDataSetChanged();
 				// TODO Auto-generated method stub
@@ -478,10 +480,12 @@ public class MainActivity extends DrawerActivity {
 
 				DataManager.sharedDataManager().setSelectedIndex(-1);
 				adapter.notifyDataSetChanged();*/
+				notefoleserGridList.setVisibility(View.GONE);
+				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+				listView.setVisibility(View.VISIBLE);
 				setListView = "detail";
 				swipeListView();
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -497,6 +501,9 @@ public class MainActivity extends DrawerActivity {
 				//notefoleserPintrestList.setVisibility(View.GONE);
 				DataManager.sharedDataManager().setSelectedIndex(-1);
 				adapter.notifyDataSetChanged();*/
+				notefoleserGridList.setVisibility(View.GONE);
+				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+				listView.setVisibility(View.VISIBLE);
 				setListView = "list";
 				swipeListView();
 				myDialog.dismiss();
@@ -1133,10 +1140,15 @@ public class MainActivity extends DrawerActivity {
 
 	public void swipeListView(){
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+		GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
 
 		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, setListView);
-		listView.setOffsetLeft(170L);
-		listView.setAdapter(noteAdapter);
+		if(setListView != "grid") {
+			listView.setOffsetLeft(170L);
+			listView.setAdapter(noteAdapter);
+		}else{
+			listGridView.setAdapter(noteAdapter);
+		}
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1354,14 +1366,14 @@ public class MainActivity extends DrawerActivity {
 				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
 				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
 
-				String timebombTime = check(date[2])+"-"+check(date[1])+"-"+check(date[0])+" "+check(time[0])+":"+check(time[1])+":00";
+				String timebombTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
 
 				Note n = Note.findById(Note.class, Long.valueOf(noteid));
 				n.timebomb = timebombTime;
 				n.save();
 
 				move.dismiss();
-				Toast.makeText(getApplication(),"Date Time: " + timebombTime ,Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplication(),"Timebomb Set: " + timebombTime, Toast.LENGTH_LONG).show();
 			}
 		});
 

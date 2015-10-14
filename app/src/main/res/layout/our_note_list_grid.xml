@@ -1,106 +1,84 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <GridLayout
-        android:id="@+id/back"
-        android:tag="back"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal"
+    android:weightSum="2" >
+
+    <LinearLayout
+        android:id="@+id/front"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:background="@color/C58FAD0"
-        android:orientation="horizontal"
-        android:weightSum="7"
-        android:gravity="right">
+        android:layout_weight="1"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/tvIdHidden"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+        <LinearLayout
+            android:id="@+id/layoutnotefolderAdapter"
+            android:layout_width="match_parent"
+            android:layout_height="162dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="1dp"
             android:background="@android:color/transparent"
-            android:visibility="invisible"/>
+            android:orientation="vertical" >
 
-        <ImageButton
-            android:id="@+id/btnlock"
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="15dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/image_option_unlock"
-            android:onClick="passCode"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="3dp"
+                android:background="@android:color/transparent"
+                android:id="@+id/tvNoteDate"
+                android:textColor="@color/light_gray_666666"
+                android:textSize="12sp" />
 
-        <ImageButton
-            android:id="@+id/btntimebomb"
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="15dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/image_option_timebomb2" />
+            <TextView
+                android:id="@+id/tvNoteName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/light_gray_666666"
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
-        <ImageButton
-            android:id="@+id/btnmove"
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/image_option_move2"
-            android:onClick="move"/>
+            <TextView
+                android:id="@+id/tvNoteDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:lines="4"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/light_gray_999999"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+        </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btndelete"
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="15dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/image_option_delete2"
-            android:onClick="deleteNote" />
+        <View
+            android:id="@+id/layoutsepreter1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/ffffff"
+            android:visibility="visible" />
+    </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btnshare"
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/image_option_share2" />
+    <View
+        android:id="@+id/layoutsepreter"
+        android:layout_width="2dp"
+        android:layout_height="190dp"
+        android:layout_gravity="end"
+        android:layout_weight="1"
+        android:background="@color/ffffff"
+        android:visibility="visible" />
 
-    </GridLayout>
-
-    <GridLayout
-        android:orientation="vertical"
-        android:id="@+id/front"
-        android:tag="front"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@android:color/white">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvNoteName"
-            android:textColor="#000" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvNoteDesc"
-            android:textColor="#000" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvNoteDate"
-            android:textColor="#000" />
-
-    </GridLayout>
-
-</FrameLayout>
+</LinearLayout>
