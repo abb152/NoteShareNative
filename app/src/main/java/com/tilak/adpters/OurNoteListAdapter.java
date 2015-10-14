@@ -20,6 +20,7 @@ public class OurNoteListAdapter extends BaseAdapter {
     String listview = "";
     Activity activity;
     TextView noteDesc;
+    CustomDateFormatter cdf;
 
     public OurNoteListAdapter(Activity activity,ArrayList<HashMap<String,String>> list, String listwiew){
         super();
@@ -60,12 +61,9 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.our_note_list,null); //change the name of the layout
             if(listview == "grid"){
-                convertView = inflater.inflate(R.layout.our_note_list,null); //change the name of the layout
+                convertView = inflater.inflate(R.layout.our_note_list_grid,null); //change the name of the layout
             }
 
-            if(listview != "grid") {
-                holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdHidden);
-            }
             holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.front);
             holder.txtNoteName = (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
             holder.txtNoteDesc = (TextView) convertView.findViewById(R.id.tvNoteDesc);
@@ -80,6 +78,8 @@ public class OurNoteListAdapter extends BaseAdapter {
             }
 
             if(listview != "grid") {
+                holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdHidden);
+
                 holder.btnLock = (ImageButton) convertView.findViewById(R.id.btnlock);
                 holder.btnTimebomb = (ImageButton) convertView.findViewById(R.id.btntimebomb);
                 holder.btnMove = (ImageButton) convertView.findViewById(R.id.btnmove);
@@ -94,7 +94,7 @@ public class OurNoteListAdapter extends BaseAdapter {
         HashMap<String,String> map = list.get(position);
         holder.txtNoteName.setText(map.get("noteName")); //set the hash maps
         holder.txtNoteDesc.setText(map.get("noteDesc"));
-        holder.txtNoteDate.setText(map.get("noteDate"));
+        holder.txtNoteDate.setText(cdf.dbToAdapterDate(map.get("noteDate")));
         holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
         if(listview != "grid") {
             holder.tvIdHidden.setText(map.get("noteId"));
@@ -110,6 +110,10 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.btnMove.setTag(map.get("noteId"));
             holder.btnDelete.setTag(map.get("noteId"));
             holder.btnShare.setTag(map.get("noteId"));
+
+            if(Integer.parseInt(map.get("noteNum")) % 2 == 0){
+                holder.
+            }
         }
 
         return convertView;

@@ -860,7 +860,9 @@ public class MainActivity extends DrawerActivity {
 	void putInList(){
 		if(list.size()>0)
 			list.clear();
+		int i = 0;
 		for(Note currentnote : sortallnotes){
+			i++;
 			String noteDesc = "";
 			List<NoteElement> noteElements = NoteElement.findWithQuery(NoteElement.class, "SELECT DISTINCT TYPE FROM NOTE_ELEMENT WHERE NOTEID = " + currentnote.getId());
 			for (NoteElement currentNoteElement : noteElements){
@@ -873,6 +875,7 @@ public class MainActivity extends DrawerActivity {
 			map.put("noteId", currentnote.getId().toString());
 			map.put("noteBgColor",currentnote.getBackground());
 			map.put("noteLock", String.valueOf(currentnote.getIslocked()));
+			map.put("noteNum", String.valueOf(i));
 			//map.put("noteLock", String.valueOf(currentnote.getIslocked()));
 			list.add(map);
 		}
