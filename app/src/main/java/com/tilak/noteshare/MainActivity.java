@@ -920,9 +920,9 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.colorbutton4);
 		ImageButton colorbutton5 = (ImageButton) paintLayout
 				.findViewById(R.id.colorbutton5);
-		ImageButton colorbutton6 = (ImageButton) paintLayout
+		ImageButton colorbutton6 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton6);
-		ImageButton colorbutton7 = (ImageButton) paintLayout
+		ImageButton colorbutton7 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton7);
 		ImageButton colorbutton8 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton8);
@@ -930,14 +930,6 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.colorbutton9);
 		ImageButton colorbutton10 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton10);
-		ImageButton colorbutton11 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton11);
-		ImageButton colorbutton12 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton12);
-		ImageButton colorbutton13 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton13);
-		ImageButton colorbutton14 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton14);
 
 		colorbutton1.setOnClickListener(new OnClickListener() {
 
@@ -1017,38 +1009,6 @@ public class MainActivity extends DrawerActivity {
 			}
 		});
 		colorbutton10.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v, nid);
-			}
-		});
-		colorbutton11.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v, nid);
-			}
-		});
-		colorbutton12.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v, nid);
-			}
-		});
-		colorbutton13.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v, nid);
-			}
-		});
-		colorbutton14.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

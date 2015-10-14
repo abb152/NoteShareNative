@@ -959,14 +959,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 				.findViewById(R.id.colorbutton9);
 		ImageButton colorbutton10 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton10);
-		ImageButton colorbutton11 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton11);
-		ImageButton colorbutton12 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton12);
-		ImageButton colorbutton13 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton13);
-		ImageButton colorbutton14 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton14);
 		colorbutton1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -1045,38 +1037,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 			}
 		});
 		colorbutton10.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(position, v);
-			}
-		});
-		colorbutton11.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(position, v);
-			}
-		});
-		colorbutton12.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(position, v);
-			}
-		});
-		colorbutton13.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(position, v);
-			}
-		});
-		colorbutton14.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

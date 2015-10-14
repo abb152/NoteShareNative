@@ -30,7 +30,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,7 +47,6 @@ import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.NOTETYPE;
 import com.tilak.datamodels.NoteListDataModel;
-import com.tilak.db.Folder;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
@@ -1664,14 +1662,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.colorbutton9);
 		ImageButton colorbutton10 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton10);
-		ImageButton colorbutton11 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton11);
-		ImageButton colorbutton12 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton12);
-		ImageButton colorbutton13 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton13);
-		ImageButton colorbutton14 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton14);
 		colorbutton1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -1750,38 +1740,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		colorbutton10.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v);
-			}
-		});
-		colorbutton11.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v);
-			}
-		});
-		colorbutton12.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v);
-			}
-		});
-		colorbutton13.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				paintClicked(v);
-			}
-		});
-		colorbutton14.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
