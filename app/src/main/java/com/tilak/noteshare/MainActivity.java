@@ -124,6 +124,8 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				String strCout = "(" + sortallnotes.size() + ")";
+				textViewheaderTitle.setText("NOTE " + strCout);
 			}
 
 			@Override
