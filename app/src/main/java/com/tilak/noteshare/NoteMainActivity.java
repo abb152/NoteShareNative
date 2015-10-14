@@ -276,6 +276,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		updateHeaderControls(R.id.imageButtonHamburg);
 		imageButtonsquence.setVisibility(View.VISIBLE);
+		imageButtoncalander.setVisibility(View.VISIBLE);
 
 		fonts_sizeName = getResources().getStringArray(R.array.Font_Size_px);
 		fontSizes = getResources().getStringArray(R.array.Font_Size);
@@ -1107,7 +1108,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	/************* main list control Here ************/
 	void addlistners() {
 
-		imageButtoncalander.setVisibility(View.GONE);
+		imageButtoncalander.setVisibility(View.VISIBLE); //changed by Jay
 
 		// #NOTE ITEM CLCIK
 
@@ -1184,7 +1185,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// Save test he
 				// Updated text in list view
 
-				if (txtViewer.getText().length() > 0) {
+
 					NoteListDataModel model = new NoteListDataModel();
 					model.noteType = NOTETYPE.TEXTMODE;
 					model.stringtext = new SpannableString(txtViewer.getText());
@@ -1208,7 +1209,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					arrNoteListData.add(model);
 					adapter.notifyDataSetChanged();
 					listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
-				}
+
 				updateHeaderControls(-1);
 				textNoteControls.setVisibility(View.GONE);
 				LayoutTextWritingView.setVisibility(View.GONE);
@@ -1357,7 +1358,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				layout_audio_notechooser.setVisibility(View.GONE);
 			}
 		});
-		imageButtonTextMode.setOnClickListener(new OnClickListener() {
+		/*imageButtonTextMode.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -1382,7 +1383,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				imageButtoncalander.setVisibility(View.VISIBLE);
 
 			}
-		});
+		});*/
 		imageButtonMoreMode.setOnClickListener(new OnClickListener() {
 
 			@Override

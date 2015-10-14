@@ -11,12 +11,15 @@ public class CustomDateFormatter {
     public String dbToAdapterDate(String date){
 
         SimpleDateFormat originalDateFormat  = new SimpleDateFormat("yyyy-MM-dd KK:mm:ss");
-        SimpleDateFormat requiredDateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
+        SimpleDateFormat requiredDateFormat = new SimpleDateFormat("yyyy-MM-dd KK:mm:ss");
+        //SimpleDateFormat requiredDateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
+
         try {
-            date = requiredDateFormat.format(originalDateFormat.parse(date)).toString();
+            date = requiredDateFormat.format(originalDateFormat.parse(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         return date;
     }
 }

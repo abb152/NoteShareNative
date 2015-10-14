@@ -3,19 +3,24 @@
     android:id="@+id/front"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:background="@android:color/transparent"
     android:orientation="horizontal"
-    android:weightSum="2" >
+    android:weightSum="2"
+    android:layout_marginRight="5dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/layoutnotefolderAdapter"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:orientation="vertical" >
 
@@ -25,7 +30,7 @@
                 android:layout_gravity="right"
                 android:background="@android:color/transparent"
                 android:id="@+id/tvNoteDate"
-                android:text="01 JAN 2015"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="10sp" />
 
@@ -34,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:text="BOTANY: THE CLASSIFICATION"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -44,9 +49,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:text="LOrejdshsdcvsdhjvhjsdvsvdjkvbdsjkvghcghcgctchgcgtcdgcghytycgctydytcty"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="14sp" />
+
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imageView4"
+            android:layout_gravity="right"
+            android:baselineAlignBottom="false"
+            android:src="@drawable/note_fold_shadow"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
 
 </LinearLayout>
