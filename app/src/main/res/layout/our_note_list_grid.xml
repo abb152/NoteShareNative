@@ -55,12 +55,12 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/imageView4"
             android:layout_gravity="right"
             android:baselineAlignBottom="false"
-            android:src="@drawable/note_fold_shadow"
+            android:src="@drawable/note_fold_shadow2"
             android:background="@android:color/transparent"/>
     </LinearLayout>
 

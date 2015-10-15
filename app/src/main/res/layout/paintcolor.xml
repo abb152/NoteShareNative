@@ -76,9 +76,9 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#95D57B"
+                android:background="#F6B2B3"
                 android:contentDescription="@string/paint"
-                android:tag="#95D57B" />
+                android:tag="#F6B2B3" />
 
         <!-- Bottom Row -->
 
