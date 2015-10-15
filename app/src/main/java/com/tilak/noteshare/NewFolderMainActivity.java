@@ -2,6 +2,7 @@ package com.tilak.noteshare;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -64,10 +65,12 @@ public class NewFolderMainActivity extends DrawerActivity {
 	public NewNoteFolderGridAdapter gridAdapter;
 	public ArrayList<SideMenuitems> arrDataNote;
 	final Context context = this;
-	public TextView textNoteSort, textNoteView;
+//	public TextView textNoteSort, textNoteView;
 
 	public SORTTYPE_NEW sortType;
 	private ArrayList<HashMap<String,String>> list;
+
+	public List<Folder> allfolders;
 
 	public Dialog dialogColor;
 	public ImageButton searchbuttonclick;
@@ -83,8 +86,39 @@ public class NewFolderMainActivity extends DrawerActivity {
 		View contentView = inflater.inflate(R.layout.folder_activity_main,
 				null, false);
 		mDrawerLayout.addView(contentView, 0);
-		initlizeUIElement(contentView);
-//		getDeafultNote();
+
+		try {
+			initlizeUIElement(contentView);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		editTextsearchNote = (EditText)findViewById(R.id.editTextsearchNote);
+		editTextsearchNote.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				allfolders = Folder.findWithQuery(Folder.class, "Select * from FOlder where name LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				String strCout = "(" + allfolders.size() + ")";
+				textViewheaderTitle.setText("FOLDER " + strCout);
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (allfolders.toString() == "[]") {
+					putInList();
+					swipeListView();
+//					d.setText("Nothing to display"); set your message
+				} else {
+					putInList();
+					swipeListView();
+				}
+			}
+		});
 
 	}
 
@@ -106,8 +140,8 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		//imageButtonsquence.setVisibility(View.GONE);
 
-		textNoteSort = (TextView) findViewById(R.id.textNoteSort);
-		textNoteView = (TextView) findViewById(R.id.textNoteView);
+//		textNoteSort = (TextView) findViewById(R.id.textNoteSort);
+//		textNoteView = (TextView) findViewById(R.id.textNoteView);
 
 		textViewAdd = (ImageButton) findViewById(R.id.textViewAdd);
 		arrDataNote = new ArrayList<SideMenuitems>();
@@ -329,24 +363,24 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 	void addlistners() {
 
-		textNoteSort.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				showActionSheet_sort(arg0);
-
-			}
-		});
-		textNoteView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				showActionSheet(v);
-
-			}
-		});
+//		textNoteSort.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				showActionSheet_sort(arg0);
+//
+//			}
+//		});
+//		textNoteView.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				showActionSheet(v);
+//
+//			}
+//		});
 
 		/*imageButtoncalander.setOnClickListener(new OnClickListener() {
 			@Override
@@ -1083,15 +1117,8 @@ public class NewFolderMainActivity extends DrawerActivity {
 	}
 	void populate() {
 		list=new ArrayList<HashMap<String, String>>();
-		List<Folder> allfolders = Folder.findWithQuery(Folder.class, "Select * from Folder");
-		for(Folder currentfolder : allfolders){
-			HashMap<String,String> map = new HashMap<String,String>();
-			map.put("folderName", currentfolder.getName());
-			map.put("folderDesc", currentfolder.getName()); // change this later
-			map.put("folderDate", currentfolder.getCreationtime());
-			map.put("folderId", currentfolder.getId().toString());
-			list.add(map);
-		}
+		allfolders = Folder.findWithQuery(Folder.class, "Select * from Folder");
+		putInList();
 
 		//adapter.notifyDataSetChanged();
 		String strCout = "(" + list.size() + ")";
@@ -1101,18 +1128,55 @@ public class NewFolderMainActivity extends DrawerActivity {
 		//updatePintrestView();
 	}
 
+	void putInList(){
+		if(list.size()>0)
+			list.clear();
+		for(Folder currentfolder : allfolders){
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("folderName", currentfolder.getName());
+			map.put("folderDesc", currentfolder.getName()); // change this later
+			map.put("folderDate", currentfolder.getCreationtime());
+			map.put("folderId", currentfolder.getId().toString());
+			list.add(map);
+		}
+	}
+
 	void swipeListView(){
 		SwipeListView listView = (SwipeListView) findViewById(R.id.notefolderList);
 
 		OurFolderListAdapter testAdapter = new OurFolderListAdapter(this,list);
-		listView.setOffsetLeft(400L);
+		listView.setOffsetLeft(450L);
 		listView.setAdapter(testAdapter);
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
 				//do your stuff here
 //				showColorAlert(NewFolderMainActivity.this);
+
 				return true;
+			}
+		});
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+				finish();
+				Log.d("select position", "Position = " + position);
+				int itemPosition = position;
+				String folid = null;
+
+				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+
+				folid = map.get("folderId");
+
+				Log.d("select folid", "FOlder"+folid);
+
+				Intent intent = new Intent(NewFolderMainActivity.this, MainActivity.class);
+				intent.putExtra("FolderId", folid);
+				startActivity(intent);
+
 			}
 		});
 	}
@@ -1133,4 +1197,11 @@ public class NewFolderMainActivity extends DrawerActivity {
 		showDeleteAlert("Are you sure you want to delete ?",
 				NewFolderMainActivity.this, id);
 	}
+
+//	public void getNotesInFolder(View v){
+//		String id = v.getTag().toString();
+//		Intent intent = new Intent(NewFolderMainActivity.this, MainActivity.class);
+//		intent.putExtra("FolderId", id);
+//		startActivity(intent);
+//	}
 }

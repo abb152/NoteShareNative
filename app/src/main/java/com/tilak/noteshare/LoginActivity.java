@@ -16,6 +16,7 @@ public class LoginActivity extends Activity {
 
     public void main(View v){
         Intent i = new Intent(getApplication(), MainActivity.class);
+        i.putExtra("FolderId", "-1");
         startActivity(i);
 
     }

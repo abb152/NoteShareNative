@@ -93,6 +93,7 @@ public class MainActivity extends DrawerActivity {
 	public List<Note> sortallnotes;
 
 	public String setListView = "detail";
+	public static String folderIdforNotes;
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -100,6 +101,10 @@ public class MainActivity extends DrawerActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_main);
+
+		Intent intent = this.getIntent();
+		folderIdforNotes = intent.getStringExtra("FolderId");
+		Log.v("select","OnCreate"+folderIdforNotes);
 
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -123,7 +128,11 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				Log.v("select",folderIdforNotes);
+				if(folderIdforNotes.equals("-1"))
+					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				else
+					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ? AND folder = " + folderIdforNotes, "%" + editTextsearchNote.getText().toString() + "%");
 				String strCout = "(" + sortallnotes.size() + ")";
 				textViewheaderTitle.setText("NOTE " + strCout);
 			}
@@ -842,8 +851,14 @@ public class MainActivity extends DrawerActivity {
 
 
 	void populate() {
-		list=new ArrayList<HashMap<String, String>>();
-		List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' ORDER BY ID DESC");
+		list = new ArrayList<HashMap<String, String>>();
+		List<Note> allnotes;
+		Log.v("select",folderIdforNotes);
+		if(folderIdforNotes.equals("-1"))
+			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' ORDER BY ID DESC");
+		else
+			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' AND folder = " + folderIdforNotes + " ORDER BY ID DESC");
+
 		sortallnotes = allnotes;
 //		sortingArray();
 		putInList();

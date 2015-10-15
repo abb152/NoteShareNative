@@ -71,13 +71,14 @@ public class OurFolderListAdapter extends BaseAdapter {
             holder= (ViewHolder) convertView.getTag();
         }
 
-        HashMap<String,String> map =list.get(position);
+        HashMap<String,String> map = list.get(position);
         holder.txtFolderName.setText(map.get("folderName")); //set the hash maps
         holder.txtFolderDesc.setText(map.get("folderDesc"));
         holder.txtFolderDate.setText(map.get("folderDate"));
         holder.tvIdHidden.setText(map.get("folderId"));
 
         holder.btnDelete.setTag(map.get("folderId"));
+        holder.linearLayout.setTag(map.get("folderId"));
 
         return convertView;
     }
