@@ -82,7 +82,7 @@ public class MainActivity extends DrawerActivity {
 	public NoteFolderGridAdapter gridAdapter;
 	public ArrayList<SideMenuitems> arrDataNote;
 	final Context context = this;
-	public TextView textNoteSort, textNoteView;
+	public LinearLayout textNoteSort, textNoteView;
 	
 	public SORTTYPE sortType;
 
@@ -104,7 +104,7 @@ public class MainActivity extends DrawerActivity {
 
 		Intent intent = this.getIntent();
 		folderIdforNotes = intent.getStringExtra("FolderId");
-		Log.v("select","OnCreate"+folderIdforNotes);
+		Log.v("select", "OnCreate" + folderIdforNotes);
 
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -189,8 +189,8 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.imageButtonHamburg);
 
 
-		textNoteSort = (TextView) findViewById(R.id.textNoteSort);
-		textNoteView = (TextView) findViewById(R.id.textNoteView);
+		textNoteSort = (LinearLayout) findViewById(R.id.textNoteSort);
+		textNoteView = (LinearLayout) findViewById(R.id.textNoteView);
 
 		textViewAdd = (ImageButton) findViewById(R.id.textViewAdd);
 
