@@ -87,7 +87,7 @@ public class OurNoteListAdapter extends BaseAdapter {
                 /*FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                         FrameLayout.LayoutParams.WRAP_CONTENT);*/
 
-                LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 125);
+                LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 160);
                 holder.main.setLayoutParams(params);
             }
 

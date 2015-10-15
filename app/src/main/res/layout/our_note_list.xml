@@ -90,11 +90,10 @@
         android:tag="front"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="fill_parent"
@@ -121,15 +120,9 @@
             android:id="@+id/tvNoteDate"
             android:textColor="#000"
             android:text="01.04.15"
-            android:textSize="10sp"/>
+            android:textSize="10sp" />
 
-        </LinearLayout>
-
-        <View
-            android:id="@+id/dividerView"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#ddd" />
+    </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

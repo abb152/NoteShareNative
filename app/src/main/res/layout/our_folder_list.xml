@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/back"
         android:tag="back"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_height="match_parent"
         android:background="@color/header_bg"
         android:orientation="horizontal"
         android:weightSum="7"
@@ -38,28 +43,43 @@
         android:orientation="vertical"
         android:id="@+id/front"
         android:tag="front"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@android:color/white">
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:descendantFocusability="blocksDescendants">
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvFolderName"
+            android:layout_marginBottom="2dp"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:text="@string/app_name"
             android:textColor="#000" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvFolderDesc"
+            android:layout_marginBottom="2dp"
+            android:text="@string/app_name"
+            android:textSize="14sp"
             android:textColor="#000" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvFolderDate"
+            android:text="@string/app_name"
+            android:textSize="10sp"
             android:textColor="#000" />
 
     </LinearLayout>
 
-</FrameLayout>
+    </FrameLayout>
+
+</LinearLayout>
