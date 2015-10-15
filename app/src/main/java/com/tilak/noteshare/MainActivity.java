@@ -128,8 +128,8 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				Log.v("select",folderIdforNotes);
-				if(folderIdforNotes.equals("-1"))
+//				Log.v("select",folderIdforNotes);
+				if(folderIdforNotes == null || folderIdforNotes == "-1")
 					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
 				else
 					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ? AND folder = " + folderIdforNotes, "%" + editTextsearchNote.getText().toString() + "%");
@@ -853,8 +853,7 @@ public class MainActivity extends DrawerActivity {
 	void populate() {
 		list = new ArrayList<HashMap<String, String>>();
 		List<Note> allnotes;
-		Log.v("select",folderIdforNotes);
-		if(folderIdforNotes.equals("-1"))
+		if(folderIdforNotes == null || folderIdforNotes == "-1")
 			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' ORDER BY ID DESC");
 		else
 			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' AND folder = " + folderIdforNotes + " ORDER BY ID DESC");

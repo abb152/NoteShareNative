@@ -1158,7 +1158,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 		});
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -1200,8 +1199,10 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 //	public void getNotesInFolder(View v){
 //		String id = v.getTag().toString();
+//		Log.v("oncrea","Folder id = " + id);
 //		Intent intent = new Intent(NewFolderMainActivity.this, MainActivity.class);
 //		intent.putExtra("FolderId", id);
+//		finish();
 //		startActivity(intent);
 //	}
 }
