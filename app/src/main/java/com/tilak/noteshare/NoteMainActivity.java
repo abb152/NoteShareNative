@@ -892,7 +892,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 				//showBrushSizeDialog(false);
-				onCreateDialog();
+				onCreateBrushDialog();
 			}
 		});
 		imageButtondrawerase.setOnClickListener(new OnClickListener() {
@@ -902,7 +902,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 				// showEraserDialog();
-				showBrushSizeDialog(true);
+				//showBrushSizeDialog(true);
+				onCreateEraserDialog();
 			}
 		});
 		imageButtondrawMore.setOnClickListener(new OnClickListener() {
@@ -3089,7 +3090,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	        }
 	    }};
 
-	public void onCreateDialog() {
+	public void onCreateBrushDialog() {
 
 		Dialog brushDialog = new Dialog(NoteMainActivity.this);
 		brushDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -3109,9 +3110,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		final TextView tvBrushSize = (TextView) brushDialog.findViewById(R.id.tvBrushSize);
 		String size = String.valueOf(10 + (lastBrushSize * 2));
 		tvBrushSize.setText(size);
+		
 		drawView.setBrushSize(10 + (lastBrushSize * 2));
 
-		if(count >0) {
+		if (count > 0) {
 			v.setBackgroundColor(color_selected);
 		}
 		colorPickerSeekBar.setProgress(lastBrushColor);
@@ -3128,12 +3130,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
+			public void onStartTrackingTouch(SeekBar seekBar) {}
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
+			public void onStopTrackingTouch(SeekBar seekBar) {}
 		});
 
 		sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -3148,18 +3148,54 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-
-			}
+			public void onStartTrackingTouch(SeekBar seekBar) {}
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-
-			}
+			public void onStopTrackingTouch(SeekBar seekBar) {}
 		});
 
 		brushDialog.show();
 	}
 	int lastBrushColor = 0,count = 0, lastBrushSize = 3 ;
+
+	public void onCreateEraserDialog() {
+		Dialog brushDialog = new Dialog(NoteMainActivity.this);
+		brushDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		brushDialog.setCancelable(true);
+		brushDialog.setContentView(R.layout.eraser_chooser);
+		final View v = brushDialog.findViewById(R.id.view);
+		TextView textViewSizesHeader = (TextView) brushDialog.findViewById(R.id.textViewSizesHeader);
+		textViewSizesHeader.setText("ERASER SIZES");
+
+		SeekBar sizeSeekBar = (SeekBar) brushDialog.findViewById(R.id.sizeSeekBar);
+		sizeSeekBar.setMax(14);
+		sizeSeekBar.setProgress(lastBrushSize);
+
+		final TextView tvBrushSize = (TextView) brushDialog.findViewById(R.id.tvBrushSize);
+		String size = String.valueOf(10 + (lastBrushSize * 2));
+		tvBrushSize.setText(size);
+		drawView.setBrushSize(10 + (lastBrushSize * 2));
+		drawView.setDrawColor(Color.parseColor("#FFFFFF"));
+
+		sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				lastBrushSize = progress;
+				drawView.setBrushSize(10 + (progress * 2));
+				String size = String.valueOf(10 + (lastBrushSize * 2));
+				tvBrushSize.setText(size);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
+
+		brushDialog.show();
+	}
 
 }
