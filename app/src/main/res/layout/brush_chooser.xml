@@ -3,7 +3,8 @@
     android:layout_height="wrap_content"
     android:background="#eaeaea"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:paddingBottom="5dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textViewSizesHeader"
@@ -20,226 +21,58 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar
+            android:id="@+id/colorpicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:max="1791"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginLeft="10dp"
-            android:text="@string/size"
-            android:gravity="center"/>
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/size" />
 
         <TextView
-            android:id="@+id/number"
+            android:id="@+id/tvBrushSize"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/zero"
-            android:gravity="center"/>
+            android:gravity="center|right"
+            android:text="@string/zero" />
 
         <SeekBar
+            android:id="@+id/sizeSeekBar"
             android:layout_width="180dp"
             android:layout_height="match_parent"
-            android:id="@+id/seekBar"
-            android:layout_margin="10dp"
-            android:padding="20dp"
-            android:max="100"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:layout_weight="0"
-            android:thumb="@drawable/thumb"
-            android:progressDrawable="@layout/progress_drawable"/>
+            android:progressDrawable="@layout/progress_drawable"
+            android:thumb="@drawable/thumb" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+        <View
+            android:id="@+id/view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight="0"
+            android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:text="@string/app_name"
-            android:gravity="center"/>
+            android:layout_marginBottom="0dp"
+            android:background="#000"/>
 
     </LinearLayout>
-
-   <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:weightSum="5"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal" >
-       
-     
-
-        <ImageButton
-            android:id="@+id/small_brush"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:padding="0dp"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/sml"
-            android:src="@drawable/brush_10" />
-
-        <ImageButton
-            android:id="@+id/small_brush_12"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/med"
-            android:src="@drawable/brush_12" />
-
-        <ImageButton
-            android:id="@+id/small_brush_14"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_14" />
-          <ImageButton
-            android:id="@+id/small_brush_16"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_16" />
-            <ImageButton
-            android:id="@+id/small_brush_18"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_18" />
-        
-    </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:weightSum="5"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal" >
-       
-    
-        <ImageButton
-            android:id="@+id/medium_brush"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/med"
-            android:src="@drawable/brush_20" />
-        
-           <ImageButton
-            android:id="@+id/medium_brush_22"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/med"
-            android:src="@drawable/brush_22" />
-              <ImageButton
-            android:id="@+id/medium_brush_24"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/med"
-            android:src="@drawable/brush_24" />
-                 <ImageButton
-            android:id="@+id/medium_brush_26"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/med"
-            android:src="@drawable/brush_26" />
-                    <ImageButton
-            android:id="@+id/medium_brush_28"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/med"
-            android:src="@drawable/brush_28" />
-
-
-    </LinearLayout>
-   <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:weightSum="5"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal" >
-       
-        <ImageButton
-            android:id="@+id/large_brush"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_30" />
-        
-                <ImageButton
-            android:id="@+id/large_brush_32"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_32" />
-                        <ImageButton
-            android:id="@+id/large_brush_34"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_34" />
-                                <ImageButton
-            android:id="@+id/large_brush_36"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_36" />
-                                        <ImageButton
-            android:id="@+id/large_brush_38"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/lrg"
-            android:src="@drawable/brush_38" />
-        
-    </LinearLayout>-->
-
-   <View
-       android:id="@+id/view1"
-       android:layout_width="wrap_content"
-       android:layout_height="5dp"
-       android:layout_weight="0" />
 
 </LinearLayout>

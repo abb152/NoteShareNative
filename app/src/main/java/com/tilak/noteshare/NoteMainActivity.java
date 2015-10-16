@@ -42,6 +42,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
 import com.tilak.adpters.NotesListAdapter;
 import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.dataAccess.DataManager;
@@ -78,8 +79,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public TextView progressRecordtext;
 	EditText textViewheaderTitle;
 	public RelativeLayout layoutHeader;
-
 	public int currentAudioIndex = 0;
+
+	//Color picker
+	int color_selected = 5251;
+	ColorPickerSeekBar colorPickerSeekBar = null;
 
 	EditText edittextEditer, txtViewer;
 	Button btnAddText;
@@ -887,7 +891,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
-				showBrushSizeDialog(false);
+				//showBrushSizeDialog(false);
+				onCreateDialog();
 			}
 		});
 		imageButtondrawerase.setOnClickListener(new OnClickListener() {
@@ -1462,10 +1467,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		}
 			break;
 		case R.id.imageButtonPaintMode: {
-
 			imageButtonPaintMode.setBackgroundColor(getResources().getColor(
 					R.color.A8b241b));
-
 		}
 			break;
 		case R.id.imageButtonShareMode: {
@@ -1898,30 +1901,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		} else {
 			textViewSizesHeader.setText("BRUSH SIZES");
 		}
-
-		seekbar = (SeekBar) findViewById(R.id.seekBar);
-		number = (TextView) findViewById(R.id.number);
-		number.setText("1");
-
-		seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			int progress_value;
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				progress_value = progress;
-				number.setText(seekbar.getProgress());
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				number.setText(seekbar.getProgress());
-			}
-		});
-
-
-		//seekbar();
 
 		/*ImageButton smallBtn = (ImageButton) brushDialog1
 				.findViewById(R.id.small_brush);
@@ -3109,5 +3088,78 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	            Toast.makeText(getApplicationContext(), "Maximum Limit Reached", Toast.LENGTH_SHORT).show();
 	        }
 	    }};
+
+	public void onCreateDialog() {
+
+		Dialog brushDialog = new Dialog(NoteMainActivity.this);
+		brushDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		brushDialog.setCancelable(true);
+		brushDialog.setContentView(R.layout.brush_chooser);
+
+		final View v = brushDialog.findViewById(R.id.view);
+
+		TextView textViewSizesHeader = (TextView) brushDialog.findViewById(R.id.textViewSizesHeader);
+		textViewSizesHeader.setText("BRUSH SIZES");
+		colorPickerSeekBar = (ColorPickerSeekBar) brushDialog.findViewById(R.id.colorpicker);
+
+		SeekBar sizeSeekBar = (SeekBar) brushDialog.findViewById(R.id.sizeSeekBar);
+		sizeSeekBar.setMax(14);
+		sizeSeekBar.setProgress(lastBrushSize);
+
+		final TextView tvBrushSize = (TextView) brushDialog.findViewById(R.id.tvBrushSize);
+		String size = String.valueOf(10 + (lastBrushSize * 2));
+		tvBrushSize.setText(size);
+		drawView.setBrushSize(10 + (lastBrushSize * 2));
+
+		if(count >0) {
+			v.setBackgroundColor(color_selected);
+		}
+		colorPickerSeekBar.setProgress(lastBrushColor);
+
+
+		colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
+			@Override
+			public void onColorChanged(SeekBar seekBar, int color, boolean b) {
+				v.setBackgroundColor(color);
+				color_selected = color;
+				drawView.setDrawColor(color);
+				lastBrushColor = seekBar.getProgress();
+				count++;
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
+
+		sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+				lastBrushSize = progress;
+				drawView.setBrushSize(10 + (progress * 2));
+				String size = String.valueOf(10 + (lastBrushSize * 2));
+				tvBrushSize.setText(size);
+
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
+
+		brushDialog.show();
+	}
+	int lastBrushColor = 0,count = 0, lastBrushSize = 3 ;
 
 }

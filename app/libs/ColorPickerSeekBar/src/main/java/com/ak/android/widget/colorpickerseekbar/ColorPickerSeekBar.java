@@ -59,6 +59,7 @@ public class ColorPickerSeekBar extends SeekBar implements SeekBar.OnSeekBarChan
         shape.getPaint().setShader(colorGradient);
         this.setProgressDrawable(shape);
         this.setMax(256 * 7 - 1);
+
     }
 
     /**
