@@ -127,6 +127,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	private MediaRecorder myAudioRecorder;
 	View contentView;
 	private String outputFile = null;
+	public static String noteIdForDetails;
 
 	// /Drawing Controls
 
@@ -158,6 +159,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_main);
+		Intent intent = this.getIntent();
+		noteIdForDetails = intent.getStringExtra("NoteId");
+		Log.v("select", "onCreate Note Id" + noteIdForDetails);
 
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -225,7 +229,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.imageButtonTextMode);
 		imageButtonMoreMode = (ImageButton) contentview
 				.findViewById(R.id.imageButtonMoreMode);
-		textViewheaderTitle.setText("NOTE");
+
+		if(noteIdForDetails == null)
+			textViewheaderTitle.setText("NOTE");
+		else {
+			Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+			textViewheaderTitle.setText(n.getTitle());
+		}
 		
 		LayoutTextWritingView = (RelativeLayout) contentview
 				.findViewById(R.id.LayoutTextWritingView);
@@ -1193,29 +1203,36 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// Updated text in list view
 
 
-					NoteListDataModel model = new NoteListDataModel();
-					model.noteType = NOTETYPE.TEXTMODE;
-					model.stringtext = new SpannableString(txtViewer.getText());
-					Log.d("Note Text",txtViewer.getText().toString());
-					//get all notes
-					List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
-					int incremented = allnotes.size() + 1;
+				NoteListDataModel model = new NoteListDataModel();
+				model.noteType = NOTETYPE.TEXTMODE;
+				model.stringtext = new SpannableString(txtViewer.getText());
+				Log.d("Note Text",txtViewer.getText().toString());
+				//get all notes
+				List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
+				int incremented = allnotes.size() + 1;
 
-					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					String currentDateStr = formatter.format(new Date());
+				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String currentDateStr = formatter.format(new Date());
 
-					Note note = new Note(textViewheaderTitle.getText().toString(), "", "", "", "", "", "#FFFFFF", currentDateStr, currentDateStr , "","1",0);
-					note.save();
+				Note note;
 
+				if (noteIdForDetails == null) {
+					note = new Note(textViewheaderTitle.getText().toString(), "", "", "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
 					NoteElement noteElem = new NoteElement(note.getId(), 1,txtViewer.getText().toString() , "text", "yes");
 					noteElem.save();
+				}
+				else {
+					note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+					note.setModificationtime(currentDateStr);
+				}
+				note.save();
 
-					finish();
-					startActivity(new Intent(context, MainActivity.class));
+				finish();
+				startActivity(new Intent(context, MainActivity.class));
 
-					arrNoteListData.add(model);
-					adapter.notifyDataSetChanged();
-					listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
+				arrNoteListData.add(model);
+				adapter.notifyDataSetChanged();
+				listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
 
 				updateHeaderControls(-1);
 				textNoteControls.setVisibility(View.GONE);
