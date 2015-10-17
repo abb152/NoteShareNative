@@ -112,7 +112,10 @@ public class OurNoteListAdapter extends BaseAdapter {
 
         holder.txtNoteDate.setText(dbToAdapterDate(map.get("noteDate")));
 
-        holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
+        if(map.get("noteBgColor").toString().equals("#FFFFFF") && listview == "grid")
+            holder.linearLayout.setBackgroundColor(Color.parseColor("#F0F0F0"));
+        else
+            holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
 
         if(listview == "grid"){
 

@@ -31,6 +31,8 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,6 +42,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
@@ -56,11 +59,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 //import android.support.annotation.Keep;
 
@@ -111,6 +114,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public DrawingView drawView;
 	private ImageButton currPaint;
 	public Dialog dialogColor;
+	public Dialog move;
 
 	boolean isErase;
 	public Dialog brushDialog1;
@@ -147,10 +151,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
 	public String[] fontSizes;
 	ImageView background_bg;
-
-
-	public SeekBar seekbar;
-	public TextView number;
 
 	// 8b241b selected bg
 
@@ -1057,18 +1057,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.layout_note_more_Info);
 		layout_note_more_Info.setVisibility(View.GONE);
 
-		Button buttonLock = (Button) layout_note_more_Info
+		/*Button buttonLock = (Button) layout_note_more_Info
 				.findViewById(R.id.buttonLock);
 		Button buttonDelete = (Button) layout_note_more_Info
-				.findViewById(R.id.buttonDelete);
+				.findViewById(R.id.buttonDelete);*/
 		Button buttonRemind = (Button) layout_note_more_Info
-				.findViewById(R.id.buttonRemind);
-		Button buttonTimeBomb = (Button) layout_note_more_Info
+				.findViewById(R.id.btnRemind);
+		/*Button buttonTimeBomb = (Button) layout_note_more_Info
 				.findViewById(R.id.buttonTimeBomb);
 		Button buttonAttach = (Button) layout_note_more_Info
-				.findViewById(R.id.buttonAttach);
+				.findViewById(R.id.buttonAttach);*/
 
-		buttonLock.setOnClickListener(new OnClickListener() {
+		/*buttonLock.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -1083,16 +1083,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// TODO Auto-generated method stub
 				System.out.println("button delete");
 			}
-		});
-		buttonRemind.setOnClickListener(new OnClickListener() {
+		});*/
+		/*buttonRemind.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				finish();
 				System.out.println("button remind");
 			}
-		});
-		buttonTimeBomb.setOnClickListener(new OnClickListener() {
+		});*/
+		/*buttonTimeBomb.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -1108,7 +1109,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				System.out.println("button attached");
 			}
 		});
-
+*/
 	}
 
 	/************* main list control Here ************/
@@ -2705,6 +2706,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View arg0) {
 
+				Date date = new Date();
+
 				drawingControls.setVisibility(View.GONE);
 				layOutDrawingView.setVisibility(View.GONE);
 				updateButtonUI(-1);
@@ -2713,13 +2716,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setDrawingCacheEnabled(true);
 
 				String imgSaved = MediaStore.Images.Media.insertImage(
-						getContentResolver(), drawView.getDrawingCache(), UUID
-								.randomUUID().toString() + ".png", "drawing");
+						getContentResolver(), drawView.getDrawingCache(), /*UUID.randomUUID().toString()*/
+						"IMG" + new Timestamp(date.getTime()), "drawing");
 				System.out.println("the string uri:" + imgSaved);
 
 				if (imgSaved != null) {
 					Toast.makeText(getApplicationContext(),
-							"Drawing saved to Gallery!", Toast.LENGTH_SHORT);
+							"Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
 					// savedToast.show();
 					drawView.destroyDrawingCache();
 
@@ -2758,7 +2761,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				} else {
 					Toast.makeText(getApplicationContext(),
 							"Oops! Image could not be saved.",
-							Toast.LENGTH_SHORT);
+							Toast.LENGTH_SHORT).show();
 				}
 
 				dialog.dismiss();
@@ -3110,7 +3113,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		final TextView tvBrushSize = (TextView) brushDialog.findViewById(R.id.tvBrushSize);
 		String size = String.valueOf(10 + (lastBrushSize * 2));
 		tvBrushSize.setText(size);
-		
+
 		drawView.setBrushSize(10 + (lastBrushSize * 2));
 
 		if (count > 0) {
@@ -3196,6 +3199,111 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		brushDialog.show();
+	}
+
+	public void remindClick(View v) {
+		//String id = v.getTag().toString();
+		//setDateTime.showDate(this, id);
+		showDate(this);
+	}
+
+
+	//public void showDate(Context context, final String noteid ){
+	public void showDate(Context context){
+
+		move = new Dialog(context);
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.datetime, null, false);
+
+		LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
+		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("Date Time");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
+		TimePicker tp = (TimePicker) contentView.findViewById(R.id.tp);
+
+
+		//final int[1] hour;/* = tp.getCurrentHour();*/
+		final int[] time = new int[2];
+		time[0] = tp.getCurrentHour();
+		time[1] = tp.getCurrentMinute();
+
+		final int[] date = new int[3];
+		date[0] = dp.getDayOfMonth();
+		date[1] = dp.getMonth() +1;
+		date[2] = dp.getYear();
+
+
+		tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+				time[0] = hourOfDay;
+				time[1] = minute;
+			}
+		});
+
+		Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+		Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
+
+		dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
+
+		dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+			@Override
+			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+				//Log.d("tag", "finally found the listener, the date is: year " + year + ", month " + month + ", dayOfMonth " + dayOfMonth);
+				date[0] = dayOfMonth;
+				date[1] = month + 1;
+				date[2] = year;
+			}
+		});
+
+		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
+
+				String timebombTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
+
+				/*Note n = Note.findById(Note.class, Long.valueOf(noteid));
+				n.timebomb = timebombTime;
+				n.save();*/
+
+				move.dismiss();
+				Toast.makeText(getApplication(),"Remind Set: " + timebombTime, Toast.LENGTH_LONG).show();
+			}
+		});
+
+		buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				move.dismiss();
+			}
+		});
+
+
+		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		move.setCancelable(true);
+
+		move.setContentView(contentView);
+		move.show();
+	}
+
+
+	public String check(int value){
+		String newvalue;
+		if (value < 10) // minute
+			newvalue = "0" + String.valueOf(value);
+		else
+			newvalue =  String.valueOf(value);
+		return newvalue;
 	}
 
 }

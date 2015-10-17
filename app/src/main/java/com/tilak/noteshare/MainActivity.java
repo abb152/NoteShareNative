@@ -1283,6 +1283,7 @@ public class MainActivity extends DrawerActivity {
 
 	public void timeBomb(View v){
 		String id = v.getTag().toString();
+		//setDateTime.showDate(this, id);
 		showDate(this, id);
 	}
 
@@ -1337,7 +1338,7 @@ public class MainActivity extends DrawerActivity {
 			}
 		});
 
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
+		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -1356,7 +1357,7 @@ public class MainActivity extends DrawerActivity {
 			}
 		});
 
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
+		buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -1381,4 +1382,5 @@ public class MainActivity extends DrawerActivity {
 			newvalue =  String.valueOf(value);
 		return newvalue;
 	}
+
 }
