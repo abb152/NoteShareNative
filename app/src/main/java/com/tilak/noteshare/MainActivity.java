@@ -807,8 +807,8 @@ public class MainActivity extends DrawerActivity {
 
 			// 1. Get the external storage directory
 			String appName = MainActivity.this.getString(R.string.app_name);
-			String imgDir = "../NoteShare/Images";
-			String audioDir = "../NoteShare/Audio";
+			String imgDir = "../NoteShare/NoteShare Images";
+			String audioDir = "../NoteShare/NoteShare Audio";
 			appName = "../" + appName;
 			File mediaStorageDir = new File(
 					Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())), appName);
@@ -1141,6 +1141,27 @@ public class MainActivity extends DrawerActivity {
 				return true;
 			}
 		});
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+				int itemPosition = position;
+				String noteid = null;
+
+				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+
+				noteid = map.get("noteId");
+
+				try {
+					Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
+					i.putExtra("noteId", noteid);
+					startActivity(i);
+				} catch (Exception e) {
+
+				}
+			}
+		});
 	}
 	class TitleComparator implements Comparator<Note> {
 
@@ -1381,6 +1402,15 @@ public class MainActivity extends DrawerActivity {
 		else
 			newvalue =  String.valueOf(value);
 		return newvalue;
+	}
+
+	public void openNoteDetail(View v){
+		String id = v.getTag().toString();
+		Log.v("oncrea","Note id = " + id);
+		Intent intent = new Intent(MainActivity.this, NoteMainActivity.class);
+		intent.putExtra("NoteId", id);
+		finish();
+		startActivity(intent);
 	}
 
 }

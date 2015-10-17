@@ -122,6 +122,12 @@
             android:text="01.04.15"
             android:textSize="10sp" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn3"
+            android:onClick="openNoteDetail"/>
+
     </LinearLayout>
     </FrameLayout>
 

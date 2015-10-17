@@ -41,7 +41,6 @@ public class PasscodeActivity extends DrawerActivity {
         et4 = (EditText) findViewById(R.id.et4);
         t=(TextView) findViewById(R.id.textView);
         List<Config> config = Config.listAll(Config.class);
-        getActionBar().hide();
         if(config.size() == 0) {
             Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1");
             c.save();

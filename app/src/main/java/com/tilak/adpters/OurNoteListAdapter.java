@@ -5,10 +5,11 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.AbsListView.LayoutParams;
 import android.widget.TextView;
 
 import com.tilak.noteshare.R;
@@ -52,6 +53,7 @@ public class OurNoteListAdapter extends BaseAdapter {
         ImageButton btnLock, btnTimebomb, btnMove, btnDelete ,btnShare;
         LinearLayout linearLayout;
         LinearLayout main;
+        Button btn3;
     }
 
     @Override
@@ -71,6 +73,8 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.txtNoteName = (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
             holder.txtNoteDesc = (TextView) convertView.findViewById(R.id.tvNoteDesc);
             holder.txtNoteDate = (TextView) convertView.findViewById(R.id.tvNoteDate);
+
+            holder.btn3 = (Button) convertView.findViewById(R.id.btn3); // remove this
 
             holder.main = (LinearLayout) convertView.findViewById(R.id.noteMain);
 
@@ -144,6 +148,7 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.btnShare.setTag(map.get("noteId"));
 
         }
+        holder.btn3.setTag(map.get("noteId"));
         return convertView;
     }
 
