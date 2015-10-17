@@ -2,6 +2,7 @@ package com.tilak.noteshare;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -59,7 +60,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -2715,18 +2715,53 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// TODO Auto-generated method stub
 				drawView.setDrawingCacheEnabled(true);
 
-				String imgSaved = MediaStore.Images.Media.insertImage(
-						getContentResolver(), drawView.getDrawingCache(), /*UUID.randomUUID().toString()*/
+				/*String imgSaved = MediaStore.Images.Media.insertImage(
+						getContentResolver(), drawView.getDrawingCache(), *//*UUID.randomUUID().toString()*//*
 						"IMG" + new Timestamp(date.getTime()), "drawing");
-				System.out.println("the string uri:" + imgSaved);
+				System.out.println("the string uri:" + imgSaved);*/
+				String imgDir = "../NoteShare/NoteShare Images/";
+				String timestamp = String.valueOf(System.currentTimeMillis());
+				File file = new File(Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())),
+						imgDir + "IMG-" + timestamp + ".jpg");
+				File file2 = new File(Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())),
+						imgDir + "IMG-" + timestamp + ".png");
 
-				if (imgSaved != null) {
+				try {
+					drawView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
+					drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file2));
+
+					ContentValues values = new ContentValues();
+					values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+					values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
+					getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+					ContentValues values2 = new ContentValues();
+					values2.put(MediaStore.Images.Media.DATA, file2.getAbsolutePath());
+					values2.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
+					getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values2);
+
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				/*ContentResolver cr = getContentResolver();
+
+				private void addImageGallery(File f) {
+					ContentValues values = new ContentValues();
+					values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+					values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
+					getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+				}
+*/
+
+				if (file != null) {
 					Toast.makeText(getApplicationContext(),
 							"Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
 					// savedToast.show();
 					drawView.destroyDrawingCache();
 
-					if (DataManager.sharedDataManager().getArrNoteListData() != null) {
+					/*if (DataManager.sharedDataManager().getArrNoteListData() != null) {
 						arrNoteListData = DataManager.sharedDataManager()
 								.getArrNoteListData();
 						NoteListDataModel noteListdatamodel = new NoteListDataModel();
@@ -2754,7 +2789,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						listviewNotes.smoothScrollToPosition(arrNoteListData
 								.size() - 1);
 
-					}
+					}*/
 
 					drawView.setUserDrawn(false);
 
@@ -3204,7 +3239,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public void remindClick(View v) {
 		//String id = v.getTag().toString();
 		//setDateTime.showDate(this, id);
+		layout_note_more_Info.setVisibility(View.GONE);
 		showDate(this);
+		//layout_note_more_Info.setVisibility(View.GONE);
 	}
 
 
@@ -3268,14 +3305,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
 				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
 
-				String timebombTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
+				String reminderTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
 
-				/*Note n = Note.findById(Note.class, Long.valueOf(noteid));
-				n.timebomb = timebombTime;
+/*				Note n = Note.findById(Note.class, Long.valueOf(noteid));
+				n.remindertime = reminderTime;
 				n.save();*/
 
 				move.dismiss();
-				Toast.makeText(getApplication(),"Remind Set: " + timebombTime, Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplication(),"Remind Set: " + reminderTime, Toast.LENGTH_LONG).show();
 			}
 		});
 
