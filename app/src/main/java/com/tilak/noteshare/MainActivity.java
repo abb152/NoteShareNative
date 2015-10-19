@@ -807,12 +807,9 @@ public class MainActivity extends DrawerActivity {
 
 			// 1. Get the external storage directory
 			String appName = MainActivity.this.getString(R.string.app_name);
-			String imgDir = "../NoteShare/NoteShare Images";
-			String audioDir = "../NoteShare/NoteShare Audio";
-			appName = "../" + appName;
-			File mediaStorageDir = new File(
-					Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())), appName);
-			//Environment.getExternalStorageDirectory(Environment.getRootDirectory(), appName);
+			String imgDir = "/NoteShare/NoteShare Images";
+			String audioDir = "/NoteShare/NoteShare Audio";
+			File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), appName);
 
 			// 2. Create our subdirectory
 			if (!mediaStorageDir.exists()) {
@@ -820,15 +817,13 @@ public class MainActivity extends DrawerActivity {
 			}
 
 			// 3. Creating Image Directory in NoteShare Directory
-			File imgDirectory = new File(
-					Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())), imgDir);
+			File imgDirectory = new File(Environment.getExternalStorageDirectory(), imgDir);
 			if (!imgDirectory.exists()) {
 				if (!imgDirectory.mkdirs()) { Log.e(TAG, "Failed to create Image directory."); }
 			}
 
 			// 4. Creating Audio Directory in NoteShare Directory
-			File audioDirectory = new File(
-				Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())), audioDir);
+			File audioDirectory = new File(Environment.getExternalStorageDirectory(), audioDir);
 			if (!audioDirectory.exists()) {
 				if (!audioDirectory.mkdirs()) { Log.e(TAG, "Failed to create Audio directory."); }
 			}

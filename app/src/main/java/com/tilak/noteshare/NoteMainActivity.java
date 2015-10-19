@@ -1,14 +1,10 @@
 package com.tilak.noteshare;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
@@ -19,7 +15,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.provider.MediaStore.MediaColumns;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -55,9 +50,7 @@ import com.tilak.datamodels.NoteListDataModel;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -1516,7 +1509,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	}
 
-	public void getImage() {
+	/*public void getImage() {
 		final CharSequence[] items = { "Take Photo", "Choose from Library",
 				"Cancel" };
 
@@ -1536,7 +1529,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					Intent intent = new Intent(
 							Intent.ACTION_PICK,
 							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-					intent.setType("image/*");
+					intent.setType("image*//*");
 					startActivityForResult(
 							Intent.createChooser(intent, "Select File"),
 							SELECT_PICTURE);
@@ -1547,18 +1540,84 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		builder.show();
+	}*/
+
+	public static final int TAKE_PHOTO_REQUEST = 0;
+	public static final int MEDIA_TYPE_IMAGE = 1;
+	private Uri getOutputMediaFileUri(int mediaType) {
+		// To be safe, you should check that the SDCard is mounted
+		// using Environment.getExternalStorageState() before doing this.
+			// 3. Create a file name
+			// 4. Create the file
+		String imgDir = "NoteShare Images";
+		String appName = "NoteShare";
+		appName = "../" + appName;
+		String p = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString().trim();
+		File mediaStorageDir = new File(p, appName);
+		String path = mediaStorageDir.getPath() + File.separator + imgDir + File.separator;
+		String timestamp = String.valueOf(System.currentTimeMillis());
+		if (mediaType == MEDIA_TYPE_IMAGE) {
+			mediaStorageDir = new File(path + "IMG-" + timestamp + ".jpg");
+		}
+		else {
+			return null;
+		}
+
+		Log.d("", "File: " + Uri.fromFile(mediaStorageDir));
+
+		// 5. Return the file's URI
+		return Uri.fromFile(mediaStorageDir);
 	}
+
+	Uri mMediaUri;
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+
+		for(int i = 0; i<20; i++)
+			Log.e("Inside onActivityResult","");
+
 		if (resultCode == RESULT_OK) {
+			if (requestCode == TAKE_PHOTO_REQUEST) {
+
+				//finish();
+				Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
+				cameraIntent.putExtra("image", mMediaUri.toString());
+				startActivity(cameraIntent);
+
+				/*Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+				String imgDir = "../NoteShare/NoteShare Images/";
+				String timestamp = String.valueOf(System.currentTimeMillis());
+				File file = new File(Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())),
+						imgDir + "IMG-" + timestamp + ".jpg");
+				File storageDir = Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory()));
+
+				try {
+					//thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
+					*//*File image = File.createTempFile(imgDir + "IMG-" + timestamp, ".jpg", storageDir);
+					thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(image));*//*
+					ContentValues values = new ContentValues();
+					values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+					values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
+					getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+					Intent i = new Intent(this, CameraImage.class);
+					startActivity(i);
+					//camera_image.setImageBitmap(thumbnail);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}*/
+			}
+		}
+
+		/*if (resultCode == RESULT_OK) {
 			imageButtoncalander.setVisibility(View.VISIBLE);
 
 			if (requestCode == REQUEST_CAMERA) {
 				Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+				thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
 				File destination = new File(
 						Environment.getExternalStorageDirectory(),
@@ -1643,7 +1702,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						.smoothScrollToPosition(arrNoteListData.size() - 1);
 
 			}
-		}
+		}*/
 
 	}
 
@@ -1822,11 +1881,21 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				// System.exit(0);
-				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				startActivityForResult(intent, REQUEST_CAMERA);
+				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
+				//captureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+				if (mMediaUri == null) {
+					// display an error
+					Toast.makeText(NoteMainActivity.this, "", Toast.LENGTH_LONG).show();
+				}
+				else {
+					takePhotoIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mMediaUri);
+					startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+				}
+				/*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				startActivityForResult(intent, REQUEST_CAMERA);*/
 				dialog.dismiss();
-
 			}
 		});
 
@@ -2736,12 +2805,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						getContentResolver(), drawView.getDrawingCache(), *//*UUID.randomUUID().toString()*//*
 						"IMG" + new Timestamp(date.getTime()), "drawing");
 				System.out.println("the string uri:" + imgSaved);*/
-				String imgDir = "../NoteShare/NoteShare Images/";
+
 				String timestamp = String.valueOf(System.currentTimeMillis());
-				File file = new File(Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())),
-						imgDir + "IMG-" + timestamp + ".jpg");
-				File file2 = new File(Environment.getExternalStoragePublicDirectory(String.valueOf(Environment.getDataDirectory())),
-						imgDir + "IMG-" + timestamp + ".png");
+				File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".jpg");
+				File file2 = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".png");
 
 				try {
 					drawView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
