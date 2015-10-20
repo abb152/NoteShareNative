@@ -78,6 +78,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	EditText textViewheaderTitle;
 	public RelativeLayout layoutHeader;
 	public int currentAudioIndex = 0;
+	public LinearLayout noteElements;
 
 	//Color picker
 	int color_selected = 5251;
@@ -169,17 +170,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.inflate(R.layout.note_activity_main, null, false);
 		mDrawerLayout.addView(contentView, 0);
 		initlizeUIElement(contentView);
-
-		String name = null;
+		fetchNoteElementsFromDb();
 		/*List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT con from NoteElement where  NOTEID= '1' AND TYPE ='image'");
 		for(NoteElement n :ne){
 			name = n.content;
 		}*/
-		NoteElement ne = NoteElement.findById(NoteElement.class,4L);
-		name = ne.content;
-
-		Bitmap b = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-		imageView53.setImageBitmap(b);
 
 	}
 
@@ -211,7 +206,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		imageButtonHamburg.setImageResource(R.drawable.back_icon_1);
 		imageButtoncalander.setImageResource(R.drawable.done_icon);
 
-		imageView53 = (ImageView) findViewById(R.id.imageView53);
+		//imageView53 = (ImageView) findViewById(R.id.imageView53);
 
 		// textViewAdd = (im) findViewById(R.id.textViewAdd);
 
@@ -294,11 +289,30 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
 				updateButtonUI(-1);
-
 			}
 		});
+
+		/*imageView53.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String name = null;
+				NoteElement ne = NoteElement.findById(NoteElement.class, 1L);
+				name = ne.content;
+
+				*//*Bitmap b = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+				imageView53.setImageBitmap(b);*//*
+				Toast.makeText(getApplication(), name, Toast.LENGTH_LONG).show();
+				try {
+					MediaPlayer mp = new MediaPlayer();
+					mp.setDataSource(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+					mp.prepare();
+					mp.start();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});*/
 
 	}
 
@@ -583,13 +597,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				System.out.println("Current Index:" + currentAudioIndex);
 
-				NoteListDataModel noteListdatamodel = new NoteListDataModel();
+				/*NoteListDataModel noteListdatamodel = new NoteListDataModel();
 				noteListdatamodel.noteType = NOTETYPE.AUDIOMODE;
 				noteListdatamodel.setStrAudioFilePath(outputFile);
-				arrNoteListData.add(currentAudioIndex, noteListdatamodel);
+				//arrNoteListData.add(currentAudioIndex, noteListdatamodel);*/
 
-				adapter.notifyDataSetChanged();
-				listviewNotes.smoothScrollToPosition(currentAudioIndex);
+				//adapter.notifyDataSetChanged();
+				//listviewNotes.smoothScrollToPosition(currentAudioIndex);
 
 				LayoutAudioRecording.setVisibility(View.GONE);
 				progressRecordtext.setText("");
@@ -632,11 +646,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						Toast.LENGTH_SHORT).show();
 				progressRecordtext.setText("Recording...");
 
-				if (arrNoteListData.size() > 0) {
+				/*if (arrNoteListData.size() > 0) {
 					currentAudioIndex = arrNoteListData.size();
 				} else {
 					currentAudioIndex = 0;
-				}
+				}*/
 
 			}
 		});
@@ -3398,6 +3412,34 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		else
 			newvalue =  String.valueOf(value);
 		return newvalue;
+	}
+
+	public void fetchNoteElementsFromDb() {
+		noteElements = (LinearLayout) findViewById(R.id.noteElements);
+
+
+		LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
+		View viewImage = inflator.inflate(R.layout.note_image, null);
+		ImageView note_image = (ImageView) viewImage.findViewById(R.id.note_image);
+
+		List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = 1");
+
+		Toast.makeText(getApplication(), "Fetching..", Toast.LENGTH_LONG).show();
+
+		for(NoteElement n : ne) {
+			if(n.type.equals("image")) {
+				// add image layout
+				String name = n.content;
+				Bitmap b = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+				note_image.setImageBitmap(b);
+				noteElements.addView(note_image);
+				Toast.makeText(getApplication(), "Image Added", Toast.LENGTH_LONG).show();
+			} else if (n.type.equals("audio")) {
+				// add audio layout
+			} else {
+				Toast.makeText(getApplication(), "Sorry! Couldn't find any data", Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 
 }
