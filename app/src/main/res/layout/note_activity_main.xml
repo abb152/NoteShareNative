@@ -2,15 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/white" >
+    android:background="@android:color/white"
+    android:id="@+id/background_bg">
 
     <!-- Bacground Image view -->
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/background_bg"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent" />-->
     <!-- Header View -->
 
     <include
@@ -18,6 +19,48 @@
         android:layout_width="fill_parent"
         android:layout_height="44dp"
         layout="@layout/menu_header_1" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_alignTop="@+id/linearLayout2"
+        android:layout_above="@+id/bottommenue"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent">
+
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/textView2" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="382dp"
+                android:id="@+id/imageView53"
+                android:src="@drawable/note" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/textView22" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="382dp"
+                android:id="@+id/imageView5"
+                android:src="@drawable/note" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <!-- Button AUDIO VIEW -->
 
@@ -160,13 +203,6 @@
         android:layout_alignParentBottom="true"
         layout="@layout/note_audio_chooser_view" />
 
-    <ListView
-        android:id="@+id/listviewNotes"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/bottommenue"
-        android:layout_below="@+id/mainHeadermenue" >
-    </ListView>
 
     <LinearLayout
         android:id="@+id/layOutDrawingView"
@@ -174,7 +210,7 @@
         android:layout_height="fill_parent"
         android:layout_above="@+id/bottommenue"
         android:layout_below="@+id/mainHeadermenue"
-        android:background="@android:color/darker_gray"
+        android:background="@null"
         android:visibility="gone" >
 
         <com.tilak.noteshare.DrawingView
@@ -182,7 +218,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_margin="7dp"
-            android:background="#ffffff" />
+            android:background="@null" />
     </LinearLayout>
 
     <LinearLayout
@@ -192,7 +228,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/mainHeadermenue"
         android:layout_marginRight="0dp"
-        android:gravity="bottom" >
+        android:gravity="bottom"
+        android:id="@+id/linearLayout2">
 
         <include
             android:layout_width="match_parent"
@@ -201,66 +238,13 @@
             android:background="@color/A8b241b" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/LayoutTextWritingView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottommenue"
-        android:layout_below="@+id/LayoutAudioRecording"
-        android:background="@android:color/white" >
-
-        <EditText
-            android:id="@+id/txtViewer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/typeLay"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:editable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:inputType="textMultiLine"
-            android:padding="5dp"
-            android:textSize="18sp" />
-
-        <RelativeLayout
-            android:id="@+id/typeLay"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/transparent" >
-
-            <EditText
-                android:id="@+id/edittextEditer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/btnAddText"
-                android:background="@null"
-                android:hint="Type text to add in note"
-                android:lines="50"
-                android:padding="5dp"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/btnAddText"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:background="@color/header_bg"
-                android:paddingLeft="5dp"
-                android:text="ADD"
-                android:textColor="@color/ffffff" />
-        </RelativeLayout>
-    </RelativeLayout>
 
     <include
         android:id="@+id/LayoutAudioRecording"
-         android:layout_height="50dp"
-         layout="@layout/audiorecord_layout"
+        android:layout_height="50dp"
+        layout="@layout/audiorecord_layout"
         android:layout_below="@+id/mainHeadermenue"
         android:layout_width="match_parent" />
-
 
 
 </RelativeLayout>

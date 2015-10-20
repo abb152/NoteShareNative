@@ -1,18 +1,10 @@
 package com.tilak.adpters;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import com.tilak.datamodels.NOTETYPE;
-import com.tilak.datamodels.NoteListDataModel;
-import com.tilak.noteshare.DrawingView;
-import com.tilak.noteshare.NoteMainActivity;
-import com.tilak.noteshare.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tilak.datamodels.NOTETYPE;
+import com.tilak.datamodels.NoteListDataModel;
+import com.tilak.noteshare.R;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 interface AudiorecordingClick {
 	public void didClickPlaybutton(NoteListDataModel notelistData, int index);
@@ -138,6 +137,8 @@ public class NotesListAdapter extends BaseAdapter {
 				holder.progressRecord1.setProgress(5);
 				holder.progressRecord1.setVisibility(View.VISIBLE);
 
+				String audioPath = Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/";
+
 				holder.buttonPlay.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -151,7 +152,7 @@ public class NotesListAdapter extends BaseAdapter {
 							System.out.println("file playing path:"
 									+ model.strAudioFilePath);
 							holder.mediaPlayer
-									.setDataSource(model.strAudioFilePath);
+									.setDataSource(model.getStrAudioFilePath());
 						}
 
 						catch (IOException e) {
@@ -176,7 +177,6 @@ public class NotesListAdapter extends BaseAdapter {
 										holder.buttonPlay.setEnabled(true);
 										holder.buttonPause.setEnabled(false);
 										// progressRecord1.setProgress(0);
-
 									}
 								});
 
