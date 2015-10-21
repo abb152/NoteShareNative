@@ -22,18 +22,17 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/scrollView"
         android:layout_alignTop="@+id/linearLayout2"
-        android:layout_above="@+id/bottommenue"
-        android:background="@android:color/transparent">
+        android:layout_above="@+id/bottommenue">
 
         <LinearLayout
             android:id="@+id/noteElements"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
         </LinearLayout>
     </ScrollView>

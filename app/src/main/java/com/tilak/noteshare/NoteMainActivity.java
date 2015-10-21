@@ -79,6 +79,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public RelativeLayout layoutHeader;
 	public int currentAudioIndex = 0;
 	public LinearLayout noteElements;
+	List<ImageView> listImage = new ArrayList<ImageView>();
 
 	//Color picker
 	int color_selected = 5251;
@@ -181,6 +182,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	void initlizeUIElement(View contentview) {
 
 		scrollView = (ScrollView) contentview.findViewById(R.id.scrollView);
+
+		noteElements = (LinearLayout) findViewById(R.id.noteElements);
 
 
 	/* Default Initlization */
@@ -3414,32 +3417,100 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		return newvalue;
 	}
 
+
 	public void fetchNoteElementsFromDb() {
-		noteElements = (LinearLayout) findViewById(R.id.noteElements);
+		/*noteElements = (LinearLayout) findViewById(R.id.noteElements);
 
 
 		LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
-		View viewImage = inflator.inflate(R.layout.note_image, null);
-		ImageView note_image = (ImageView) viewImage.findViewById(R.id.note_image);
+		View viewImage = inflator.inflate(R.layout.note_image, null, false);
+		ImageView note_image = (ImageView) viewImage.findViewById(R.id.note_image);*/
 
 		List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = 1");
-
-		Toast.makeText(getApplication(), "Fetching..", Toast.LENGTH_LONG).show();
 
 		for(NoteElement n : ne) {
 			if(n.type.equals("image")) {
 				// add image layout
+				noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
+				View viewImage = inflator.inflate(R.layout.note_image, null, false);
+				LinearLayout note_image = (LinearLayout) viewImage.findViewById(R.id.note_image);
+				ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
 				String name = n.content;
-				Bitmap b = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-				note_image.setImageBitmap(b);
+				File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+				Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
+				/*try {
+					b.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(f));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}*/
+				/*Display display = getWindowManager().getDefaultDisplay();;
+				int width = display.getWidth();
+				//int height = size.y;
+				note_image.getLayoutParams().width = width;
+				note_image.getLayoutParams().height = width;*/
+				int width = note_image.getMeasuredWidth();
+				//note_image.setMeasuredDimension(width, );
+				note_imageview.setImageBitmap(b);
 				noteElements.addView(note_image);
-				Toast.makeText(getApplication(), "Image Added", Toast.LENGTH_LONG).show();
 			} else if (n.type.equals("audio")) {
 				// add audio layout
+				noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+				View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
+				LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+				audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+				audio_stop = (ImageView) viewAudio.findViewById(R.id.audio_stop);
+
+				// Audio Play
+				audio_play.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						try {
+							File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+							mp.setDataSource(f.getAbsolutePath());
+							mp.prepare();
+							mp.start();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						audio_play.setImageResource(R.drawable.pause_audio);
+					}
+				});
+
+				// Audio Stop
+				audio_stop.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mp.stop();
+						mp.release();
+					}
+				});
+				name = n.content;
+				noteElements.addView(note_audio);
 			} else {
 				Toast.makeText(getApplication(), "Sorry! Couldn't find any data", Toast.LENGTH_LONG).show();
 			}
 		}
 	}
+
+	String name;
+	MediaPlayer mp = new MediaPlayer();
+	ImageView audio_play, audio_stop;
+
+	/*public void audioplay(View v) {
+		try {
+			mp.setDataSource(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+			mp.prepare();
+			mp.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		audio_play.setImageResource(R.drawable.pause_audio);
+	}
+
+	public void audiostop(View v){
+
+	}*/
 
 }
