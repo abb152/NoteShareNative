@@ -3459,34 +3459,58 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
 				View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
 				LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+
+				final String name = n.content;
+				final MediaPlayer mp = new MediaPlayer();
+				final ImageView audio_play, audio_stop;
+
 				audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
 				audio_stop = (ImageView) viewAudio.findViewById(R.id.audio_stop);
+
+				final File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+				try {
+					mp.setDataSource(f.getAbsolutePath());
+					mp.prepare();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
 				// Audio Play
 				audio_play.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						try {
-							File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
-							mp.setDataSource(f.getAbsolutePath());
-							mp.prepare();
+
+
+						if (mp.isPlaying()) {
+							mp.pause();
+							audio_play.setImageResource(R.drawable.play_audio);
+						} else {
+							audio_play.setImageResource(R.drawable.pause_audio);
 							mp.start();
-						} catch (IOException e) {
-							e.printStackTrace();
+							mp.setOnCompletionListener(new OnCompletionListener() {
+								@Override
+								public void onCompletion(MediaPlayer mp) {
+									audio_play.setImageResource(R.drawable.play_audio);
+								}
+							});
 						}
-						audio_play.setImageResource(R.drawable.pause_audio);
+
 					}
+
 				});
 
+
 				// Audio Stop
-				audio_stop.setOnClickListener(new OnClickListener() {
+				/*audio_stop.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
+						audio_play.setImageResource(R.drawable.play_audio);
 						mp.stop();
-						mp.release();
+						mp.reset();
 					}
-				});
-				name = n.content;
+				});*/
+
 				noteElements.addView(note_audio);
 			} else {
 				Toast.makeText(getApplication(), "Sorry! Couldn't find any data", Toast.LENGTH_LONG).show();
@@ -3494,23 +3518,5 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		}
 	}
 
-	String name;
-	MediaPlayer mp = new MediaPlayer();
-	ImageView audio_play, audio_stop;
-
-	/*public void audioplay(View v) {
-		try {
-			mp.setDataSource(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
-			mp.prepare();
-			mp.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		audio_play.setImageResource(R.drawable.pause_audio);
-	}
-
-	public void audiostop(View v){
-
-	}*/
 
 }
