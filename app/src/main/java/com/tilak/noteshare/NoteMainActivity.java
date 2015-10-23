@@ -3419,13 +3419,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 
 	public void fetchNoteElementsFromDb() {
-		/*noteElements = (LinearLayout) findViewById(R.id.noteElements);
-
-
-		LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
-		View viewImage = inflator.inflate(R.layout.note_image, null, false);
-		ImageView note_image = (ImageView) viewImage.findViewById(R.id.note_image);*/
-
 		List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = 1");
 
 		for(NoteElement n : ne) {
@@ -3439,18 +3432,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				String name = n.content;
 				File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
 				Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
-				/*try {
-					b.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(f));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}*/
-				/*Display display = getWindowManager().getDefaultDisplay();;
-				int width = display.getWidth();
-				//int height = size.y;
-				note_image.getLayoutParams().width = width;
-				note_image.getLayoutParams().height = width;*/
-				int width = note_image.getMeasuredWidth();
-				//note_image.setMeasuredDimension(width, );
 				note_imageview.setImageBitmap(b);
 				noteElements.addView(note_image);
 			} else if (n.type.equals("audio")) {
@@ -3462,16 +3443,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				final String name = n.content;
 				final MediaPlayer mp = new MediaPlayer();
-				final ImageView audio_play, audio_stop;
-
-				audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-				audio_stop = (ImageView) viewAudio.findViewById(R.id.audio_stop);
+				final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+				final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
+				final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
 
 				final File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
 				try {
 					mp.setDataSource(f.getAbsolutePath());
 					mp.prepare();
-
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -3480,14 +3459,32 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				audio_play.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-
-
 						if (mp.isPlaying()) {
 							mp.pause();
 							audio_play.setImageResource(R.drawable.play_audio);
 						} else {
 							audio_play.setImageResource(R.drawable.pause_audio);
 							mp.start();
+							audio_seek.setMax(mp.getDuration() / 1000);
+							final Handler mHandler = new Handler();
+							// Make sure you update Seekbar on UI thread
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									if (mp != null) {
+										int mCurrentPosition = mp.getCurrentPosition() / 1000;
+										String currentduration = getDurationBreakdown(mp.getCurrentPosition());
+										String currentduration1 = getDurationBreakdown(mp.getDuration());
+										if (mCurrentPosition <= mp.getDuration() / 1000) {
+											System.out.println("CurrentDuration:" + currentduration);
+											audio_seek.setProgress(mCurrentPosition);
+											audio_text.setVisibility(View.VISIBLE);
+											audio_text.setText(currentduration + "/" + currentduration1);
+										}
+									}
+									mHandler.postDelayed(this, 1000);
+								}
+							});
 							mp.setOnCompletionListener(new OnCompletionListener() {
 								@Override
 								public void onCompletion(MediaPlayer mp) {
@@ -3495,22 +3492,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 								}
 							});
 						}
-
 					}
-
 				});
-
-
-				// Audio Stop
-				/*audio_stop.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						audio_play.setImageResource(R.drawable.play_audio);
-						mp.stop();
-						mp.reset();
-					}
-				});*/
-
 				noteElements.addView(note_audio);
 			} else {
 				Toast.makeText(getApplication(), "Sorry! Couldn't find any data", Toast.LENGTH_LONG).show();
