@@ -31,4 +31,5 @@ dependencies {
     compile ('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
         transitive = true
     }
+    compile 'jp.wasabeef:richeditor-android:0.3.0'
 }

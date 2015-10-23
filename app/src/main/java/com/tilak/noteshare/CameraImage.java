@@ -3,6 +3,7 @@ package com.tilak.noteshare;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,8 +36,20 @@ public class CameraImage extends Activity {
             try {
                 // Converting Uri to Bitmap
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mediaUri);
-                // Setting bitmap to ImageView
-                image.setImageBitmap(bitmap);
+                int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
+                int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(mediaUri.getPath(), options);
+                int imageHeight = options.outHeight;
+                int imageWidth = options.outWidth;
+                Bitmap scale = null;
+                if(imageWidth > imageHeight)
+                    scale = bitmap.createScaledBitmap(bitmap, imageWidth, imageHeight, false);
+                else if (imageWidth < imageHeight)
+                    scale = bitmap.createScaledBitmap(bitmap, deviceWidth, deviceHeight, false);
+                // Setting bitmap to ImageView;
+                image.setImageBitmap(scale);
             } catch (Exception e) {}
         }
     }

@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,12 +54,15 @@ import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import jp.wasabeef.richeditor.RichEditor;
 
 //import android.support.annotation.Keep;
 
@@ -132,6 +136,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	public LinearLayout drawingControls;
 	public RelativeLayout LayoutTextWritingView;
+	public HorizontalScrollView horizontal_scroll_editor;
 
 	public ScrollView scrollView;
 
@@ -171,7 +176,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.inflate(R.layout.note_activity_main, null, false);
 		mDrawerLayout.addView(contentView, 0);
 		initlizeUIElement(contentView);
-		fetchNoteElementsFromDb();
+		try {
+			fetchNoteElementsFromDb();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		/*List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT con from NoteElement where  NOTEID= '1' AND TYPE ='image'");
 		for(NoteElement n :ne){
 			name = n.content;
@@ -208,6 +217,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		imageButtonsquence.setImageResource(R.drawable.color_header_icon);
 		imageButtonHamburg.setImageResource(R.drawable.back_icon_1);
 		imageButtoncalander.setImageResource(R.drawable.done_icon);
+
+		horizontal_scroll_editor = (HorizontalScrollView) contentview.findViewById(R.id.horizontal_scroll_editor);
+		horizontal_scroll_editor.setVisibility(View.GONE);
 
 		//imageView53 = (ImageView) findViewById(R.id.imageView53);
 
@@ -1285,18 +1297,134 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// startActivity(new
 				// Intent(getApplicationContext(),AudioChooserActivity.class));
 				// listviewNotes.setScrollContainer(true);
-				layOutDrawingView.setVisibility(View.GONE);
+				/*layOutDrawingView.setVisibility(View.GONE);
 				isTextmodeSelected = false;
 				imageButtonsquence.setVisibility(View.VISIBLE);
 				layout_note_more_Info.setVisibility(View.GONE);
 				isMoreShown = false;
 
 				layout_audio_notechooser.setVisibility(View.VISIBLE);
-				imageButtoncalander.setVisibility(View.GONE);
+				imageButtoncalander.setVisibility(View.GONE);*/
 
-				// audioRecording(contentView);
-				// initlizesAudioNoteControls(contentView);
+				// add audio view
+				// add audio layout
 
+				noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+				final View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
+				LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+				final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+				final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+				audio_play.setImageResource(R.drawable.stop_audio);
+				noteElements.addView(note_audio);
+
+				try {
+					initlizeAudiorecoder();
+					myAudioRecorder.prepare();
+					myAudioRecorder.start();
+
+					//audio_seek.setMax(mp.getDuration() / 1000);
+					final Handler mHandler = new Handler();
+					// Make sure you update Seekbar on UI thread
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if (myAudioRecorder != null) {
+								//int mCurrentPosition = myAudioRecorder.getCurrentPosition() / 1000;
+								//String currentduration = getDurationBreakdown(mp.getCurrentPosition());
+								long start_time = System.currentTimeMillis();
+								long duration = (int) ((System.currentTimeMillis() - start_time) / 1000);
+								// ... set TextView with duration value
+								audio_text.setVisibility(View.VISIBLE);
+								audio_text.setText(String.valueOf(duration));
+							}
+							mHandler.postDelayed(this, 1000);
+						}
+					});
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				audio_play.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+
+						audio_play.setImageResource(R.drawable.play_audio);
+						myAudioRecorder.stop();
+						myAudioRecorder.release();
+						myAudioRecorder = null;
+
+						NoteElement ne = new NoteElement(1, 1, "yes", "audio", audioName);
+						ne.save();
+
+						Toast.makeText(NoteMainActivity.this, "Recording Saved",
+								Toast.LENGTH_SHORT).show();
+
+						System.out.println("Current Index:" + currentAudioIndex);
+
+						final MediaPlayer mp = new MediaPlayer();
+						//final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+						final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
+						final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+
+						final File f = new File(outputFile);
+						try {
+							mp.setDataSource(f.getAbsolutePath());
+							mp.prepare();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						// Audio Play
+						audio_play.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								if (mp.isPlaying()) {
+									mp.pause();
+									audio_play.setImageResource(R.drawable.play_audio);
+								} else {
+									audio_play.setImageResource(R.drawable.pause_audio);
+									mp.start();
+									audio_seek.setMax(mp.getDuration() / 1000);
+									final Handler mHandler = new Handler();
+									// Make sure you update Seekbar on UI thread
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											if (mp != null) {
+												int mCurrentPosition = mp.getCurrentPosition() / 1000;
+												String currentduration = getDurationBreakdown(mp.getCurrentPosition());
+												String currentduration1 = getDurationBreakdown(mp.getDuration());
+												if (mCurrentPosition <= mp.getDuration() / 1000) {
+													System.out.println("CurrentDuration:" + currentduration);
+													audio_seek.setProgress(mCurrentPosition);
+													audio_text.setVisibility(View.VISIBLE);
+													audio_text.setText(currentduration + "/" + currentduration1);
+												}
+											}
+											mHandler.postDelayed(this, 1000);
+										}
+									});
+									mp.setOnCompletionListener(new OnCompletionListener() {
+										@Override
+										public void onCompletion(MediaPlayer mp) {
+											audio_play.setImageResource(R.drawable.play_audio);
+										}
+									});
+								}
+							}
+						});
+
+
+
+					}
+				});
+
+				//fetchNoteElementsFromDb();
 			}
 		});
 		imageButtonImageMode.setOnClickListener(new OnClickListener() {
@@ -1366,32 +1494,40 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				layout_audio_notechooser.setVisibility(View.GONE);
 			}
 		});
-	/*imageButtonTextMode.setOnClickListener(new OnClickListener() {
+		imageButtonTextMode.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				updateButtonUI(R.id.imageButtonTextMode);
+				System.out.println("text mode");
+				//layOutDrawingView.setVisibility(View.GONE);
+				// startActivity(new
+				// Intent(getApplicationContext(),TextChooserActivity.class));
 
-	@Override
-	public void onClick(View v) {
-	// TODO Auto-generated method stub
-	updateButtonUI(R.id.imageButtonTextMode);
-	System.out.println("text mode");
-	layOutDrawingView.setVisibility(View.GONE);
-	// startActivity(new
-	// Intent(getApplicationContext(),TextChooserActivity.class));
+				// updatenoteList(NOTETYPE.TEXTMODE);
+				// listviewNotes.setScrollContainer(true);
+				//LayoutTextWritingView.setVisibility(View.VISIBLE);
+				//isTextmodeSelected = true;
 
-	// updatenoteList(NOTETYPE.TEXTMODE);
-	// listviewNotes.setScrollContainer(true);
-	LayoutTextWritingView.setVisibility(View.VISIBLE);
-	isTextmodeSelected = true;
+				drawingControls.setVisibility(View.GONE);
+				//textNoteControls.setVisibility(View.VISIBLE);
+				//imageButtonsquence.setVisibility(View.VISIBLE);
+				layout_note_more_Info.setVisibility(View.GONE);
+				isMoreShown = false;
+				layout_audio_notechooser.setVisibility(View.GONE);
+				horizontal_scroll_editor.setVisibility(View.VISIBLE);
+				//imageButtoncalander.setVisibility(View.VISIBLE);
 
-	drawingControls.setVisibility(View.GONE);
-	textNoteControls.setVisibility(View.VISIBLE);
-	imageButtonsquence.setVisibility(View.VISIBLE);
-	layout_note_more_Info.setVisibility(View.GONE);
-	isMoreShown = false;
-	layout_audio_notechooser.setVisibility(View.GONE);
-	imageButtoncalander.setVisibility(View.VISIBLE);
+				noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				LayoutInflater inflator = getLayoutInflater();
+				View viewText = inflator.inflate(R.layout.note_text, null, false);
+				RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+				editor.setMinimumHeight(80);
+				editor.setEditorHeight(80);
+				noteElements.addView(editor);
 
-	}
-	});*/
+			}
+		});
 		imageButtonMoreMode.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -1574,6 +1710,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				//finish();
 				Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
 				cameraIntent.putExtra("image", mMediaUri.toString());
+				//cameraIntent.putExtra()
 				startActivity(cameraIntent);
 
 	/*Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
@@ -3418,10 +3555,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 
 
-	public void fetchNoteElementsFromDb() {
+	public void fetchNoteElementsFromDb() throws FileNotFoundException {
 		List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = 1");
 
 		for(NoteElement n : ne) {
+			if (n.type.equals("text")) {
+				noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				LayoutInflater inflator = getLayoutInflater();
+				View viewText = inflator.inflate(R.layout.note_text, null, false);
+				RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+			}
 			if(n.type.equals("image")) {
 				// add image layout
 				noteElements = (LinearLayout) findViewById(R.id.noteElements);
@@ -3431,75 +3574,82 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
 				String name = n.content;
 				File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+				int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
+				int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
 				Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
-				note_imageview.setImageBitmap(b);
+				Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
+				Bitmap scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
+				note_imageview.setImageBitmap(scale);
 				noteElements.addView(note_image);
 			} else if (n.type.equals("audio")) {
 				// add audio layout
-				noteElements = (LinearLayout) findViewById(R.id.noteElements);
-				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-				View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
-				LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
-
 				final String name = n.content;
-				final MediaPlayer mp = new MediaPlayer();
-				final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-				final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
-				final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-
-				final File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
-				try {
-					mp.setDataSource(f.getAbsolutePath());
-					mp.prepare();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				// Audio Play
-				audio_play.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (mp.isPlaying()) {
-							mp.pause();
-							audio_play.setImageResource(R.drawable.play_audio);
-						} else {
-							audio_play.setImageResource(R.drawable.pause_audio);
-							mp.start();
-							audio_seek.setMax(mp.getDuration() / 1000);
-							final Handler mHandler = new Handler();
-							// Make sure you update Seekbar on UI thread
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									if (mp != null) {
-										int mCurrentPosition = mp.getCurrentPosition() / 1000;
-										String currentduration = getDurationBreakdown(mp.getCurrentPosition());
-										String currentduration1 = getDurationBreakdown(mp.getDuration());
-										if (mCurrentPosition <= mp.getDuration() / 1000) {
-											System.out.println("CurrentDuration:" + currentduration);
-											audio_seek.setProgress(mCurrentPosition);
-											audio_text.setVisibility(View.VISIBLE);
-											audio_text.setText(currentduration + "/" + currentduration1);
-										}
-									}
-									mHandler.postDelayed(this, 1000);
-								}
-							});
-							mp.setOnCompletionListener(new OnCompletionListener() {
-								@Override
-								public void onCompletion(MediaPlayer mp) {
-									audio_play.setImageResource(R.drawable.play_audio);
-								}
-							});
-						}
-					}
-				});
-				noteElements.addView(note_audio);
+				addAudio(name);
 			} else {
 				Toast.makeText(getApplication(), "Sorry! Couldn't find any data", Toast.LENGTH_LONG).show();
 			}
 		}
 	}
 
+	public void addAudio(String name) {
+		noteElements = (LinearLayout) findViewById(R.id.noteElements);
+		LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+		View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
+		LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+
+		final MediaPlayer mp = new MediaPlayer();
+		final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+		final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
+		final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+
+		final File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+		try {
+			mp.setDataSource(f.getAbsolutePath());
+			mp.prepare();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Audio Play
+		audio_play.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mp.isPlaying()) {
+					mp.pause();
+					audio_play.setImageResource(R.drawable.play_audio);
+				} else {
+					audio_play.setImageResource(R.drawable.pause_audio);
+					mp.start();
+					audio_seek.setMax(mp.getDuration() / 1000);
+					final Handler mHandler = new Handler();
+					// Make sure you update Seekbar on UI thread
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if (mp != null) {
+								int mCurrentPosition = mp.getCurrentPosition() / 1000;
+								String currentduration = getDurationBreakdown(mp.getCurrentPosition());
+								String currentduration1 = getDurationBreakdown(mp.getDuration());
+								if (mCurrentPosition <= mp.getDuration() / 1000) {
+									System.out.println("CurrentDuration:" + currentduration);
+									audio_seek.setProgress(mCurrentPosition);
+									audio_text.setVisibility(View.VISIBLE);
+									audio_text.setText(currentduration + "/" + currentduration1);
+								}
+							}
+							mHandler.postDelayed(this, 1000);
+						}
+					});
+					mp.setOnCompletionListener(new OnCompletionListener() {
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							audio_play.setImageResource(R.drawable.play_audio);
+						}
+					});
+				}
+			}
+		});
+		noteElements.addView(note_audio);
+	}
 
 }
