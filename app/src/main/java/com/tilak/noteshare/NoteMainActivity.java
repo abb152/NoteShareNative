@@ -106,6 +106,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			layout_note_more_Info, layout_audio_notechooser;
 
 	public TextView textViewAdd, textViewDuration;
+	ImageButton bold = null, italic = null, underline = null, h1 = null, h2 = null, h3 = null, h4 = null, h5 = null, h6 = null, align_left = null, align_center = null, align_right = null, redo = null, undo = null;
+	/*LayoutInflater inflator = getLayoutInflater();
+	View viewText = inflator.inflate(R.layout.note_text, null, false);*/
+	View viewText;
+	List<RichEditor> allRe = new ArrayList<RichEditor>();
 
 	final Context context = this;
 	public ArrayList<NoteListDataModel> arrNoteListData;
@@ -181,6 +186,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+
 		/*List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT con from NoteElement where  NOTEID= '1' AND TYPE ='image'");
 		for(NoteElement n :ne){
 			name = n.content;
@@ -674,7 +680,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	void initlizesTextNoteControls(View contentview) {
 		//
 
-		textNoteControls = (LinearLayout) contentview
+		/*textNoteControls = (LinearLayout) contentview
 				.findViewById(R.id.textNoteControls);
 		textNoteControls.setVisibility(View.GONE);
 
@@ -694,14 +700,28 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.textButtondrawMore);
 
 		textButtondrawback.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-
 				isTextmodeSelected = false;
-
 			}
-		});
+		});*/
+		textNoteControls = (LinearLayout) contentview.findViewById(R.id.textNoteControls);
+		textNoteControls.setVisibility(View.GONE);
+
+		bold = (ImageButton) findViewById(R.id.action_bold);
+		italic = (ImageButton) findViewById(R.id.action_italic);
+		underline = (ImageButton) findViewById(R.id.action_underline);
+		h1 = (ImageButton) findViewById(R.id.action_heading1);
+		h2 = (ImageButton) findViewById(R.id.action_heading2);
+		h3 = (ImageButton) findViewById(R.id.action_heading3);
+		h4 = (ImageButton) findViewById(R.id.action_heading4);
+		h5 = (ImageButton) findViewById(R.id.action_heading5);
+		h6 = (ImageButton) findViewById(R.id.action_heading6);
+		align_left = (ImageButton) findViewById(R.id.action_align_left);
+		align_center = (ImageButton) findViewById(R.id.action_align_center);
+		align_right = (ImageButton) findViewById(R.id.action_align_right);
+		redo = (ImageButton) findViewById(R.id.action_redo);
+		undo = (ImageButton) findViewById(R.id.action_undo);
 
 	}
 
@@ -743,7 +763,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	void addTextNoteControlsListners() {
 
-		textButtondrawback.setOnClickListener(new OnClickListener() {
+		/*textButtondrawback.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -847,7 +867,120 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				updateTextNoteControlListners(arg0.getId());
 				System.out.println("MORE  MODE");
 			}
+		});*/
+
+		// redo
+		redo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).redo();
+			}
 		});
+
+		// undo
+		undo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).undo();
+			}
+		});
+
+		// bold
+		bold.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				 allRe.get(Integer.parseInt(v.getTag().toString())).setBold();
+			}
+		});
+
+		// italic
+		italic.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setItalic();
+			}
+		});
+
+		// underline
+		underline.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setUnderline();
+			}
+		});
+
+		// h1
+		h1.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(1);
+			}
+		});
+
+		// h2
+		h2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(2);
+			}
+		});
+
+		// h3
+		h3.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(3);
+			}
+		});
+
+		// h4
+		h4.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(4);
+			}
+		});
+
+		// h5
+		h5.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(5);
+			}
+		});
+
+		// h6
+		h6.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(6);
+			}
+		});
+
+		// align left
+		align_left.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignLeft();
+			}
+		});
+
+		// align center
+		align_center.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignCenter();
+			}
+		});
+
+		// align right
+		align_right.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignRight();
+			}
+		});
+
 	}
 
 	void addScribbleControlListners() {
@@ -1434,7 +1567,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						});
 
 
-
 					}
 				});
 
@@ -1534,14 +1666,34 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				noteElements = (LinearLayout) findViewById(R.id.noteElements);
 				LayoutInflater inflator = getLayoutInflater();
-				View viewText = inflator.inflate(R.layout.note_text, null, false);
-				RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+				viewText = inflator.inflate(R.layout.note_text, null, false);
+				final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
 				editor.setMinimumHeight(80);
 				editor.setEditorHeight(80);
+				editor.setBackgroundColor(0);
 				noteElements.addView(editor);
 
+				allRe.add(editor);
+				editor.setTag(allRe.size()-1);
+				//editor.setHtml(s);
+				editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+					@Override
+					public void onFocusChange(View v, boolean hasFocus) {
+						//mEditor.setEditorHeight(400);
+						String id = v.getTag().toString();
+						setFeatureTag(id);
+						drawingControls.setVisibility(View.GONE);
+						layout_note_more_Info.setVisibility(View.GONE);
+						isMoreShown = false;
+						layout_audio_notechooser.setVisibility(View.GONE);
+						horizontal_scroll_editor.setVisibility(View.VISIBLE);
+					}
+				});
 			}
 		});
+
+
+
 		imageButtonMoreMode.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -1562,10 +1714,31 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					layout_note_more_Info.setVisibility(View.GONE);
 				}
 				imageButtoncalander.setVisibility(View.GONE);
-
 			}
 		});
 
+	}
+
+	private void setFeatureTag(String id){
+
+
+		for(int i=0; i<20 ; i++)
+			Log.e("Inside setFeatureTag","id :"+id);
+
+		bold.setTag(Integer.parseInt(id));
+		italic.setTag(Integer.parseInt(id));
+		underline.setTag(Integer.parseInt(id));
+		h1.setTag(Integer.parseInt(id));
+		h2.setTag(Integer.parseInt(id));
+		h3.setTag(Integer.parseInt(id));
+		h4.setTag(Integer.parseInt(id));
+		h5.setTag(Integer.parseInt(id));
+		h6.setTag(Integer.parseInt(id));
+		align_left.setTag(Integer.parseInt(id));
+		align_center.setTag(Integer.parseInt(id));
+		align_right.setTag(Integer.parseInt(id));
+		redo.setTag(Integer.parseInt(id));
+		undo.setTag(Integer.parseInt(id));
 	}
 
 	/*void updatenoteList(NOTETYPE notetype) {
@@ -3574,12 +3747,30 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		for(NoteElement n : ne) {
 			if (n.type.equals("text")) {
+				String s = n.content;
 				noteElements = (LinearLayout) findViewById(R.id.noteElements);
 				LayoutInflater inflator = getLayoutInflater();
 				View viewText = inflator.inflate(R.layout.note_text, null, false);
 				RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+				allRe.add(editor);
+				editor.setTag(allRe.size() - 1);
+				editor.setHtml(s);
+				editor.setBackgroundColor(0);
+				editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+					@Override
+					public void onFocusChange(View v, boolean hasFocus) {
+						String id = v.getTag().toString();
+						setFeatureTag(id);
+						drawingControls.setVisibility(View.GONE);
+						layout_note_more_Info.setVisibility(View.GONE);
+						isMoreShown = false;
+						layout_audio_notechooser.setVisibility(View.GONE);
+						horizontal_scroll_editor.setVisibility(View.VISIBLE);
+					}
+				});
+				noteElements.addView(editor);
 			}
-			if(n.type.equals("image")) {
+			else if(n.type.equals("image")) {
 				// add image layout
 				noteElements = (LinearLayout) findViewById(R.id.noteElements);
 				LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
@@ -3599,8 +3790,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// add audio layout
 				final String name = n.content;
 				addAudio(name);
-			} else {
-				Toast.makeText(getApplication(), "Sorry! Couldn't find any data", Toast.LENGTH_LONG).show();
 			}
 		}
 	}

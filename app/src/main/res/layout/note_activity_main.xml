@@ -225,6 +225,7 @@
         android:id="@+id/horizontal_scroll_editor"
         android:layout_width="match_parent"
         android:layout_height="52dp"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:background="#FF5A60">
 
@@ -264,30 +265,6 @@
                 android:background="@null"
                 android:contentDescription="@null"
                 android:src="@drawable/italic" />
-
-            <ImageButton
-                android:id="@+id/action_subscript"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/subscript" />
-
-            <ImageButton
-                android:id="@+id/action_superscript"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/superscript" />
-
-            <ImageButton
-                android:id="@+id/action_strikethrough"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/strikethrough" />
 
             <ImageButton
                 android:id="@+id/action_underline"
@@ -347,40 +324,6 @@
                 android:src="@drawable/h6" />
 
             <ImageButton
-                android:id="@+id/action_txt_color"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/txt_color"
-                />
-
-            <ImageButton
-                android:id="@+id/action_bg_color"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/bg_color" />
-
-
-            <ImageButton
-                android:id="@+id/action_indent"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/indent" />
-
-            <ImageButton
-                android:id="@+id/action_outdent"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/outdent" />
-
-            <ImageButton
                 android:id="@+id/action_align_left"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -403,14 +346,6 @@
                 android:background="@null"
                 android:contentDescription="@null"
                 android:src="@drawable/justify_right" />
-
-            <ImageButton
-                android:id="@+id/action_blockquote"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@null"
-                android:contentDescription="@null"
-                android:src="@drawable/blockquote" />
 
         </LinearLayout>
     </HorizontalScrollView>
