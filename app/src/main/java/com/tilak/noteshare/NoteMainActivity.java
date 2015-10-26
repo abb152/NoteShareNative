@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -1367,9 +1368,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				finish();
 				startActivity(new Intent(context, MainActivity.class));
 
-				arrNoteListData.add(model);
+				/*arrNoteListData.add(model);
 				adapter.notifyDataSetChanged();
-				listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
+				listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);*/
 
 				updateHeaderControls(-1);
 				textNoteControls.setVisibility(View.GONE);
@@ -1822,39 +1823,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	}
 
-	/*public void getImage() {
-	final CharSequence[] items = { "Take Photo", "Choose from Library",
-	"Cancel" };
-
-	AlertDialog.Builder builder = new AlertDialog.Builder(
-	NoteMainActivity.this);
-	builder.setTitle("Add Photo!");
-	builder.setItems(items, new DialogInterface.OnClickListener() {
-	@Override
-	public void onClick(DialogInterface dialog, int item) {
-	if (items[item].equals("Take Photo")) {
-
-	Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	startActivityForResult(intent, REQUEST_CAMERA);
-
-	} else if (items[item].equals("Choose from Library")) {
-
-	Intent intent = new Intent(
-	Intent.ACTION_PICK,
-	android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	intent.setType("image*//*");
-	startActivityForResult(
-	Intent.createChooser(intent, "Select File"),
-	SELECT_PICTURE);
-
-	} else if (items[item].equals("Cancel")) {
-	dialog.dismiss();
-	}
-	}
-	});
-	builder.show();
-	}*/
-
 	public static final int TAKE_PHOTO_REQUEST = 0;
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	private Uri getOutputMediaFileUri(int mediaType) {
@@ -1888,15 +1856,47 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		for(int i = 0; i<20; i++)
-			Log.e("Inside onActivityResult","");
 
 		if (resultCode == RESULT_OK) {
 			if (requestCode == TAKE_PHOTO_REQUEST) {
 
+				/*int rotate = 0;
+				int orientation = 0;
+				String timestamp = String.valueOf(System.currentTimeMillis());
+				String imagePath = Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/IMG-" + timestamp + ".jpg";
+				try {
+					getContentResolver().notifyChange(mMediaUri, null);
+					File imageFile = new File(imagePath);
+					ExifInterface exif = new ExifInterface(
+							imageFile.getAbsolutePath());
+					orientation = exif.getAttributeInt(
+							ExifInterface.TAG_ORIENTATION,
+							ExifInterface.ORIENTATION_NORMAL);
+					switch (orientation) {
+						case ExifInterface.ORIENTATION_ROTATE_270:
+							rotate = 270;
+							break;
+						case ExifInterface.ORIENTATION_ROTATE_180:
+							rotate = 180;
+							break;
+						case ExifInterface.ORIENTATION_ROTATE_90:
+							rotate = 90;
+							break;
+					}
+					Log.v("", "Exif orientation: " + orientation);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				*//****** Image rotation ****//*
+				Matrix matrix = new Matrix();
+				matrix.postRotate(orientation);*/
+				//Bitmap cropped = Bitmap.createBitmap(scaled, x, y, width, height, matrix, true);
+
 				//finish();
 				Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
 				cameraIntent.putExtra("image", mMediaUri.toString());
+				cameraIntent.putExtra("check", 0);
 				//cameraIntent.putExtra()
 				startActivity(cameraIntent);
 
@@ -1922,6 +1922,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	} catch (Exception e) {
 	e.printStackTrace();
 	}*/
+			} else if (requestCode == SELECT_PICTURE) {
+				Uri imagePath = data.getData();
+				Intent selectIntent = new Intent(NoteMainActivity.this, CameraImage.class);
+				selectIntent.putExtra("select_image", imagePath.toString());
+				selectIntent.putExtra("check", 1);
+				Log.e("select pic", imagePath.toString());
+				//cameraIntent.putExtra()
+				startActivity(selectIntent);
 			}
 		}
 
@@ -2220,7 +2228,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
 						// System.exit(0);
-
 						Intent intent = new Intent(
 								Intent.ACTION_PICK,
 								android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -2228,9 +2235,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						startActivityForResult(
 								Intent.createChooser(intent, "Select File"),
 								SELECT_PICTURE);
-
 						dialog.dismiss();
-
 					}
 				});
 
@@ -3783,7 +3788,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
 				Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 				//Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
+				BitmapFactory.Options op = new BitmapFactory.Options();
+				op.inJustDecodeBounds = true;
+				int imageWidth = op.outWidth;
+				int imageHeight = op.outHeight;
+				Matrix matrix = new Matrix();
+				matrix.postRotate(90);
+				//Bitmap scale;
 				Bitmap scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
+				if(imageWidth > imageHeight) {
+					//scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
+					//note_imageview.setImageBitmap(scale);
+				}
+				else if (imageWidth < imageHeight) {
+					//scale = b.createScaledBitmap(b, imageWidth, imageHeight, false);
+					//Bitmap rotatedBitmap = Bitmap.createBitmap(scale , 0, 0, scale.getWidth(), scale.getHeight(), matrix, true);
+					//note_imageview.setImageBitmap(scale);
+				}
 				note_imageview.setImageBitmap(scale);
 				noteElements.addView(note_image);
 			} else if (n.type.equals("audio")) {
