@@ -96,6 +96,8 @@ public class MainActivity extends DrawerActivity {
 	public String setListView = "detail";
 	public static String folderIdforNotes;
 
+	public ArrayList<String> noteIdList = new ArrayList<String>();
+
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	@Override
@@ -867,8 +869,6 @@ public class MainActivity extends DrawerActivity {
 
 	}
 
-	ArrayList<String> noteIdList = new ArrayList<String>();
-
 	void putInList(){
 		if(list.size()>0)
 			list.clear();
@@ -1142,8 +1142,6 @@ public class MainActivity extends DrawerActivity {
 
 			listView.setSwipeListViewListener(new BaseSwipeListViewListener() {
 
-
-
 				@Override
 				public void onClickFrontView(int position) {
 
@@ -1172,8 +1170,6 @@ public class MainActivity extends DrawerActivity {
 				}
 
 			});
-
-
 
 			listView.setAdapter(noteAdapter);
 

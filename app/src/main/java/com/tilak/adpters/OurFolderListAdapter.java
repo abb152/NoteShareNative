@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,7 +46,6 @@ public class OurFolderListAdapter extends BaseAdapter {
         TextView txtFolderName,txtFolderDesc,txtFolderDate,tvIdHidden;
         ImageButton btnDelete;
         LinearLayout linearLayout;
-        Button button3;
     }
 
     @Override
@@ -66,7 +64,6 @@ public class OurFolderListAdapter extends BaseAdapter {
             holder.txtFolderDesc = (TextView) convertView.findViewById(R.id.tvFolderDesc);
             holder.txtFolderDate= (TextView) convertView.findViewById(R.id.tvFolderDate);
             holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdFolderHidden);
-            //holder.button3 = (Button) convertView.findViewById(R.id.button3);
 
             holder.btnDelete = (ImageButton) convertView.findViewById(R.id.btnfolderdelete);
             convertView.setTag(holder);
@@ -82,7 +79,6 @@ public class OurFolderListAdapter extends BaseAdapter {
 
         holder.btnDelete.setTag(map.get("folderId"));
         holder.linearLayout.setTag(map.get("folderId"));
-        //holder.button3.setTag(map.get("folderId"));
 
         return convertView;
     }

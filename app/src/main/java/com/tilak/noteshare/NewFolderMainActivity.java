@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NewNoteFolderAdapter;
 import com.tilak.adpters.NewNoteFolderGridAdapter;
@@ -75,6 +76,8 @@ public class NewFolderMainActivity extends DrawerActivity {
 	public Dialog dialogColor;
 	public ImageButton searchbuttonclick;
 	public EditText editTextsearchNote;
+
+	public ArrayList<String> folderIdList = new ArrayList<String>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -1128,10 +1131,13 @@ public class NewFolderMainActivity extends DrawerActivity {
 		//updatePintrestView();
 	}
 
+
 	void putInList(){
 		if(list.size()>0)
 			list.clear();
 		for(Folder currentfolder : allfolders){
+
+			folderIdList.add(currentfolder.getId().toString());
 			HashMap<String,String> map = new HashMap<String,String>();
 			map.put("folderName", currentfolder.getName());
 			map.put("folderDesc", currentfolder.getName()); // change this later
@@ -1146,22 +1152,38 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		OurFolderListAdapter testAdapter = new OurFolderListAdapter(this,list);
 		listView.setOffsetLeft(450L);
-		listView.setAdapter(testAdapter);
 
-		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-				//do your stuff here
-//				showColorAlert(NewFolderMainActivity.this);
+		listView.setSwipeListViewListener(new BaseSwipeListViewListener() {
 
-				return true;
+			@Override
+			public void onClickFrontView(int position) {
+
+				Log.d("select position", "Position = " + position);
+				int itemPosition = position;
+				String folid = null;
+				folid = folderIdList.get(position);
+
+				Log.d("select folid", "FOlder" + folid);
+
+				try {
+					Intent intent = new Intent(NewFolderMainActivity.this, MainActivity.class);
+					intent.putExtra("FolderId", folid);
+					startActivity(intent);
+				} catch (Exception e) {
+
+				}
 			}
+
 		});
+
+
+
+		listView.setAdapter(testAdapter);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-				finish();
 				Log.d("select position", "Position = " + position);
 				int itemPosition = position;
 				String folid = null;
@@ -1178,6 +1200,9 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 			}
 		});
+
+
+
 	}
 
 	public void delete(String id){

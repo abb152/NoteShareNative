@@ -78,14 +78,6 @@
             android:textSize="10sp"
             android:textColor="#000" />
 
-        <!--<Button-->
-            <!--style="?android:attr/buttonStyleSmall"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="New Button"-->
-            <!--android:id="@+id/button3"-->
-            <!--android:onClick="getNotesInFolder"/>-->
-
     </LinearLayout>
 
     </FrameLayout>
