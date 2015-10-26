@@ -34,7 +34,7 @@
                 android:textSize="14sp"
                 android:hint="Search a Note.." >
 
-                <requestFocus />
+                <!--<requestFocus />-->
             </EditText>
 
             <ImageButton
@@ -93,7 +93,7 @@
         android:dividerHeight="0dp"
         android:numColumns="2"
         android:scrollbars="none"
-        android:visibility="gone" >
+        android:visibility="gone">
     </GridView>
 
     <ScrollView

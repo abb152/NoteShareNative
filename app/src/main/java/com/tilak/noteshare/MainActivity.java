@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NoteFolderAdapter;
 import com.tilak.adpters.NoteFolderGridAdapter;
@@ -866,13 +867,18 @@ public class MainActivity extends DrawerActivity {
 
 	}
 
+	ArrayList<String> noteIdList = new ArrayList<String>();
+
 	void putInList(){
 		if(list.size()>0)
 			list.clear();
 		int i = 0;
 		for(Note currentnote : sortallnotes){
 			i++;
+
+			noteIdList.add(currentnote.getId().toString());
 			String noteDesc = "";
+
 			List<NoteElement> noteElements = NoteElement.findWithQuery(NoteElement.class, "SELECT DISTINCT TYPE FROM NOTE_ELEMENT WHERE NOTEID = " + currentnote.getId());
 			for (NoteElement currentNoteElement : noteElements){
 				noteDesc += currentNoteElement.getType().toUpperCase() + " ";
@@ -1119,44 +1125,98 @@ public class MainActivity extends DrawerActivity {
 		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, setListView);
 		if(setListView != "grid") {
 			listView.setOffsetLeft(170L);
-			listView.setAdapter(noteAdapter);
-		}else{
-			listGridView.setAdapter(noteAdapter);
-		}
 
-		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				//do your stuff here
+			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+					//do your stuff here
 
-				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+					HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 
-				int nid = Integer.parseInt(map.get("noteId"));
-
-				showColorAlert(MainActivity.this, nid);
-				return true;
-			}
-		});
-
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-				int itemPosition = position;
-				String noteid = null;
-
-				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
-
-				noteid = map.get("noteId");
-
-				try {
-					Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
-					i.putExtra("noteId", noteid);
-					startActivity(i);
-				} catch (Exception e) {
-
+					int nid = Integer.parseInt(map.get("noteId"));
+					showColorAlert(MainActivity.this, nid);
+					return true;
 				}
+			});
+
+
+
+			listView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+
+
+
+				@Override
+				public void onClickFrontView(int position) {
+
+					int itemPosition = position;
+
+					for (int j = 0; j < 20; j++)
+						Log.e("Position: ", String.valueOf(itemPosition));
+
+					String noteid = null;
+
+					noteid = noteIdList.get(position);
+
+					for (int j = 0; j < 20; j++)
+						Log.e("Position: ", noteid);
+					//HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+
+					//noteid = map.get("noteId");
+
+					try {
+						Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
+						i.putExtra("NoteId", noteid);
+						startActivity(i);
+					} catch (Exception e) {
+
+					}
+				}
+
+			});
+
+
+
+			listView.setAdapter(noteAdapter);
+
+			}else{
+
+				listGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						int itemPosition = position;
+						String noteid = null;
+
+						HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+
+						noteid = map.get("noteId");
+
+						for (int j = 0; j < 20; j++)
+							Log.e("NoteId: ", String.valueOf(noteid));
+
+						try {
+							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
+							i.putExtra("NoteId", noteid);
+							startActivity(i);
+						} catch (Exception e) {
+
+						}
+					}
+				});
+
+				listGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+					public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+						//do your stuff here
+
+						HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
+
+						int nid = Integer.parseInt(map.get("noteId"));
+						showColorAlert(MainActivity.this, nid);
+						return true;
+					}
+				});
+
+				listGridView.setAdapter(noteAdapter);
 			}
-		});
+
 	}
 	class TitleComparator implements Comparator<Note> {
 

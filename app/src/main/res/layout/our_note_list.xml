@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/noteMain">
+    android:id="@+id/noteMain"
+    android:descendantFocusability="blocksDescendants"
+    android:focusableInTouchMode="true">
 
     <FrameLayout
     android:layout_width="match_parent"
@@ -112,7 +114,7 @@
             android:layout_marginBottom="2dp"
             android:text="Lorem Ipsum is simply"
             android:textSize="14sp"
-            android:textColor="#000" />
+            android:textColor="#000"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -120,13 +122,7 @@
             android:id="@+id/tvNoteDate"
             android:textColor="#000"
             android:text="01.04.15"
-            android:textSize="10sp" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn3"
-            android:onClick="openNoteDetail"/>
+            android:textSize="10sp"/>
 
     </LinearLayout>
     </FrameLayout>

@@ -52,11 +52,11 @@
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
-            <Button
+            <!--<Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn3"
-                android:onClick="openNoteDetail"/>
+                android:onClick="openNoteDetail"/>-->
 
         </LinearLayout>
 
