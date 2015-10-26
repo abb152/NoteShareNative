@@ -1341,10 +1341,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// Updated text in list view
 
 
-				NoteListDataModel model = new NoteListDataModel();
-				model.noteType = NOTETYPE.TEXTMODE;
-				model.stringtext = new SpannableString(txtViewer.getText());
-				Log.d("Note Text",txtViewer.getText().toString());
 				//get all notes
 				List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
 				int incremented = allnotes.size() + 1;
