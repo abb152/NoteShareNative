@@ -3,7 +3,6 @@ package com.tilak.noteshare;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,8 +42,6 @@ public class CameraImage extends Activity {
                 //setImage(imagePath);
                 Uri imagePath = Uri.parse(b.getString("select_image"));
                 setImage(imagePath);
-                /*bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imagePath);
-                image.setImageBitmap(bitmap);*/
             } catch (Exception e) {}
         }
     }
@@ -85,34 +82,13 @@ public class CameraImage extends Activity {
         bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mediaUri);
         int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
         int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
-        BitmapFactory.Options bounds = new BitmapFactory.Options();
-        bounds.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mediaUri.getPath(), bounds);
-        /*BitmapFactory.Options opts = new BitmapFactory.Options();
-        Bitmap bm = BitmapFactory.decodeFile(mediaUri.getPath(), opts);
-        ExifInterface exif = new ExifInterface(mediaUri.getPath());
-        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-        int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
-
-        int rotationAngle = 0;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) rotationAngle = 90;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) rotationAngle = 180;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
-
-        Matrix matrix = new Matrix();
-        matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);*/
-        int imageHeight = bounds.outHeight;
-        int imageWidth = bounds.outWidth;
-        Bitmap scale = bitmap.createScaledBitmap(bitmap, deviceHeight, deviceWidth, false);
+        int imageWidth = bitmap.getWidth();
+        int imageHeight = bitmap.getHeight();
+        Bitmap scale = bitmap.createScaledBitmap(bitmap, deviceWidth, deviceHeight, false);
         if(imageWidth > imageHeight) // landscape
             scale = bitmap.createScaledBitmap(bitmap, deviceHeight, deviceWidth, false);
-        else if (imageWidth < imageHeight) { // portrait
+        else if (imageWidth < imageHeight) // portrait
             scale = bitmap.createScaledBitmap(bitmap, deviceWidth, deviceHeight, false);
-            //image.setImageBitmap(bitmap);
-            //Bitmap rotate = scale.createBitmap(scale, 0, 0, scale.getWidth(), scale.getHeight(), matrix, false);
-            //image.setImageBitmap(rotate);
-        }
         image.setImageBitmap(scale);
 
         // Setting bitmap to ImageView
