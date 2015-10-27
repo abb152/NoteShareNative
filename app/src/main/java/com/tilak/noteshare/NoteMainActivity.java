@@ -26,8 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
@@ -49,7 +47,6 @@ import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
 import com.tilak.adpters.NotesListAdapter;
 import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.dataAccess.DataManager;
-import com.tilak.datamodels.NOTETYPE;
 import com.tilak.datamodels.NoteListDataModel;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
@@ -193,6 +190,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			name = n.content;
 		}*/
 
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		//initlizeUIElement(contentView);
+		try {
+			fetchNoteElementsFromDb();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	void initlizeUIElement(View contentview) {
@@ -870,6 +878,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});*/
 
+		/*boolean change = true;
+		if (change) {
+			// onclick
+			// dark color
+		}
+		// false
+		if (!change) {
+			// remove onclick
+			// same color
+		}
+		// true*/
+
 		// redo
 		redo.setOnClickListener(new OnClickListener() {
 			@Override
@@ -1437,7 +1457,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
 
-
 				noteElements.addView(note_audio);
 
 				try {
@@ -1895,6 +1914,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				cameraIntent.putExtra("check", 0);
 				//cameraIntent.putExtra()
 				startActivity(cameraIntent);
+
+				/*noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
+				View viewImage = inflator.inflate(R.layout.note_image, null, false);
+				LinearLayout note_image = (LinearLayout) viewImage.findViewById(R.id.note_image);
+				ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
+				noteElements.addView(note_imageview);*/
 
 	/*Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 	String imgDir = "../NoteShare/NoteShare Images/";
@@ -2568,29 +2594,33 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.layoutPapers);
 		final LinearLayout layoutColors1 = (LinearLayout) dialog
 				.findViewById(R.id.layoutColors1);
-		final ListView ListViewItems = (ListView) dialog
-				.findViewById(R.id.ListViewItems);
+		//final ListView ListViewItems = (ListView) dialog
+				//.findViewById(R.id.ListViewItems);
 
-		final Button buttonFont = (Button) dialog.findViewById(R.id.buttonFont);
-		final Button buttonSize = (Button) dialog.findViewById(R.id.buttonSize);
-		final Button buttonColors = (Button) dialog
-				.findViewById(R.id.buttonColors);
-		final Button buttonPaper = (Button) dialog
-				.findViewById(R.id.buttonPaper);
+		//final Button buttonFont = (Button) dialog.findViewById(R.id.buttonFont);
+		//final Button buttonSize = (Button) dialog.findViewById(R.id.buttonSize);
+		final Button buttonColors = (Button) dialog.findViewById(R.id.buttonColors);
+		final Button buttonPaper = (Button) dialog.findViewById(R.id.buttonPaper);
 
 		layoutPapers.setVisibility(View.GONE);
-		layoutColors1.setVisibility(View.GONE);
-		ListViewItems.setVisibility(View.VISIBLE);
+		layoutColors1.setVisibility(View.VISIBLE);
+
+		buttonColors.setBackgroundColor(getResources().getColor(
+				R.color.eaeaea));
+		buttonColors.setTextColor(getResources().getColor(
+				R.color.header_bg));
+
+		//ListViewItems.setVisibility(View.VISIBLE);
 
 		// fonts_sizeName=getResources().getStringArray(R.array.Font_Size_px);
-		fontSizes = getResources().getStringArray(R.array.Font_Size);
+		//fontSizes = getResources().getStringArray(R.array.Font_Size);
 
-		TextFont_sizeAdapter = new TextFont_Size_ChooseAdapter(
+		/*TextFont_sizeAdapter = new TextFont_Size_ChooseAdapter(
 				NoteMainActivity.this, fonts_Name_Display);// fonts_sizeName
 		ListViewItems.setAdapter(TextFont_sizeAdapter);
-		DataManager.sharedDataManager().setSELECTED_TEXT_OPTION(NOTETYPE.FONT);
+		DataManager.sharedDataManager().setSELECTED_TEXT_OPTION(NOTETYPE.FONT);*/
 
-		buttonFont.setOnClickListener(new OnClickListener() {
+		/*buttonFont.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -2668,7 +2698,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				TextFont_sizeAdapter.notifyDataSetChanged();
 
 			}
-		});
+		});*/
 		buttonColors.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -2677,9 +2707,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				layoutPapers.setVisibility(View.GONE);
 				layoutColors1.setVisibility(View.VISIBLE);
-				ListViewItems.setVisibility(View.GONE);
+				//ListViewItems.setVisibility(View.GONE);
 
-				buttonFont.setBackgroundColor(getResources().getColor(
+				/*buttonFont.setBackgroundColor(getResources().getColor(
 						R.color.header_bg));
 				buttonFont
 						.setTextColor(getResources().getColor(R.color.ffffff));
@@ -2687,7 +2717,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				buttonSize.setBackgroundColor(getResources().getColor(
 						R.color.header_bg));
 				buttonSize
-						.setTextColor(getResources().getColor(R.color.ffffff));
+						.setTextColor(getResources().getColor(R.color.ffffff));*/
 
 				buttonColors.setBackgroundColor(getResources().getColor(
 						R.color.eaeaea));
@@ -2709,9 +2739,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// TODO Auto-generated method stub
 				layoutPapers.setVisibility(View.VISIBLE);
 				layoutColors1.setVisibility(View.GONE);
-				ListViewItems.setVisibility(View.GONE);
+				//ListViewItems.setVisibility(View.GONE);
 
-				buttonFont.setBackgroundColor(getResources().getColor(
+				/*buttonFont.setBackgroundColor(getResources().getColor(
 						R.color.header_bg));
 				buttonFont
 						.setTextColor(getResources().getColor(R.color.ffffff));
@@ -2719,7 +2749,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				buttonSize.setBackgroundColor(getResources().getColor(
 						R.color.header_bg));
 				buttonSize
-						.setTextColor(getResources().getColor(R.color.ffffff));
+						.setTextColor(getResources().getColor(R.color.ffffff));*/
 
 				buttonColors.setBackgroundColor(getResources().getColor(
 						R.color.header_bg));
@@ -2736,7 +2766,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		// Onselected the size and font
 
-		ListViewItems.setOnItemClickListener(new OnItemClickListener() {
+		/*ListViewItems.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -2764,7 +2794,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				}
 
 			}
-		});
+		});*/
 
 		// ListViewItems
 
@@ -3744,6 +3774,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 
 	public void fetchNoteElementsFromDb() throws FileNotFoundException {
+		noteElements.removeAllViews();
 		List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = 1");
 
 		for(NoteElement n : ne) {
@@ -3760,13 +3791,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 					@Override
 					public void onFocusChange(View v, boolean hasFocus) {
-						String id = v.getTag().toString();
-						setFeatureTag(id);
-						drawingControls.setVisibility(View.GONE);
-						layout_note_more_Info.setVisibility(View.GONE);
-						isMoreShown = false;
-						layout_audio_notechooser.setVisibility(View.GONE);
-						horizontal_scroll_editor.setVisibility(View.VISIBLE);
+					String id = v.getTag().toString();
+					setFeatureTag(id);
+					drawingControls.setVisibility(View.GONE);
+					layout_note_more_Info.setVisibility(View.GONE);
+					isMoreShown = false;
+					layout_audio_notechooser.setVisibility(View.GONE);
+					horizontal_scroll_editor.setVisibility(View.VISIBLE);
 					}
 				});
 				noteElements.addView(editor);
