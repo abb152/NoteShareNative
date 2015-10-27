@@ -3834,22 +3834,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				//Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
 				BitmapFactory.Options op = new BitmapFactory.Options();
 				op.inJustDecodeBounds = true;
-				int imageWidth = op.outWidth;
-				int imageHeight = op.outHeight;
+				int imageWidth = b.getWidth();
+				int imageHeight = b.getHeight();
 				Matrix matrix = new Matrix();
 				matrix.postRotate(90);
 				//Bitmap scale;
-				Bitmap scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
+				Bitmap scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false); // portrait
+				//Bitmap scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false); //landscape
 				if(imageWidth > imageHeight) { // landscape
-					//scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
 					scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
-					//note_imageview.setImageBitmap(scale);
 				}
 				else if (imageWidth < imageHeight) { // portrait
-					//scale = b.createScaledBitmap(b, imageWidth, imageHeight, false);
 					scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
-					//Bitmap rotatedBitmap = Bitmap.createBitmap(scale , 0, 0, scale.getWidth(), scale.getHeight(), matrix, true);
-					//note_imageview.setImageBitmap(scale);
 				}
 				note_imageview.setImageBitmap(scale);
 				noteElements.addView(note_image);
