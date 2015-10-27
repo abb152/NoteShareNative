@@ -1368,7 +1368,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String currentDateStr = formatter.format(new Date());
 
-				Note note;
+				final Note note;
 
 				if (noteIdForDetails == null) {
 					note = new Note(textViewheaderTitle.getText().toString(), "", "", "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
@@ -1378,6 +1378,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				else {
 					note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 					note.setModificationtime(currentDateStr);
+					String updatedText = textViewheaderTitle.getText().toString();
+					note.setTitle(updatedText);
+					/*textViewheaderTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+						@Override
+						public void onFocusChange(View v, boolean hasFocus) {
+							if (!hasFocus) {
+								String updatedText = textViewheaderTitle.getText().toString();
+								note.setTitle(updatedText);
+								note.save();
+							}
+						}
+					});*/
+					/*if (textViewheaderTitle.requestFocus()) {
+						String updatedText = textViewheaderTitle.getText().toString();
+						note.setTitle(updatedText);
+						note.save();
+					}*/
 				}
 				note.save();
 
@@ -3822,13 +3839,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				Matrix matrix = new Matrix();
 				matrix.postRotate(90);
 				//Bitmap scale;
-				Bitmap scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
-				if(imageWidth > imageHeight) {
+				Bitmap scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
+				if(imageWidth > imageHeight) { // landscape
 					//scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
+					scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
 					//note_imageview.setImageBitmap(scale);
 				}
-				else if (imageWidth < imageHeight) {
+				else if (imageWidth < imageHeight) { // portrait
 					//scale = b.createScaledBitmap(b, imageWidth, imageHeight, false);
+					scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
 					//Bitmap rotatedBitmap = Bitmap.createBitmap(scale , 0, 0, scale.getWidth(), scale.getHeight(), matrix, true);
 					//note_imageview.setImageBitmap(scale);
 				}
