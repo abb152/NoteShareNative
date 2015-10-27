@@ -134,6 +134,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	View contentView;
 	private String outputFile = null;
 	public static String noteIdForDetails;
+	SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	String currentDateStr = formatter.format(new Date());
 
 	// /Drawing Controls
 
@@ -241,7 +243,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		// textViewAdd = (im) findViewById(R.id.textViewAdd);
 
 		// audio controls
-		audioRecording(contentView);
+		//audioRecording(contentView);
 		initlizesAudioNoteControls(contentview);
 
 		// MoreInfo View
@@ -423,7 +425,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		myAudioRecorder.setOutputFile(outputFile);
 	}
 
-	void audioRecording(View contentview) {
+	/*void audioRecording(View contentview) {
 
 		LayoutAudioRecording = (RelativeLayout) contentview
 				.findViewById(R.id.LayoutAudioRecording);
@@ -627,10 +629,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				System.out.println("Current Index:" + currentAudioIndex);
 
-				/*NoteListDataModel noteListdatamodel = new NoteListDataModel();
+				*//*NoteListDataModel noteListdatamodel = new NoteListDataModel();
 				noteListdatamodel.noteType = NOTETYPE.AUDIOMODE;
 				noteListdatamodel.setStrAudioFilePath(outputFile);
-				//arrNoteListData.add(currentAudioIndex, noteListdatamodel);*/
+				//arrNoteListData.add(currentAudioIndex, noteListdatamodel);*//*
 
 				//adapter.notifyDataSetChanged();
 				//listviewNotes.smoothScrollToPosition(currentAudioIndex);
@@ -676,15 +678,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						Toast.LENGTH_SHORT).show();
 				progressRecordtext.setText("Recording...");
 
-				/*if (arrNoteListData.size() > 0) {
+				*//*if (arrNoteListData.size() > 0) {
 					currentAudioIndex = arrNoteListData.size();
 				} else {
 					currentAudioIndex = 0;
-				}*/
+				}*//*
 
 			}
 		});
-	}
+	}*/
 
 	void initlizesTextNoteControls(View contentview) {
 		//
@@ -717,6 +719,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		textNoteControls = (LinearLayout) contentview.findViewById(R.id.textNoteControls);
 		textNoteControls.setVisibility(View.GONE);
 
+		// bold italic underline h1 h2 h3 h4 h5 h6 align_left align_center align_right redo undo
 		bold = (ImageButton) findViewById(R.id.action_bold);
 		italic = (ImageButton) findViewById(R.id.action_italic);
 		underline = (ImageButton) findViewById(R.id.action_underline);
@@ -895,6 +898,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).redo();
+				updateTextNoteControlListners(R.id.action_redo);
 			}
 		});
 
@@ -903,6 +907,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).undo();
+				updateTextNoteControlListners(R.id.action_undo);
 			}
 		});
 
@@ -911,6 +916,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				 allRe.get(Integer.parseInt(v.getTag().toString())).setBold();
+				updateTextNoteControlListners(R.id.action_bold);
 			}
 		});
 
@@ -919,6 +925,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setItalic();
+				updateTextNoteControlListners(R.id.action_italic);
 			}
 		});
 
@@ -927,6 +934,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setUnderline();
+				updateTextNoteControlListners(R.id.action_underline);
 			}
 		});
 
@@ -935,6 +943,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(1);
+				updateTextNoteControlListners(R.id.action_heading1);
 			}
 		});
 
@@ -943,6 +952,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(2);
+				updateTextNoteControlListners(R.id.action_heading2);
 			}
 		});
 
@@ -951,6 +961,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(3);
+				updateTextNoteControlListners(R.id.action_heading3);
 			}
 		});
 
@@ -959,6 +970,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(4);
+				updateTextNoteControlListners(R.id.action_heading4);
 			}
 		});
 
@@ -967,6 +979,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(5);
+				updateTextNoteControlListners(R.id.action_heading5);
 			}
 		});
 
@@ -975,6 +988,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(6);
+				updateTextNoteControlListners(R.id.action_heading6);
 			}
 		});
 
@@ -983,6 +997,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignLeft();
+				updateTextNoteControlListners(R.id.action_align_left);
 			}
 		});
 
@@ -991,6 +1006,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignCenter();
+				updateTextNoteControlListners(R.id.action_align_center);
 			}
 		});
 
@@ -999,6 +1015,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignRight();
+				updateTextNoteControlListners(R.id.action_align_right);
 			}
 		});
 
@@ -1087,51 +1104,64 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	void updateTextNoteControlListners(int elementId) {
 
-		textButtondrawback.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		textButtondrawnew.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		textButtondrawdraw.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		textButtondrawcolors.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		textButtondrawbrushsize.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		textButtondrawerase.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		textButtondrawMore.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
+		bold.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		italic.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		underline.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		h1.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		h2.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		h3.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		h4.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		h5.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		h6.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		align_left.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		align_center.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		align_right.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		redo.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		undo.setBackgroundColor(getResources().getColor(R.color.header_bg));
 
 		switch (elementId) {
-			case R.id.textButtondrawback:
-				textButtondrawback.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
+			case R.id.action_bold:
+				bold.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				break;
-			case R.id.textButtondrawnew:
-				textButtondrawnew.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
+			case R.id.action_italic:
+				italic.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				break;
-			case R.id.textButtondrawdraw:
-				textButtondrawdraw.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
+			case R.id.action_underline:
+				underline.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				break;
-			case R.id.textButtondrawcolors:
-				textButtondrawcolors.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
+			case R.id.action_heading1:
+				h1.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				break;
-			case R.id.textButtondrawbrushsize:
-				textButtondrawbrushsize.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
+			case R.id.action_heading2:
+				h2.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				break;
-			case R.id.textButtondrawerase:
-				textButtondrawerase.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
+			case R.id.action_heading3:
+				h3.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				break;
-			case R.id.textButtondrawMore:
-				textButtondrawMore.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
+			case R.id.action_heading4:
+				h4.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				break;
-
+			case R.id.action_heading5:
+				h5.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+				break;
+			case R.id.action_heading6:
+				h6.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+				break;
+			case R.id.action_align_left:
+				align_left.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+				break;
+			case R.id.action_align_center:
+				align_center.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+				break;
+			case R.id.action_align_right:
+				align_right.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+				break;
+			case R.id.action_redo:
+				redo.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+				break;
+			case R.id.action_undo:
+				undo.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+				break;
 			default:
 				break;
 		}
@@ -1365,19 +1395,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
 				int incremented = allnotes.size() + 1;
 
-				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String currentDateStr = formatter.format(new Date());
-
 				final Note note;
 
 				if (noteIdForDetails == null) {
-					note = new Note(textViewheaderTitle.getText().toString(), "", "", "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
+					note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
 					/*NoteElement noteElem = new NoteElement(note.getId(), 1, "yes", "text", txtViewer.getText().toString());
 					noteElem.save();*/
 				}
 				else {
 					note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 					note.setModificationtime(currentDateStr);
+					note.setColor(backgroundColor);
 					String updatedText = textViewheaderTitle.getText().toString();
 					note.setTitle(updatedText);
 					/*textViewheaderTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -1535,9 +1563,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						myAudioRecorder = null;
 						record_text.setVisibility(View.GONE);
 
-
-						NoteElement ne = new NoteElement(1, 1, "yes", "audio", audioName);
-						ne.save();
+						if (noteIdForDetails == null) {
+							makeNote();
+						}
+						if (noteIdForDetails != null) {
+							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName);
+							ne.save();
+						}
 
 						Toast.makeText(NoteMainActivity.this, "Recording Saved",
 								Toast.LENGTH_SHORT).show();
@@ -1928,6 +1960,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				//finish();
 				Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
 				cameraIntent.putExtra("image", mMediaUri.toString());
+				//send noteid
+				cameraIntent.putExtra("noteid", noteIdForDetails);
 				cameraIntent.putExtra("check", 0);
 				//cameraIntent.putExtra()
 				startActivity(cameraIntent);
@@ -1965,6 +1999,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				Uri imagePath = data.getData();
 				Intent selectIntent = new Intent(NoteMainActivity.this, CameraImage.class);
 				selectIntent.putExtra("select_image", imagePath.toString());
+				selectIntent.putExtra("noteid", noteIdForDetails);
 				selectIntent.putExtra("check", 1);
 				Log.e("select pic", imagePath.toString());
 				//cameraIntent.putExtra()
@@ -3302,6 +3337,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	}
 
+	static String backgroundColor = "#FFFFFF";
+
 	public void paperButtonSelected(View view) {
 		if (view.getId() == R.id.paper_bg_1) {
 			background_bg.setBackgroundResource(R.drawable.paper_bg_1);
@@ -3332,6 +3369,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		currentFontColor = Color.BLACK;
 		background_bg.setBackgroundColor(Color.parseColor(view.getTag()
 				.toString()));
+		backgroundColor = view.getTag().toString();
+
+		if (noteIdForDetails == null) {
+			makeNote();
+		}
+
+		if (noteIdForDetails != null) {
+			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+			note.setColor(backgroundColor);
+			note.save();
+		}
 
 	}
 
@@ -3433,7 +3481,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	}
 
-	private String getNextFileName() {
+	/*private String getNextFileName() {
 		return Environment.getExternalStorageDirectory() + File.separator
 				+ "Record_" + System.currentTimeMillis() + ".mp4";
 	}
@@ -3504,10 +3552,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			Intent intent = new Intent();
 			intent.setAction(android.content.Intent.ACTION_VIEW);
-			intent.setDataAndType(Uri.fromFile(file), "audio/*");
+			intent.setDataAndType(Uri.fromFile(file), "audio*//*");
 			startActivity(intent);
 		}
-	}
+	}*/
 
 	public static String getDurationBreakdown(long millis) {
 		if (millis < 0) {
@@ -3789,70 +3837,80 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		return newvalue;
 	}
 
+	public void makeNote() {
+		Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
+		note.save();
+		noteIdForDetails = note.getId().toString();
+	}
+
 
 	public void fetchNoteElementsFromDb() throws FileNotFoundException {
-		noteElements.removeAllViews();
-		List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = 1");
 
-		for(NoteElement n : ne) {
-			if (n.type.equals("text")) {
-				String s = n.content;
-				noteElements = (LinearLayout) findViewById(R.id.noteElements);
-				LayoutInflater inflator = getLayoutInflater();
-				View viewText = inflator.inflate(R.layout.note_text, null, false);
-				RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
-				allRe.add(editor);
-				editor.setTag(allRe.size() - 1);
-				editor.setHtml(s);
-				editor.setBackgroundColor(0);
-				editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-					@Override
-					public void onFocusChange(View v, boolean hasFocus) {
-					String id = v.getTag().toString();
-					setFeatureTag(id);
-					drawingControls.setVisibility(View.GONE);
-					layout_note_more_Info.setVisibility(View.GONE);
-					isMoreShown = false;
-					layout_audio_notechooser.setVisibility(View.GONE);
-					horizontal_scroll_editor.setVisibility(View.VISIBLE);
+		if(noteIdForDetails != null) {
+
+			noteElements.removeAllViews();
+			List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
+			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+			String background = note.getColor();
+			background_bg.setBackgroundColor(Color.parseColor(background));
+			for (NoteElement n : ne) {
+				if (n.type.equals("text")) {
+					String s = n.content;
+					noteElements = (LinearLayout) findViewById(R.id.noteElements);
+					LayoutInflater inflator = getLayoutInflater();
+					View viewText = inflator.inflate(R.layout.note_text, null, false);
+					RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+					allRe.add(editor);
+					editor.setTag(allRe.size() - 1);
+					editor.setHtml(s);
+					editor.setBackgroundColor(0);
+					editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+						@Override
+						public void onFocusChange(View v, boolean hasFocus) {
+							String id = v.getTag().toString();
+							setFeatureTag(id);
+							drawingControls.setVisibility(View.GONE);
+							layout_note_more_Info.setVisibility(View.GONE);
+							isMoreShown = false;
+							layout_audio_notechooser.setVisibility(View.GONE);
+							horizontal_scroll_editor.setVisibility(View.VISIBLE);
+						}
+					});
+					noteElements.addView(editor);
+				} else if (n.type.equals("image")) {
+					// add image layout
+					noteElements = (LinearLayout) findViewById(R.id.noteElements);
+					LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
+					View viewImage = inflator.inflate(R.layout.note_image, null, false);
+					LinearLayout note_image = (LinearLayout) viewImage.findViewById(R.id.note_image);
+					ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
+					String name = n.content;
+					File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+					int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
+					int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
+					Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
+					//Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
+					BitmapFactory.Options op = new BitmapFactory.Options();
+					op.inJustDecodeBounds = true;
+					int imageWidth = b.getWidth();
+					int imageHeight = b.getHeight();
+					Matrix matrix = new Matrix();
+					matrix.postRotate(90);
+					//Bitmap scale;
+					Bitmap scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false); // portrait
+					//Bitmap scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false); //landscape
+					if (imageWidth > imageHeight) { // landscape
+						scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
+					} else if (imageWidth < imageHeight) { // portrait
+						scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
 					}
-				});
-				noteElements.addView(editor);
-			}
-			else if(n.type.equals("image")) {
-				// add image layout
-				noteElements = (LinearLayout) findViewById(R.id.noteElements);
-				LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
-				View viewImage = inflator.inflate(R.layout.note_image, null, false);
-				LinearLayout note_image = (LinearLayout) viewImage.findViewById(R.id.note_image);
-				ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
-				String name = n.content;
-				File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-				int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
-				int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
-				Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
-				//Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
-				BitmapFactory.Options op = new BitmapFactory.Options();
-				op.inJustDecodeBounds = true;
-				int imageWidth = b.getWidth();
-				int imageHeight = b.getHeight();
-				Matrix matrix = new Matrix();
-				matrix.postRotate(90);
-				//Bitmap scale;
-				Bitmap scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false); // portrait
-				//Bitmap scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false); //landscape
-				if(imageWidth > imageHeight) { // landscape
-					scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
+					note_imageview.setImageBitmap(scale);
+					noteElements.addView(note_image);
+				} else if (n.type.equals("audio")) {
+					// add audio layout
+					final String name = n.content;
+					addAudio(name);
 				}
-				else if (imageWidth < imageHeight) { // portrait
-					scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
-				}
-				note_imageview.setImageBitmap(scale);
-				noteElements.addView(note_image);
-			} else if (n.type.equals("audio")) {
-				// add audio layout
-				final String name = n.content;
-				addAudio(name);
 			}
 		}
 	}

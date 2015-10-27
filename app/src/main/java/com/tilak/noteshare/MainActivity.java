@@ -1147,15 +1147,15 @@ public class MainActivity extends DrawerActivity {
 
 					int itemPosition = position;
 
-					for (int j = 0; j < 20; j++)
-						Log.e("Position: ", String.valueOf(itemPosition));
+					/*for (int j = 0; j < 20; j++)
+						Log.e("Position: ", String.valueOf(itemPosition));*/
 
 					String noteid = null;
 
 					noteid = noteIdList.get(position);
 
-					for (int j = 0; j < 20; j++)
-						Log.e("Position: ", noteid);
+					/*for (int j = 0; j < 20; j++)
+						Log.e("Position: ", noteid);*/
 					//HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 
 					//noteid = map.get("noteId");

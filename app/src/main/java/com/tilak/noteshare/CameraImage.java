@@ -22,6 +22,7 @@ public class CameraImage extends Activity {
 
     Bitmap bitmap;
     ImageView image;
+    String noteid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class CameraImage extends Activity {
 
         // Retrieving image Uri from Bundle
         Bundle b = getIntent().getExtras();
+        noteid = b.getString("noteid");
         int check = getIntent().getIntExtra("check", 0);
         image = (ImageView)findViewById(R.id.camera_image);
         if (check == 0) {
@@ -65,7 +67,9 @@ public class CameraImage extends Activity {
             Toast.makeText(getApplication(), mediaStorageDir.toString(), Toast.LENGTH_LONG).show();
 
             // Saving to database
-            NoteElement noteElement = new NoteElement(1L, 1, "yes", "image", "IMG-" + timestamp + ".jpg");
+            Toast.makeText(getApplicationContext(), noteid, Toast.LENGTH_LONG).show();
+
+            NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", "IMG-" + timestamp + ".jpg");
             noteElement.save();
         } catch (FileNotFoundException e) {}
     }
