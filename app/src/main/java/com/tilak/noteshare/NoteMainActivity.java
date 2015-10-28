@@ -46,7 +46,6 @@ import android.widget.Toast;
 import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
 import com.tilak.adpters.NotesListAdapter;
 import com.tilak.adpters.TextFont_Size_ChooseAdapter;
-import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.NoteListDataModel;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
@@ -67,7 +66,7 @@ import jp.wasabeef.richeditor.RichEditor;
 public class NoteMainActivity extends DrawerActivity implements OnClickListener {
 
 	public ImageButton imageButtonHamburg, imageButtoncalander,
-			imageButtonsquence;
+			imageButtonsquence, imageButtoncheckbox;
 	private float smallBrush, mediumBrush, largeBrush;
 	public ImageButton imageButtonTextMode, imageButtonImageMode,
 			imageButtonPaintMode, imageButtonAudioMode, imageButtonShareMode,
@@ -163,6 +162,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
 	public String[] fontSizes;
 	RelativeLayout background_bg;
+	public String[] editortext = new String[1];
 
 	// 8b241b selected bg
 
@@ -223,6 +223,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.mainHeadermenue);
 		imageButtoncalander = (ImageButton) layoutHeader
 				.findViewById(R.id.imageButtoncalander);
+		imageButtoncheckbox = (ImageButton) layoutHeader
+				.findViewById(R.id.imageButtoncheckbox);
 
 		textViewheaderTitle = (EditText) layoutHeader
 				.findViewById(R.id.textViewheaderTitle);
@@ -277,6 +279,27 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		else {
 			Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 			textViewheaderTitle.setText(n.getTitle());
+
+			textViewheaderTitle.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+					String updatedText = s.toString();
+					Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+					note.title = updatedText;
+					note.save();
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+
+				}
+			});
+
 		}
 
 
@@ -320,7 +343,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateButtonUI(-1);
 			}
 		});
@@ -377,7 +399,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				updateAudioNoteUI(arg0.getId());
 				layout_audio_notechooser.setVisibility(View.GONE);
 			}
@@ -387,9 +408,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 
-				;
 				LayoutAudioRecording.setVisibility(View.VISIBLE);
 				buttonPlay.setVisibility(View.GONE);
 				buttonRecordPause.setVisibility(View.GONE);
@@ -460,8 +479,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-
-				// TODO Auto-generated method stub
 				buttonRecord.setVisibility(View.VISIBLE);
 				buttonRecordPause.setVisibility(View.GONE);
 				myAudioRecorder.stop();
@@ -474,7 +491,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 
 				buttonPause.setVisibility(View.VISIBLE);
 				buttonPlay.setVisibility(View.VISIBLE);
@@ -493,7 +509,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					Toast.makeText(NoteMainActivity.this, "Recording pause",
 							Toast.LENGTH_SHORT).show();
 				} catch (Exception e) {
-					// TODO: handle exception
 					e.printStackTrace();
 					Toast.makeText(NoteMainActivity.this, "pause error",
 							Toast.LENGTH_SHORT).show();
@@ -508,7 +523,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View arg0) throws IllegalArgumentException,
 					SecurityException, IllegalStateException {
-				// TODO Auto-generated method stub
 				// Button play Click
 				progressRecord1.setProgress(0);
 
@@ -653,17 +667,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				isRecordingAudio = true;
 				progressRecordtext.setVisibility(View.VISIBLE);
 
-				// TODO Auto-generated method stub
 				try {
 
 					myAudioRecorder.prepare();
 					myAudioRecorder.start();
 
 				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -779,7 +790,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				// BACK MODE
 				updateTextNoteControlListners(arg0.getId());
 				textNoteControls.setVisibility(View.GONE);
@@ -794,8 +804,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				// BULLET MODE
 				updateTextNoteControlListners(arg0.getId());
 				System.out.println("BULLET  MODE");
@@ -806,7 +814,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				// NUMBERING MODE
 				updateTextNoteControlListners(arg0.getId());
 				System.out.println("NUMBERING  MODE");
@@ -816,7 +823,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 
 				// BOLD MODE
 
@@ -836,8 +842,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				// ITIELIC MODE
 				// updateTextNoteControlListners(arg0.getId());
 				System.out.println("ITIELIC  MODE");
@@ -854,8 +858,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				// UNDERLINE MODE
 				// updateTextNoteControlListners(arg0.getId());
 				System.out.println("UNDERLINE  MODE");
@@ -873,8 +875,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				// MORE MODE
 				updateTextNoteControlListners(arg0.getId());
 				System.out.println("MORE  MODE");
@@ -1026,7 +1026,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 
 				if (drawView.getUserDrawn() == true) {
@@ -1044,7 +1043,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 				showNewDrawingDialog();
 
@@ -1054,7 +1052,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 				drawView.setErase(false);
 				drawView.setBrushSize(drawView.getLastBrushSize());
@@ -1065,7 +1062,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 				showColorAlert("", NoteMainActivity.this);
 			}
@@ -1074,7 +1070,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 				//showBrushSizeDialog(false);
 				onCreateBrushDialog();
@@ -1084,7 +1079,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 				// showEraserDialog();
 				//showBrushSizeDialog(true);
@@ -1095,7 +1089,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateScribbleControlListners(v.getId());
 
 			}
@@ -1270,7 +1263,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void onClick(View arg0) {
-	// TODO Auto-generated method stub
 	System.out.println("button lock");
 	}
 	});
@@ -1278,7 +1270,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void onClick(View arg0) {
-	// TODO Auto-generated method stub
 	System.out.println("button delete");
 	}
 	});*/
@@ -1286,7 +1277,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void onClick(View arg0) {
-	// TODO Auto-generated method stub
 	finish();
 	System.out.println("button remind");
 	}
@@ -1295,7 +1285,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void onClick(View arg0) {
-	// TODO Auto-generated method stub
 	System.out.println("button time bomb");
 	}
 	});
@@ -1303,7 +1292,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void onClick(View arg0) {
-	// TODO Auto-generated method stub
 	System.out.println("button attached");
 	}
 	});
@@ -1322,7 +1310,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 	long arg3) {
-	// TODO Auto-generated method stub
 	NoteListDataModel notelistitem = arrNoteListData.get(arg2);
 	Toast.makeText(getApplicationContext(), "clicke",
 	Toast.LENGTH_SHORT).show();
@@ -1379,35 +1366,28 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 
 				layout_note_more_Info.setVisibility(View.GONE);
 				imageButtonsquence.setVisibility(View.VISIBLE);
 				isMoreShown = false;
 				// Save click
 				updateHeaderControls(v.getId());
-
 				// Save test he
 				// Updated text in list view
-
-
 				//get all notes
 				List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
 				int incremented = allnotes.size() + 1;
 
 				final Note note;
-
 				if (noteIdForDetails == null) {
-					note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
-					/*NoteElement noteElem = new NoteElement(note.getId(), 1, "yes", "text", txtViewer.getText().toString());
-					noteElem.save();*/
+					makeNote();
 				}
-				else {
+				if (noteIdForDetails != null) {
 					note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 					note.setModificationtime(currentDateStr);
-					note.setColor(backgroundColor);
 					String updatedText = textViewheaderTitle.getText().toString();
 					note.setTitle(updatedText);
+
 					/*textViewheaderTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 						@Override
 						public void onFocusChange(View v, boolean hasFocus) {
@@ -1424,17 +1404,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						note.save();
 					}*/
 				}
-				note.save();
-
-				finish();
-				startActivity(new Intent(context, MainActivity.class));
 
 				/*arrNoteListData.add(model);
 				adapter.notifyDataSetChanged();
 				listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);*/
 
-				updateHeaderControls(-1);
 				textNoteControls.setVisibility(View.GONE);
+				horizontal_scroll_editor.setVisibility(View.GONE);
+				// TODO req
 				isTextmodeSelected=false;
 			}
 		});
@@ -1443,7 +1420,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				// openSlideMenu();
 				isTextmodeSelected = false;
 				layout_note_more_Info.setVisibility(View.GONE);
@@ -1460,7 +1436,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				imageButtoncalander.setVisibility(View.GONE);
 
 				if (isTextmodeSelected == true) {
@@ -1487,7 +1462,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				drawingControls.setVisibility(View.GONE);
 				updateButtonUI(R.id.imageButtonAudioMode);
 				System.out.println("audio mode");
@@ -1546,10 +1520,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					});
 
 				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -1642,7 +1614,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				System.out.println("image  mode");
 				updateButtonUI(R.id.imageButtonImageMode);
 				// listviewNotes.setScrollContainer(true);
@@ -1663,7 +1634,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				System.out.println("paint mode");
 				//scrollView.setVisibility(View.INVISIBLE);
 
@@ -1693,7 +1663,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				drawingControls.setVisibility(View.GONE);
 				updateButtonUI(R.id.imageButtonShareMode);
 				System.out.println("share mode");
@@ -1708,7 +1677,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		imageButtonTextMode.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				updateButtonUI(R.id.imageButtonTextMode);
 				System.out.println("text mode");
 				//layOutDrawingView.setVisibility(View.GONE);
@@ -1740,7 +1708,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				allRe.add(editor);
 				editor.setTag(allRe.size()-1);
+				final boolean[] ne_added = {false};
+				final long[] thisnoteid = new long[1];
 				//editor.setHtml(s);
+
+				// TODO editor up
 				editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 					@Override
 					public void onFocusChange(View v, boolean hasFocus) {
@@ -1754,16 +1726,36 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						horizontal_scroll_editor.setVisibility(View.VISIBLE);
 					}
 				});
+
+				editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+					@Override
+					public void onTextChange(String s) {
+						//editortext[0] = s;
+						//String tag = (String) editor.getTag();
+						Log.v("Jay TextChange:", s);
+						Log.v("Jay Tag: ", editor.getTag().toString());
+
+						if(!ne_added[0]){
+							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s);
+							ne.save();
+							thisnoteid[0] = ne.getId();
+							ne_added[0] = true;
+						}
+						if(ne_added[0]){
+							NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
+							ne.content = s;
+							ne.save();
+						}
+					}
+				});
 			}
 		});
-
 
 
 		imageButtonMoreMode.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				imageButtonsquence.setVisibility(View.VISIBLE);
 				drawingControls.setVisibility(View.GONE);
 				System.out.println("more mode");
@@ -1785,10 +1777,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 
 	private void setFeatureTag(String id){
-
-
-		for(int i=0; i<20 ; i++)
-			Log.e("Inside setFeatureTag","id :"+id);
 
 		bold.setTag(Integer.parseInt(id));
 		italic.setTag(Integer.parseInt(id));
@@ -1961,6 +1949,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
 				cameraIntent.putExtra("image", mMediaUri.toString());
 				//send noteid
+				if(noteIdForDetails == null)
+					cameraIntent.putExtra("a", 0);
+				else
+					cameraIntent.putExtra("a", 1);
+
 				cameraIntent.putExtra("noteid", noteIdForDetails);
 				cameraIntent.putExtra("check", 0);
 				//cameraIntent.putExtra()
@@ -2105,7 +2098,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	void showColorAlert(String message, Context context) {
 
 		dialogColor = new Dialog(context);
-
+		dialogColor.setCancelable(true);
 		dialogColor.setCanceledOnTouchOutside(true);
 
 		LayoutInflater inflater = (LayoutInflater) this
@@ -2144,7 +2137,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 
 			}
@@ -2153,7 +2145,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 
 			}
@@ -2162,7 +2153,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 
 			}
@@ -2171,7 +2161,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 			}
 		});
@@ -2179,7 +2168,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 			}
 		});
@@ -2187,7 +2175,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 			}
 		});
@@ -2195,7 +2182,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 			}
 		});
@@ -2204,7 +2190,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 			}
 		});
@@ -2213,7 +2198,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 			}
 		});
@@ -2221,7 +2205,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v);
 			}
 		});
@@ -2266,7 +2249,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				dialog.dismiss();
 
 			}
@@ -2275,7 +2257,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				// System.exit(0);
 				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
@@ -2300,7 +2281,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 					@Override
 					public void onClick(View arg0) {
-						// TODO Auto-generated method stub
 						// System.exit(0);
 						Intent intent = new Intent(
 								Intent.ACTION_PICK,
@@ -2354,8 +2334,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				dialog.dismiss();
 			}
 		});
@@ -2676,8 +2654,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				DataManager.sharedDataManager().setSELECTED_TEXT_OPTION(
 						NOTETYPE.FONT);
 				TextFont_sizeAdapter = new TextFont_Size_ChooseAdapter(
@@ -2715,8 +2691,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				DataManager.sharedDataManager().setSELECTED_TEXT_OPTION(
 						NOTETYPE.SIZE);
 
@@ -2755,8 +2729,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				layoutPapers.setVisibility(View.GONE);
 				layoutColors1.setVisibility(View.VISIBLE);
 				//ListViewItems.setVisibility(View.GONE);
@@ -2787,8 +2759,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-
-				// TODO Auto-generated method stub
 				layoutPapers.setVisibility(View.VISIBLE);
 				layoutColors1.setVisibility(View.GONE);
 				//ListViewItems.setVisibility(View.GONE);
@@ -2880,7 +2850,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2889,7 +2858,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2898,7 +2866,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2907,7 +2874,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2916,7 +2882,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2925,7 +2890,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2934,7 +2898,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2943,7 +2906,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2952,7 +2914,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2961,7 +2922,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
@@ -2991,7 +2951,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3000,7 +2959,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3010,7 +2968,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3019,7 +2976,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3028,7 +2984,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3037,7 +2992,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3046,7 +3000,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3055,7 +3008,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3064,7 +3016,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3073,7 +3024,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3082,7 +3032,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3091,7 +3040,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				colorButtonSelected(v);
 				dialog.dismiss();
 			}
@@ -3136,7 +3084,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				drawView.startNew();
 				dialog.dismiss();
 			}
@@ -3195,7 +3142,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				layOutDrawingView.setVisibility(View.GONE);
 				updateButtonUI(-1);
 
-				// TODO Auto-generated method stub
 				drawView.setDrawingCacheEnabled(true);
 
 	/*String imgSaved = MediaStore.Images.Media.insertImage(
@@ -3293,8 +3239,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
-
 		// super.onBackPressed();
 
 		// if (drawView.getUserDrawn() == true) {
@@ -3302,8 +3246,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		// } else {
 
 		finish();
-		DataManager.sharedDataManager().setArrNoteListData(
-				new ArrayList<NoteListDataModel>());
+
 		// }
 
 	}
@@ -3331,10 +3274,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-
 		paintClicked(v);
-
 	}
 
 	static String backgroundColor = "#FFFFFF";
@@ -3463,8 +3403,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	@Override
 	public void run() {
-	// TODO Auto-generated method stub
-
 	if (txtViewer.getText().length() > 0) {
 	spanold = new SpannableString(txtViewer.getText());
 	txtViewer.setText(TextUtils.concat(spanold, " ",
@@ -3598,24 +3536,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		@Override
 		public void afterTextChanged(Editable arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 									  int arg3)
-		{
-			// TODO Auto-generated method stub
-
-		}
+		{}
 
 		@Override
 		public void onTextChanged(CharSequence s, int a, int b, int c) {
-			// TODO Auto-generated method stub
 
 			txtViewer.setText(s);
-
-
 
 			if(a == 9){
 				Toast.makeText(getApplicationContext(), "Maximum Limit Reached", Toast.LENGTH_SHORT).show();
@@ -3707,7 +3637,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		String size = String.valueOf(10 + (lastBrushSize * 2));
 		tvBrushSize.setText(size);
 		drawView.setBrushSize(10 + (lastBrushSize * 2));
-		drawView.setDrawColor(Color.parseColor("#FFFFFF"));
+		drawView.setDrawColor(Color.parseColor("#00FFFFFF"));
 
 		sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -3795,7 +3725,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
 				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
 
@@ -3814,7 +3743,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				move.dismiss();
 			}
 		});
@@ -3853,13 +3781,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 			String background = note.getColor();
 			background_bg.setBackgroundColor(Color.parseColor(background));
-			for (NoteElement n : ne) {
+			for (final NoteElement n : ne) {
 				if (n.type.equals("text")) {
 					String s = n.content;
 					noteElements = (LinearLayout) findViewById(R.id.noteElements);
 					LayoutInflater inflator = getLayoutInflater();
 					View viewText = inflator.inflate(R.layout.note_text, null, false);
-					RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+					final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
 					allRe.add(editor);
 					editor.setTag(allRe.size() - 1);
 					editor.setHtml(s);
@@ -3874,8 +3802,28 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							isMoreShown = false;
 							layout_audio_notechooser.setVisibility(View.GONE);
 							horizontal_scroll_editor.setVisibility(View.VISIBLE);
+
+							// TODO hide
+							imageButtoncheckbox.setVisibility(View.GONE);
+							imageButtonsquence.setVisibility(View.GONE);
 						}
 					});
+
+					editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+						@Override
+						public void onTextChange(String s) {
+							//editortext[0] = s;
+							//String tag = (String) editor.getTag();
+							Log.v("Jay TextChange: ", s);
+							Log.v("Jay Tag: ", editor.getTag().toString());
+							/*NoteElement ne = NoteElement.findById(NoteElement.class, Long.parseLong(n.getId()));
+							ne.content = s;
+							ne.save();*/
+							n.content = s;
+							n.save();
+						}
+					});
+
 					noteElements.addView(editor);
 				} else if (n.type.equals("image")) {
 					// add image layout

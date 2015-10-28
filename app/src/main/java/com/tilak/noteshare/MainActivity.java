@@ -115,7 +115,7 @@ public class MainActivity extends DrawerActivity {
 		View contentView = inflater
 				.inflate(R.layout.activity_main, null, false);
 		mDrawerLayout.addView(contentView, 0);
-		DataManager.sharedDataManager().setSelectedIndex(-1);
+		//DataManager.sharedDataManager().setSelectedIndex(-1);
 
 		try {
 			initlizeUIElement(contentView);
@@ -167,6 +167,7 @@ public class MainActivity extends DrawerActivity {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+
 		populate();
 		swipeListView();
 	}
@@ -870,11 +871,12 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	void putInList(){
-		if(list.size()>0)
+		if(list.size()>0) {
 			list.clear();
+		}
+		noteIdList.clear();
 		int i = 0;
 		for(Note currentnote : sortallnotes){
-			i++;
 
 			noteIdList.add(currentnote.getId().toString());
 			String noteDesc = "";
@@ -893,6 +895,7 @@ public class MainActivity extends DrawerActivity {
 			map.put("noteNum", String.valueOf(i));
 			//map.put("noteLock", String.valueOf(currentnote.getIslocked()));
 			list.add(map);
+			i++;
 		}
 	}
 

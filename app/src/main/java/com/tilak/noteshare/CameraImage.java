@@ -7,22 +7,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CameraImage extends Activity {
 
     Bitmap bitmap;
     ImageView image;
     String noteid;
+    int a;
+
+    NoteMainActivity noteMainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +39,16 @@ public class CameraImage extends Activity {
         // Retrieving image Uri from Bundle
         Bundle b = getIntent().getExtras();
         noteid = b.getString("noteid");
+        a = b.getInt("a");
         int check = getIntent().getIntExtra("check", 0);
         image = (ImageView)findViewById(R.id.camera_image);
+
+        /*for(int i = 0 ; i < 20 ; i ++)
+            Log.e("Inside noteId null",noteMainActivity.noteIdForDetails );
+*/
+        for(int i = 0 ; i < 20 ; i ++)
+            Log.e("Inside a",String.valueOf(a));
+
         if (check == 0) {
             try {
                 Uri mediaUri = Uri.parse(b.getString("image"));
@@ -46,6 +61,7 @@ public class CameraImage extends Activity {
                 setImage(imagePath);
             } catch (Exception e) {}
         }
+
     }
 
     public void done(View v) {
@@ -63,15 +79,25 @@ public class CameraImage extends Activity {
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
             getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-            // Toast to display image path
-            Toast.makeText(getApplication(), mediaStorageDir.toString(), Toast.LENGTH_LONG).show();
-
             // Saving to database
-            Toast.makeText(getApplicationContext(), noteid, Toast.LENGTH_LONG).show();
+            if (a == 0) { makeNote(); }
 
-            NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", "IMG-" + timestamp + ".jpg");
-            noteElement.save();
+            if (a == 1) {
+                NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", "IMG-" + timestamp + ".jpg");
+                noteElement.save();
+            }
+
         } catch (FileNotFoundException e) {}
+    }
+
+    public void makeNote() {
+        SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateStr = formatter.format(new Date());
+        Note note = new Note("NOTE", "","#FFFFFF", "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
+        note.save();
+        noteMainActivity.noteIdForDetails = note.getId().toString();
+        noteid = noteMainActivity.noteIdForDetails;
+        a = 1;
     }
 
     public void crop(View v){}
