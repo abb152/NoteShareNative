@@ -1677,8 +1677,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				LayoutInflater inflator = getLayoutInflater();
 				viewText = inflator.inflate(R.layout.note_text, null, false);
 				final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
-				editor.setMinimumHeight(80);
-				editor.setEditorHeight(80);
+				editor.setMinimumHeight(40);
+				editor.setEditorHeight(40);
 				editor.setBackgroundColor(0);
 				noteElements.addView(editor);
 
@@ -1984,6 +1984,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				Intent selectIntent = new Intent(NoteMainActivity.this, CameraImage.class);
 				selectIntent.putExtra("select_image", imagePath.toString());
 				selectIntent.putExtra("noteid", noteIdForDetails);
+
+				if(noteIdForDetails == null)
+					selectIntent.putExtra("a", 0);
+				else
+					selectIntent.putExtra("a", 1);
+
 				selectIntent.putExtra("check", 1);
 				Log.e("select pic", imagePath.toString());
 				//cameraIntent.putExtra()
