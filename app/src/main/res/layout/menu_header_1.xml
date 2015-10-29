@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="Hello"
+                android:text="NOTE"
                 android:background="@color/header_bg"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"

@@ -146,8 +146,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public ScrollView scrollView;
 
 	public ImageButton imageButtondrawback, imageButtondrawnew,
-			imageButtondrawdraw, imageButtondrawcolors,
-			imageButtondrawbrushsize, imageButtondrawerase,
+            imageButtonbrushdraw, imageButtondrawcolors,
+			imageButtonhighlightdraw, imageButtondrawerase,
 			imageButtondrawMore;
 
 	public ImageButton textButtondrawback, textButtondrawnew,
@@ -276,33 +276,33 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		imageButtonMoreMode = (ImageButton) contentview
 				.findViewById(R.id.imageButtonMoreMode);
 
-		if(noteIdForDetails == null)
-			textViewheaderTitle.setText("NOTE");
-		else {
-			Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-			textViewheaderTitle.setText(n.getTitle());
+        /*if(noteIdForDetails == null)
+            textViewheaderTitle.setText("NOTE");*/
 
-			textViewheaderTitle.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-				}
+        textViewheaderTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {
-					String updatedText = s.toString();
-					Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-					note.title = updatedText;
-					note.save();
-				}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-				@Override
-				public void afterTextChanged(Editable s) {
+                if(noteIdForDetails == null)
+                {
+                    makeNote();
+                }
 
-				}
-			});
+                String updatedText = s.toString();
+                Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+                note.title = updatedText;
+                modifyNoteTime();
+                note.save();
+            }
 
-		}
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
 
 
 		/** Layout Audio Recording **/
@@ -773,12 +773,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.imageButtondrawback);
 		imageButtondrawnew = (ImageButton) drawingControls
 				.findViewById(R.id.imageButtondrawnew);
-		imageButtondrawdraw = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtondrawdraw);
+        imageButtonbrushdraw = (ImageButton) drawingControls
+				.findViewById(R.id.imageButtonbrushdraw);
 		imageButtondrawcolors = (ImageButton) drawingControls
 				.findViewById(R.id.imageButtondrawcolors);
-		imageButtondrawbrushsize = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtondrawbrushsize);
+        imageButtonhighlightdraw = (ImageButton) drawingControls
+				.findViewById(R.id.imageButtonhighlightdraw);
 		imageButtondrawerase = (ImageButton) drawingControls
 				.findViewById(R.id.imageButtondrawerase);
 		imageButtondrawMore = (ImageButton) drawingControls
@@ -1050,45 +1050,46 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			}
 		});
-		imageButtondrawdraw.setOnClickListener(new OnClickListener() {
-
+		imageButtonbrushdraw.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				updateScribbleControlListners(v.getId());
-				drawView.setErase(false);
-				drawView.setBrushSize(drawView.getLastBrushSize());
-
+				//drawView.setErase(false);
+				//drawView.setBrushSize(drawView.getLastBrushSize());
+                //onCreateBrushDialog();
+                showScribbleDialog("brush");
+                openBrush();
 			}
 		});
 		imageButtondrawcolors.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				updateScribbleControlListners(v.getId());
-				showColorAlert("", NoteMainActivity.this);
+				//showColorAlert("", NoteMainActivity.this);
 			}
 		});
-		imageButtondrawbrushsize.setOnClickListener(new OnClickListener() {
-
+		imageButtonhighlightdraw.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				updateScribbleControlListners(v.getId());
 				//showBrushSizeDialog(false);
-				onCreateBrushDialog();
+                //showHighLightAlert("", NoteMainActivity.this);
+                showScribbleDialog("highlight");
+                openHighlight();
 			}
 		});
 		imageButtondrawerase.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				updateScribbleControlListners(v.getId());
 				// showEraserDialog();
 				//showBrushSizeDialog(true);
-				onCreateEraserDialog();
+				//onCreateEraserDialog();
+                showScribbleDialog("eraser");
+                openEraser();
 			}
 		});
 		imageButtondrawMore.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				updateScribbleControlListners(v.getId());
@@ -1169,11 +1170,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				R.color.header_bg));
 		imageButtondrawnew.setBackgroundColor(getResources().getColor(
 				R.color.header_bg));
-		imageButtondrawdraw.setBackgroundColor(getResources().getColor(
+		imageButtonbrushdraw.setBackgroundColor(getResources().getColor(
 				R.color.header_bg));
 		imageButtondrawcolors.setBackgroundColor(getResources().getColor(
 				R.color.header_bg));
-		imageButtondrawbrushsize.setBackgroundColor(getResources().getColor(
+		imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(
 				R.color.header_bg));
 		imageButtondrawerase.setBackgroundColor(getResources().getColor(
 				R.color.header_bg));
@@ -1190,15 +1191,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						R.color.A8b241b));
 				break;
 			case R.id.imageButtondrawdraw:
-				imageButtondrawdraw.setBackgroundColor(getResources().getColor(
+                imageButtonbrushdraw.setBackgroundColor(getResources().getColor(
 						R.color.A8b241b));
 				break;
 			case R.id.imageButtondrawcolors:
 				imageButtondrawcolors.setBackgroundColor(getResources().getColor(
 						R.color.A8b241b));
 				break;
-			case R.id.imageButtondrawbrushsize:
-				imageButtondrawbrushsize.setBackgroundColor(getResources()
+			case R.id.imageButtonhighlightdraw:
+                imageButtonhighlightdraw.setBackgroundColor(getResources()
 						.getColor(R.color.A8b241b));
 				break;
 			case R.id.imageButtondrawerase:
@@ -1375,12 +1376,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// Save click
 				updateHeaderControls(v.getId());
 
-				//if (textelementid.size() > 0)
+				if (textelementid.size() > 0)
 					textelementid.get(0).clearFocus();
 
 				textNoteControls.setVisibility(View.GONE);
 				horizontal_scroll_editor.setVisibility(View.GONE);
-				// TODO req
 				isTextmodeSelected=false;
 
 				try  {
@@ -1517,6 +1517,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						if (noteIdForDetails != null) {
 							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName);
 							ne.save();
+                            modifyNoteTime();
 						}
 
 						Toast.makeText(NoteMainActivity.this, "Recording Saved",
@@ -1736,6 +1737,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
 							ne.content = s;
 							ne.save();
+                            modifyNoteTime();
 						}
 					}
 				});
@@ -2095,8 +2097,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	void showColorAlert(String message, Context context) {
 
 		dialogColor = new Dialog(context);
-		dialogColor.setCancelable(true);
-		dialogColor.setCanceledOnTouchOutside(true);
+        dialogColor.setCanceledOnTouchOutside(true);
 
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -2130,53 +2131,44 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.colorbutton9);
 		ImageButton colorbutton10 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton10);
-		colorbutton1.setOnClickListener(new OnClickListener() {
 
+		colorbutton1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
-
 			}
 		});
 		colorbutton2.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
-
 			}
 		});
 		colorbutton3.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
-
 			}
 		});
 		colorbutton4.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
 			}
 		});
 		colorbutton5.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
 			}
 		});
 		colorbutton6.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
 			}
 		});
 		colorbutton7.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
@@ -2184,7 +2176,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		colorbutton8.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
@@ -2192,14 +2183,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		colorbutton9.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
 			}
 		});
 		colorbutton10.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				paintClicked(v);
@@ -2212,11 +2201,117 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		textViewTitleAlert.setTextColor(Color.WHITE);
 
 		dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialogColor.setCancelable(false);
-
 		dialogColor.setContentView(contentView);
 		dialogColor.show();
 	}
+
+    void showHighLightAlert(String message, Context context) {
+
+        dialogColor = new Dialog(context);
+        dialogColor.setCanceledOnTouchOutside(true);
+
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflate your activity layout here!
+        View contentView = inflater.inflate(R.layout.highlightcolor, null, false);
+        LinearLayout paintHighlight1 = (LinearLayout) contentView.findViewById(R.id.paint_highlight1);
+        LinearLayout paintHighlight2 = (LinearLayout) contentView.findViewById(R.id.paint_highlight2);
+        // currPaint = (ImageButton) paintLayout.getChildAt(0);
+        // currPaint.setImageDrawable(getResources().getDrawable(
+        // R.drawable.paint_pressed));
+
+        ImageButton highlightbutton1 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton1);
+        ImageButton highlightbutton2 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton2);
+        ImageButton highlightbutton3 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton3);
+        ImageButton highlightbutton4 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton4);
+        ImageButton highlightbutton5 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton5);
+        ImageButton highlightbutton6 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton6);
+        ImageButton highlightbutton7 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton7);
+        ImageButton highlightbutton8 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton8);
+        ImageButton highlightbutton9 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton9);
+        ImageButton highlightbutton10 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton10);
+
+        highlightbutton1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+
+        highlightbutton8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+
+        highlightbutton9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton10.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("SELECT COLOR");
+        textViewTitleAlert.setTextColor(Color.WHITE);
+
+        dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogColor.setContentView(contentView);
+        dialogColor.show();
+    }
 
 	void showImageChooserAlertWith(String message, Context context) {
 
@@ -2844,7 +2939,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.paper_bg_1);
 
 		paper_bg_10.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2852,7 +2946,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_9.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2860,7 +2953,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_8.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2868,7 +2960,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_7.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2876,7 +2967,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_6.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2884,7 +2974,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_5.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2892,7 +2981,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_4.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2900,7 +2988,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_3.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2908,7 +2995,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_2.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2916,7 +3002,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		paper_bg_1.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -2944,8 +3029,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.color_bg_2);
 		ImageButton color_bg_1 = (ImageButton) dialog
 				.findViewById(R.id.color_bg_1);
-		color_bg_10.setOnClickListener(new OnClickListener() {
 
+		color_bg_10.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -2953,7 +3038,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_9.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -2962,7 +3046,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		color_bg_8.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -2970,7 +3053,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_7.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -2978,7 +3060,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_6.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -2986,7 +3067,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_7.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -2994,7 +3074,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_6.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -3002,7 +3081,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_5.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -3010,7 +3088,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_4.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -3018,7 +3095,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_3.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -3026,7 +3102,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_2.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -3034,7 +3109,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		color_bg_1.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				colorButtonSelected(v);
@@ -3043,8 +3117,288 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		dialog.show();
-
 	}
+
+    Dialog scribbleDialog;
+    ImageButton buttonHighlight, buttonBrush, buttonEraser;
+
+    // TODO highlight + brush + eraser dialog
+    public void showScribbleDialog(String name) {
+        scribbleDialog = new Dialog(NoteMainActivity.this);
+        scribbleDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        scribbleDialog.setCanceledOnTouchOutside(true);
+        scribbleDialog.setContentView(R.layout.scribble_dialog);
+
+        final LinearLayout layoutHighlight = (LinearLayout) scribbleDialog.findViewById(R.id.highlightView);
+        final LinearLayout layoutBrush = (LinearLayout) scribbleDialog.findViewById(R.id.brushView);
+        final LinearLayout layoutEraser = (LinearLayout) scribbleDialog.findViewById(R.id.eraserView);
+
+        buttonHighlight = (ImageButton) scribbleDialog.findViewById(R.id.buttonHighlight);
+        buttonBrush = (ImageButton) scribbleDialog.findViewById(R.id.buttonBrush);
+        buttonEraser = (ImageButton) scribbleDialog.findViewById(R.id.buttonEraser);
+
+        layoutHighlight.setVisibility(View.GONE);
+        layoutBrush.setVisibility(View.GONE);
+        layoutEraser.setVisibility(View.GONE);
+
+        if (name.equals("highlight"))
+            layoutHighlight.setVisibility(View.VISIBLE);
+        else if (name.equals("brush"))
+            layoutBrush.setVisibility(View.VISIBLE);
+        else if (name.equals("eraser"))
+            layoutEraser.setVisibility(View.VISIBLE);
+
+        buttonHighlight.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                layoutHighlight.setVisibility(View.VISIBLE);
+                layoutBrush.setVisibility(View.GONE);
+                layoutEraser.setVisibility(View.GONE);
+                openHighlight();
+            }
+        });
+
+        buttonBrush.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                layoutHighlight.setVisibility(View.GONE);
+                layoutBrush.setVisibility(View.VISIBLE);
+                layoutEraser.setVisibility(View.GONE);
+                openBrush();
+            }
+        });
+
+        buttonEraser.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutHighlight.setVisibility(View.GONE);
+                layoutBrush.setVisibility(View.GONE);
+                layoutEraser.setVisibility(View.VISIBLE);
+                openEraser();
+            }
+        });
+
+        // Highlight
+        LinearLayout paintHighlight1 = (LinearLayout) layoutHighlight.findViewById(R.id.paint_highlight1);
+        LinearLayout paintHighlight2 = (LinearLayout) layoutHighlight.findViewById(R.id.paint_highlight2);
+
+        ImageButton highlightbutton1 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton1);
+        ImageButton highlightbutton2 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton2);
+        ImageButton highlightbutton3 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton3);
+        ImageButton highlightbutton4 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton4);
+        ImageButton highlightbutton5 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton5);
+        ImageButton highlightbutton6 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton6);
+        ImageButton highlightbutton7 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton7);
+        ImageButton highlightbutton8 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton8);
+        ImageButton highlightbutton9 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton9);
+        ImageButton highlightbutton10 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton10);
+
+        highlightbutton1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+
+        highlightbutton8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+
+        highlightbutton9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton10.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+
+        // Brush
+        colorPickerSeekBar = (ColorPickerSeekBar) scribbleDialog.findViewById(R.id.colorpicker);
+
+        final View v = scribbleDialog.findViewById(R.id.view);
+        SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
+        sizeSeekBar.setMax(14);
+        sizeSeekBar.setProgress(lastBrushSize);
+
+        final TextView tvBrushSize = (TextView) scribbleDialog.findViewById(R.id.tvBrushSize);
+        String size = String.valueOf(10 + (lastBrushSize * 2));
+        tvBrushSize.setText(size);
+
+        drawView.setBrushSize(10 + (lastBrushSize * 2));
+
+        if (count > 0) {
+            v.setBackgroundColor(color_selected);
+        }
+        colorPickerSeekBar.setProgress(lastBrushColor);
+
+
+        colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
+            @Override
+            public void onColorChanged(SeekBar seekBar, int color, boolean b) {
+                v.setBackgroundColor(color);
+                color_selected = color;
+                drawView.setDrawColor(color);
+                lastBrushColor = seekBar.getProgress();
+                count++;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                lastBrushSize = progress;
+                drawView.setBrushSize(10 + (progress * 2));
+                String size = String.valueOf(10 + (lastBrushSize * 2));
+                tvBrushSize.setText(size);
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        // Eraser
+        SeekBar sizeEraserSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.eraser_sizeSeekBar);
+        sizeEraserSeekBar.setMax(14);
+        sizeEraserSeekBar.setProgress(lastBrushSize);
+
+        final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
+        String esize = String.valueOf(10 + (lastBrushSize * 2));
+        tvEraserSize.setText(esize);
+        drawView.setBrushSize(10 + (lastBrushSize * 2));
+        drawView.setDrawColor(Color.parseColor("#FFFFFF"));
+
+        sizeEraserSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lastBrushSize = progress;
+                drawView.setBrushSize(10 + (progress * 2));
+                String esize = String.valueOf(10 + (lastBrushSize * 2));
+                tvEraserSize.setText(esize);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        scribbleDialog.show();
+    }
+
+    // TODO highlighter clicked
+    public void highlightClicked(View view) {
+        // use chosen color
+        if (view != currPaint) {
+            // update color
+            ImageButton imgView = (ImageButton) view;
+            String color = view.getTag().toString();
+
+            imgView.setImageDrawable(getResources().getDrawable(R.drawable.paint_pressed));
+            // currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
+            // currPaint = (ImageButton) view;
+            System.out.println("selected color:" + color);
+
+            int colorCode = Color.parseColor(color);
+            scribbleDialog.dismiss();
+            drawView.setDrawColor(colorCode);
+        }
+
+    }
+    // TODO open highlight
+    public void openHighlight() {
+        buttonHighlight.setBackgroundColor(getResources().getColor(R.color.eaeaea));
+        buttonHighlight.setImageResource(R.drawable.scrbble_highlight_red);
+        buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonBrush.setImageResource(R.drawable.scrbble_draw);
+        buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonEraser.setImageResource(R.drawable.scrbble_erase);
+    }
+    // TODO open brush
+    public void openBrush() {
+        buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
+        buttonBrush.setBackgroundColor(getResources().getColor(R.color.eaeaea));
+        buttonBrush.setImageResource(R.drawable.scrbble_draw_red);
+        buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonEraser.setImageResource(R.drawable.scrbble_erase);
+    }
+    // TODO open eraser
+    public void openEraser() {
+        buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
+        buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonBrush.setImageResource(R.drawable.scrbble_draw);
+        buttonEraser.setBackgroundColor(getResources().getColor(R.color.eaeaea));
+        buttonEraser.setImageResource(R.drawable.scrbble_erase_red);
+    }
 
 	void showNewDrawingDialog() {
 
@@ -3072,13 +3426,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View arg0) {
-
 				dialog.dismiss();
-
 			}
 		});
 		buttonAlertOk.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				drawView.startNew();
@@ -3264,7 +3615,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			int colorCode = Color.parseColor(color);
 			dialogColor.dismiss();
 			drawView.setDrawColor(colorCode);
-
 		}
 
 	}
@@ -3315,6 +3665,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		if (noteIdForDetails != null) {
 			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 			note.setColor(backgroundColor);
+            note.setModificationtime(currentDateStr);
 			note.save();
 		}
 
@@ -3617,7 +3968,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	int lastBrushColor = 0,count = 0, lastBrushSize = 3 ;
 
-	public void onCreateEraserDialog() {
+	/*public void onCreateEraserDialog() {
 		Dialog brushDialog = new Dialog(NoteMainActivity.this);
 		brushDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		brushDialog.setCancelable(true);
@@ -3634,7 +3985,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		String size = String.valueOf(10 + (lastBrushSize * 2));
 		tvBrushSize.setText(size);
 		drawView.setBrushSize(10 + (lastBrushSize * 2));
-		drawView.setDrawColor(Color.parseColor("#00FFFFFF"));
+		drawView.setDrawColor(Color.parseColor("#FFFFFF"));
 
 		sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -3655,7 +4006,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		brushDialog.show();
-	}
+	}*/
 
 	public void remindClick(View v) {
 		//String id = v.getTag().toString();
@@ -3768,14 +4119,24 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		noteIdForDetails = note.getId().toString();
 	}
 
+    public void modifyNoteTime() {
+        Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+        n.modificationtime = currentDateStr;
+        n.save();
+    }
 
-	public void fetchNoteElementsFromDb() throws FileNotFoundException {
+
+
+    public void fetchNoteElementsFromDb() throws FileNotFoundException {
 
 		if(noteIdForDetails != null) {
 
 			noteElements.removeAllViews();
 			List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
 			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+
+            textViewheaderTitle.setText(note.getTitle());
+
 			String background = note.getColor();
 			background_bg.setBackgroundColor(Color.parseColor(background));
 			for (final NoteElement n : ne) {
@@ -3822,6 +4183,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							ne.save();*/
 							n.content = s;
 							n.save();
+                            modifyNoteTime();
 						}
 					});
 
@@ -3859,7 +4221,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				} else if (n.type.equals("audio")) {
 					// add audio layout
 					final String name = n.content;
-					addAudio(name);
+                    addAudio(name);
 				}
 			}
 		}

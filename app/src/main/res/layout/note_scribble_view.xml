@@ -19,31 +19,32 @@
         android:src="@drawable/scrbble_back" />
 
     <ImageButton
-        android:id="@+id/imageButtondrawdraw"
+        android:id="@+id/imageButtondrawcolors"
+        android:layout_width="40dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/scrbble_undo" />
+
+    <ImageButton
+        android:id="@+id/imageButtonhighlightdraw"
+        android:layout_width="40dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/scrbble_highlight" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonbrushdraw"
         android:layout_width="40dp"
           android:layout_weight="1"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/scrbble_draw" />
-
-    <ImageButton
-        android:id="@+id/imageButtondrawcolors"
-        android:layout_width="40dp"
-          android:layout_weight="1"
-          android:scaleType="fitCenter"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:src="@drawable/scrbble_undo" />
-
-    <ImageButton
-        android:id="@+id/imageButtondrawbrushsize"
-        android:layout_width="40dp"
-          android:layout_weight="1"
-          android:scaleType="fitCenter"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:src="@drawable/scrbble_highlight" />
 
     <ImageButton
         android:id="@+id/imageButtondrawerase"

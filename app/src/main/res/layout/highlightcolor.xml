@@ -32,63 +32,63 @@
         <!-- Top Row -->
 
         <LinearLayout
-            android:id="@+id/paint_colors"
+            android:id="@+id/paint_highlight1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal" >
 
             <ImageButton
-                android:id="@+id/colorbutton1"
+                android:id="@+id/hightlightbutton1"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#8BC9EA"
+                android:background="#AA8BC9EA"
                 android:contentDescription="@string/paint"
-                android:tag="#8BC9EA" />
+                android:tag="#AA8BC9EA" />
 
             <ImageButton
-                android:id="@+id/colorbutton2"
+                android:id="@+id/hightlightbutton2"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#F9E6C9"
+                android:background="#AAF9E6C9"
                 android:contentDescription="@string/paint"
-                android:tag="#F9E6C9" />
+                android:tag="#AAF9E6C9" />
 
             <ImageButton
-                android:id="@+id/colorbutton3"
+                android:id="@+id/highlightbutton3"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#8DDDC6"
+                android:background="#AA8DDDC6"
                 android:contentDescription="@string/paint"
-                android:tag="#8DDDC6" />
+                android:tag="#AA8DDDC6" />
 
             <ImageButton
-                android:id="@+id/colorbutton4"
+                android:id="@+id/highlightbutton4"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#FEFF74"
+                android:background="#AAFEFF74"
                 android:contentDescription="@string/paint"
-                android:tag="#FEFF74" />
+                android:tag="#AAFEFF74" />
 
             <ImageButton
-                android:id="@+id/colorbutton5"
+                android:id="@+id/highlightbutton5"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#F6B2B3"
+                android:background="#AAF6B2B3"
                 android:contentDescription="@string/paint"
-                android:tag="#F6B2B3" />
+                android:tag="#AAF6B2B3" />
 
-        <!-- Bottom Row -->
+            <!-- Bottom Row -->
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/paint_colors1"
+            android:id="@+id/paint_highlight2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -97,51 +97,52 @@
             android:gravity="center">
 
             <ImageButton
-                android:id="@+id/colorbutton6"
+                android:id="@+id/highlightbutton6"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#B794F6"
+                android:background="#AAB794F6"
                 android:contentDescription="@string/paint"
-                android:tag="#B794F6" />
+                android:tag="#AAB794F6" />
 
             <ImageButton
-                android:id="@+id/colorbutton7"
+                android:id="@+id/highlightbutton7"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#ACDE95"
+                android:background="#AAACDE95"
                 android:contentDescription="@string/paint"
-                android:tag="#ACDE95" />
+                android:tag="#AAACDE95" />
 
             <ImageButton
-                android:id="@+id/colorbutton8"
+                android:id="@+id/highlightbutton8"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#D69FA0"
+                android:background="#AAD69FA0"
                 android:contentDescription="@string/paint"
-                android:tag="#D69FA0" />
+                android:tag="#AAD69FA0" />
 
             <ImageButton
-                android:id="@+id/colorbutton9"
+                android:id="@+id/highlightbutton9"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#EF9BEE"
+                android:background="#AAEF9BEE"
                 android:contentDescription="@string/paint"
-                android:tag="#EF9BEE" />
+                android:tag="#AAEF9BEE" />
 
             <ImageButton
-                android:id="@+id/colorbutton10"
+                android:id="@+id/highlightbutton10"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#CACACA"
+                android:background="#AACACACA"
                 android:contentDescription="@string/paint"
-                android:tag="#CACACA" />
+                android:tag="#AACACACA" />
 
         </LinearLayout>
-        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

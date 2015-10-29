@@ -888,7 +888,7 @@ public class MainActivity extends DrawerActivity {
 			HashMap<String,String> map = new HashMap<String,String>();
 			map.put("noteName", currentnote.getTitle());
 			map.put("noteDesc", noteDesc); // change this later
-			map.put("noteDate", currentnote.getCreationtime());
+			map.put("noteDate", currentnote.getModificationtime());
 			map.put("noteId", currentnote.getId().toString());
 			map.put("noteBgColor",currentnote.getBackground());
 			map.put("noteLock", String.valueOf(currentnote.getIslocked()));

@@ -85,6 +85,7 @@ public class CameraImage extends Activity {
             if (a == 1) {
                 NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", "IMG-" + timestamp + ".jpg");
                 noteElement.save();
+                modifyNoteTime();
             }
 
         } catch (FileNotFoundException e) {}
@@ -98,6 +99,14 @@ public class CameraImage extends Activity {
         noteMainActivity.noteIdForDetails = note.getId().toString();
         noteid = noteMainActivity.noteIdForDetails;
         a = 1;
+    }
+
+    public void modifyNoteTime() {
+        SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateStr = formatter.format(new Date());
+        Note n = Note.findById(Note.class, Long.parseLong(noteid));
+        n.modificationtime = currentDateStr;
+        n.save();
     }
 
     public void crop(View v){}
