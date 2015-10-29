@@ -42,6 +42,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.view.inputmethod.InputMethodManager;
 
 import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
 import com.tilak.adpters.NotesListAdapter;
@@ -163,6 +164,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public String[] fontSizes;
 	RelativeLayout background_bg;
 	public String[] editortext = new String[1];
+	public List<View> textelementid = new ArrayList<View>();
 
 	// 8b241b selected bg
 
@@ -1372,47 +1374,21 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				isMoreShown = false;
 				// Save click
 				updateHeaderControls(v.getId());
-				// Save test he
-				// Updated text in list view
-				//get all notes
-				List<Note> allnotes = Note.findWithQuery(Note.class, "Select * from Note");
-				int incremented = allnotes.size() + 1;
 
-				final Note note;
-				if (noteIdForDetails == null) {
-					makeNote();
-				}
-				if (noteIdForDetails != null) {
-					note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-					note.setModificationtime(currentDateStr);
-					String updatedText = textViewheaderTitle.getText().toString();
-					note.setTitle(updatedText);
-
-					/*textViewheaderTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-						@Override
-						public void onFocusChange(View v, boolean hasFocus) {
-							if (!hasFocus) {
-								String updatedText = textViewheaderTitle.getText().toString();
-								note.setTitle(updatedText);
-								note.save();
-							}
-						}
-					});*/
-					/*if (textViewheaderTitle.requestFocus()) {
-						String updatedText = textViewheaderTitle.getText().toString();
-						note.setTitle(updatedText);
-						note.save();
-					}*/
-				}
-
-				/*arrNoteListData.add(model);
-				adapter.notifyDataSetChanged();
-				listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);*/
+				//if (textelementid.size() > 0)
+					textelementid.get(0).clearFocus();
 
 				textNoteControls.setVisibility(View.GONE);
 				horizontal_scroll_editor.setVisibility(View.GONE);
 				// TODO req
 				isTextmodeSelected=false;
+
+				try  {
+					InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				} catch (Exception e) {
+
+				}
 			}
 		});
 
@@ -1712,6 +1688,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				final long[] thisnoteid = new long[1];
 				//editor.setHtml(s);
 
+				//editor.requestFocus();
+				if (textelementid.size() == 0)
+					textelementid.add(editor);
+
+
+				editor.focusEditor();
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT);
+
 				// TODO editor up
 				editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 					@Override
@@ -1724,6 +1709,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						isMoreShown = false;
 						layout_audio_notechooser.setVisibility(View.GONE);
 						horizontal_scroll_editor.setVisibility(View.VISIBLE);
+
+						if (textelementid.size()>0)
+							textelementid.remove(0);
+
+						textelementid.add(v);
+
 					}
 				});
 
@@ -3806,6 +3797,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							// TODO hide
 							imageButtoncheckbox.setVisibility(View.GONE);
 							imageButtonsquence.setVisibility(View.GONE);
+							if (textelementid.size()>0)
+								textelementid.remove(0);
+
+							textelementid.add(v);
 						}
 					});
 
@@ -3823,6 +3818,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							n.save();
 						}
 					});
+
 
 					noteElements.addView(editor);
 				} else if (n.type.equals("image")) {
@@ -3923,5 +3919,4 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 		noteElements.addView(note_audio);
 	}
-
 }
