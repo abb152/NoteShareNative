@@ -845,7 +845,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View arg0) {
 				// ITIELIC MODE
-				// updateTextNoteControlListners(arg0.getId());
+				//
+				 updateTextNoteControlListners(arg0.getId());
 				System.out.println("ITIELIC  MODE");
 				if (isItalic == true) {
 					isItalic = false;
@@ -900,7 +901,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).redo();
-				updateTextNoteControlListners(R.id.action_redo);
+				//updateTextNoteControlListners(R.id.action_redo);
 			}
 		});
 
@@ -909,7 +910,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).undo();
-				updateTextNoteControlListners(R.id.action_undo);
+				//updateTextNoteControlListners(R.id.action_undo);
 			}
 		});
 
@@ -918,7 +919,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				 allRe.get(Integer.parseInt(v.getTag().toString())).setBold();
-				updateTextNoteControlListners(R.id.action_bold);
+				//updateTextNoteControlListners(R.id.action_bold);
 			}
 		});
 
@@ -927,7 +928,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setItalic();
-				updateTextNoteControlListners(R.id.action_italic);
+				//updateTextNoteControlListners(R.id.action_italic);
 			}
 		});
 
@@ -936,7 +937,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setUnderline();
-				updateTextNoteControlListners(R.id.action_underline);
+				//updateTextNoteControlListners(R.id.action_underline);
 			}
 		});
 
@@ -945,7 +946,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(1);
-				updateTextNoteControlListners(R.id.action_heading1);
+				//updateTextNoteControlListners(R.id.action_heading1);
 			}
 		});
 
@@ -954,7 +955,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(2);
-				updateTextNoteControlListners(R.id.action_heading2);
+				//updateTextNoteControlListners(R.id.action_heading2);
 			}
 		});
 
@@ -963,7 +964,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(3);
-				updateTextNoteControlListners(R.id.action_heading3);
+				//updateTextNoteControlListners(R.id.action_heading3);
 			}
 		});
 
@@ -972,7 +973,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(4);
-				updateTextNoteControlListners(R.id.action_heading4);
+				//updateTextNoteControlListners(R.id.action_heading4);
 			}
 		});
 
@@ -981,7 +982,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(5);
-				updateTextNoteControlListners(R.id.action_heading5);
+				//updateTextNoteControlListners(R.id.action_heading5);
 			}
 		});
 
@@ -990,7 +991,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(6);
-				updateTextNoteControlListners(R.id.action_heading6);
+				//updateTextNoteControlListners(R.id.action_heading6);
 			}
 		});
 
@@ -999,7 +1000,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignLeft();
-				updateTextNoteControlListners(R.id.action_align_left);
+				//updateTextNoteControlListners(R.id.action_align_left);
 			}
 		});
 
@@ -1008,7 +1009,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignCenter();
-				updateTextNoteControlListners(R.id.action_align_center);
+				//updateTextNoteControlListners(R.id.action_align_center);
 			}
 		});
 
@@ -1017,7 +1018,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onClick(View v) {
 				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignRight();
-				updateTextNoteControlListners(R.id.action_align_right);
+				//updateTextNoteControlListners(R.id.action_align_right);
 			}
 		});
 
@@ -1684,7 +1685,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				noteElements.addView(editor);
 
 				allRe.add(editor);
-				editor.setTag(allRe.size()-1);
+				editor.setTag(allRe.size() - 1);
+				setFeatureTag(String.valueOf(allRe.size() - 1));
+
 				final boolean[] ne_added = {false};
 				final long[] thisnoteid = new long[1];
 				//editor.setHtml(s);
@@ -1704,6 +1707,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					public void onFocusChange(View v, boolean hasFocus) {
 						//mEditor.setEditorHeight(400);
 						String id = v.getTag().toString();
+
 						setFeatureTag(id);
 						drawingControls.setVisibility(View.GONE);
 						layout_note_more_Info.setVisibility(View.GONE);
@@ -1724,8 +1728,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					public void onTextChange(String s) {
 						//editortext[0] = s;
 						//String tag = (String) editor.getTag();
-						Log.v("Jay TextChange:", s);
-						Log.v("Jay Tag: ", editor.getTag().toString());
 
 						if(!ne_added[0]){
 							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s);
@@ -4176,8 +4178,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						public void onTextChange(String s) {
 							//editortext[0] = s;
 							//String tag = (String) editor.getTag();
-							Log.v("Jay TextChange: ", s);
-							Log.v("Jay Tag: ", editor.getTag().toString());
 							/*NoteElement ne = NoteElement.findById(NoteElement.class, Long.parseLong(n.getId()));
 							ne.content = s;
 							ne.save();*/
