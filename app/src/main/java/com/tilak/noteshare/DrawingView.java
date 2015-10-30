@@ -1,16 +1,16 @@
 package com.tilak.noteshare;
 
 import android.content.Context;
-import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.MotionEvent;
-import android.view.View;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class DrawingView extends View {
 
@@ -157,10 +157,13 @@ public class DrawingView extends View {
 	{
 		return paintColor;
 	}
-	public int getEraseColor()
-	{
-		
-		return 0xFFFFFFFF;
+	public int getEraseColor() { return 0xFFFFFFFF;	}
+
+	public void onClickEraser(int i) {
+		if (i == 0)
+			drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		else if (i == 1)
+			drawPaint.setXfermode(null);
 	}
 	
 	public Bitmap  getBitMapimagae()

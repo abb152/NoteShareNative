@@ -1061,6 +1061,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 //onCreateBrushDialog();
                 showScribbleDialog("brush");
                 openBrush();
+				updateScribbleButtonColor("brush");
 			}
 		});
 		imageButtondrawcolors.setOnClickListener(new OnClickListener() {
@@ -1078,6 +1079,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 //showHighLightAlert("", NoteMainActivity.this);
                 showScribbleDialog("highlight");
                 openHighlight();
+				updateScribbleButtonColor("highlight");
 			}
 		});
 		imageButtondrawerase.setOnClickListener(new OnClickListener() {
@@ -1089,6 +1091,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				//onCreateEraserDialog();
                 showScribbleDialog("eraser");
                 openEraser();
+				updateScribbleButtonColor("eraser");
 			}
 		});
 		imageButtondrawMore.setOnClickListener(new OnClickListener() {
@@ -1652,7 +1655,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		imageButtonShareMode.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				drawingControls.setVisibility(View.GONE);
@@ -1751,20 +1753,21 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					public void onTextChange(String s) {
 						//editortext[0] = s;
 						//String tag = (String) editor.getTag();
+
 						if(noteIdForDetails == null)
 							makeNote();
 
-						if(!ne_added[0]){
+						if (!ne_added[0]) {
 							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s);
 							ne.save();
 							thisnoteid[0] = ne.getId();
 							ne_added[0] = true;
 						}
-						if(ne_added[0]){
+						if (ne_added[0]) {
 							NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
 							ne.content = s;
 							ne.save();
-                            modifyNoteTime();
+							modifyNoteTime();
 						}
 					}
 				});
@@ -1773,7 +1776,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 
 		imageButtonMoreMode.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				imageButtonsquence.setVisibility(View.VISIBLE);
@@ -3182,6 +3184,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 layoutBrush.setVisibility(View.GONE);
                 layoutEraser.setVisibility(View.GONE);
                 openHighlight();
+				updateScribbleButtonColor("highlight");
             }
         });
 
@@ -3192,6 +3195,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 layoutBrush.setVisibility(View.VISIBLE);
                 layoutEraser.setVisibility(View.GONE);
                 openBrush();
+				updateScribbleButtonColor("brush");
             }
         });
 
@@ -3202,6 +3206,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 layoutBrush.setVisibility(View.GONE);
                 layoutEraser.setVisibility(View.VISIBLE);
                 openEraser();
+				updateScribbleButtonColor("eraser");
             }
         });
 
@@ -3414,6 +3419,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
     // TODO open highlight
     public void openHighlight() {
+		drawView.onClickEraser(1);
 		//drawView.setDrawColor(Color.parseColor("#00"));
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.eaeaea));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight_red);
@@ -3425,6 +3431,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     // TODO open brush
     public void openBrush() {
 		drawView.setDrawColor(color_selected);
+		drawView.onClickEraser(1);
 		//drawView.setBrushSize(lastBrushSize);
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
@@ -3435,7 +3442,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
     // TODO open eraser
     public void openEraser() {
-		drawView.setDrawColor(Color.parseColor("#00000000"));
+		//drawView.setDrawColor(Color.parseColor("#FFFFFF"));
+		drawView.setDrawColor(Color.TRANSPARENT);
+		drawView.onClickEraser(0);
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
         buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
@@ -3443,6 +3452,24 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         buttonEraser.setBackgroundColor(getResources().getColor(R.color.eaeaea));
         buttonEraser.setImageResource(R.drawable.scrbble_erase_red);
     }
+	// TODO updateScribbleButtonColor
+	public void updateScribbleButtonColor(String name) {
+		if (name.equals("highlight")) {
+			imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+			imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+			imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		}
+		if (name.equals("brush")) {
+			imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+			imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+			imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.header_bg));
+		}
+		if (name.equals("eraser")) {
+			imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+			imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+			imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+		}
+	}
 
 	void showNewDrawingDialog() {
 
