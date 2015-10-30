@@ -1748,7 +1748,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					public void onTextChange(String s) {
 						//editortext[0] = s;
 						//String tag = (String) editor.getTag();
-						if(noteIdForDetails.isEmpty())
+						if(noteIdForDetails == null)
 							makeNote();
 
 						if(!ne_added[0]){
