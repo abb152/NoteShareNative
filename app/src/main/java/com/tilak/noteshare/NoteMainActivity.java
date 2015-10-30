@@ -760,11 +760,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		layOutDrawingView.setVisibility(View.GONE);
 
-		smallBrush = getResources().getInteger(R.integer.small_size);
+		/*smallBrush = getResources().getInteger(R.integer.small_size);
 		mediumBrush = getResources().getInteger(R.integer.medium_size);
 		largeBrush = getResources().getInteger(R.integer.large_size);
 
-		drawView.setBrushSize(smallBrush);
+		drawView.setBrushSize(smallBrush);*/
 
 		drawingControls = (LinearLayout) contentview
 				.findViewById(R.id.drawingControls);
@@ -1645,6 +1645,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				imageButtonHamburg.setVisibility(View.GONE);
 				imageButtoncalander.setVisibility(View.VISIBLE);
 				drawView.setVisibility(View.VISIBLE);
+				drawView.setDrawColor(getResources().getColor(R.color.black));
+				drawView.setBrushSize(16);
 			}
 		});
 		imageButtonShareMode.setOnClickListener(new OnClickListener() {
@@ -3268,14 +3270,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 highlightClicked(v);
             }
         });
-
         highlightbutton8.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 highlightClicked(v);
             }
         });
-
         highlightbutton9.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3307,7 +3307,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             v.setBackgroundColor(color_selected);
         }
         colorPickerSeekBar.setProgress(lastBrushColor);
-
 
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override
@@ -3950,7 +3949,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			v.setBackgroundColor(color_selected);
 		}
 		colorPickerSeekBar.setProgress(lastBrushColor);
-
 
 		colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
 			@Override

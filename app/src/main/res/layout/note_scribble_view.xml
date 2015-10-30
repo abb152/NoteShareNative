@@ -41,7 +41,7 @@
     <ImageButton
         android:id="@+id/imageButtonbrushdraw"
         android:layout_width="40dp"
-          android:layout_weight="1"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
