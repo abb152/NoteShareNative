@@ -25,14 +25,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/audioRecording"
-        android:layout_alignTop="@+id/scrollView" />
+        android:layout_alignTop="@+id/linearLayout2"
+        android:layout_alignEnd="@+id/linearLayout2" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_alignTop="@+id/linearLayout2"
-        android:layout_above="@+id/bottommenue">
+        android:layout_above="@+id/bottommenue"
+        android:layout_below="@+id/audioRecording">
 
         <LinearLayout
             android:orientation="vertical"
