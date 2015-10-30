@@ -30,7 +30,6 @@
                 android:id="@+id/imageButtonHamburg"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
-
                 android:background="@android:color/transparent"
                 android:padding="0dp"
                 android:scaleType="fitCenter"
@@ -88,7 +87,7 @@
                 android:background="@android:color/transparent"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:src="@drawable/done_icon" />
         </LinearLayout>
     </LinearLayout>

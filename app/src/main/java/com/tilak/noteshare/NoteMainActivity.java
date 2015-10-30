@@ -281,27 +281,28 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 
         textViewheaderTitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(noteIdForDetails == null)
-                {
-                    makeNote();
-                }
+				if (noteIdForDetails == null) {
+					makeNote();
+				}
 
-                String updatedText = s.toString();
-                Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-                note.title = updatedText;
-                modifyNoteTime();
-                note.save();
-            }
+				String updatedText = s.toString();
+				Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+				note.title = updatedText;
+				modifyNoteTime();
+				note.save();
+			}
 
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 
 
 
@@ -314,7 +315,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		updateHeaderControls(R.id.imageButtonHamburg);
 		imageButtonsquence.setVisibility(View.VISIBLE);
-		imageButtoncalander.setVisibility(View.VISIBLE);
+		//imageButtoncalander.setVisibility(View.VISIBLE);
 
 		fonts_sizeName = getResources().getStringArray(R.array.Font_Size_px);
 		fontSizes = getResources().getStringArray(R.array.Font_Size);
@@ -1305,7 +1306,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	/************* main list control Here ************/
 	void addlistners() {
 
-		imageButtoncalander.setVisibility(View.VISIBLE); //changed by Jay
+		//imageButtoncalander.setVisibility(View.VISIBLE); //changed by Jay
 
 		// #NOTE ITEM CLCIK
 
@@ -1387,9 +1388,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				try  {
 					InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-				} catch (Exception e) {
+				} catch (Exception e) {}
 
-				}
+				//drawView.startNew();
+				drawView.setVisibility(View.GONE);
+				drawingControls.setVisibility(View.GONE);
+				imageButtonHamburg.setVisibility(View.VISIBLE);
+				imageButtoncalander.setVisibility(View.GONE);
+				imageButtonsquence.setVisibility(View.VISIBLE);
+				imageButtoncheckbox.setVisibility(View.VISIBLE);
+
+
 			}
 		});
 
@@ -1413,7 +1422,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				imageButtoncalander.setVisibility(View.GONE);
 
 				if (isTextmodeSelected == true) {
 					LayoutTextWritingView.setVisibility(View.VISIBLE);
@@ -1629,12 +1637,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				isTextmodeSelected = false;
 				updateScribbleControlListners(R.id.imageButtondrawback);
-				imageButtonsquence.setVisibility(View.VISIBLE);
+				imageButtonsquence.setVisibility(View.GONE);
+				imageButtoncheckbox.setVisibility(View.GONE);
 				layout_note_more_Info.setVisibility(View.GONE);
 				isMoreShown = false;
 				layout_audio_notechooser.setVisibility(View.GONE);
-				imageButtoncalander.setVisibility(View.GONE);
-
+				imageButtonHamburg.setVisibility(View.GONE);
+				imageButtoncalander.setVisibility(View.VISIBLE);
+				drawView.setVisibility(View.VISIBLE);
 			}
 		});
 		imageButtonShareMode.setOnClickListener(new OnClickListener() {
@@ -1673,7 +1683,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				isMoreShown = false;
 				layout_audio_notechooser.setVisibility(View.GONE);
 				horizontal_scroll_editor.setVisibility(View.VISIBLE);
-				//imageButtoncalander.setVisibility(View.VISIBLE);
+
+				imageButtonHamburg.setVisibility(View.GONE);
+				imageButtoncalander.setVisibility(View.VISIBLE);
+				imageButtonsquence.setVisibility(View.GONE);
+				imageButtoncheckbox.setVisibility(View.GONE);
 
 				noteElements = (LinearLayout) findViewById(R.id.noteElements);
 				LayoutInflater inflator = getLayoutInflater();
@@ -1715,7 +1729,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						layout_audio_notechooser.setVisibility(View.GONE);
 						horizontal_scroll_editor.setVisibility(View.VISIBLE);
 
-						if (textelementid.size()>0)
+						imageButtonHamburg.setVisibility(View.GONE);
+						imageButtoncalander.setVisibility(View.VISIBLE);
+						imageButtonsquence.setVisibility(View.GONE);
+						imageButtoncheckbox.setVisibility(View.GONE);
+
+						if (textelementid.size() > 0)
 							textelementid.remove(0);
 
 						textelementid.add(v);
@@ -1728,6 +1747,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					public void onTextChange(String s) {
 						//editortext[0] = s;
 						//String tag = (String) editor.getTag();
+						if(noteIdForDetails.isEmpty())
+							makeNote();
 
 						if(!ne_added[0]){
 							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s);
@@ -4162,6 +4183,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							isMoreShown = false;
 							layout_audio_notechooser.setVisibility(View.GONE);
 							horizontal_scroll_editor.setVisibility(View.VISIBLE);
+							imageButtoncalander.setVisibility(View.VISIBLE);
+							imageButtonHamburg.setVisibility(View.GONE);
 
 							// TODO hide
 							imageButtoncheckbox.setVisibility(View.GONE);
