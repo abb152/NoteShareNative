@@ -84,7 +84,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	List<ImageView> listImage = new ArrayList<ImageView>();
 
 	//Color picker
-	int color_selected = 5251;
+	int color_selected = -16777216;
 	ColorPickerSeekBar colorPickerSeekBar = null;
 
 	EditText edittextEditer, txtViewer;
@@ -1397,8 +1397,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				imageButtoncalander.setVisibility(View.GONE);
 				imageButtonsquence.setVisibility(View.VISIBLE);
 				imageButtoncheckbox.setVisibility(View.VISIBLE);
-
-
 			}
 		});
 
@@ -1645,7 +1643,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				imageButtonHamburg.setVisibility(View.GONE);
 				imageButtoncalander.setVisibility(View.VISIBLE);
 				drawView.setVisibility(View.VISIBLE);
-				drawView.setDrawColor(getResources().getColor(R.color.black));
+				//drawView.setDrawColor(getResources().getColor(R.color.black));
+				drawView.setDrawColor(color_selected);
 				drawView.setBrushSize(16);
 			}
 		});
@@ -3297,6 +3296,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         sizeSeekBar.setMax(14);
         sizeSeekBar.setProgress(lastBrushSize);
 
+		if(count == 0) {
+			drawView.setBrushSize(10 + (lastBrushSize * 2));
+			drawView.setDrawColor(Color.parseColor("#000000"));
+			colorPickerSeekBar.setProgress(0);
+		}
+
         final TextView tvBrushSize = (TextView) scribbleDialog.findViewById(R.id.tvBrushSize);
         String size = String.valueOf(10 + (lastBrushSize * 2));
         tvBrushSize.setText(size);
@@ -3308,12 +3313,21 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
         colorPickerSeekBar.setProgress(lastBrushColor);
 
+		//int currentColor = drawView.getCurrentPaintColor();
+		//drawView.setDrawColor();
+
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override
             public void onColorChanged(SeekBar seekBar, int color, boolean b) {
                 v.setBackgroundColor(color);
-                color_selected = color;
-                drawView.setDrawColor(color);
+				color_selected = color;
+
+
+				for(int i=0; i <20;i++)
+					Log.e("ColorSelected: ", String.valueOf(color_selected));
+
+
+				drawView.setDrawColor(color);
                 lastBrushColor = seekBar.getProgress();
                 count++;
             }
@@ -3351,26 +3365,27 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
         String esize = String.valueOf(10 + (lastBrushSize * 2));
         tvEraserSize.setText(esize);
-        drawView.setBrushSize(10 + (lastBrushSize * 2));
-        drawView.setDrawColor(Color.parseColor("#FFFFFF"));
+
+		/*drawView.setBrushSize(10 + (lastBrushSize * 2));
+		drawView.setDrawColor(Color.parseColor("#FFFFFF"));*/
 
         sizeEraserSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                lastBrushSize = progress;
-                drawView.setBrushSize(10 + (progress * 2));
-                String esize = String.valueOf(10 + (lastBrushSize * 2));
-                tvEraserSize.setText(esize);
-            }
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				lastBrushSize = progress;
+				drawView.setBrushSize(10 + (progress * 2));
+				String esize = String.valueOf(10 + (lastBrushSize * 2));
+				tvEraserSize.setText(esize);
+			}
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
 
         scribbleDialog.show();
     }
@@ -3386,16 +3401,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             imgView.setImageDrawable(getResources().getDrawable(R.drawable.paint_pressed));
             // currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
             // currPaint = (ImageButton) view;
-            System.out.println("selected color:" + color);
+			System.out.println("selected color:" + color);
 
             int colorCode = Color.parseColor(color);
-            scribbleDialog.dismiss();
+			scribbleDialog.dismiss();
             drawView.setDrawColor(colorCode);
         }
 
     }
     // TODO open highlight
     public void openHighlight() {
+		//drawView.setDrawColor(Color.parseColor("#00"));
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.eaeaea));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight_red);
         buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
@@ -3405,6 +3421,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
     // TODO open brush
     public void openBrush() {
+		drawView.setDrawColor(color_selected);
+		//drawView.setBrushSize(lastBrushSize);
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
         buttonBrush.setBackgroundColor(getResources().getColor(R.color.eaeaea));
@@ -3414,6 +3432,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
     // TODO open eraser
     public void openEraser() {
+		drawView.setDrawColor(Color.parseColor("#FFFFFF"));
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
         buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
