@@ -101,7 +101,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	private String mActiveRecordFileName;
 
 	public LinearLayout layOutDrawingView, textNoteControls,
-			layout_note_more_Info, layout_audio_notechooser;
+			layout_note_more_Info, layout_audio_notechooser , audioElement;
 
 	public TextView textViewAdd, textViewDuration;
 	ImageButton bold = null, italic = null, underline = null, h1 = null, h2 = null, h3 = null, h4 = null, h5 = null, h6 = null, align_left = null, align_center = null, align_right = null, redo = null, undo = null;
@@ -197,9 +197,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 
 	@Override
-	protected void onRestart() {
-		super.onRestart();
-		//initlizeUIElement(contentView);
+	protected void onResume() {
+		super.onResume();
+		initlizeUIElement(contentView);
 		try {
 			fetchNoteElementsFromDb();
 		} catch (FileNotFoundException e) {
@@ -1449,7 +1449,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				updateButtonUI(R.id.imageButtonAudioMode);
 				System.out.println("audio mode");
 
-				noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				audioElement = (LinearLayout) findViewById(R.id.audioRecording);
 				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
 				final View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
 				LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
@@ -1459,7 +1459,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
 
-				noteElements.addView(note_audio);
+				audioElement.addView(note_audio);
 
 				try {
 					initlizeAudiorecoder();
@@ -1532,7 +1532,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 						System.out.println("Current Index:" + currentAudioIndex);
 
-						final MediaPlayer mp = new MediaPlayer();
+						audioElement.removeAllViews();
+						onResume();
+
+						/*final MediaPlayer mp = new MediaPlayer();
 						//final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
 						final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
 						final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
@@ -1585,7 +1588,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 									});
 								}
 							}
-						});
+						});*/
 
 
 					}
@@ -1748,7 +1751,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					public void onTextChange(String s) {
 						//editortext[0] = s;
 						//String tag = (String) editor.getTag();
-						if(noteIdForDetails.isEmpty())
+						if(noteIdForDetails == null)
 							makeNote();
 
 						if(!ne_added[0]){
@@ -3432,7 +3435,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
     // TODO open eraser
     public void openEraser() {
-		drawView.setDrawColor(Color.parseColor("#FFFFFF"));
+		drawView.setDrawColor(Color.parseColor("#00000000"));
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
         buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
@@ -4226,7 +4229,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             modifyNoteTime();
 						}
 					});
-
 
 					noteElements.addView(editor);
 				} else if (n.type.equals("image")) {

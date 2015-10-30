@@ -20,6 +20,13 @@
         android:layout_height="44dp"
         layout="@layout/menu_header_1" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/audioRecording"
+        android:layout_alignTop="@+id/scrollView" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -203,7 +210,6 @@
             android:id="@+id/viewScibble"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_margin="7dp"
             android:background="@null" />
     </LinearLayout>
 
