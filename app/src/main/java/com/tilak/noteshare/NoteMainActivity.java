@@ -278,7 +278,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         /*if(noteIdForDetails == null)
             textViewheaderTitle.setText("NOTE");*/
+		Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 
+		final String[] noteTitle = {note.getTitle()};
+		textViewheaderTitle.setText(note.getTitle());
+
+		String background = note.getColor();
+		background_bg.setBackgroundColor(Color.parseColor(background));
 
         textViewheaderTitle.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -293,10 +299,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				}
 
 				String updatedText = s.toString();
-				Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-				note.title = updatedText;
-				note.modificationtime = currentDateStr;
-				note.save();
+				if(!noteTitle[0].equals(updatedText)){
+					Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+					note.title = updatedText;
+					//note.modificationtime = currentDateStr;
+					note.save();
+					modifyNoteTime();
+					noteTitle[0] = updatedText;
+				}
 			}
 
 			@Override
@@ -4203,12 +4213,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			noteElements.removeAllViews();
 			List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
-			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 
-            textViewheaderTitle.setText(note.getTitle());
-
-			String background = note.getColor();
-			background_bg.setBackgroundColor(Color.parseColor(background));
 			for (final NoteElement n : ne) {
 				if (n.type.equals("text")) {
 					String s = n.content;

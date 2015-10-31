@@ -45,28 +45,29 @@ public class PasscodeActivity extends DrawerActivity {
             Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1");
             c.save();
         }
-        if(check.equals("1")){
+        if(check.equals("1") || check.equals("2")){
             t.setText("Confirm Password");
             Config con = Config.findById(Config.class, 1L);
             dbPass = con.passcode;
         }
+
     }
     public void keyPressed(View v){
         TextView tv = (TextView) v;
         i++;
         if(check.equals("1")){
             passcode += tv.getText().toString();
-            if(passcode.length() == 4){
+            if(passcode.length() == 4) {
                 et4.setText("*");
-                if(Integer.parseInt(passcode) == dbPass){
-                    Note n = Note.findById(Note.class,Long.parseLong(fileId));
+                if (Integer.parseInt(passcode) == dbPass) {
+                    Note n = Note.findById(Note.class, Long.parseLong(fileId));
                     n.islocked = 1;
                     n.save();
                     finish();
-                }else{
-                    passcode="";
-                    i=0;
-                    Log.d("//////////////",passcode);
+                } else {
+                    passcode = "";
+                    i = 0;
+                    Log.d("//////////////", passcode);
                     et1.setText("");
                     et2.setText("");
                     et3.setText("");
@@ -74,7 +75,8 @@ public class PasscodeActivity extends DrawerActivity {
                     t.setText("Enter Valid Password to Open file.");
                     Toast.makeText(PasscodeActivity.this, "Invalid Password", Toast.LENGTH_LONG).show();
                 }
-            }else{
+            }
+            else{
                 if (i == 1) {
                     Log.d("//////////////", passcode);
                     et1.setText("*");
@@ -86,8 +88,40 @@ public class PasscodeActivity extends DrawerActivity {
                     et3.setText("*");
                 }
             }
-        }
-        else {
+        }else if(check.equals("2")) {
+            passcode += tv.getText().toString();
+            if (passcode.length() == 4) {
+                et4.setText("*");
+                if (Integer.parseInt(passcode) == dbPass) {
+                    finish();
+                    Intent i = new Intent(PasscodeActivity.this, NoteMainActivity.class);
+                    i.putExtra("NoteId", fileId);
+                    startActivity(i);
+                } else {
+                    passcode = "";
+                    i = 0;
+                    Log.d("//////////////", passcode);
+                    et1.setText("");
+                    et2.setText("");
+                    et3.setText("");
+                    et4.setText("");
+                    t.setText("Enter Valid Password to Open file.");
+                    Toast.makeText(PasscodeActivity.this, "Invalid Password", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                if (i == 1) {
+                    Log.d("//////////////", passcode);
+                    et1.setText("*");
+                } else if (i == 2) {
+                    Log.d("//////////////", passcode);
+                    et2.setText("*");
+                } else if (i == 3) {
+                    Log.d("//////////////", passcode);
+                    et3.setText("*");
+                }
+            }
+        }else {
             if (i <= 4) {
                 passcode += tv.getText().toString();
                 if (passcode.length() == 4) {

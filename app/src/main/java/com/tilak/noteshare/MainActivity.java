@@ -290,7 +290,6 @@ public class MainActivity extends DrawerActivity {
 //
 //				@Override
 //				public int compare(SideMenuitems lhs, SideMenuitems rhs) {
-//					// TODO Auto-generated method stub
 //				return lhs.getColours().compareToIgnoreCase(rhs.getColours());
 //				}
 //			});
@@ -340,7 +339,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				showActionSheet_sort(arg0);
 
 			}
@@ -348,7 +346,6 @@ public class MainActivity extends DrawerActivity {
 		textNoteView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				showActionSheet(v);
 			}
 		});
@@ -361,7 +358,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				openSlideMenu();
 			}
 		});
@@ -369,8 +365,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 			}
 		});*/
 		textViewAdd.setOnClickListener(new OnClickListener() {
@@ -395,7 +389,6 @@ public class MainActivity extends DrawerActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
-                // TODO Auto-generated method stub
                 if (DataManager.sharedDataManager().getSelectedIndex() == arg2) {
                     DataManager.sharedDataManager().setSelectedIndex(-1);
                 } else {
@@ -464,7 +457,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.VISIBLE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.GONE);
@@ -478,10 +470,7 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -491,7 +480,6 @@ public class MainActivity extends DrawerActivity {
 			public void onClick(View arg0) {
 				/*DataManager.sharedDataManager().setTypeofListView(false);
 				adapter.notifyDataSetChanged();
-				// TODO Auto-generated method stub
 				notefoleserGridList.setVisibility(View.GONE);
 				notefoleserList.setVisibility(View.VISIBLE);
 				//notefoleserPintrestList.setVisibility(View.GONE);
@@ -511,7 +499,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				/*DataManager.sharedDataManager().setTypeofListView(true);
 				adapter.notifyDataSetChanged();
 				notefoleserGridList.setVisibility(View.GONE);
@@ -631,7 +618,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "Modified Time",
 						Toast.LENGTH_SHORT).show();
 				sortType=SORTTYPE.MODIFIED_TIME;
@@ -662,12 +648,7 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				
-			
 //				adapter.notifyDataSetChanged();
-				
-				
 				sortType=SORTTYPE.ALPHABET;
 				sortingArray();
 
@@ -683,8 +664,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				sortType=SORTTYPE.TIME_BOMB;
 				sortingArray();
 
@@ -765,7 +744,6 @@ public class MainActivity extends DrawerActivity {
 
             @Override
             public void onClick(View arg0) {
-                // TODO Auto-generated method stub
                 dialog.dismiss();
 
             }
@@ -774,7 +752,6 @@ public class MainActivity extends DrawerActivity {
 
             @Override
             public void onClick(View arg0) {
-                // TODO Auto-generated method stub
 				if (type.equals("exit")) {
 					System.exit(0);
 				}
@@ -959,7 +936,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 
 			}
@@ -968,7 +944,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 
 			}
@@ -977,7 +952,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 
 			}
@@ -986,7 +960,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 			}
 		});
@@ -994,7 +967,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 			}
 		});
@@ -1002,7 +974,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 			}
 		});
@@ -1010,7 +981,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 			}
 		});
@@ -1019,7 +989,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 			}
 		});
@@ -1028,7 +997,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 			}
 		});
@@ -1036,7 +1004,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				paintClicked(v, nid);
 			}
 		});
@@ -1117,7 +1084,6 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void setPasscode(String id){
-
 		Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
 		intent.putExtra("FileId", id);
 		intent.putExtra("Check", "1");
@@ -1167,9 +1133,20 @@ public class MainActivity extends DrawerActivity {
 					//noteid = map.get("noteId");
 
 					try {
-						Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
-						i.putExtra("NoteId", noteid);
-						startActivity(i);
+						// TODO if passcode == null
+						Note note = Note.findById(Note.class, Long.parseLong(noteid));
+						if(note.islocked == 0){
+							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
+							i.putExtra("NoteId", noteid);
+							startActivity(i);
+						}
+						else{
+							Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
+							intent.putExtra("FileId", noteid);
+							intent.putExtra("Check", "2");
+							startActivity(intent);
+						}
+						// TODO if passcode != null
 					} catch (Exception e) {
 
 					}
@@ -1422,7 +1399,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
 				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
 
@@ -1441,7 +1417,6 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				move.dismiss();
 			}
 		});
