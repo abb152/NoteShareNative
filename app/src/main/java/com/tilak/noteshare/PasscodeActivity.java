@@ -45,7 +45,7 @@ public class PasscodeActivity extends DrawerActivity {
             Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1");
             c.save();
         }
-        if(check.equals("1") || check.equals("2")){
+        if(check.equals("1") || check.equals("2") || check.equals("3")){
             t.setText("Confirm Password");
             Config con = Config.findById(Config.class, 1L);
             dbPass = con.passcode;
@@ -121,7 +121,40 @@ public class PasscodeActivity extends DrawerActivity {
                     et3.setText("*");
                 }
             }
-        }else {
+        } else if(check.equals("3")){
+            passcode += tv.getText().toString();
+            if(passcode.length() == 4) {
+                et4.setText("*");
+                if (Integer.parseInt(passcode) == dbPass) {
+                    Note n = Note.findById(Note.class, Long.parseLong(fileId));
+                    n.islocked = 0;
+                    n.save();
+                    finish();
+                } else {
+                    passcode = "";
+                    i = 0;
+                    Log.d("//////////////", passcode);
+                    et1.setText("");
+                    et2.setText("");
+                    et3.setText("");
+                    et4.setText("");
+                    t.setText("Enter Valid Password to remove passcode.");
+                    Toast.makeText(PasscodeActivity.this, "Invalid Password", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                if (i == 1) {
+                    Log.d("//////////////", passcode);
+                    et1.setText("*");
+                } else if (i == 2) {
+                    Log.d("//////////////", passcode);
+                    et2.setText("*");
+                } else if (i == 3) {
+                    Log.d("//////////////", passcode);
+                    et3.setText("*");
+                }
+            }
+        } else {
             if (i <= 4) {
                 passcode += tv.getText().toString();
                 if (passcode.length() == 4) {

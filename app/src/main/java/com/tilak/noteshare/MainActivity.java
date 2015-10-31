@@ -759,10 +759,6 @@ public class MainActivity extends DrawerActivity {
 					delete(id);
 					dialog.dismiss();
 				}
-				if (type.equals("passcode")){
-					removePasscode(id);
-					dialog.dismiss();
-				}
             }
         });
 
@@ -1067,26 +1063,20 @@ public class MainActivity extends DrawerActivity {
 
 		Note n = Note.findById(Note.class, Long.parseLong(id));
 		if(n.islocked == 1){
-			//remove passCode
-			showAlertWith("Are you sure you want to remove Pass Code?", MainActivity.this, "passcode", id);
-
+			setPasscode(id, 3);
 		}else{
-			setPasscode(id);
+			setPasscode(id, 1);
 		}
 	}
 
-	public void removePasscode(String id){
-
-		Note n = Note.findById(Note.class, Long.parseLong(id));
-		n.islocked = 0;
-		n.save();
-		onRestart();
-	}
-
-	public void setPasscode(String id){
+	public void setPasscode(String id, int i){
 		Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
 		intent.putExtra("FileId", id);
-		intent.putExtra("Check", "1");
+		if (i == 1) {
+			intent.putExtra("Check", "1");
+		} else if (i == 3) {
+			intent.putExtra("Check", "3");
+		}
 		startActivity(intent);
 	}
 
