@@ -168,8 +168,10 @@ public class MainActivity extends DrawerActivity {
 			e.printStackTrace();
 		}
 
+		sortType = SORTTYPE.MODIFIED_TIME;
 		populate();
-		swipeListView();
+		sortingArray();
+		//swipeListView();
 	}
 
 
@@ -218,9 +220,10 @@ public class MainActivity extends DrawerActivity {
 
 		addlistners();
 		// getDeafultNote();
-		sortType = SORTTYPE.ALPHABET;
+		sortType = SORTTYPE.MODIFIED_TIME;
 		checkTimeClicked();
 		populate();
+		sortingArray();
 		swipeListView();
 	}
 
@@ -1307,6 +1310,8 @@ public class MainActivity extends DrawerActivity {
 		textViewTitleAlert.setTextColor(Color.WHITE);
 
 		ListView lvFolder = (ListView) contentView.findViewById(R.id.lvFolder);
+		TextView empty = (TextView) contentView.findViewById(R.id.empty);
+		lvFolder.setEmptyView(empty);
 
 		ArrayList<HashMap<String,String>> folderList = new ArrayList<HashMap<String, String>>();
 

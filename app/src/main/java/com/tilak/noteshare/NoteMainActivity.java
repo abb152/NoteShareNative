@@ -295,7 +295,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				String updatedText = s.toString();
 				Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 				note.title = updatedText;
-				modifyNoteTime();
+				note.modificationtime = currentDateStr;
 				note.save();
 			}
 
