@@ -38,6 +38,7 @@ import com.tilak.adpters.OurMoveMenuAdapter;
 import com.tilak.adpters.OurNoteListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
+import com.tilak.db.Config;
 import com.tilak.db.Folder;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
@@ -217,6 +218,11 @@ public class MainActivity extends DrawerActivity {
 		//adapter = new NoteFolderAdapter(this, arrDataNote);
 		//notefoleserList.setAdapter(adapter);
 
+		List<Config> config = Config.listAll(Config.class);
+		if(config.size() == 0) {
+			Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1");
+			c.save();
+		}
 
 		addlistners();
 		// getDeafultNote();
@@ -1064,8 +1070,13 @@ public class MainActivity extends DrawerActivity {
 		Note n = Note.findById(Note.class, Long.parseLong(id));
 		if(n.islocked == 1){
 			setPasscode(id, 3);
-		}else{
-			setPasscode(id, 1);
+		}else {
+			Config con = Config.findById(Config.class, 1L);
+			Log.e("jay con.passcode", String.valueOf(con.getPasscode()));
+			if (con.getPasscode() == 0)
+				Toast.makeText(getApplicationContext(), "Please set passcode in Setting page", Toast.LENGTH_LONG).show();
+			else
+				setPasscode(id, 1);
 		}
 	}
 

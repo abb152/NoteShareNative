@@ -165,6 +165,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	RelativeLayout background_bg;
 	public String[] editortext = new String[1];
 	public List<View> textelementid = new ArrayList<View>();
+	public String[] noteTitle = new String[1];
 
 	// 8b241b selected bg
 
@@ -278,13 +279,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         /*if(noteIdForDetails == null)
             textViewheaderTitle.setText("NOTE");*/
-		Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-
-		final String[] noteTitle = {note.getTitle()};
-		textViewheaderTitle.setText(note.getTitle());
-
-		String background = note.getColor();
-		background_bg.setBackgroundColor(Color.parseColor(background));
 
         textViewheaderTitle.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -4197,6 +4191,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
 		note.save();
 		noteIdForDetails = note.getId().toString();
+
+		Log.e("jay notetitle:", note.getTitle());
+
+		noteTitle[0] = note.getTitle();
 	}
 
     public void modifyNoteTime() {
@@ -4213,6 +4211,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			noteElements.removeAllViews();
 			List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
+
+			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+
+			noteTitle[0] = note.title;
+
+			for(int k=0; k<20; k++)
+				Log.e("jay notetitle", noteTitle[0]);
+
+			textViewheaderTitle.setText(note.getTitle());
+
+			String background = note.getColor();
+			background_bg.setBackgroundColor(Color.parseColor(background));
 
 			for (final NoteElement n : ne) {
 				if (n.type.equals("text")) {

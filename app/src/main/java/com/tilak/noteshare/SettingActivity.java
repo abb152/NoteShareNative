@@ -11,6 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.tilak.db.Config;
+
+import java.util.List;
+
 public class SettingActivity extends DrawerActivity {
 
 	public RelativeLayout layoutHeder;
@@ -49,6 +53,12 @@ void  initlizeUIElement(View contentView)
 	textViewSubHeaderTitle.setText("Settings");
 	
 	addListners();
+
+	List<Config> config = Config.listAll(Config.class);
+	if(config.size() == 0) {
+		Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1");
+		c.save();
+	}
 }
 
 @Override
@@ -66,9 +76,16 @@ public void addListners() {
 	
 }
 	public void setPasscode(View v){
-		Intent intent = new Intent(SettingActivity.this, PasscodeActivity.class);
-		intent.putExtra("FileId", "");
-		intent.putExtra("Check", "0");
-		startActivity(intent);
+		Config con = Config.findById(Config.class, 1L);
+		if (con.getPasscode() == 0) {
+			Intent intent = new Intent(SettingActivity.this, PasscodeActivity.class);
+			intent.putExtra("FileId", "");
+			intent.putExtra("Check", "0");
+			startActivity(intent);
+		} else {
+			Intent intent = new Intent(SettingActivity.this, PasscodeActivity.class);
+			intent.putExtra("Check", "4");
+			startActivity(intent);
+		}
 	}
 }
