@@ -82,103 +82,65 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#AA8BC9EA"
+                android:background="#FF5B1E"
                 android:contentDescription="@string/paint"
-                android:tag="#AA8BC9EA" />
+                android:tag="#77FF5B1E" />
 
             <ImageButton
                 android:id="@+id/hightlightbutton2"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#AAF9E6C9"
+                android:background="#E0F74E"
                 android:contentDescription="@string/paint"
-                android:tag="#AAF9E6C9" />
+                android:tag="#77E0F74E" />
 
             <ImageButton
                 android:id="@+id/highlightbutton3"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#AA8DDDC6"
+                android:background="#6A469D"
                 android:contentDescription="@string/paint"
-                android:tag="#AA8DDDC6" />
+                android:tag="#776A469D" />
 
             <ImageButton
                 android:id="@+id/highlightbutton4"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#AAFEFF74"
+                android:background="#3AA8F0"
                 android:contentDescription="@string/paint"
-                android:tag="#AAFEFF74" />
+                android:tag="#773AA8F0" />
 
             <ImageButton
                 android:id="@+id/highlightbutton5"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#AAF6B2B3"
+                android:background="#FF4B94"
                 android:contentDescription="@string/paint"
-                android:tag="#AAF6B2B3" />
-
-            <!-- Bottom Row -->
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/paint_highlight2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:gravity="center">
+                android:tag="#77FF4B94" />
 
             <ImageButton
                 android:id="@+id/highlightbutton6"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#AAB794F6"
+                android:background="#37CE7D"
                 android:contentDescription="@string/paint"
-                android:tag="#AAB794F6" />
+                android:tag="#7737CE7D" />
 
             <ImageButton
                 android:id="@+id/highlightbutton7"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#AAACDE95"
+                android:background="#BCBCBC"
                 android:contentDescription="@string/paint"
-                android:tag="#AAACDE95" />
+                android:tag="#77BCBCBC" />
 
-            <ImageButton
-                android:id="@+id/highlightbutton8"
-                android:layout_width="@dimen/large_brush"
-                android:layout_height="@dimen/large_brush"
-                android:layout_margin="2dp"
-                android:background="#AAD69FA0"
-                android:contentDescription="@string/paint"
-                android:tag="#AAD69FA0" />
-
-            <ImageButton
-                android:id="@+id/highlightbutton9"
-                android:layout_width="@dimen/large_brush"
-                android:layout_height="@dimen/large_brush"
-                android:layout_margin="2dp"
-                android:background="#AAEF9BEE"
-                android:contentDescription="@string/paint"
-                android:tag="#AAEF9BEE" />
-
-            <ImageButton
-                android:id="@+id/highlightbutton10"
-                android:layout_width="@dimen/large_brush"
-                android:layout_height="@dimen/large_brush"
-                android:layout_margin="2dp"
-                android:background="#AACACACA"
-                android:contentDescription="@string/paint"
-                android:tag="#AACACACA" />
+            <!-- Bottom Row -->
 
         </LinearLayout>
     </LinearLayout>

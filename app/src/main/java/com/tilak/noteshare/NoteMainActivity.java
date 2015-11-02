@@ -45,9 +45,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
-import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NotesListAdapter;
-import com.tilak.adpters.OurNoteListAdapter;
 import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.datamodels.NoteListDataModel;
 import com.tilak.db.Note;
@@ -170,7 +168,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public List<View> textelementid = new ArrayList<View>();
 	public String[] noteTitle = new String[1];
 	public String[] noteCheckText = new String[1];
-
 
 	// 8b241b selected bg
 
@@ -3299,7 +3296,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         // Highlight
         LinearLayout paintHighlight1 = (LinearLayout) layoutHighlight.findViewById(R.id.paint_highlight1);
-        LinearLayout paintHighlight2 = (LinearLayout) layoutHighlight.findViewById(R.id.paint_highlight2);
 
         ImageButton highlightbutton1 = (ImageButton) paintHighlight1
                 .findViewById(R.id.hightlightbutton1);
@@ -3311,16 +3307,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 .findViewById(R.id.highlightbutton4);
         ImageButton highlightbutton5 = (ImageButton) paintHighlight1
                 .findViewById(R.id.highlightbutton5);
-        ImageButton highlightbutton6 = (ImageButton) paintHighlight2
+        ImageButton highlightbutton6 = (ImageButton) paintHighlight1
                 .findViewById(R.id.highlightbutton6);
-        ImageButton highlightbutton7 = (ImageButton) paintHighlight2
+        ImageButton highlightbutton7 = (ImageButton) paintHighlight1
                 .findViewById(R.id.highlightbutton7);
-        ImageButton highlightbutton8 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton8);
-        ImageButton highlightbutton9 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton9);
-        ImageButton highlightbutton10 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton10);
 
         highlightbutton1.setOnClickListener(new OnClickListener() {
             @Override
@@ -3359,24 +3349,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
         highlightbutton7.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                highlightClicked(v);
-            }
-        });
-        highlightbutton8.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                highlightClicked(v);
-            }
-        });
-        highlightbutton9.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                highlightClicked(v);
-            }
-        });
-        highlightbutton10.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 highlightClicked(v);
