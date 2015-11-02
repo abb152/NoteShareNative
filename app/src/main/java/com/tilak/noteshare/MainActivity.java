@@ -101,6 +101,9 @@ public class MainActivity extends DrawerActivity {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
+	public SwipeListView listView;
+	final int[] lastItemOpened = {-1};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -1055,6 +1058,7 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void deleteNote(View v){
+		listView.closeAnimate(lastItemOpened[0]);
 
 		String id = v.getTag().toString();
 		//Long noteid = (long) tvIdHidden.getText();
@@ -1064,6 +1068,8 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void passCode(View v){
+
+		listView.closeAnimate(lastItemOpened[0]);
 
 		String id = v.getTag().toString();
 
@@ -1092,7 +1098,7 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void swipeListView(){
-		SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+		listView = (SwipeListView) findViewById(R.id.notefoleserList);
 		GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
 
 		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, setListView);
@@ -1119,29 +1125,19 @@ public class MainActivity extends DrawerActivity {
 				public void onClickFrontView(int position) {
 
 					int itemPosition = position;
-
-					/*for (int j = 0; j < 20; j++)
-						Log.e("Position: ", String.valueOf(itemPosition));*/
-
 					String noteid = null;
 
 					noteid = noteIdList.get(position);
 
-					/*for (int j = 0; j < 20; j++)
-						Log.e("Position: ", noteid);*/
-					//HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
-
-					//noteid = map.get("noteId");
 
 					try {
 						// TODO if passcode == null
 						Note note = Note.findById(Note.class, Long.parseLong(noteid));
-						if(note.islocked == 0){
+						if (note.islocked == 0) {
 							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
-						}
-						else{
+						} else {
 							Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
 							intent.putExtra("FileId", noteid);
 							intent.putExtra("Check", "2");
@@ -1153,9 +1149,19 @@ public class MainActivity extends DrawerActivity {
 					}
 				}
 
+				@Override
+				public void onOpened(int position, boolean toRight) {
+					super.onOpened(position, toRight);
+					//listView.closeOpenedItems();
+					if (lastItemOpened[0] != -1 && lastItemOpened[0] != position)
+						listView.closeAnimate(lastItemOpened[0]);
+					lastItemOpened[0] = position;
+				}
+
 			});
 
 			listView.setAdapter(noteAdapter);
+			listView.setAnimationTime(200);
 
 			}else{
 
@@ -1335,11 +1341,13 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void move(View v){
+		listView.closeAnimate(lastItemOpened[0]);
 		String noteid = v.getTag().toString();
 		showMenuAlert(this, noteid);
 	}
 
 	public void timeBomb(View v){
+		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		//setDateTime.showDate(this, id);
 		showDate(this, id);

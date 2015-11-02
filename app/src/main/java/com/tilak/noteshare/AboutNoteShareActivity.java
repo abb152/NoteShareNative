@@ -44,8 +44,8 @@ public class AboutNoteShareActivity extends DrawerActivity {
 		
 		
 		layoutTitleHeaderview=(LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
-		textViewSubHeaderTitle=(TextView) layoutTitleHeaderview.findViewById(R.id.textViewHeaderTitle1);
-		textViewSubHeaderTitle.setText("About".toUpperCase());
+		/*textViewSubHeaderTitle=(TextView) layoutTitleHeaderview.findViewById(R.id.textViewHeaderTitle1);
+		textViewSubHeaderTitle.setText("About".toUpperCase());*/
 		
 		addListners();
 	}

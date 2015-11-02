@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
@@ -42,10 +43,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.view.inputmethod.InputMethodManager;
 
 import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
+import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NotesListAdapter;
+import com.tilak.adpters.OurNoteListAdapter;
 import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.datamodels.NoteListDataModel;
 import com.tilak.db.Note;
@@ -168,6 +170,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public List<View> textelementid = new ArrayList<View>();
 	public String[] noteTitle = new String[1];
 	public String[] noteCheckText = new String[1];
+
 
 	// 8b241b selected bg
 
