@@ -95,21 +95,28 @@ public class PasscodeActivity extends DrawerActivity {
             }
         }else if(check.equals("4")){
             passcode += tv.getText().toString();
+            Log.d("//////////////", passcode);
             if (passcode.length() == 4) {
+                Log.d("jay", passcode);
                 et4.setText("*");
                 if (Integer.parseInt(passcode) == dbPass) {
+                    Log.d("//////////////", passcode);
                     t.setText("New Password");
                     et1.setText("");
                     et2.setText("");
                     et3.setText("");
                     et4.setText("");
-                    /*if (passcode.length() == 4) {
-                        //t.setText("Confirm Password");
-                        if (!confirm) {
+                    passcode = "";
+                    i = 0;
+                    //newpasscode += tv.getText().toString();
+                    if (i == 4) {
+                        et4.setText("*");
+                        t.setText("Confirm Password");
+                        if (confirm == false) {
                             confirm_passcode = passcode;
                             passcode = "";
                             i = 0;
-                            Log.d("//////////////", passcode);
+                            Log.d("///// jay in", passcode);
                             et1.setText("");
                             et2.setText("");
                             et3.setText("");
@@ -123,7 +130,7 @@ public class PasscodeActivity extends DrawerActivity {
                                 Toast.makeText(PasscodeActivity.this, "Passcode Saved", Toast.LENGTH_LONG).show();
                                 finish();
                             } else {
-                                Toast.makeText(PasscodeActivity.this, "Invalid Password", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PasscodeActivity.this, "Null Password", Toast.LENGTH_LONG).show();
                                 passcode = "";
                                 et1.setText("");
                                 et2.setText("");
@@ -133,24 +140,29 @@ public class PasscodeActivity extends DrawerActivity {
                                 i = 0;
                             }
                         }
-                    } else {
+                    } if (i < 4) {
                         if (i == 1) {
-                            Log.d("//////////////", passcode);
+                            Log.d("&&&&&&&&&", passcode);
                             et1.setText("*");
+                            i++;
                         } else if (i == 2) {
-                            Log.d("//////////////", passcode);
+                            Log.d("&&&&&&&&&", passcode);
                             et2.setText("*");
+                            i++;
                         } else if (i == 3) {
-                            Log.d("//////////////", passcode);
+                            Log.d("&&&&&&&&&&&&", passcode);
                             et3.setText("*");
+                            i++;
                         }
-                    }*/
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Invalid Password", Toast.LENGTH_LONG).show();
                     et1.setText("");
                     et2.setText("");
                     et3.setText("");
                     et4.setText("");
+                    i = 0;
+                    passcode = "";
                 }
                 //Check for passcode
             } else {

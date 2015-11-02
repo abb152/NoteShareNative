@@ -109,6 +109,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	View viewText = inflator.inflate(R.layout.note_text, null, false);*/
 	View viewText;
 	List<RichEditor> allRe = new ArrayList<RichEditor>();
+	List<EditText> allCheckboxText = new ArrayList<EditText>();
 
 	final Context context = this;
 	public ArrayList<NoteListDataModel> arrNoteListData;
@@ -166,6 +167,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public String[] editortext = new String[1];
 	public List<View> textelementid = new ArrayList<View>();
 	public String[] noteTitle = new String[1];
+	public String[] noteCheckText = new String[1];
 
 	// 8b241b selected bg
 
@@ -1062,9 +1064,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				updateScribbleControlListners(v.getId());
 				//drawView.setErase(false);
 				//drawView.setBrushSize(drawView.getLastBrushSize());
-                //onCreateBrushDialog();
-                showScribbleDialog("brush");
-                openBrush();
+				//onCreateBrushDialog();
+				showScribbleDialog("brush");
+				openBrush();
 				updateScribbleButtonColor("brush");
 			}
 		});
@@ -1080,9 +1082,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			public void onClick(View v) {
 				updateScribbleControlListners(v.getId());
 				//showBrushSizeDialog(false);
-                //showHighLightAlert("", NoteMainActivity.this);
-                showScribbleDialog("highlight");
-                openHighlight();
+				//showHighLightAlert("", NoteMainActivity.this);
+				showScribbleDialog("highlight");
+				openHighlight();
 				updateScribbleButtonColor("highlight");
 			}
 		});
@@ -1093,8 +1095,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				// showEraserDialog();
 				//showBrushSizeDialog(true);
 				//onCreateEraserDialog();
-                showScribbleDialog("eraser");
-                openEraser();
+				showScribbleDialog("eraser");
+				openEraser();
 				updateScribbleButtonColor("eraser");
 			}
 		});
@@ -1423,6 +1425,83 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 
+		imageButtoncheckbox.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				imageButtoncalander.setVisibility(View.VISIBLE);
+				noteElements = (LinearLayout) findViewById(R.id.noteElements);
+				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+				final View viewChecklist = inflater.inflate(R.layout.note_checklist, null, false);
+				LinearLayout checkbox = (LinearLayout) viewChecklist.findViewById(R.id.checkbox);
+				final ImageView checklist_icon = (ImageView) viewChecklist.findViewById(R.id.checkboxIcon);
+				checklist_icon.setTag("1");
+				final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
+				allCheckboxText.add(checklist_text);
+				noteElements.addView(checkbox);
+
+				final boolean[] cb_added = {false};
+				final long[] thisnoteelementid = new long[1];
+
+				checklist_text.addTextChangedListener(new TextWatcher() {
+					@Override
+					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+					}
+
+					@Override
+					public void onTextChanged(CharSequence s, int start, int before, int count) {
+						if (noteIdForDetails == null) {
+							makeNote();
+						}
+						if (noteIdForDetails != null) {
+							String updatedText = s.toString();
+
+							if (!cb_added[0]) {
+								NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "checkbox", updatedText);
+								ne.save();
+								thisnoteelementid[0] = ne.getId();
+								cb_added[0] = true;
+							}
+							if (cb_added[0]) {
+								NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
+								ne.content = s.toString();
+								ne.save();
+								modifyNoteTime();
+							}
+						}
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+
+					}
+				});
+
+				checklist_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+					@Override
+					public void onFocusChange(View v, boolean hasFocus) {
+						InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+						imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
+					}
+				});
+
+				checklist_icon.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String tag = v.getTag().toString();
+						if (tag.equals("1")) {
+							checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+							v.setTag("0");
+						} else {
+							checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+							v.setTag("1");
+						}
+					}
+				});
+
+			}
+		});
+
 		imageButtonsquence.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -1533,6 +1612,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							ne.save();
                             modifyNoteTime();
 						}
+
 
 						Toast.makeText(NoteMainActivity.this, "Recording Saved",
 								Toast.LENGTH_SHORT).show();
@@ -4216,9 +4296,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			noteTitle[0] = note.title;
 
-			for(int k=0; k<20; k++)
-				Log.e("jay notetitle", noteTitle[0]);
-
 			textViewheaderTitle.setText(note.getTitle());
 
 			String background = note.getColor();
@@ -4306,6 +4383,73 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					// add audio layout
 					final String name = n.content;
                     addAudio(name);
+				} else if (n.type.equals("checkbox")) {
+					String s = n.content;
+					noteElements = (LinearLayout) findViewById(R.id.noteElements);
+					LayoutInflater inflator = getLayoutInflater();
+					View viewChecklist = inflator.inflate(R.layout.note_checklist, null, false);
+					LinearLayout checkbox = (LinearLayout) viewChecklist.findViewById(R.id.checkbox);
+					final ImageView checklist_icon = (ImageView) viewChecklist.findViewById(R.id.checkboxIcon);
+					checklist_icon.setTag("1");
+					final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
+					allCheckboxText.add(checklist_text);
+					checklist_text.setText(s);
+					//checklist_text.setTag(allCheckboxText.size()-1);
+ 					noteElements.addView(checkbox);
+
+					checklist_text.addTextChangedListener(new TextWatcher() {
+						@Override
+						public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+						}
+
+						@Override
+						public void onTextChanged(CharSequence s, int start, int before, int count) {
+							n.content = s.toString();
+							n.save();
+							modifyNoteTime();
+						}
+
+						@Override
+						public void afterTextChanged(Editable s) {
+						}
+					});
+
+					checklist_icon.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							String tag = v.getTag().toString();
+							if (tag.equals("1")) {
+								checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+								v.setTag("0");
+							} else {
+								checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+								v.setTag("1");
+							}
+						}
+					});
+
+					checklist_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+						@Override
+						public void onFocusChange(View v, boolean hasFocus) {
+							//String id = v.getTag().toString();
+							drawingControls.setVisibility(View.GONE);
+							layout_note_more_Info.setVisibility(View.GONE);
+							isMoreShown = false;
+							layout_audio_notechooser.setVisibility(View.GONE);
+							imageButtoncalander.setVisibility(View.VISIBLE);
+							imageButtonHamburg.setVisibility(View.GONE);
+							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
+
+							// TODO hide
+							imageButtoncheckbox.setVisibility(View.GONE);
+							imageButtonsquence.setVisibility(View.GONE);
+							if (textelementid.size() > 0)
+								textelementid.remove(0);
+
+							textelementid.add(v);
+						}
+					});
 				}
 			}
 		}
