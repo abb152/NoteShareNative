@@ -57,13 +57,9 @@
     <LinearLayout
         android:id="@+id/highlightView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginTop="56dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:layout_marginTop="44dp"
         android:background="@color/eaeaea"
         android:orientation="vertical"
         android:visibility="gone">
@@ -75,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -143,6 +140,49 @@
             <!-- Bottom Row -->
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/size" />
+
+            <TextView
+                android:id="@+id/tvHighlightSize"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/zero" />
+
+            <SeekBar
+                android:id="@+id/hightlight_sizeSeekBar"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:maxWidth="10dp"
+                android:minHeight="10dp"
+                android:progressDrawable="@layout/progress_drawable"
+                android:thumb="@drawable/thumb" />
+
+            <View
+                android:id="@+id/hview"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="0dp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

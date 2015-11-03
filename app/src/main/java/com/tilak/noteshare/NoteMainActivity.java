@@ -3233,6 +3233,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 
     Dialog scribbleDialog;
+	View hview;
     ImageButton buttonHighlight, buttonBrush, buttonEraser;
 
     // TODO highlight + brush + eraser dialog
@@ -3331,29 +3332,57 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
         highlightbutton4.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                highlightClicked(v);
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				highlightClicked(v);
+			}
+		});
         highlightbutton5.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                highlightClicked(v);
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				highlightClicked(v);
+			}
+		});
         highlightbutton6.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                highlightClicked(v);
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				highlightClicked(v);
+			}
+		});
         highlightbutton7.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                highlightClicked(v);
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				highlightClicked(v);
+			}
+		});
+
+		final TextView tvHighlightSize = (TextView) layoutHighlight.findViewById(R.id.tvHighlightSize);
+		String hsize = String.valueOf(10 + (lastBrushSize * 2));
+		tvHighlightSize.setText(hsize);
+		SeekBar hightlight_sizeSeekBar = (SeekBar) layoutHighlight.findViewById(R.id.hightlight_sizeSeekBar);
+		hightlight_sizeSeekBar.setMax(14);
+		hightlight_sizeSeekBar.setProgress(lastBrushSize);
+		hview = layoutHighlight.findViewById(R.id.hview);
+		hview.setBackgroundColor(lastHighlightColor);
+
+		hightlight_sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				lastBrushSize = progress;
+				drawView.setBrushSize(10 + (progress * 2));
+				drawView.setDrawColor(lastHighlightColor);
+				String esize = String.valueOf(10 + (lastBrushSize * 2));
+				tvHighlightSize.setText(esize);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
 
         // Brush
         colorPickerSeekBar = (ColorPickerSeekBar) scribbleDialog.findViewById(R.id.colorpicker);
@@ -3441,6 +3470,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				lastBrushSize = progress;
 				drawView.setBrushSize(10 + (progress * 2));
+				drawView.setDrawColor(lastBrushColor);
 				String esize = String.valueOf(10 + (lastBrushSize * 2));
 				tvEraserSize.setText(esize);
 			}
@@ -3459,23 +3489,19 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     // TODO highlighter clicked
     public void highlightClicked(View view) {
-        // use chosen color
         if (view != currPaint) {
-            // update color
             ImageButton imgView = (ImageButton) view;
             String color = view.getTag().toString();
-
             imgView.setImageDrawable(getResources().getDrawable(R.drawable.paint_pressed));
-            // currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
-            // currPaint = (ImageButton) view;
-			System.out.println("selected color:" + color);
-
-            int colorCode = Color.parseColor(color);
+			lastHighlightColor = Color.parseColor(color);
 			scribbleDialog.dismiss();
-            drawView.setDrawColor(colorCode);
+            drawView.setDrawColor(lastHighlightColor);
         }
 
     }
+
+	int firstHighlightColor = 0, lastHighlightColor = Color.parseColor("#77FF5B1E");
+
     // TODO open highlight
     public void openHighlight() {
 		drawView.onClickEraser(1);
@@ -3486,6 +3512,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         buttonBrush.setImageResource(R.drawable.scrbble_draw);
         buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonEraser.setImageResource(R.drawable.scrbble_erase);
+		firstHighlightColor = Color.parseColor("#77FF5B1E");
+		firstHighlightColor = lastHighlightColor;
+		hview.setBackgroundColor(lastHighlightColor);
+		drawView.setDrawColor(lastHighlightColor);
+
     }
     // TODO open brush
     public void openBrush() {
@@ -3502,7 +3533,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     // TODO open eraser
     public void openEraser() {
 		//drawView.setDrawColor(Color.parseColor("#FFFFFF"));
-		drawView.setDrawColor(Color.TRANSPARENT);
+		drawView.setDrawColor(Color.WHITE);
 		drawView.onClickEraser(0);
         buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
