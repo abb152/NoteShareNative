@@ -9,6 +9,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
@@ -22,6 +24,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -3233,7 +3236,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 
     Dialog scribbleDialog;
-	View hview;
+	View highlightview, brushview, eraserview;
     ImageButton buttonHighlight, buttonBrush, buttonEraser;
 
     // TODO highlight + brush + eraser dialog
@@ -3362,8 +3365,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		SeekBar hightlight_sizeSeekBar = (SeekBar) layoutHighlight.findViewById(R.id.hightlight_sizeSeekBar);
 		hightlight_sizeSeekBar.setMax(14);
 		hightlight_sizeSeekBar.setProgress(lastBrushSize);
-		hview = layoutHighlight.findViewById(R.id.hview);
-		hview.setBackgroundColor(lastHighlightColor);
+		highlightview = layoutHighlight.findViewById(R.id.aview);
+		LayerDrawable bgDrawable = (LayerDrawable) highlightview.getBackground();
+		final GradientDrawable shape = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_id);
+		shape.setColor(lastHighlightColor);
+		//aview.setBackgroundColor(lastHighlightColor);
 
 		hightlight_sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -3373,6 +3379,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setDrawColor(lastHighlightColor);
 				String esize = String.valueOf(10 + (lastBrushSize * 2));
 				tvHighlightSize.setText(esize);
+				int size = (lastBrushSize * 4 + 20);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+				params.gravity = Gravity.CENTER;
+				highlightview.setLayoutParams(params);
 			}
 
 			@Override
@@ -3387,7 +3397,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         // Brush
         colorPickerSeekBar = (ColorPickerSeekBar) scribbleDialog.findViewById(R.id.colorpicker);
 
-        final View v = scribbleDialog.findViewById(R.id.view);
+        brushview = layoutBrush.findViewById(R.id.view);
+		LayerDrawable brushDrawable = (LayerDrawable) brushview.getBackground();
+		final GradientDrawable brushshape = (GradientDrawable) brushDrawable.findDrawableByLayerId(R.id.shape_id);
+		brushshape.setColor(lastBrushColor);
         SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
         sizeSeekBar.setMax(14);
         sizeSeekBar.setProgress(lastBrushSize);
@@ -3405,7 +3418,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         drawView.setBrushSize(10 + (lastBrushSize * 2));
 
         if (count > 0) {
-            v.setBackgroundColor(color_selected);
+			brushview.setBackgroundColor(color_selected);
         }
         colorPickerSeekBar.setProgress(lastBrushColor);
 
@@ -3415,14 +3428,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override
             public void onColorChanged(SeekBar seekBar, int color, boolean b) {
-                v.setBackgroundColor(color);
+				brushview.setBackgroundColor(color);
 				color_selected = color;
-
-
-				for(int i=0; i <20;i++)
-					Log.e("ColorSelected: ", String.valueOf(color_selected));
-
-
 				drawView.setDrawColor(color);
                 lastBrushColor = seekBar.getProgress();
                 count++;
@@ -3438,12 +3445,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
                 lastBrushSize = progress;
                 drawView.setBrushSize(10 + (progress * 2));
-                String size = String.valueOf(10 + (lastBrushSize * 2));
-                tvBrushSize.setText(size);
-
+                String tvsize = String.valueOf(10 + (lastBrushSize * 2));
+                tvBrushSize.setText(tvsize);
+				int size = (lastBrushSize * 4 + 20);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+				params.gravity = Gravity.CENTER;
+				brushview.setLayoutParams(params);
             }
 
             @Override
@@ -3462,6 +3471,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         String esize = String.valueOf(10 + (lastBrushSize * 2));
         tvEraserSize.setText(esize);
 
+		eraserview = layoutEraser.findViewById(R.id.eraser_view);
+		LayerDrawable eraserDrawable = (LayerDrawable) eraserview.getBackground();
+		final GradientDrawable erasershape = (GradientDrawable) eraserDrawable.findDrawableByLayerId(R.id.shape_id);
+		erasershape.setColor(lastBrushColor);
+
 		/*drawView.setBrushSize(10 + (lastBrushSize * 2));
 		drawView.setDrawColor(Color.parseColor("#FFFFFF"));*/
 
@@ -3473,6 +3487,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setDrawColor(lastBrushColor);
 				String esize = String.valueOf(10 + (lastBrushSize * 2));
 				tvEraserSize.setText(esize);
+				int size = (lastBrushSize * 4 + 20);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+				params.gravity = Gravity.CENTER;
+				eraserview.setLayoutParams(params);
 			}
 
 			@Override
@@ -3500,7 +3518,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
-	int firstHighlightColor = 0, lastHighlightColor = Color.parseColor("#77FF5B1E");
+	int firstHighlightColor, lastHighlightColor = Color.parseColor("#77FF5B1E");
 
     // TODO open highlight
     public void openHighlight() {
@@ -3512,11 +3530,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         buttonBrush.setImageResource(R.drawable.scrbble_draw);
         buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
         buttonEraser.setImageResource(R.drawable.scrbble_erase);
-		firstHighlightColor = Color.parseColor("#77FF5B1E");
 		firstHighlightColor = lastHighlightColor;
-		hview.setBackgroundColor(lastHighlightColor);
+		//hview.setBackgroundColor(lastHighlightColor);
 		drawView.setDrawColor(lastHighlightColor);
-
     }
     // TODO open brush
     public void openBrush() {

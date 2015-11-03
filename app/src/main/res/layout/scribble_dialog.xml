@@ -172,14 +172,19 @@
                 android:progressDrawable="@layout/progress_drawable"
                 android:thumb="@drawable/thumb" />
 
-            <View
-                android:id="@+id/hview"
+            <LinearLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="0"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="0dp"/>
+                android:layout_marginRight="10dp">
+
+                <View
+                    android:id="@+id/aview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/color_circle"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -241,15 +246,19 @@
                 android:progressDrawable="@layout/progress_drawable"
                 android:thumb="@drawable/thumb" />
 
-            <View
-                android:id="@+id/view"
+            <LinearLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="0"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="0dp"
-                android:background="#000"/>
+                android:layout_marginRight="10dp">
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/color_circle"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -292,15 +301,19 @@
             android:progressDrawable="@layout/progress_drawable"
             android:thumb="@drawable/thumb" />
 
-        <View
-            android:id="@+id/eraser_view"
+        <LinearLayout
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_weight="0"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="0dp"
-            android:background="#000"/>
+            android:layout_marginRight="10dp">
+
+            <View
+                android:id="@+id/eraser_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/color_circle"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

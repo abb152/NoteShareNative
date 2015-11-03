@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <corners
-        android:bottomLeftRadius="20dp"
-        android:bottomRightRadius="20dp"
-        android:topLeftRadius="20dp"
-        android:topRightRadius="20dp" />
-    <size
-        android:width="40dp"
-        android:height="40dp" />
-    <gradient
-        android:angle="270"
-        android:endColor="#80FF00FF"
-        android:startColor="#FFFF0000" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/shape_id">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="oval">
+            <corners
+                android:radius="20dp" />
+            <size
+                android:width="40dp"
+                android:height="40dp" />
+            <solid
+                android:color="#000" />
+        </shape>
+    </item>
+    <item
+        android:id="@+id/shape_id2">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="oval">
+            <corners
+                android:radius="20dp" />
+            <size
+                android:width="40dp"
+                android:height="40dp" />
+            <solid
+                android:color="#000" />
+        </shape>
+    </item>
+    <item
+        android:id="@+id/shape_id3">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="oval">
+            <corners
+                android:radius="20dp" />
+            <size
+                android:width="40dp"
+                android:height="40dp" />
+            <solid
+                android:color="#000" />
+        </shape>
+    </item>
+</layer-list>
