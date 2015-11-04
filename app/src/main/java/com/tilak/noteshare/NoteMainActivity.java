@@ -3151,6 +3151,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	Dialog scribbleDialog;
 	View highlightview, brushview, eraserview;
 	ImageButton buttonHighlight, buttonBrush, buttonEraser;
+	GradientDrawable brushshape;
+	int lastBrushSize = 3, lastHighlightSize = 3, lastEraserSize = 3,
+			highlightViewSize = (lastHighlightSize * 4 + 20),
+			brushViewSize = (lastBrushSize * 4 + 20),
+			eraserViewSize = (lastEraserSize * 4 + 20),
+			lastBrushColor = 0, count = 0;
 
 	// TODO highlight + brush + eraser dialog
 	public void showScribbleDialog(String name) {
@@ -3273,11 +3279,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		});
 
 		final TextView tvHighlightSize = (TextView) layoutHighlight.findViewById(R.id.tvHighlightSize);
-		String hsize = String.valueOf(10 + (lastBrushSize * 2));
+		String hsize = String.valueOf(10 + (lastHighlightSize * 2));
 		tvHighlightSize.setText(hsize);
 		SeekBar hightlight_sizeSeekBar = (SeekBar) layoutHighlight.findViewById(R.id.hightlight_sizeSeekBar);
 		hightlight_sizeSeekBar.setMax(14);
-		hightlight_sizeSeekBar.setProgress(lastBrushSize);
+		hightlight_sizeSeekBar.setProgress(lastHighlightSize);
 		highlightview = layoutHighlight.findViewById(R.id.aview);
 		LayerDrawable bgDrawable = (LayerDrawable) highlightview.getBackground();
 		final GradientDrawable shape = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_id);
@@ -3287,13 +3293,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		hightlight_sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				lastBrushSize = progress;
+				lastHighlightSize = progress;
 				drawView.setBrushSize(10 + (progress * 2));
 				drawView.setDrawColor(lastHighlightColor);
-				String esize = String.valueOf(10 + (lastBrushSize * 2));
+				String esize = String.valueOf(10 + (lastHighlightSize * 2));
 				tvHighlightSize.setText(esize);
-				int size = (lastBrushSize * 4 + 20);
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+				highlightViewSize = (lastHighlightSize * 4 + 20);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
 				params.gravity = Gravity.CENTER;
 				highlightview.setLayoutParams(params);
 			}
@@ -3312,8 +3318,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		brushview = layoutBrush.findViewById(R.id.view);
 		LayerDrawable brushDrawable = (LayerDrawable) brushview.getBackground();
-		final GradientDrawable brushshape = (GradientDrawable) brushDrawable.findDrawableByLayerId(R.id.shape_id);
-		brushshape.setColor(lastBrushColor);
+		brushshape = (GradientDrawable) brushDrawable.findDrawableByLayerId(R.id.shape_id);
+		brushshape.setColor(color_selected);
 		SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
 		sizeSeekBar.setMax(14);
 		sizeSeekBar.setProgress(lastBrushSize);
@@ -3341,10 +3347,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
 			@Override
 			public void onColorChanged(SeekBar seekBar, int color, boolean b) {
+				//((LayerDrawable) brushview.getBackground()).findDrawableByLayerId(R.id.shape_id);
 				brushview.setBackgroundColor(color);
 				color_selected = color;
 				drawView.setDrawColor(color);
 				lastBrushColor = seekBar.getProgress();
+				brushview.setBackgroundResource(R.drawable.color_circle);
+				brushshape.setColor(color);
 				count++;
 			}
 
@@ -3362,8 +3371,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setBrushSize(10 + (progress * 2));
 				String tvsize = String.valueOf(10 + (lastBrushSize * 2));
 				tvBrushSize.setText(tvsize);
-				int size = (lastBrushSize * 4 + 20);
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+				brushViewSize = (lastBrushSize * 4 + 20);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
 				params.gravity = Gravity.CENTER;
 				brushview.setLayoutParams(params);
 			}
@@ -3378,30 +3387,30 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		// Eraser
 		SeekBar sizeEraserSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.eraser_sizeSeekBar);
 		sizeEraserSeekBar.setMax(14);
-		sizeEraserSeekBar.setProgress(lastBrushSize);
+		sizeEraserSeekBar.setProgress(lastEraserSize);
 
 		final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
-		String esize = String.valueOf(10 + (lastBrushSize * 2));
+		String esize = String.valueOf(10 + (lastEraserSize * 2));
 		tvEraserSize.setText(esize);
 
 		eraserview = layoutEraser.findViewById(R.id.eraser_view);
 		LayerDrawable eraserDrawable = (LayerDrawable) eraserview.getBackground();
 		final GradientDrawable erasershape = (GradientDrawable) eraserDrawable.findDrawableByLayerId(R.id.shape_id);
-		erasershape.setColor(lastBrushColor);
+		erasershape.setColor(Color.BLACK);
 
-	/*drawView.setBrushSize(10 + (lastBrushSize * 2));
-	drawView.setDrawColor(Color.parseColor("#FFFFFF"));*/
+		/*drawView.setBrushSize(10 + (lastBrushSize * 2));
+		drawView.setDrawColor(Color.parseColor("#FFFFFF"));*/
 
 		sizeEraserSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				lastBrushSize = progress;
+				lastEraserSize = progress;
 				drawView.setBrushSize(10 + (progress * 2));
 				drawView.setDrawColor(lastBrushColor);
-				String esize = String.valueOf(10 + (lastBrushSize * 2));
+				String esize = String.valueOf(10 + (lastEraserSize * 2));
 				tvEraserSize.setText(esize);
-				int size = (lastBrushSize * 4 + 20);
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+				eraserViewSize = (lastEraserSize * 4 + 20);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
 				params.gravity = Gravity.CENTER;
 				eraserview.setLayoutParams(params);
 			}
@@ -3436,7 +3445,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	// TODO open highlight
 	public void openHighlight() {
 		drawView.onClickEraser(1);
+		drawView.setBrushSize(10 + (lastHighlightSize * 2));
 		//drawView.setDrawColor(Color.parseColor("#00"));
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
+		params.gravity = Gravity.CENTER;
+		highlightview.setLayoutParams(params);
 		buttonHighlight.setBackgroundColor(getResources().getColor(R.color.eaeaea));
 		buttonHighlight.setImageResource(R.drawable.scrbble_highlight_red);
 		buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
@@ -3451,7 +3464,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public void openBrush() {
 		drawView.setDrawColor(color_selected);
 		drawView.onClickEraser(1);
+		drawView.setBrushSize(10 + (lastBrushSize * 2));
+		brushview.setBackgroundColor(color_selected);
+		brushview.setBackgroundResource(R.drawable.color_circle);
+		brushshape.setColor(color_selected);
 		//drawView.setBrushSize(lastBrushSize);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
+		params.gravity = Gravity.CENTER;
+		brushview.setLayoutParams(params);
 		buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
 		buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
 		buttonBrush.setBackgroundColor(getResources().getColor(R.color.eaeaea));
@@ -3464,6 +3484,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		//drawView.setDrawColor(Color.parseColor("#FFFFFF"));
 		drawView.setDrawColor(Color.WHITE);
 		drawView.onClickEraser(0);
+		drawView.setBrushSize(10 + (lastEraserSize * 2));
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
+		params.gravity = Gravity.CENTER;
+		eraserview.setLayoutParams(params);
 		buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
 		buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
 		buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
@@ -4024,7 +4048,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		brushDialog.show();
 	}
-	int lastBrushColor = 0,count = 0, lastBrushSize = 3 ;
 
 	/*public void onCreateEraserDialog() {
 	Dialog brushDialog = new Dialog(NoteMainActivity.this);
