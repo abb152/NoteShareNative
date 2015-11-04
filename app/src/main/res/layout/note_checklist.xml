@@ -30,8 +30,8 @@
         android:textColor="@android:color/black"
         android:inputType="textMultiLine"
         android:minLines="1"
-        android:maxLines="10">
-        <requestFocus/>
+        android:maxLines="10"
+        android:textCursorDrawable="@null" >
     </EditText>
 
 </LinearLayout>
