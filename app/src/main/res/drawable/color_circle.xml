@@ -13,30 +13,4 @@
                 android:color="#000" />
         </shape>
     </item>
-    <item
-        android:id="@+id/shape_id2">
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
-            android:shape="oval">
-            <corners
-                android:radius="20dp" />
-            <size
-                android:width="40dp"
-                android:height="40dp" />
-            <solid
-                android:color="#000" />
-        </shape>
-    </item>
-    <item
-        android:id="@+id/shape_id3">
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
-            android:shape="oval">
-            <corners
-                android:radius="20dp" />
-            <size
-                android:width="40dp"
-                android:height="40dp" />
-            <solid
-                android:color="#000" />
-        </shape>
-    </item>
 </layer-list>
