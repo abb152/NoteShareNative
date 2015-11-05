@@ -33,4 +33,5 @@ dependencies {
         transitive = true
     }
     compile 'jp.wasabeef:richeditor-android:0.3.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
 }
