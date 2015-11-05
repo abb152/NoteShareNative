@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,7 +27,6 @@ public class CameraImage extends Activity {
     ImageView image;
     String noteid;
     int a;
-
     NoteMainActivity noteMainActivity;
 
     @Override
@@ -44,10 +42,7 @@ public class CameraImage extends Activity {
         image = (ImageView)findViewById(R.id.camera_image);
 
         /*for(int i = 0 ; i < 20 ; i ++)
-            Log.e("Inside noteId null",noteMainActivity.noteIdForDetails );
-*/
-        for(int i = 0 ; i < 20 ; i ++)
-            Log.e("Inside a",String.valueOf(a));
+            Log.e("Inside noteId null",noteMainActivity.noteIdForDetails );*/
 
         if (check == 0) {
             try {
@@ -61,6 +56,7 @@ public class CameraImage extends Activity {
                 setImage(imagePath);
             } catch (Exception e) {}
         }
+
 
     }
 
@@ -109,7 +105,7 @@ public class CameraImage extends Activity {
         n.save();
     }
 
-    public void crop(View v){}
+
 
     public void cancel(View v){
         finish();

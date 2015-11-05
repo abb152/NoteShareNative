@@ -210,6 +210,7 @@ WINDSONG
         <item name="android:backgroundDimEnabled">false</item>
     </style>
     <string name="title_activity_passcode">PasscodeActivity</string>
+    <string name="title_activity_camera">CameraActivity</string>
 
    
 

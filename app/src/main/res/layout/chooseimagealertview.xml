@@ -19,13 +19,13 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textViewTitleTakePicture"
+        android:id="@+id/tvCropSize"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="2dp"
         android:background="@android:color/transparent"
         android:gravity="center"
-        android:text="TAKE A PICTURE"
+        android:text="USE CROP SIZE"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/light_gray_999999"
         android:textSize="14sp" />
@@ -39,13 +39,13 @@
         android:background="@android:color/darker_gray" />
 
     <TextView
-        android:id="@+id/textViewTitlechosserfromgallary"
+        android:id="@+id/tvFullSize"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="2dp"
         android:background="@android:color/transparent"
         android:gravity="center"
-        android:text="CHOOSE FROM GALLARY"
+        android:text="USE FULL SIZE"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/light_gray_999999"
         android:textSize="14sp" />
@@ -59,7 +59,7 @@
         android:background="@android:color/darker_gray" />
 
     <TextView
-        android:id="@+id/buttonAlertCancel"
+        android:id="@+id/tvCancel"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="2dp"

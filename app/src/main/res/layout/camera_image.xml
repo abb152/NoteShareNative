@@ -24,10 +24,9 @@
             android:id="@+id/crop"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:visibility="gone"
+            android:layout_weight="0.5"
             android:text="CROP"
-            android:onClick="crop"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/cancel"
