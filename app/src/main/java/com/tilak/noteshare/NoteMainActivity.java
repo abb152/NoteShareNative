@@ -117,7 +117,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	View viewText = inflator.inflate(R.layout.note_text, null, false);*/
 	View viewText;
 	List<RichEditor> allRe = new ArrayList<RichEditor>();
-	List<EditText> allCheckboxText = new ArrayList<EditText>();
+	List<View> allCheckboxText = new ArrayList<View>();
 
 	final Context context = this;
 	public ArrayList<NoteListDataModel> arrNoteListData;
@@ -1348,7 +1348,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				final View viewChecklist = inflater.inflate(R.layout.note_checklist, null, false);
 				final LinearLayout checkbox = (LinearLayout) viewChecklist.findViewById(R.id.checkbox);
 				final ImageView checklist_icon = (ImageView) viewChecklist.findViewById(R.id.checkboxIcon);
-				checklist_icon.setTag("1");
+				checklist_icon.setTag("0");
 				final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
 
 				if (allCheckboxText.size() == 0)
@@ -1451,7 +1451,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						if (allCheckboxText.size() > 0)
 							allCheckboxText.remove(0);
 
-						allCheckboxText.add((EditText) v);
+						allCheckboxText.add(v);
 					}
 				});
 
@@ -1686,7 +1686,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				isTextmodeSelected = false;
 				drawingControls.setVisibility(View.GONE);
 				layOutDrawingView.setVisibility(View.GONE);
-				showImageChooserAlertWith("", NoteMainActivity.this);
+				//showImageChooserAlertWith("", NoteMainActivity.this);
+				//ToDo Image
+				Intent intent = new Intent(NoteMainActivity.this, CameraActivity.class);
+				if(noteIdForDetails == null)
+					intent.putExtra("isNoteIdNull", true);
+				else
+					intent.putExtra("isNoteIdNull", false);
+
+				intent.putExtra("noteid", noteIdForDetails);
+				//intent.putExtra("check", 0);
+				startActivity(intent);
 				imageButtonsquence.setVisibility(View.VISIBLE);
 				layout_note_more_Info.setVisibility(View.GONE);
 				isMoreShown = false;
@@ -2399,7 +2409,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		dialogColor.show();
 	}
 
-	void showImageChooserAlertWith(String message, Context context) {
+	/*void showImageChooserAlertWith(String message, Context context) {
 
 		final Dialog dialog = new Dialog(context);
 
@@ -2448,8 +2458,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					takePhotoIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mMediaUri);
 					startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
 				}
-	/*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	startActivityForResult(intent, REQUEST_CAMERA);*/
+	*//*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	startActivityForResult(intent, REQUEST_CAMERA);*//*
 				dialog.dismiss();
 			}
 		});
@@ -2463,7 +2473,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						Intent intent = new Intent(
 								Intent.ACTION_PICK,
 								android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image/*");
+						intent.setType("image*//*");
 						startActivityForResult(
 								Intent.createChooser(intent, "Select File"),
 								SELECT_PICTURE);
@@ -2476,7 +2486,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		dialog.setContentView(contentView);
 		dialog.show();
 
-	}
+	}*/
 
 	void showAlertWith(String message, Context context) {
 
