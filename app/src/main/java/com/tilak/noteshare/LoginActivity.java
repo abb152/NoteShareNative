@@ -1,10 +1,15 @@
 package com.tilak.noteshare;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -32,6 +37,12 @@ import com.tilak.db.Config;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.List;
 
 public class LoginActivity extends Activity implements View.OnClickListener,
@@ -52,7 +63,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     private ConnectionResult mConnectionResult;
 
     private SignInButton btnSignIn;
-
+    /*if (android.os.Build.VERSION.SDK_INT > 9) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+    }*/
+    //getBitmapFromURL("https://lh5.googleusercontent.com/-NcmQ7wanfmo/AAAAAAAAAAI/AAAAAAAALxY/_Vfnvjx6a40/photo.jpg?sz=250");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +134,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                 if (profile != null) {
                                     String firstName = profile.getFirstName();
                                     String lastName = profile.getLastName();
-                                    Uri pictureUri = profile.getProfilePictureUri(500, 500);
+                                    Uri pictureUri = profile.getProfilePictureUri(200, 200);
                                     String email = object.optString("email");
                                     String uid = object.optString("id");
                                     //Toast.makeText(getApplicationContext(), "" + uid + " " + firstName + " " + lastName + " " + email + " " + pictureUri.toString(), Toast.LENGTH_LONG).show();
@@ -131,6 +146,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                     c.setFbid(uid);
                                     c.setProfilepic(pictureUri.toString());
                                     c.save();
+                                    getBitmapFromURL(c.profilepic);
                                     goToMain();
                                     facebookLogout();
                                 } else {
@@ -165,10 +181,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            if (resultCode != RESULT_OK) {
-                mSignInClicked = true;
-            } else
-                mSignInClicked= true;
+            if (resultCode != RESULT_OK)
+                mSignInClicked = false;
 
             mIntentInProgress = false;
 
@@ -186,6 +200,35 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         Intent i = new Intent(getApplication(), MainActivity.class);
         i.putExtra("FolderId", "-1");
         startActivity(i);
+        finish();
+    }
+
+    public void getBitmapFromURL(String src) {
+        try {
+            java.net.URL url = new java.net.URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            try {
+                // Saving Image file
+                String profilePicture = String.valueOf("profile");
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + profilePicture + ".jpg");
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
+
+                // Refreshing Gallery to view Image in Gallery
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, mediaStorageDir.getAbsolutePath());
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+
+            } catch (FileNotFoundException e) {}
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -268,8 +311,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     private void getProfileInformation() {
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi
-                        .getCurrentPerson(mGoogleApiClient);
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 String personName = currentPerson.getDisplayName();
                 String firstName = currentPerson.getName().getGivenName();
                 String lastName = currentPerson.getName().getFamilyName();
@@ -278,6 +320,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 String personGooglePlusId = currentPerson.getId();
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
 
+                personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + 200;
+
                 Config c = Config.findById(Config.class,1l);
                 c.setFirstname(firstName);
                 c.setLastname(lastName);
@@ -285,6 +329,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 c.setGoogleid(personGooglePlusId);
                 c.setProfilepic(personPhotoUrl);
                 c.save();
+                getBitmapFromURL(c.profilepic);
                 goToMain();
 
                 Log.e(TAG, "Name: " + personName +

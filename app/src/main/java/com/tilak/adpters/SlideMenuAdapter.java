@@ -1,26 +1,29 @@
 package com.tilak.adpters;
 
-import java.util.ArrayList;
-
-
-
-
-
-import com.tilak.dataAccess.DataManager;
-import com.tilak.datamodels.SideMenuitems;
-import com.tilak.noteshare.R;
-import com.tilak.noteshare.RoundImage;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.tilak.datamodels.SideMenuitems;
+import com.tilak.db.Config;
+import com.tilak.noteshare.R;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class SlideMenuAdapter extends BaseAdapter {
 
@@ -84,18 +87,33 @@ public class SlideMenuAdapter extends BaseAdapter {
 			} else {
 				holder1 = (ViewHolder1) vi.getTag();
 			}
-			holder1.textViewusername.setText("USERNAME");
+
+			Config config = Config.findById(Config.class,1l);
+			config.firstname = "Harsh";
+			config.lastname = "Thakkar";
+			config.save();
+			//holder1.textViewusername.setText("Jay");
+
+			String name = "profile.jpg";
+			File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/" + name);
+			Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
+			vi = inflater.inflate(R.layout.userprofile, null);
+			holder1 = new ViewHolder1();
+			holder1.imageViewUserImage = (ImageView) vi
+					.findViewById(R.id.imageViewUserProfile);
+			holder1.imageViewUserImage.setImageBitmap(getRoundedCornerImage(b));
+			holder1.textViewusername = (TextView) vi.findViewById(R.id.textViewUsername);
+			holder1.textViewusername.setText(config.firstname +" "+config.lastname);
 			//holder1.textViewUserbalance.setText("");
 			
-			Bitmap bm =DataManager.sharedDataManager().getUserImageBitMap();
+			/*Bitmap bm =DataManager.sharedDataManager().getUserImageBitMap();
 			if(bm==null)
 			{
 				bm=BitmapFactory.decodeResource(activity.getResources(),R.drawable.ic_launcher);
-			}
-			
-			
-			RoundImage  roundedImage = new RoundImage(bm);
-            holder1.imageViewUserImage.setImageDrawable(roundedImage);
+			}*/
+
+			//RoundImage  roundedImage = new RoundImage(bm);
+            //holder1.imageViewUserImage.setImageDrawable(roundedImage);
 		
             //return vi;
 		
@@ -168,6 +186,28 @@ public class SlideMenuAdapter extends BaseAdapter {
 		public TextView textViewUserbalance;
 		
 
+	}
+
+	public static Bitmap getRoundedCornerImage(Bitmap bitmap){
+		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+				bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(output);
+
+		final int color = 0xff424242;
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		final RectF rectF = new RectF(rect);
+		final float roundPx = 140;
+
+		paint.setAntiAlias(true);
+		canvas.drawARGB(0, 0, 0, 0);
+		paint.setColor(color);
+		canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+		canvas.drawBitmap(bitmap, rect, rect, paint);
+
+		return output;
 	}
 
 }
