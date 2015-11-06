@@ -53,4 +53,8 @@
       <dimen name="large_brush_38">38dp</dimen>
     <integer name="large_size_38">38</integer>
 
+    <!-- Facebook dimens -->
+    <dimen name="fb_text_size">18sp</dimen>
+    <dimen name="gp_text_size">20sp</dimen>
+
 </resources>

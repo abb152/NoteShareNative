@@ -15,6 +15,7 @@ import com.tilak.adpters.MenuOpenInterface;
 import com.tilak.adpters.SlideMenuAdapter;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.datamodels.SlideMenu;
+import com.tilak.db.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -255,6 +256,20 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				break;
 			case 12: {
 				System.out.println("logout");
+				Config c = Config.findById(Config.class, 1l);
+				c.setFirstname("");
+				c.setLastname("");
+				c.setEmail("");
+				c.setPassword("");
+				c.setFbid("");
+				c.setGoogleid("");
+				c.setPasscode(0);
+				c.setProfilepic("");
+				c.setUsername("");
+				c.setDeviceid("");
+				c.setServerid("");
+				c.save();
+				startActivity(new Intent(this, LoginActivity.class));
 			}
 				break;
 			default: {}
