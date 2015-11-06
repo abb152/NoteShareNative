@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -3330,6 +3329,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		LayerDrawable brushDrawable = (LayerDrawable) brushview.getBackground();
 		brushshape = (GradientDrawable) brushDrawable.findDrawableByLayerId(R.id.shape_id);
 		brushshape.setColor(color_selected);
+
 		SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
 		sizeSeekBar.setMax(14);
 		sizeSeekBar.setProgress(lastBrushSize);
@@ -3358,12 +3358,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			@Override
 			public void onColorChanged(SeekBar seekBar, int color, boolean b) {
 				//((LayerDrawable) brushview.getBackground()).findDrawableByLayerId(R.id.shape_id);
-				brushview.setBackgroundColor(color);
 				color_selected = color;
 				drawView.setDrawColor(color);
 				lastBrushColor = seekBar.getProgress();
+				brushview.setBackgroundColor(color_selected);
 				brushview.setBackgroundResource(R.drawable.color_circle);
-				brushshape.setColor(color);
+				brushshape.setColor(color_selected);
 				count++;
 			}
 
@@ -3385,6 +3385,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
 				params.gravity = Gravity.CENTER;
 				brushview.setLayoutParams(params);
+				brushshape.setColor(color_selected);
 			}
 
 			@Override
@@ -3477,7 +3478,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		drawView.setBrushSize(10 + (lastBrushSize * 2));
 		brushview.setBackgroundColor(color_selected);
 		brushview.setBackgroundResource(R.drawable.color_circle);
-		brushshape.setColor(color_selected);
+		//brushshape.setColor(color_selected);
 		//drawView.setBrushSize(lastBrushSize);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
 		params.gravity = Gravity.CENTER;
@@ -4290,11 +4291,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
 					String name = n.content;
 					File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-					int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
-					int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
+					//int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
+					//int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
 					Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 					//Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
-					BitmapFactory.Options op = new BitmapFactory.Options();
+					/*BitmapFactory.Options op = new BitmapFactory.Options();
 					op.inJustDecodeBounds = true;
 					int imageWidth = b.getWidth();
 					int imageHeight = b.getHeight();
@@ -4307,8 +4308,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
 					} else if (imageWidth < imageHeight) { // portrait
 						scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
-					}
-					note_imageview.setImageBitmap(scale);
+					}*/
+					note_imageview.setImageBitmap(b);
 					noteElements.addView(note_image);
 				} else if(n.type.equals("scribble")) {
 

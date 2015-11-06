@@ -269,6 +269,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				c.setDeviceid("");
 				c.setServerid("");
 				c.save();
+				finish();
 				startActivity(new Intent(this, LoginActivity.class));
 			}
 				break;

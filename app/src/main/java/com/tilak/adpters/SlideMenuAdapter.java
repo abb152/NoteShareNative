@@ -89,9 +89,6 @@ public class SlideMenuAdapter extends BaseAdapter {
 			}
 
 			Config config = Config.findById(Config.class,1l);
-			config.firstname = "Harsh";
-			config.lastname = "Thakkar";
-			config.save();
 			//holder1.textViewusername.setText("Jay");
 
 			String name = "profile.jpg";

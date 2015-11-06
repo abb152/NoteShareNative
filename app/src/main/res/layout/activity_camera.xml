@@ -18,7 +18,8 @@ android:layout_height="match_parent">
     android:background="@color/header_bg"
     android:layout_alignParentBottom="true"
     android:layout_alignParentStart="true"
-    android:id="@+id/linearLayout">
+    android:id="@+id/linearLayout"
+    android:weightSum="4">
 
     <Button
         android:id="@+id/Button_crop"
@@ -43,7 +44,7 @@ android:layout_height="match_parent">
         android:id="@+id/Button_cancel"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.25"
+        android:layout_weight="1"
         android:textColor="@color/white"
         android:drawablePadding="-40sp"
         android:background="@null"
@@ -56,14 +57,17 @@ android:layout_height="match_parent">
         android:layout_marginBottom="8dp"
         android:background="@color/white"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/Button_load"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="Choose / Take Image"
+        android:scaleType="centerInside"
+        android:padding="5dp"
+        android:text="Pick Image"
         android:textColor="@color/white"
-        android:background="@null" />
+        android:background="@null"
+        android:src="@drawable/gallary_icon_1"/>
 
     <View
         android:layout_width="1dp"
@@ -72,14 +76,17 @@ android:layout_height="match_parent">
         android:layout_marginBottom="8dp"
         android:background="@color/white"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/Button_rotate"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_weight="1"
+        android:scaleType="centerInside"
+        android:padding="15dp"
         android:text="Rotate"
         android:textColor="@color/white"
-        android:background="@null" />
+        android:background="@null"
+        android:src="@drawable/rotate"/>
 
     <View
         android:layout_width="1dp"
@@ -92,7 +99,7 @@ android:layout_height="match_parent">
         android:id="@+id/Button_done"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.25"
+        android:layout_weight="1"
         android:textColor="@color/white"
         android:drawablePadding="-40sp"
         android:background="@null"

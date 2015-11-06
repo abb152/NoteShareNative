@@ -27,14 +27,14 @@
         android:gravity="center"
         android:text="USE CROP SIZE"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/light_gray_999999"
-        android:textSize="14sp" />
+        android:textColor="@color/light_gray_666666"
+        android:textSize="16sp"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginRight="5dp"
-         android:layout_marginLeft="5dp"
+        android:layout_marginRight="15dp"
+         android:layout_marginLeft="15dp"
         android:layout_marginTop="2dp"
         android:background="@android:color/darker_gray" />
 
@@ -47,8 +47,8 @@
         android:gravity="center"
         android:text="USE FULL SIZE"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/light_gray_999999"
-        android:textSize="14sp" />
+        android:textColor="@color/light_gray_666666"
+        android:textSize="16sp"/>
 
     <View
         android:layout_width="match_parent"
@@ -56,7 +56,8 @@
         android:layout_marginTop="2dp"
           android:layout_marginRight="5dp"
          android:layout_marginLeft="5dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tvCancel"
@@ -68,13 +69,14 @@
         android:text="CANCEL"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/light_gray_999999"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="2dp"
-        
+        android:visibility="gone"
         android:background="@android:color/darker_gray" />
 
     <!--

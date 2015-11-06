@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -63,10 +64,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     private ConnectionResult mConnectionResult;
 
     private SignInButton btnSignIn;
-    /*if (android.os.Build.VERSION.SDK_INT > 9) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-    }*/
+
     //getBitmapFromURL("https://lh5.googleusercontent.com/-NcmQ7wanfmo/AAAAAAAAAAI/AAAAAAAALxY/_Vfnvjx6a40/photo.jpg?sz=250");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +82,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         Config configCheck = Config.findById(Config.class,1l);
         if(!configCheck.fbid.isEmpty() || !configCheck.googleid.isEmpty()){
             goToMain();
+        }
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
         }
 
         FacebookSdk.sdkInitialize(getApplicationContext());

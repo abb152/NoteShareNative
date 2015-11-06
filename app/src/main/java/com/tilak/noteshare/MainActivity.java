@@ -762,7 +762,10 @@ public class MainActivity extends DrawerActivity {
             @Override
             public void onClick(View arg0) {
 				if (type.equals("exit")) {
-					System.exit(0);
+					finish();
+					finish();
+					finish();
+					finish();
 				}
 				if (type.equals("delete")){
 					delete(id);

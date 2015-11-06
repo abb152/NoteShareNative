@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -107,7 +108,7 @@ public class CameraActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                showImageChooserAlertWith("",CameraActivity.this);
+                showImageChooserAlertWith("SELECT IMAGE SIZE",CameraActivity.this);
             }
         });
 
@@ -297,8 +298,8 @@ public class CameraActivity extends Activity {
 
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
-        //textViewTitleAlert.setText("");
-        //textViewTitleAlert.setTextColor(Color.WHITE);
+        textViewTitleAlert.setText(message);
+        textViewTitleAlert.setTextColor(Color.WHITE);
 
         TextView tvFullSize = (TextView) contentView
                 .findViewById(R.id.tvFullSize);
