@@ -3369,6 +3369,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		LayerDrawable brushDrawable = (LayerDrawable) brushview.getBackground();
 		brushshape = (GradientDrawable) brushDrawable.findDrawableByLayerId(R.id.shape_id);
 		brushshape.setColor(color_selected);
+		brushview.setBackground(brushshape);
 
 		SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
 		sizeSeekBar.setMax(14);
@@ -3391,19 +3392,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		}
 		colorPickerSeekBar.setProgress(lastBrushColor);
 
-		//int currentColor = drawView.getCurrentPaintColor();
-		//drawView.setDrawColor();
-
 		colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
 			@Override
 			public void onColorChanged(SeekBar seekBar, int color, boolean b) {
-				//((LayerDrawable) brushview.getBackground()).findDrawableByLayerId(R.id.shape_id);
 				color_selected = color;
-				drawView.setDrawColor(color);
+				drawView.setDrawColor(color_selected);
+				drawView.setBrushSize(10 + (lastBrushSize *2));
 				lastBrushColor = seekBar.getProgress();
 				brushview.setBackgroundColor(color_selected);
-				brushview.setBackgroundResource(R.drawable.color_circle);
 				brushshape.setColor(color_selected);
+				brushview.setBackground(brushshape);
 				count++;
 			}
 
@@ -3448,9 +3446,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		LayerDrawable eraserDrawable = (LayerDrawable) eraserview.getBackground();
 		final GradientDrawable erasershape = (GradientDrawable) eraserDrawable.findDrawableByLayerId(R.id.shape_id);
 		erasershape.setColor(Color.BLACK);
-
-		/*drawView.setBrushSize(10 + (lastBrushSize * 2));
-		drawView.setDrawColor(Color.parseColor("#FFFFFF"));*/
 
 		sizeEraserSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -3516,9 +3511,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		drawView.setDrawColor(color_selected);
 		drawView.onClickEraser(1);
 		drawView.setBrushSize(10 + (lastBrushSize * 2));
-		brushview.setBackgroundColor(color_selected);
-		brushview.setBackgroundResource(R.drawable.color_circle);
-		//brushshape.setColor(color_selected);
+		brushshape.setColor(color_selected);
+		brushview.setBackground(brushshape);
 		//drawView.setBrushSize(lastBrushSize);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
 		params.gravity = Gravity.CENTER;
