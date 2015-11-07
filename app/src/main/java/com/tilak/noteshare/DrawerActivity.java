@@ -3,6 +3,7 @@ package com.tilak.noteshare;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -232,7 +233,9 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				break;
 			case 8: {
 				System.out.println("like us on facebook");
-				startActivity(new Intent(this, LikeUsOnFacebookActivity.class));
+				//startActivity(new Intent(this, LikeUsOnFacebookActivity.class));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/wohlig/"));
+				startActivity(browserIntent);
 				//finish();
 			}
 				break;
@@ -244,8 +247,14 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				break;
 			case 10: {
 				System.out.println("invites friends");
-				startActivity(new Intent(this, InviteFriendsActivity.class));
+				//startActivity(new Intent(this, InviteFriendsActivity.class));
 				//finish();
+				Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
+				Intent share = new Intent(Intent.ACTION_SEND);
+				share.setType("image/*");
+				share.putExtra(Intent.EXTRA_STREAM, uri);
+				share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
+				startActivity(Intent.createChooser(share, "Invite your friends"));
 			}
 				break;
 			case 11: {
