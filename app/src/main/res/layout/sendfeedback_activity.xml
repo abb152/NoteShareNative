@@ -41,7 +41,7 @@
         android:background="@drawable/borderframe" >
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/etFeedback"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -49,8 +49,6 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:inputType="textMultiLine" >
-
-            <requestFocus />
         </EditText>
     </LinearLayout>
 
@@ -64,7 +62,7 @@
         android:weightSum="2" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btSubmit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
