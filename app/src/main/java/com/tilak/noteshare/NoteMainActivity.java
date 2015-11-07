@@ -173,7 +173,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	public TextFont_Size_ChooseAdapter TextFont_sizeAdapter;
 	public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
 	public String[] fontSizes;
-	RelativeLayout background_bg;
+	LinearLayout background_bg;
 	public String[] editortext = new String[1];
 	public List<View> textelementid = new ArrayList<View>();
 	public String[] noteTitle = new String[1];
@@ -233,8 +233,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		currentFontTypeface = NoteShareFonts.arial;
 		currentFontColor = Color.BLACK;
 
-		background_bg = (RelativeLayout) contentview
-				.findViewById(R.id.background_bg);
+		background_bg = (LinearLayout) contentview
+				.findViewById(R.id.noteElements);
 		layoutHeader = (RelativeLayout) contentview
 				.findViewById(R.id.mainHeadermenue);
 		imageButtoncalander = (ImageButton) layoutHeader
@@ -1579,6 +1579,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				try {
 					initlizeAudiorecoder();
+
+					if (noteIdForDetails == null) {
+						makeNote();
+					}
+					if (noteIdForDetails != null) {
+						NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName);
+						ne.save();
+						modifyNoteTime();
+					}
+
 					myAudioRecorder.prepare();
 					myAudioRecorder.start();
 
@@ -1634,14 +1644,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						myAudioRecorder = null;
 						record_text.setVisibility(View.GONE);
 
-						if (noteIdForDetails == null) {
+						/*if (noteIdForDetails == null) {
 							makeNote();
 						}
 						if (noteIdForDetails != null) {
 							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName);
 							ne.save();
 							modifyNoteTime();
-						}
+						}*/
 
 
 						Toast.makeText(NoteMainActivity.this, "Recording Saved",
@@ -4375,7 +4385,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					noteElements.addView(note_image);
 				} else if(n.type.equals("scribble")) {
 
-					noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
+					/*noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
 					LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
 					View viewImage = inflator.inflate(R.layout.note_image, null, false);
 					RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
@@ -4391,7 +4401,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					params.setMargins(0, n.getOrdernumber(), 0, 0);
 					note_imageview.setLayoutParams(params);
 					//note_image.setTop(n.getOrdernumber());
-					noteScribbleElements.addView(note_image, params);
+					noteScribbleElements.addView(note_image, params);*/
 
 				}else if (n.type.equals("audio")) {
 					// add audio layout

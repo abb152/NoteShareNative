@@ -48,7 +48,8 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:ems="10"
-            android:inputType="textMultiLine" >
+            android:inputType="textMultiLine"
+            android:gravity="start">
         </EditText>
     </LinearLayout>
 

@@ -13,10 +13,10 @@
 
     <ImageButton
         android:id="@+id/deleteImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
-        android:padding="10dp"
+        android:padding="4dp"
         android:scaleType="centerInside"
         android:background="@color/header_bg"
         android:src="@drawable/image_option_delete2"

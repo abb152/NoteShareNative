@@ -240,7 +240,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			}
 				break;
 			case 9: {
-				System.out.println(" send feed back");
+				System.out.println("send feed back");
 				startActivity(new Intent(this, SendFeedbackActivity.class));
 				 finish();
 			}

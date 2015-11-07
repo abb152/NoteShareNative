@@ -13,6 +13,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.tilak.db.Config;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -107,6 +110,10 @@ public class SendFeedbackActivity extends DrawerActivity {
 
 	public void sendFeedback() throws JSONException, ClientProtocolException, IOException {
 
+		Config con = Config.findById(Config.class, 1L);
+		//String email = con.email;
+		String message = textViewFeedbackText.getText().toString();
+
 		Log.e("jay in getServerData","");
 		ArrayList<String> stringData = new ArrayList<String>();
 		DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -115,14 +122,21 @@ public class SendFeedbackActivity extends DrawerActivity {
 
 		JSONObject json = new JSONObject();
 		json.put("user", "56120af8a89c4c8f043a0285");
-		json.put("email", "heyMogambo@wohlig.com");
-		json.put("text", "Mogambo Khush hua");
+		//json.put("email", email);
+		json.put("text", message);
 		//postMethod.setHeader("Content-Type", "application/json" );
 		postMethod.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
 		String response = httpClient.execute(postMethod,resonseHandler);
 		Log.e("jay response :", response);
 		JSONObject responseJson = new JSONObject(response);
 		String value = responseJson.get("value").toString();
+		//String message = responseJson.get("message").toString();
+
+		if (value.equals("true")) {
+			Toast.makeText(getApplicationContext(), "Thank you for your feedback", Toast.LENGTH_LONG).show();
+		} else if (value.equals("false")) {
+			Toast.makeText(getApplicationContext(), "Something went wrong, please again later", Toast.LENGTH_LONG).show();
+		}
 
 	}
 }
