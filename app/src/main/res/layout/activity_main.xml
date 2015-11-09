@@ -147,6 +147,7 @@
         android:weightSum="5" >
 
         <LinearLayout
+            android:id="@+id/textNoteSort"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -154,7 +155,6 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/textNoteSort"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -188,6 +188,7 @@
             android:background="@android:color/white" />
 
         <LinearLayout
+            android:id="@+id/textNoteView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -195,7 +196,6 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/textNoteView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

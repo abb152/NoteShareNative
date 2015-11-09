@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/checkbox">
+    android:id="@+id/checkbox"
+    android:paddingTop="10dp">
 
     <LinearLayout
     android:layout_width="match_parent"
@@ -42,10 +43,10 @@
 
     <ImageButton
         android:id="@+id/deleteCheckbox"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentRight="true"
-        android:padding="4dp"
+        android:padding="5dp"
         android:scaleType="centerInside"
         android:background="@color/header_bg"
         android:src="@drawable/image_option_delete2"

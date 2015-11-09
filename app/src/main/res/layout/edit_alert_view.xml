@@ -24,6 +24,8 @@
         android:layout_height="44dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:background="@android:color/white"
         android:hint="Enter a name"
         android:text=""

@@ -587,7 +587,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 				false);
 		TextView textViewTitleAlert = (TextView) contentView
 				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("CRATE A FOLDER");
+		textViewTitleAlert.setText("CREATE A FOLDER");
 		textViewTitleAlert.setTextColor(Color.WHITE);
 		final EditText textViewTitleAlertMessage = (EditText) contentView
 				.findViewById(R.id.textViewTitleAlertMessage);

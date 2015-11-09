@@ -1,6 +1,7 @@
 package com.tilak.noteshare;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -134,6 +135,9 @@ public class SendFeedbackActivity extends DrawerActivity {
 
 		if (value.equals("true")) {
 			Toast.makeText(getApplicationContext(), "Thank you for your feedback", Toast.LENGTH_LONG).show();
+			finish();
+			Intent in = new Intent(this, MainActivity.class);
+			startActivity(in);
 		} else if (value.equals("false")) {
 			Toast.makeText(getApplicationContext(), "Something went wrong, please again later", Toast.LENGTH_LONG).show();
 		}

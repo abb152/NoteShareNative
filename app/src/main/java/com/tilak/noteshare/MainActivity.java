@@ -724,11 +724,11 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     public void onBackPressed() {
-        showAlertWith("Are you sure,Do you want to quit the app?",
+        showAlertWith("ALERT", "Are you sure,Do you want to quit the app?",
 				MainActivity.this, "exit", "");
     }
 
-    void showAlertWith(String message, Context context, final String type, final String id) {
+    void showAlertWith(String title, String message, Context context, final String type, final String id) {
 
         final Dialog dialog = new Dialog(context);
 
@@ -739,7 +739,7 @@ public class MainActivity extends DrawerActivity {
 
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("ALERT");
+        textViewTitleAlert.setText(title);
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlertMessage);
@@ -1066,7 +1066,7 @@ public class MainActivity extends DrawerActivity {
 		String id = v.getTag().toString();
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();
-		showAlertWith("Are you sure you want to delete ?",
+		showAlertWith("DELETE NOTE", "Are you sure you want to delete ?",
 				MainActivity.this, "delete", id);
 	}
 

@@ -36,9 +36,9 @@
     <View
         android:id="@+id/layoutsepreter"
         android:layout_width="fill_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_height="1.0dp"
-        android:background="@color/light_gray_999999" />
+        android:background="#ccc" />
 
 </LinearLayout>

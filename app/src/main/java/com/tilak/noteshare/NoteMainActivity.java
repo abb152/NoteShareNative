@@ -1923,9 +1923,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				if (isMoreShown == false) {
 					isMoreShown = true;
 					layout_note_more_Info.setVisibility(View.VISIBLE);
+					imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 				} else {
 					isMoreShown = false;
 					layout_note_more_Info.setVisibility(View.GONE);
+					imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
 				}
 				imageButtoncalander.setVisibility(View.GONE);
 			}
@@ -4158,7 +4160,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 		LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
 		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("Date Time");
+		textViewTitleAlert.setText("Set Remainder");
 		textViewTitleAlert.setTextColor(Color.WHITE);
 
 		DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
@@ -4715,11 +4717,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	public void deleteButton(){
 		if(!isDeleteModeSelected) {
+			imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
 			for (int i = 0; i < allDelete.size(); i++) {
 				allDelete.get(i).setVisibility(View.VISIBLE);
 			}
 			isDeleteModeSelected = true;
 		}else{
+			imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
 			for (int i = 0; i < allDelete.size(); i++) {
 				allDelete.get(i).setVisibility(View.GONE);
 			}

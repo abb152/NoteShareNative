@@ -3,7 +3,8 @@
     android:id="@+id/note_audio"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -51,9 +52,8 @@
             android:layout_gravity="bottom"
             android:visibility="gone"
             android:textColor="@color/light_gray_666666"
-            android:layout_marginEnd="53dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:id="@+id/audio_cancel"
@@ -65,10 +65,10 @@
 
         <ImageButton
             android:id="@+id/deleteAudio"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
-            android:padding="4dp"
+            android:padding="5dp"
             android:scaleType="centerInside"
             android:background="@color/header_bg"
             android:src="@drawable/image_option_delete2"
