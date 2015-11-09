@@ -23,6 +23,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -3007,14 +3008,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		// buttonColors
 		// buttonPaper
 
-		ImageButton paper_bg_10 = (ImageButton) dialog
+		/*ImageButton paper_bg_10 = (ImageButton) dialog
 				.findViewById(R.id.paper_bg_10);
 		ImageButton paper_bg_9 = (ImageButton) dialog
 				.findViewById(R.id.paper_bg_9);
 		ImageButton paper_bg_8 = (ImageButton) dialog
 				.findViewById(R.id.paper_bg_8);
 		ImageButton paper_bg_7 = (ImageButton) dialog
-				.findViewById(R.id.paper_bg_7);
+				.findViewById(R.id.paper_bg_7);*/
 		ImageButton paper_bg_6 = (ImageButton) dialog
 				.findViewById(R.id.paper_bg_6);
 		ImageButton paper_bg_5 = (ImageButton) dialog
@@ -3028,7 +3029,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 		ImageButton paper_bg_1 = (ImageButton) dialog
 				.findViewById(R.id.paper_bg_1);
 
-		paper_bg_10.setOnClickListener(new OnClickListener() {
+		/*paper_bg_10.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				paperButtonSelected(arg0);
@@ -3055,7 +3056,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				paperButtonSelected(arg0);
 				dialog.dismiss();
 			}
-		});
+		});*/
 		paper_bg_6.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -3359,7 +3360,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setDrawColor(lastHighlightColor);
 				String esize = String.valueOf(10 + (lastHighlightSize * 2));
 				tvHighlightSize.setText(esize);
-				highlightViewSize = (lastHighlightSize * 4 + 20);
+				//highlightViewSize = (lastHighlightSize * 4 + 20);
+				highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
 				params.gravity = Gravity.CENTER;
 				highlightview.setLayoutParams(params);
@@ -3431,7 +3433,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setBrushSize(10 + (progress * 2));
 				String tvsize = String.valueOf(10 + (lastBrushSize * 2));
 				tvBrushSize.setText(tvsize);
-				brushViewSize = (lastBrushSize * 4 + 20);
+				//brushViewSize = (lastBrushSize * 4 + 20);
+				brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
 				params.gravity = Gravity.CENTER;
 				brushview.setLayoutParams(params);
@@ -3467,7 +3470,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				drawView.setDrawColor(lastBrushColor);
 				String esize = String.valueOf(10 + (lastEraserSize * 2));
 				tvEraserSize.setText(esize);
-				eraserViewSize = (lastEraserSize * 4 + 20);
+				//eraserViewSize = (lastEraserSize * 4 + 20);
+				eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
 				params.gravity = Gravity.CENTER;
 				eraserview.setLayoutParams(params);
@@ -3805,7 +3809,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			background_bg.setBackgroundResource(R.drawable.paper_bg_5);
 		} else if (view.getId() == R.id.paper_bg_6) {
 			background_bg.setBackgroundResource(R.drawable.paper_bg_6);
-		} else if (view.getId() == R.id.paper_bg_7) {
+		}/* else if (view.getId() == R.id.paper_bg_7) {
 			background_bg.setBackgroundResource(R.drawable.paper_bg_7);
 		} else if (view.getId() == R.id.paper_bg_8) {
 			background_bg.setBackgroundResource(R.drawable.paper_bg_8);
@@ -3813,7 +3817,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			background_bg.setBackgroundResource(R.drawable.paper_bg_9);
 		} else if (view.getId() == R.id.paper_bg_10) {
 			background_bg.setBackgroundResource(R.drawable.paper_bg_10);
-		}
+		}*/
 
 	}
 

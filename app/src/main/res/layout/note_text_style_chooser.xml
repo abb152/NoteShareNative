@@ -67,7 +67,8 @@
         android:layout_above="@+id/bottonLayout"
         android:layout_below="@+id/toplayout"
         android:divider="@color/eaeaea"
-        android:dividerHeight="1dp" >
+        android:dividerHeight="1dp"
+        android:visibility="gone">
     </ListView>
 
     <LinearLayout
@@ -210,6 +211,7 @@
         android:layout_below="@+id/toplayout"
         android:background="@android:color/transparent"
         android:orientation="vertical"
+        android:gravity="center"
         android:padding="0dp"
         android:visibility="gone"
         android:weightSum="2" >
@@ -219,7 +221,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:weightSum="5"
+            android:weightSum="6"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -276,9 +278,21 @@
                  android:layout_weight="1"
                 android:src="@drawable/paper_5"
                 android:tag="#9fdb86" />
+
+            <ImageButton
+                android:id="@+id/paper_bg_6"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="#d0d0d0"
+                android:layout_weight="1"
+                android:src="@drawable/paper_5"
+                android:tag="#9fdb86" />
+
         </LinearLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -340,7 +354,7 @@
                  android:layout_weight="1"
                 android:src="@drawable/paper_10"
                 android:tag="#d0d0d0" />
-        </LinearLayout>
+        </LinearLayout>-->
     </LinearLayout>
 
     <View

@@ -24,7 +24,7 @@ public class AboutNoteShareActivity extends DrawerActivity {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		// inflate your activity layout here!
 		View contentView = inflater
-				.inflate(R.layout.termsandconditions_activity, null, false);
+				.inflate(R.layout.about_activity, null, false);
 		mDrawerLayout.addView(contentView, 0);
 		initlizeUIElement(contentView);
 	}

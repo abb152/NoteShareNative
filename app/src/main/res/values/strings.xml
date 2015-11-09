@@ -42,6 +42,9 @@
     <string name="fb_unable_to_connect">Unable to connect to Facebook, Please try again!</string>
     <string name="gp_unable_to_connect">Unable to connect to Google Plus, Please try again!</string>
 
+    <!-- About -->
+    <string name="about">About</string>
+
     <!-- Terms and condition -->
     <string name="tctitle">Mobile App Terms and Conditions</string>
     <string name="tcgeneraltitle">1. GENERAL</string>
