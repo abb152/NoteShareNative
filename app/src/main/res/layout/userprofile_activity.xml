@@ -32,7 +32,6 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Hi User Name, Welcome to Note Share"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
@@ -42,7 +41,7 @@
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:padding="15dp"
+                android:padding="5dp"
                 android:background="@drawable/circular_view"
                 android:scaleType="fitXY"
                 android:src="@drawable/gallary_icon_1" />

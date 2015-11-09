@@ -8,6 +8,8 @@
         android:id="@+id/editTextlogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textColorHint="@android:color/white"
         android:textColor="@android:color/white"
         android:background="@android:color/transparent"

@@ -135,16 +135,18 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
                                 Profile profile = Profile.getCurrentProfile();
                                 if (profile != null) {
-                                    String firstName = profile.getFirstName();
-                                    String lastName = profile.getLastName();
+                                    //String firstName = profile.getFirstName();
+                                    //String lastName = profile.getLastName();
+                                    String name = profile.getName();
                                     Uri pictureUri = profile.getProfilePictureUri(200, 200);
                                     String email = object.optString("email");
                                     String uid = object.optString("id");
                                     //Toast.makeText(getApplicationContext(), "" + uid + " " + firstName + " " + lastName + " " + email + " " + pictureUri.toString(), Toast.LENGTH_LONG).show();
 
                                     Config c = Config.findById(Config.class,1l);
-                                    c.setFirstname(firstName);
-                                    c.setLastname(lastName);
+                                    //c.setFirstname(firstName);
+                                    //c.setLastname(lastName);
+                                    c.setFirstname(name);
                                     c.setEmail(email);
                                     c.setFbid(uid);
                                     c.setProfilepic(pictureUri.toString());
@@ -316,8 +318,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 String personName = currentPerson.getDisplayName();
-                String firstName = currentPerson.getName().getGivenName();
-                String lastName = currentPerson.getName().getFamilyName();
+                //String firstName = currentPerson.getName().getGivenName();
+                //String lastName = currentPerson.getName().getFamilyName();
                 String personPhotoUrl = currentPerson.getImage().getUrl();
                 String personGooglePlusProfile = currentPerson.getUrl();
                 String personGooglePlusId = currentPerson.getId();
@@ -326,8 +328,9 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + 200;
 
                 Config c = Config.findById(Config.class,1l);
-                c.setFirstname(firstName);
-                c.setLastname(lastName);
+                //c.setFirstname(firstName);
+                //c.setLastname(lastName);
+                c.setFirstname(personName);
                 c.setEmail(email);
                 c.setGoogleid(personGooglePlusId);
                 c.setProfilepic(personPhotoUrl);

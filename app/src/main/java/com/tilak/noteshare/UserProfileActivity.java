@@ -25,8 +25,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tilak.dataAccess.DataManager;
+import com.tilak.db.Config;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -52,13 +54,30 @@ public class UserProfileActivity extends Activity {
 		setContentView(R.layout.userprofile_activity);
 
 		initlizeUIElement(null);
-		getUserProfile();
+		//getUserProfile();
 
 	}
 
 	void initlizeUIElement(View contentview) {
 
+		Bundle b = getIntent().getExtras();
+		String fname = b.getString("fname");
+		String hide = b.getString("hide");
+		//String profilepic = b.getString("profilepic");
+
+		TextView userGreetingmesage = (TextView) findViewById(R.id.UserGreetingmesage);
+
+		if(hide.equals("hide"))
+			userGreetingmesage.setVisibility(View.GONE);
+		else
+			userGreetingmesage.setText("Hi " + fname + ", Welcome to Note Share");
+
+		String name = "profile.jpg";
+		File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/" + name);
+		Bitmap profilepic = BitmapFactory.decodeFile(String.valueOf(f));
+
 		userprofilepicture = (ImageButton) findViewById(R.id.userprofilepicture);
+		userprofilepicture.setImageBitmap(getRoundedCornerImage(profilepic));
 		btnnext = (Button) findViewById(R.id.btnprofileNext);
 		//btnUploadprofilepic = (Button) findViewById(R.id.btnprofileuploadProfile1);
 		chooseImage = (TextView) findViewById(R.id.btnprofileuploadProfile1);
@@ -66,7 +85,7 @@ public class UserProfileActivity extends Activity {
 
 		textnickname = (EditText) layoutusernickname
 				.findViewById(R.id.editTextlogin);
-
+		textnickname.setText(fname);
 		textnickname.setHint("Select a User Name");
 
 		addlistners();
@@ -79,7 +98,12 @@ public class UserProfileActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent newIntent = new Intent(getApplicationContext(),DrawerActivity.class);
+				String name = textnickname.getText().toString();
+				Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG).show();
+				Config c = Config.findById(Config.class, 1L);
+				//c.setFirstname(name);
+				c.firstname = name;
+				Intent newIntent = new Intent(getApplicationContext(), MainActivity.class);
 				startActivity(newIntent);
 				finish();
 			}
@@ -113,10 +137,7 @@ public class UserProfileActivity extends Activity {
 	}
 
 	public void getImage() {
-		final CharSequence[] items = { "Take Photo", "Choose from Library",
-				"Cancel" };
-
-		
+		final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				UserProfileActivity.this);
@@ -173,6 +194,19 @@ public class UserProfileActivity extends Activity {
 					e.printStackTrace();
 				}
 
+				/*File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + "profile.jpg");
+				try {
+					thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}*/
+
+				// Refreshing Gallery to view Image in Gallery
+				/*ContentValues values = new ContentValues();
+				values.put(MediaStore.Images.Media.DATA, mediaStorageDir.getAbsolutePath());
+				values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+				getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
+
 				// userprofilepicture.setImageBitmap(thumbnail);
 
 				/*RoundImage roundedImage = new RoundImage(thumbnail);
@@ -180,7 +214,7 @@ public class UserProfileActivity extends Activity {
 				DataManager.sharedDataManager().setUserImageBitMap(thumbnail);
 				chossedImage = thumbnail;*/
 
-				userprofilepicture.setImageBitmap(getRoundedCornerImage(thumbnail));
+				userprofilepicture.setImageBitmap(thumbnail);
 
 			} else if (requestCode == SELECT_PICTURE) {
 				Uri selectedImageUri = data.getData();
@@ -209,8 +243,8 @@ public class UserProfileActivity extends Activity {
 
 				// userprofilepicture.setImageBitmap(bm);
 
-				RoundImage roundedImage = new RoundImage(bm);
-				userprofilepicture.setImageDrawable(roundedImage);
+				//RoundImage roundedImage = new RoundImage(bm);
+				userprofilepicture.setImageBitmap(getRoundedCornerImage(bm));
 				DataManager.sharedDataManager().setUserImageBitMap(bm);
 
 				chossedImage = bm;
@@ -220,7 +254,7 @@ public class UserProfileActivity extends Activity {
 	}
 
 	public void getUserProfile() {
-		File file = new File(Environment.getExternalStoragePublicDirectory("NoteShare/Images") + "/profile-picture.jpg");
+		File file = new File(Environment.getExternalStoragePublicDirectory("NoteShare") + "/profile.jpg");
 		Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(file));
 		if(file.exists()) {
 			//userprofilepicture.setImageBitmap(bmp);

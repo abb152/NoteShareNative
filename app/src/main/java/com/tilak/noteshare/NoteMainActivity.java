@@ -1629,6 +1629,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						}
 					});
 
+					//audio_text.setText(myAudioRecorder.get);
+
 				} catch (IllegalStateException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -1727,7 +1729,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("image  mode");
+				System.out.println("image mode");
 				updateButtonUI(R.id.imageButtonImageMode);
 				// listviewNotes.setScrollContainer(true);
 				// startActivity(new
@@ -4362,7 +4364,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					imageDelete.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
+							//Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
 							//deleteElements(v.getTag().toString());
 							showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
 						}
@@ -4429,7 +4431,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					audioDelete.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
+							//Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
 							//deleteElements(v.getTag().toString());
 							showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
 						}

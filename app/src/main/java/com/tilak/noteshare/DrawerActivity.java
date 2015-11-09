@@ -178,7 +178,12 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		position = position1;
 		if (position1 == 0) {
 			// Profile setting
-			startActivity(new Intent(this, ProfileSettingActivity.class));
+			Config c = Config.findById(Config.class, 1L);
+			String fname = c.getFirstname();
+			Intent i = new Intent(this, UserProfileActivity.class);
+			i.putExtra("fname", fname);
+			i.putExtra("hide", "hide");
+			startActivity(i);
 			System.out.println("profile setting");
 			//finish();
 		} else {
