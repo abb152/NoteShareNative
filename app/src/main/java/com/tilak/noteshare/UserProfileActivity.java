@@ -104,15 +104,16 @@ public class UserProfileActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String name = textnickname.getText().toString().trim();
-				//Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG).show();
-				Config c = Config.findById(Config.class, 1l);
-				c.setFirstname(name);
-				//c.firstname = name;
-				c.save();
-				//Toast.makeText(getApplicationContext(), c.firstname, Toast.LENGTH_LONG).show();
-				Intent newIntent = new Intent(getApplicationContext(), MainActivity.class);
-				startActivity(newIntent);
-				finish();
+				if (name.length() > 25) {
+					Toast.makeText(getApplicationContext(), "Name can only be of 25 characters", Toast.LENGTH_LONG).show();
+				} else {
+					Config c = Config.findById(Config.class, 1l);
+					c.setFirstname(name);
+					c.save();
+					Intent newIntent = new Intent(getApplicationContext(), MainActivity.class);
+					startActivity(newIntent);
+					finish();
+				}
 			}
 		});
 		

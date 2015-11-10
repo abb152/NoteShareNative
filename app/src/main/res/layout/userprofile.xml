@@ -33,6 +33,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="0dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:gravity="center_horizontal|center_vertical"
             android:text="username"
             android:textAppearance="?android:attr/textAppearanceSmall"

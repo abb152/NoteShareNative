@@ -70,8 +70,6 @@ public class SlideMenuAdapter extends BaseAdapter {
 		switch (position) {
 		case 0:
 		{
-
-			
 			ViewHolder1 holder1;
 
 			if (convertView == null) {
