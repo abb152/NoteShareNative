@@ -95,8 +95,12 @@ public class CameraActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                cropImageView.rotateImage(ROTATE_NINETY_DEGREES);
-                croppedImage = rotateBitmap(croppedImage, 90);
+                if (findViewById(R.id.CropImageView) == null) {
+                    Toast.makeText(getApplicationContext(), "Please first select a photo", Toast.LENGTH_LONG).show();
+                } else {
+                    cropImageView.rotateImage(ROTATE_NINETY_DEGREES);
+                    croppedImage = rotateBitmap(croppedImage, 90);
+                }
             }
         });
 
@@ -108,7 +112,11 @@ public class CameraActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                showImageChooserAlertWith("SELECT IMAGE SIZE",CameraActivity.this);
+                if (findViewById(R.id.CropImageView) == null) {
+                    Toast.makeText(getApplicationContext(), "Please first select a photo", Toast.LENGTH_LONG).show();
+                } else {
+                    showImageChooserAlertWith("SELECT IMAGE SIZE", CameraActivity.this);
+                }
             }
         });
 

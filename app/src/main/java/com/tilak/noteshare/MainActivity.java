@@ -93,8 +93,6 @@ public class MainActivity extends DrawerActivity {
 	public Dialog move;
 
 	public List<Note> sortallnotes;
-
-	public String selectedView = "detail";
 	public String setListView = "detail";
 	public static String folderIdforNotes;
 
@@ -137,7 +135,7 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 //				Log.v("select",folderIdforNotes);
-				if(folderIdforNotes == null || folderIdforNotes == "-1")
+				if (folderIdforNotes == null || folderIdforNotes == "-1")
 					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
 				else
 					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ? AND folder = " + folderIdforNotes, "%" + editTextsearchNote.getText().toString() + "%");
@@ -1455,19 +1453,6 @@ public class MainActivity extends DrawerActivity {
 		intent.putExtra("NoteId", id);
 		finish();
 		startActivity(intent);
-	}
-
-	public void setSelectedView(String view) {
-		if (view.equals("detail")) {
-			setListView = "detail";
-			selectedView = "detail";
-		} else if (view.equals("list")) {
-			setListView = "list";
-			selectedView = "list";
-		} else if (view.equals("grid")) {
-			setListView = "grid";
-			selectedView = "grid";
-		}
 	}
 
 }

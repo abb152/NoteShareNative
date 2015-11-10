@@ -138,7 +138,7 @@ public class SendFeedbackActivity extends DrawerActivity {
 			Intent in = new Intent(this, MainActivity.class);
 			startActivity(in);
 		} else if (value.equals("false")) {
-			Toast.makeText(getApplicationContext(), "Something went wrong, please again later", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Something went wrong, please try again later", Toast.LENGTH_LONG).show();
 		}
 
 	}

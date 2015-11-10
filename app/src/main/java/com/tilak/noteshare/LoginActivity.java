@@ -36,6 +36,13 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.tilak.db.Config;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -44,6 +51,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends Activity implements View.OnClickListener,
@@ -142,8 +150,15 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                     String email = object.optString("email");
                                     String uid = object.optString("id");
                                     //Toast.makeText(getApplicationContext(), "" + uid + " " + firstName + " " + lastName + " " + email + " " + pictureUri.toString(), Toast.LENGTH_LONG).show();
+                                    try {
+                                        sendLogin(uid, name, email, pictureUri.toString(), "fb");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
-                                    Config c = Config.findById(Config.class,1l);
+                                    /*Config c = Config.findById(Config.class,1l);
                                     //c.setFirstname(firstName);
                                     //c.setLastname(lastName);
                                     c.setFirstname(name);
@@ -151,8 +166,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                     c.setFbid(uid);
                                     c.setProfilepic(pictureUri.toString());
                                     c.save();
-                                    getBitmapFromURL(c.profilepic);
-                                    goToMain();
+                                    getBitmapFromURL(c.profilepic);*/
+                                    //goToMain();
                                     facebookLogout();
                                 } else {
                                     //facebookLogout();
@@ -327,7 +342,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
                 personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + 200;
 
-                Config c = Config.findById(Config.class,1l);
+                /*Config c = Config.findById(Config.class,1l);
                 //c.setFirstname(firstName);
                 //c.setLastname(lastName);
                 c.setFirstname(personName);
@@ -335,8 +350,16 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 c.setGoogleid(personGooglePlusId);
                 c.setProfilepic(personPhotoUrl);
                 c.save();
-                getBitmapFromURL(c.profilepic);
-                goToMain();
+                getBitmapFromURL(c.profilepic);*/
+                //goToMain();
+
+                try {
+                    sendLogin(personGooglePlusId, personName, email, personPhotoUrl, "gp");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 Log.e(TAG, "Name: " + personName +
                         ", person Id:" + personGooglePlusId +
@@ -388,6 +411,60 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         super.onStop();
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
+        }
+    }
+
+    public void sendLogin(String id, String name, String email, String profilePic, String type) throws JSONException, ClientProtocolException, IOException {
+        //Config con = Config.findById(Config.class, 1L);
+        //String email = con.email;
+        //String message = textViewFeedbackText.getText().toString();
+
+        Log.e("jay in getServerData","");
+        ArrayList<String> stringData = new ArrayList<String>();
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        ResponseHandler<String> resonseHandler = new BasicResponseHandler();
+        HttpPost postMethod = new HttpPost("http://192.168.0.121:1337/user/sociallogin");
+
+        JSONObject json = new JSONObject();
+        //json.put("user", "56120af8a89c4c8f043a0285");
+        if (type.equals("fb")) {
+            json.put("fbid", id);
+        } else if (type.equals("gp")) {
+            json.put("googleid", id);
+        }
+        json.put("name", name);
+        json.put("email", email);
+        json.put("profilepic", profilePic);
+        //postMethod.setHeader("Content-Type", "application/json" );
+        postMethod.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
+        String response = httpClient.execute(postMethod,resonseHandler);
+        Log.e("jay response :", response);
+        JSONObject responseJson = new JSONObject(response);
+        Log.e("response json", responseJson.toString());
+        String responseServerId = responseJson.get("_id").toString();
+        //responseServerId = responseJson.getString("_id");
+        String responseFbId = responseJson.get("fbid").toString();
+        String responseGpId = responseJson.get("googleid").toString();
+        String responseName = responseJson.get("name").toString();
+        String responseEmail = responseJson.get("email").toString();
+        String responseProfilePic = responseJson.get("profilepic").toString();
+
+        //Log.v("response data", responseServerId + responseFbId + responseEmail + responseName + responseProfilePic);
+
+        //String message = responseJson.get("message").toString();
+
+        if (responseServerId.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "No response from Server", Toast.LENGTH_LONG).show();
+        } else {
+            Config c = Config.findById(Config.class, 1l);
+            c.setFirstname(responseName);
+            c.setEmail(responseEmail);
+            c.setFbid(responseFbId);
+            c.setGoogleid(responseGpId);
+            c.setProfilepic(responseProfilePic);
+            c.save();
+            getBitmapFromURL(c.profilepic);
+            goToMain();
         }
     }
 
