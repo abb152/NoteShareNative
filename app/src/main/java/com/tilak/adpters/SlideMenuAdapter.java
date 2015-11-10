@@ -98,9 +98,9 @@ public class SlideMenuAdapter extends BaseAdapter {
 			holder1 = new ViewHolder1();
 			holder1.imageViewUserImage = (ImageView) vi
 					.findViewById(R.id.imageViewUserProfile);
-			holder1.imageViewUserImage.setImageBitmap(getRoundedCornerImage(b));
+			holder1.imageViewUserImage.setImageBitmap(getRoundedCornerImage(getSquareImage(b)));
 			holder1.textViewusername = (TextView) vi.findViewById(R.id.textViewUsername);
-			holder1.textViewusername.setText(config.firstname +" "+config.lastname);
+			holder1.textViewusername.setText(config.firstname/* +" "+config.lastname*/);
 			//holder1.textViewUserbalance.setText("");
 			
 			/*Bitmap bm =DataManager.sharedDataManager().getUserImageBitMap();
@@ -181,8 +181,29 @@ public class SlideMenuAdapter extends BaseAdapter {
 		public TextView textViewusername;
 		public ImageView imageViewUserImage;
 		public TextView textViewUserbalance;
-		
+	}
 
+	public static Bitmap getSquareImage(Bitmap bitmap) {
+		Bitmap tempBitmap;
+		if (bitmap.getWidth() >= bitmap.getHeight()){
+			tempBitmap = Bitmap.createBitmap(
+					bitmap,
+					bitmap.getWidth()/2 - bitmap.getHeight()/2,
+					0,
+					bitmap.getHeight(),
+					bitmap.getHeight()
+			);
+
+		} else{
+			tempBitmap = Bitmap.createBitmap(
+					bitmap,
+					0,
+					bitmap.getHeight()/2 - bitmap.getWidth()/2,
+					bitmap.getWidth(),
+					bitmap.getWidth()
+			);
+		}
+		return tempBitmap;
 	}
 
 	public static Bitmap getRoundedCornerImage(Bitmap bitmap){

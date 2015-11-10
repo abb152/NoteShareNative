@@ -2,6 +2,7 @@ package com.tilak.noteshare;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +32,9 @@ import android.widget.Toast;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.db.Config;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class UserProfileActivity extends Activity {
 
@@ -75,9 +75,14 @@ public class UserProfileActivity extends Activity {
 		String name = "profile.jpg";
 		File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/" + name);
 		Bitmap profilepic = BitmapFactory.decodeFile(String.valueOf(f));
-
 		userprofilepicture = (ImageButton) findViewById(R.id.userprofilepicture);
-		userprofilepicture.setImageBitmap(getRoundedCornerImage(profilepic));
+
+		if (f.exists()) {
+			userprofilepicture.setImageBitmap(getRoundedCornerImage(getSquareImage(profilepic)));
+		} else {
+			Toast.makeText(getApplicationContext(), "User profile doesn't exist", Toast.LENGTH_LONG).show();
+		}
+
 		btnnext = (Button) findViewById(R.id.btnprofileNext);
 		//btnUploadprofilepic = (Button) findViewById(R.id.btnprofileuploadProfile1);
 		chooseImage = (TextView) findViewById(R.id.btnprofileuploadProfile1);
@@ -98,11 +103,13 @@ public class UserProfileActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String name = textnickname.getText().toString();
-				Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG).show();
-				Config c = Config.findById(Config.class, 1L);
-				//c.setFirstname(name);
-				c.firstname = name;
+				String name = textnickname.getText().toString().trim();
+				//Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG).show();
+				Config c = Config.findById(Config.class, 1l);
+				c.setFirstname(name);
+				//c.firstname = name;
+				c.save();
+				//Toast.makeText(getApplicationContext(), c.firstname, Toast.LENGTH_LONG).show();
 				Intent newIntent = new Intent(getApplicationContext(), MainActivity.class);
 				startActivity(newIntent);
 				finish();
@@ -174,10 +181,10 @@ public class UserProfileActivity extends Activity {
 
 			if (requestCode == REQUEST_CAMERA) {
 				Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				/*ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
-				String imgDir = "NoteShare/Images/";
+				String imgDir = "NoteShare/";
 				File destination = new File(
 						Environment.getExternalStoragePublicDirectory(imgDir),
 						"profile-picture" + ".jpg");
@@ -192,20 +199,22 @@ public class UserProfileActivity extends Activity {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
-				}
+				}*/
 
-				/*File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + "profile.jpg");
+				File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + "profile.jpg");
+				if (mediaStorageDir.exists())
+					mediaStorageDir.delete();
 				try {
 					thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-				}*/
+				}
 
 				// Refreshing Gallery to view Image in Gallery
-				/*ContentValues values = new ContentValues();
+				ContentValues values = new ContentValues();
 				values.put(MediaStore.Images.Media.DATA, mediaStorageDir.getAbsolutePath());
 				values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-				getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
+				getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
 				// userprofilepicture.setImageBitmap(thumbnail);
 
@@ -214,7 +223,9 @@ public class UserProfileActivity extends Activity {
 				DataManager.sharedDataManager().setUserImageBitMap(thumbnail);
 				chossedImage = thumbnail;*/
 
-				userprofilepicture.setImageBitmap(thumbnail);
+				//userprofilepicture.setImageBitmap(thumbnail);
+				userprofilepicture.setScaleType(ImageView.ScaleType.CENTER_CROP);
+				userprofilepicture.setImageBitmap(getRoundedCornerImage(getSquareImage(thumbnail)));
 
 			} else if (requestCode == SELECT_PICTURE) {
 				Uri selectedImageUri = data.getData();
@@ -240,11 +251,19 @@ public class UserProfileActivity extends Activity {
 				options.inSampleSize = scale;
 				options.inJustDecodeBounds = false;
 				bm = BitmapFactory.decodeFile(selectedImagePath, options);
+				File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + "profile.jpg");
+				if (mediaStorageDir.exists())
+					mediaStorageDir.delete();
+				try {
+					bm.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 
 				// userprofilepicture.setImageBitmap(bm);
 
 				//RoundImage roundedImage = new RoundImage(bm);
-				userprofilepicture.setImageBitmap(getRoundedCornerImage(bm));
+				userprofilepicture.setImageBitmap(getRoundedCornerImage(getSquareImage(bm)));
 				DataManager.sharedDataManager().setUserImageBitMap(bm);
 
 				chossedImage = bm;
@@ -263,6 +282,29 @@ public class UserProfileActivity extends Activity {
 			//userprofilepicture.setBackground(Drawable.createFromPath(String.valueOf(file)));
 		}
 
+	}
+
+	public static Bitmap getSquareImage(Bitmap bitmap) {
+		Bitmap tempBitmap;
+		if (bitmap.getWidth() >= bitmap.getHeight()){
+			tempBitmap = Bitmap.createBitmap(
+					bitmap,
+					bitmap.getWidth()/2 - bitmap.getHeight()/2,
+					0,
+					bitmap.getHeight(),
+					bitmap.getHeight()
+			);
+
+		} else{
+			tempBitmap = Bitmap.createBitmap(
+					bitmap,
+					0,
+					bitmap.getHeight()/2 - bitmap.getWidth()/2,
+					bitmap.getWidth(),
+					bitmap.getWidth()
+			);
+		}
+		return tempBitmap;
 	}
 
 	public static Bitmap getRoundedCornerImage(Bitmap bitmap) {
