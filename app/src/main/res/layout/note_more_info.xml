@@ -13,7 +13,7 @@
         android:visibility="visible"
         android:layout_height="1dp" />
 
-    <!--<Button
+    <Button
         android:id="@+id/buttonLock"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
@@ -28,21 +28,23 @@
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:layout_height="1dp" />
+
     <Button
-        android:id="@+id/buttonDelete"
+        android:id="@+id/buttonTimebomb"
         android:layout_width="fill_parent"
-        android:textColor="@color/light_gray_666666"
         android:layout_height="40dp"
-         android:textSize="18sp"
+        android:textColor="@color/light_gray_666666"
         android:background="@android:color/transparent"
-        android:text="Delete" />
+        android:textSize="18sp"
+        android:text="Timebomb" />
 
     <View
         android:layout_width="fill_parent"
         android:background="@color/light_gray_999999"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_height="1dp" />-->
+        android:layout_height="1dp" />
+
     <Button
         android:id="@+id/btnRemind"
         android:layout_width="fill_parent"
@@ -59,6 +61,55 @@
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:layout_height="1dp" />
+
+    <Button
+        android:id="@+id/buttonMove"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/light_gray_666666"
+        android:background="@android:color/transparent"
+        android:textSize="18sp"
+        android:text="Move" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="fill_parent"
+        android:textColor="@color/light_gray_666666"
+        android:layout_height="40dp"
+         android:textSize="18sp"
+        android:background="@android:color/transparent"
+        android:text="Delete" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp" />
+
+    <Button
+        android:id="@+id/buttonShare"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textColor="@color/light_gray_666666"
+        android:background="@android:color/transparent"
+        android:textSize="18sp"
+        android:text="Share" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/light_gray_999999"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dp" />
+
     <!--<Button
         android:id="@+id/buttonTimeBomb"
         android:layout_width="fill_parent"
