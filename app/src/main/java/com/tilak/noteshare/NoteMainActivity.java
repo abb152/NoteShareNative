@@ -1573,7 +1573,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
 
 				allDelete.add(audioDelete);
-
+				NoteElement ne = null;
 				final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
 
 				audioElement.addView(note_audio);
@@ -1585,7 +1585,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						makeNote();
 					}
 					if (noteIdForDetails != null) {
-						NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName);
+
+						final JSONObject audioValue = new JSONObject();
+						try {
+							audioValue.put("status", 0);
+							audioValue.put("name", audioName);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+
+						ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioValue.toString());
 						ne.save();
 						modifyNoteTime();
 					}
@@ -1637,6 +1646,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					e.printStackTrace();
 				}
 
+				final NoteElement finalNe = ne;
 				audio_play.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -1656,6 +1666,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							modifyNoteTime();
 						}*/
 
+						JSONObject audioValue = null;
+						try {
+							audioValue = new JSONObject(finalNe.content);
+							audioValue.remove("status");
+							audioValue.put("status", 1);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+						finalNe.content = audioValue.toString();
+						finalNe.save();
 
 						Toast.makeText(NoteMainActivity.this, "Recording Saved",
 								Toast.LENGTH_SHORT).show();
@@ -4413,7 +4433,22 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				}else if (n.type.equals("audio")) {
 					// add audio layout
-					final String name = n.content;
+					Log.e("jay n.con", n.content);
+					String status = null, name = null;
+					JSONObject audioJson = null;
+					try {
+						audioJson = new JSONObject(n.content);
+						Log.e("jay audio Json", audioJson.toString());
+						name = audioJson.get("name").toString();
+						status = audioJson.get("status").toString();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+					if(status.equals(0))
+						break;
+
+
 					//addAudio(name);
 					noteElements = (LinearLayout) findViewById(R.id.noteElements);
 					LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
@@ -4485,6 +4520,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						}
 					});
 					noteElements.addView(note_audio);
+
 				} else if (n.type.equals("checkbox")) {
 					String text = null ,status = null;
 					JSONObject checkBoxJson = null;
