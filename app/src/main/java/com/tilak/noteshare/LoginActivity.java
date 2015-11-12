@@ -443,13 +443,18 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         Log.e("response json", responseJson.toString());
         String responseServerId = responseJson.get("_id").toString();
         //responseServerId = responseJson.getString("_id");
-        String responseFbId = responseJson.get("fbid").toString();
-        String responseGpId = responseJson.get("googleid").toString();
+        //String responseFbId; // = responseJson.get("fbid").toString();
+        //String responseGpId; // = responseJson.get("googleid").toString();
         String responseName = responseJson.get("name").toString();
         String responseEmail = responseJson.get("email").toString();
         String responseProfilePic = responseJson.get("profilepic").toString();
 
-        //Log.v("response data", responseServerId + responseFbId + responseEmail + responseName + responseProfilePic);
+        if (type.equals("fb"))
+            responseFbId = responseJson.get("fbid").toString();
+        else if (type.equals("gp"))
+            responseGpId = responseJson.get("googleid").toString();
+
+        //Log.e("response data", responseServerId + ", " + responseFbId + responseGpId);
 
         //String message = responseJson.get("message").toString();
 
@@ -467,5 +472,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             goToMain();
         }
     }
+
+    String responseFbId, responseGpId;
 
 }
