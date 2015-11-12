@@ -4434,20 +4434,20 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				}else if (n.type.equals("audio")) {
 					// add audio layout
 					Log.e("jay n.con", n.content);
-					String status = null, name = null;
+					String name = null;
+					int status = 0;
 					JSONObject audioJson = null;
 					try {
 						audioJson = new JSONObject(n.content);
 						Log.e("jay audio Json", audioJson.toString());
 						name = audioJson.get("name").toString();
-						status = audioJson.get("status").toString();
+						//status = audioJson.get("status").toString();
+						status = audioJson.getInt("status");
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
 
-					if(status.equals(0))
-						break;
-
+					Log.e("jay status", String.valueOf(status));
 
 					//addAudio(name);
 					noteElements = (LinearLayout) findViewById(R.id.noteElements);
@@ -4519,7 +4519,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							}
 						}
 					});
-					noteElements.addView(note_audio);
+					if(status == 1)
+						noteElements.addView(note_audio);
 
 				} else if (n.type.equals("checkbox")) {
 					String text = null ,status = null;
