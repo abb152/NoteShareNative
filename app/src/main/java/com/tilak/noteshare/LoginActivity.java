@@ -88,6 +88,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         }
 
         Config configCheck = Config.findById(Config.class,1l);
+        Log.e("jay fbid", configCheck.fbid);
+        Log.e("jay gpid", configCheck.googleid);
         if(!configCheck.fbid.isEmpty() || !configCheck.googleid.isEmpty()){
             goToMain();
         }
@@ -423,7 +425,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         ArrayList<String> stringData = new ArrayList<String>();
         DefaultHttpClient httpClient = new DefaultHttpClient();
         ResponseHandler<String> resonseHandler = new BasicResponseHandler();
-        HttpPost postMethod = new HttpPost("http://192.168.0.121:1337/user/sociallogin");
+        HttpPost postMethod = new HttpPost("http://104.197.122.116/user/sociallogin");
 
         JSONObject json = new JSONObject();
         //json.put("user", "56120af8a89c4c8f043a0285");
@@ -448,6 +450,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         String responseName = responseJson.get("name").toString();
         String responseEmail = responseJson.get("email").toString();
         String responseProfilePic = responseJson.get("profilepic").toString();
+        Log.e("jay fbid", responseFbId);
+        Log.e("jay gpid", responseGpId);
 
         if (type.equals("fb"))
             responseFbId = responseJson.get("fbid").toString();
@@ -468,11 +472,14 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             c.setGoogleid(responseGpId);
             c.setProfilepic(responseProfilePic);
             c.save();
+            Log.e("jay fbid", c.fbid);
+            Log.e("jay gpid", c.googleid);
+            Log.e("jay inside conf","");
             getBitmapFromURL(c.profilepic);
             goToMain();
         }
     }
 
-    String responseFbId, responseGpId;
+    String responseFbId = "", responseGpId ="";
 
 }

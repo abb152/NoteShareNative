@@ -17,14 +17,15 @@
 
         <ImageView
             android:id="@+id/imageViewUserProfile"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_marginBottom="0dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="0dp"
             android:scaleType="fitCenter"
-            android:padding="10dp"
+            android:padding="2dp"
+            android:background="@drawable/circular_user_view"
             android:src="@drawable/ic_launcher" />
 
         <TextView
@@ -32,13 +33,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="0dp"
-            android:layout_marginLeft="0dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:gravity="center_horizontal|center_vertical"
             android:text="username"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <!--

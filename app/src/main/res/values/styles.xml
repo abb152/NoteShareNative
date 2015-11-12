@@ -24,6 +24,7 @@
     <color name="twitterbuttonbg">#55acee</color>
     <color name="textfieldbg">#fff</color>
     <color name="header_bg">#ff5a60</color>
+    <color name="header_bg_dark">#cc484d</color>
     <color name="light_gray">#eeeeee</color>
     <color name="light_gray_666666">#666666</color>
     <color name="light_gray_999999">#999999</color>
@@ -49,7 +50,7 @@
     <color name="fb_background">#3b5998</color>
     <color name="gp_background">#dc4e41</color>
 
-         <style name="MyListBackContent">
+    <style name="MyListBackContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:background">@drawable/background_back</item>

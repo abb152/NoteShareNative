@@ -2,13 +2,19 @@ package com.tilak.noteshare;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -270,21 +276,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				break;
 			case 12: {
 				System.out.println("logout");
-				Config c = Config.findById(Config.class, 1l);
-				c.setFirstname("");
-				c.setLastname("");
-				c.setEmail("");
-				c.setPassword("");
-				c.setFbid("");
-				c.setGoogleid("");
-				c.setPasscode(0);
-				c.setProfilepic("");
-				c.setUsername("");
-				c.setDeviceid("");
-				c.setServerid("");
-				c.save();
-				finish();
-				startActivity(new Intent(this, LoginActivity.class));
+				showAlertWith("ARE YOU SURE?", "Are you sure you want to Log Out?", DrawerActivity.this);
 			}
 				break;
 			default: {}
@@ -359,5 +351,60 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 	 * mActionBar.setCustomView(mCustomView);
 	 * mActionBar.setDisplayShowCustomEnabled(true);
 	 */
+
+	void showAlertWith(String title, String message, Context context) {
+
+		final Dialog dialog = new Dialog(context);
+
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.alert_view, null, false);
+
+		TextView textViewTitleAlert = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText(title);
+		textViewTitleAlert.setTextColor(Color.WHITE);
+		TextView textViewTitleAlertMessage = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlertMessage);
+		textViewTitleAlertMessage.setText(message);
+
+		Button buttonAlertCancel = (Button) contentView
+				.findViewById(R.id.buttonAlertCancel);
+		Button buttonAlertOk = (Button) contentView
+				.findViewById(R.id.buttonAlertOk);
+		buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Config c = Config.findById(Config.class, 1l);
+				c.setFirstname("");
+				c.setLastname("");
+				c.setEmail("");
+				c.setPassword("");
+				c.setFbid("");
+				c.setGoogleid("");
+				c.setPasscode(0);
+				c.setProfilepic("");
+				c.setUsername("");
+				c.setDeviceid("");
+				c.setServerid("");
+				c.save();
+				finish();
+				startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
+			}
+		});
+
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(false);
+		dialog.setContentView(contentView);
+		dialog.show();
+
+	}
 
 }

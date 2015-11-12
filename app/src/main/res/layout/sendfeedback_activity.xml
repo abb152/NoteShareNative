@@ -80,7 +80,7 @@
             android:layout_margin="5dp"
                android:textColor="@android:color/white"
             android:background="@color/header_bg"
-            android:text="GO BACK" />
+            android:text="CANCEL" />
     </LinearLayout>
 
 </LinearLayout>

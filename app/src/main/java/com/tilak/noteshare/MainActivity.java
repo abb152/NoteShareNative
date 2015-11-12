@@ -606,6 +606,9 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		layoutListTimeBomb
 				.findViewById(R.id.imageViewSlidemenu);
+		ImageView layoutListImageViewTimeBomb = (ImageView) layoutListTimeBomb
+				.findViewById(R.id.imageViewSlidemenu);
+		layoutListImageViewTimeBomb.setImageResource(R.drawable.timebomb_sort_view);
 		layoutListTextViewTimeBomb.setText("Time Bomb");
 
 		layoutGridTextView.setOnClickListener(new OnClickListener() {
@@ -614,7 +617,7 @@ public class MainActivity extends DrawerActivity {
 			public void onClick(View arg0) {
 				Toast.makeText(getApplicationContext(), "Created Time",
 						Toast.LENGTH_SHORT).show();
-				sortType=SORTTYPE.CREATED_TIME;
+				sortType = SORTTYPE.CREATED_TIME;
 				sortingArray();
 
 				myDialog.dismiss();
@@ -723,11 +726,11 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     public void onBackPressed() {
-        showAlertWith("Are you sure, Do you want to quit the app?",
+        showAlertWith("QUIT THE APP", "Are you sure, Do you want to quit the app?",
 				MainActivity.this, "exit", "");
     }
 
-    void showAlertWith(String message, Context context, final String type, final String id) {
+    void showAlertWith(String title, String message, Context context, final String type, final String id) {
 
         final Dialog dialog = new Dialog(context);
 
@@ -738,7 +741,7 @@ public class MainActivity extends DrawerActivity {
 
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("ALERT");
+        textViewTitleAlert.setText(title);
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlertMessage);
@@ -1062,7 +1065,7 @@ public class MainActivity extends DrawerActivity {
 		String id = v.getTag().toString();
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();
-		showAlertWith("Are you sure you want to delete?",
+		showAlertWith("DELETE NOTE", "Are you sure you want to delete?",
 				MainActivity.this, "delete", id);
 	}
 
@@ -1279,7 +1282,7 @@ public class MainActivity extends DrawerActivity {
 		}
 	}
 
-	public void showMenuAlert(Context context,String noteid ){
+	public void showMenuAlert(Context context, String noteid){
 
 		move = new Dialog(context);
 		LayoutInflater inflater = (LayoutInflater) this
@@ -1315,7 +1318,7 @@ public class MainActivity extends DrawerActivity {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
 				int itemPosition = position;
-				String folderid = null, foldername=null;
+				String folderid = null, foldername = null;
 				Long noteid;
 
 				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);

@@ -27,8 +27,7 @@
     <TimePicker
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tp" />
-
+        android:id="@+id/tp"/>
 
     <View
         android:layout_width="match_parent"
@@ -48,9 +47,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
+            android:background="@color/header_bg"
             android:gravity="center"
-            android:text="CANCEL" />
+            android:text="CANCEL"
+            android:textColor="@color/white"/>
 
         <View
             android:layout_width="1dp"
@@ -63,9 +63,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
+            android:background="@color/header_bg"
             android:gravity="center"
-            android:text="OK" />
+            android:text="OK"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
 </LinearLayout>
