@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.media.MediaPlayer;
@@ -3948,14 +3950,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     public void paperButtonSelected(View view) {
-
         paperBackground(view.getTag().toString());
-
         String viewTag = view.getTag().toString();
 
-        if (noteIdForDetails == null) {
-            makeNote();
-        }
+        if (noteIdForDetails == null) { makeNote(); }
 
         if (noteIdForDetails != null) {
             Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
@@ -3963,22 +3961,45 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             note.setModificationtime(currentDateStr);
             note.save();
         }
-
     }
 
     public void paperBackground(String background) {
         if (background.equals("paper_bg_1")) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_1);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1111);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
+            background_bg.setBackgroundDrawable(bitmapDrawable);
+            //background_bg.setBackgroundResource(R.drawable.paper_bg_1);
         } else if (background.equals("paper_bg_2")) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_2);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1222);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
+            background_bg.setBackgroundDrawable(bitmapDrawable);
+            //background_bg.setBackgroundResource(R.drawable.paper_bg_2);
         } else if (background.equals("paper_bg_3")) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_3);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1333);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
+            background_bg.setBackgroundDrawable(bitmapDrawable);
+            //background_bg.setBackgroundResource(R.drawable.paper_bg_3);
         } else if (background.equals("paper_bg_4")) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_4);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1444);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
+            background_bg.setBackgroundDrawable(bitmapDrawable);
+            //background_bg.setBackgroundResource(R.drawable.paper_bg_4);
         } else if (background.equals("paper_bg_5")) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_5);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1555);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
+            background_bg.setBackgroundDrawable(bitmapDrawable);
+            //background_bg.setBackgroundResource(R.drawable.paper_bg_5);
         } else if (background.equals("paper_bg_6")) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_6);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1666);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
+            background_bg.setBackgroundDrawable(bitmapDrawable);
+            //background_bg.setBackgroundResource(R.drawable.paper_bg_6);
         }
     }
 

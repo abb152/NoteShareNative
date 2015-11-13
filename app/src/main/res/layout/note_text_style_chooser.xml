@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:background="@color/eaeaea"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/toplayout"
@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
-        android:weightSum="4" >
+        android:weightSum="4">
 
         <!--<Button
             android:id="@+id/buttonFont"
@@ -42,7 +42,7 @@
             android:background="@color/header_bg"
             android:text="COLOR"
             android:textColor="@android:color/white"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/buttonPaper"
@@ -68,8 +68,7 @@
         android:layout_below="@+id/toplayout"
         android:divider="@color/eaeaea"
         android:dividerHeight="1dp"
-        android:visibility="gone">
-    </ListView>
+        android:visibility="gone"></ListView>
 
     <LinearLayout
         android:id="@+id/layoutColors1"
@@ -80,17 +79,17 @@
         android:layout_centerInParent="true"
         android:background="@android:color/transparent"
         android:orientation="vertical"
-        android:visibility="gone"
         android:padding="0dp"
-        android:weightSum="2" >
+        android:visibility="gone"
+        android:weightSum="2">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:weightSum="5"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:weightSum="5">
 
             <ImageButton
                 android:id="@+id/color_bg_1"
@@ -116,19 +115,19 @@
                 android:id="@+id/color_bg_3"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#97e1cc"
                 android:tag="#97e1cc" />
 
             <ImageButton
-                 android:id="@+id/color_bg_4"
+                android:id="@+id/color_bg_4"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#fdff7f"
                 android:tag="#fdff7f" />
 
@@ -136,9 +135,9 @@
                 android:id="@+id/color_bg_5"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#9fdb86"
                 android:tag="#9fdb86" />
         </LinearLayout>
@@ -148,8 +147,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:weightSum="5"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:weightSum="5">
 
             <ImageButton
                 android:id="@+id/color_bg_6"
@@ -165,9 +164,9 @@
                 android:id="@+id/color_bg_7"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#b6e29e"
                 android:tag="#b6e29e" />
 
@@ -175,9 +174,9 @@
                 android:id="@+id/color_bg_8"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#dca9aa"
                 android:tag="#dca9aa" />
 
@@ -185,9 +184,9 @@
                 android:id="@+id/color_bg_9"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#f0a6ef"
                 android:tag="#f0a6ef" />
 
@@ -195,9 +194,9 @@
                 android:id="@+id/color_bg_10"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#d0d0d0"
                 android:tag="#d0d0d0" />
         </LinearLayout>
@@ -210,19 +209,19 @@
         android:layout_above="@+id/bottonLayout"
         android:layout_below="@+id/toplayout"
         android:background="@android:color/transparent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="0dp"
         android:visibility="gone"
-        android:weightSum="2" >
+        android:weightSum="2">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:weightSum="6"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:weightSum="6">
 
             <ImageButton
                 android:id="@+id/paper_bg_1"
@@ -230,9 +229,10 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#d0d0d0"
-                 android:layout_weight="1"
-               android:src="@drawable/paper_1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/paper_bg_11"
                 android:tag="paper_bg_1" />
 
             <ImageButton
@@ -241,9 +241,10 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#d0d0d0"
-                 android:layout_weight="1"
-                android:src="@drawable/paper_2"
+                android:scaleType="fitCenter"
+                android:src="@drawable/paper_bg_12"
                 android:tag="paper_bg_2" />
 
             <ImageButton
@@ -252,9 +253,10 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#d0d0d0"
-                 android:layout_weight="1"
-                android:src="@drawable/paper_3"
+                android:scaleType="fitCenter"
+                android:src="@drawable/paper_bg_13"
                 android:tag="paper_bg_3" />
 
             <ImageButton
@@ -263,9 +265,10 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:background="#d0d0d0"
-                 android:layout_weight="1"
-                android:src="@drawable/paper_4"
+                android:scaleType="fitCenter"
+                android:src="@drawable/paper_bg_14"
                 android:tag="paper_bg_4" />
 
             <ImageButton
@@ -274,9 +277,10 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:background="#d0d0d0"
                 android:layout_weight="1"
-                android:src="@drawable/paper_5"
+                android:background="#d0d0d0"
+                android:scaleType="fitCenter"
+                android:src="@drawable/paper_bg_15"
                 android:tag="paper_bg_5" />
 
             <ImageButton
@@ -285,9 +289,10 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:background="#d0d0d0"
                 android:layout_weight="1"
-                android:src="@drawable/paper_5"
+                android:background="#d0d0d0"
+                android:scaleType="fitCenter"
+                android:src="@drawable/paper_bg_16"
                 android:tag="paper_bg_6" />
 
         </LinearLayout>
