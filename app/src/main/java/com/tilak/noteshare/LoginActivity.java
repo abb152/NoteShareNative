@@ -443,7 +443,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         Log.e("jay response :", response);
         JSONObject responseJson = new JSONObject(response);
         Log.e("response json", responseJson.toString());
-        String responseServerId = responseJson.get("_id").toString();
+        responseServerId = responseJson.get("_id").toString();
         //responseServerId = responseJson.getString("_id");
         //String responseFbId; // = responseJson.get("fbid").toString();
         //String responseGpId; // = responseJson.get("googleid").toString();
@@ -481,5 +481,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     }
 
     String responseFbId = "", responseGpId ="";
+    static String responseServerId = "";
 
 }

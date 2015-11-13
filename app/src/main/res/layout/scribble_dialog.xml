@@ -202,21 +202,6 @@
         android:visibility="gone">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar
-                android:id="@+id/colorpicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:max="1791"/>
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/paint_brush1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -256,9 +241,9 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#800000"
+                android:background="#FF00FF"
                 android:contentDescription="@string/paint"
-                android:tag="#800000" />
+                android:tag="#FF00FF" />
 
             <ImageButton
                 android:id="@+id/brushbutton5"
@@ -340,9 +325,9 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#000080"
+                android:background="#0000FF"
                 android:contentDescription="@string/paint"
-                android:tag="#000080" />
+                android:tag="#0000FF" />
 
         </LinearLayout>
 

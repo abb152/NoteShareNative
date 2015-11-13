@@ -47,7 +47,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
 import com.tilak.adpters.NotesListAdapter;
 import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.datamodels.NoteListDataModel;
@@ -72,550 +71,287 @@ import jp.wasabeef.richeditor.RichEditor;
 
 public class NoteMainActivity extends DrawerActivity implements OnClickListener {
 
-	public ImageButton imageButtonHamburg, imageButtoncalander,
-			imageButtonsquence, imageButtoncheckbox;
-	private float smallBrush, mediumBrush, largeBrush;
-	public ImageButton imageButtonTextMode, imageButtonImageMode,
-			imageButtonPaintMode, imageButtonAudioMode, imageButtonShareMode,
-			imageButtonDeleteMode, imageButtonMoreMode;
-	public SpannableString spanUpdted, spanold;
-	MediaPlayer mediaPlayer;// = new MediaPlayer();
-	public int typefacae = Typeface.NORMAL;
-
-	public TextView progressRecordtext;
-	EditText textViewheaderTitle;
-	public RelativeLayout layoutHeader;
-	public int currentAudioIndex = 0;
-	public LinearLayout noteElements;
-	public RelativeLayout noteScribbleElements;
-	public ImageButton deleteCheckbox, deleteAudio;
-
-	List<ImageView> listImage = new ArrayList<ImageView>();
-
-	//Color picker
-	int color_selected = -16777216;
-	ColorPickerSeekBar colorPickerSeekBar = null;
-
-	EditText edittextEditer, txtViewer;
-	Button btnAddText;
-	ImageButton buttonPlay;
-	ImageButton buttonStop;
-	ImageButton buttonRecord, buttonPause, buttonRecordPause;
-	ProgressBar progressRecord;
-	SeekBar progressRecord1;
-	RelativeLayout LayoutAudioRecording;
-	private AudioRecorder mAudioRecorder;
-	private String audioName;
-
-	private String mActiveRecordFileName;
-
-	public LinearLayout layOutDrawingView, textNoteControls,
-			layout_note_more_Info, layout_audio_notechooser , audioElement;
-
-	public TextView textViewAdd, textViewDuration;
-	ImageButton bold = null, italic = null, underline = null, h1 = null, h2 = null, h3 = null, h4 = null, h5 = null, h6 = null, align_left = null, align_center = null, align_right = null, redo = null, undo = null;
-	/*LayoutInflater inflator = getLayoutInflater();
-	View viewText = inflator.inflate(R.layout.note_text, null, false);*/
-	View viewText;
-	List<RichEditor> allRe = new ArrayList<RichEditor>();
-	List<View> allCheckboxText = new ArrayList<View>();
-	List<View> allDelete = new ArrayList<View>();
-
-	final Context context = this;
-	public ArrayList<NoteListDataModel> arrNoteListData;
-	public ListView listviewNotes;
-	public NotesListAdapter adapter;
-	private static final int SELECT_PICTURE = 1;
-	private static final int REQUEST_CAMERA = 2;
-	public DrawingView drawView;
-	private ImageButton currPaint;
-	public Dialog dialogColor;
-	public Dialog move;
-
-	boolean isErase;
-	public Dialog brushDialog1;
-	private ImageView imageView53;
-
-	boolean isUnderLine = false, isBold = false, isItalic = false;
-	public int currentFontSize;
-	public String currentFontTypeface;
-	public int currentFontColor;
-	boolean isRecordingAudio = false;
-	private MediaRecorder myAudioRecorder;
-	View contentView;
-	private String outputFile = null;
-	public static String noteIdForDetails;
-	SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	String currentDateStr = formatter.format(new Date());
-
-	// /Drawing Controls
-
-	public LinearLayout drawingControls;
-	public RelativeLayout LayoutTextWritingView;
-	public HorizontalScrollView horizontal_scroll_editor;
-
-	public ScrollView scrollView;
-
-	public ImageButton imageButtondrawback, imageButtondrawnew,
-			imageButtonbrushdraw, imageButtondrawcolors,
-			imageButtonhighlightdraw, imageButtondrawerase,
-			imageButtondrawMore;
-
-	public ImageButton textButtondrawback, textButtondrawnew,
-			textButtondrawdraw, textButtondrawcolors, textButtondrawbrushsize,
-			textButtondrawerase, textButtondrawMore;
-
-	public ImageButton audioButtondrawback, audioButtondrawnew;
-
-	public boolean isMoreShown = false;
-	public boolean isTextmodeSelected = false;
-	public boolean isDeleteModeSelected = true;
-
-	public TextFont_Size_ChooseAdapter TextFont_sizeAdapter;
-	public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
-	public String[] fontSizes;
-	LinearLayout background_bg;
-	public String[] editortext = new String[1];
-	public List<View> textelementid = new ArrayList<View>();
-	public String[] noteTitle = new String[1];
-	public String[] noteCheckText = new String[1];
-
-	// 8b241b selected bg
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// setContentView(R.layout.activity_main);
-		Intent intent = this.getIntent();
-		noteIdForDetails = intent.getStringExtra("NoteId");
-		Log.v("select", "onCreate Note Id" + noteIdForDetails);
-
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		contentView = inflater
-				.inflate(R.layout.note_activity_main, null, false);
-		mDrawerLayout.addView(contentView, 0);
-		initlizeUIElement(contentView);
-		try {
-			fetchNoteElementsFromDb();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-	/*List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT con from NoteElement where  NOTEID= '1' AND TYPE ='image'");
-	for(NoteElement n :ne){
-	name = n.content;
-	}*/
-
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		initlizeUIElement(contentView);
-		try {
-			fetchNoteElementsFromDb();
-			//deleteButton();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	void initlizeUIElement(View contentview) {
-
-		scrollView = (ScrollView) contentview.findViewById(R.id.scrollView);
-
-		noteElements = (LinearLayout) findViewById(R.id.noteElements);
-
-
-	/* Default Initlization */
-		currentFontSize = 8;
-		currentFontTypeface = NoteShareFonts.arial;
-		currentFontColor = Color.BLACK;
-
-		background_bg = (LinearLayout) contentview
-				.findViewById(R.id.noteElements);
-		layoutHeader = (RelativeLayout) contentview
-				.findViewById(R.id.mainHeadermenue);
-		imageButtoncalander = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtoncalander);
-		imageButtoncheckbox = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtoncheckbox);
-
-		textViewheaderTitle = (EditText) layoutHeader
-				.findViewById(R.id.textViewheaderTitle);
-		imageButtonHamburg = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtonHamburg);
-		imageButtonsquence = (ImageButton) layoutHeader
-				.findViewById(R.id.imageButtonsquence);
-
-		imageButtonsquence.setImageResource(R.drawable.color_header_icon);
-		imageButtonHamburg.setImageResource(R.drawable.back_icon_1);
-		imageButtoncalander.setImageResource(R.drawable.done_icon);
-
-		horizontal_scroll_editor = (HorizontalScrollView) contentview.findViewById(R.id.horizontal_scroll_editor);
-		horizontal_scroll_editor.setVisibility(View.GONE);
-
-		//imageView53 = (ImageView) findViewById(R.id.imageView53);
-
-		// textViewAdd = (im) findViewById(R.id.textViewAdd);
-
-		// audio controls
-		//audioRecording(contentView);
-		initlizesAudioNoteControls(contentview);
-
-		// MoreInfo View
-
-		initlizesMoreInfoView(contentview);
-
-		// scribble controls
-		initlizesScibbleNoteControles(contentview);
-
-		// text note controls
-
-		initlizesTextNoteControls(contentview);
-
-		// Main controls
-
-		imageButtonAudioMode = (ImageButton) contentview
-				.findViewById(R.id.imageButtonAudioMode);
-		imageButtonImageMode = (ImageButton) contentview
-				.findViewById(R.id.imageButtonImageMode);
-		imageButtonPaintMode = (ImageButton) contentview
-				.findViewById(R.id.imageButtonPaintMode);
-		imageButtonShareMode = (ImageButton) contentview
-				.findViewById(R.id.imageButtonShareMode);
-		imageButtonTextMode = (ImageButton) contentview
-				.findViewById(R.id.imageButtonTextMode);
-		imageButtonMoreMode = (ImageButton) contentview
-				.findViewById(R.id.imageButtonMoreMode);
-		imageButtonDeleteMode = (ImageButton) contentview
-				.findViewById(R.id.imageButtonDeleteMode);
-
-        /*if(noteIdForDetails == null)
-            textViewheaderTitle.setText("NOTE");*/
-
-		textViewheaderTitle.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-				if (noteIdForDetails == null) {
-					makeNote();
-				}
-
-				String updatedText = s.toString();
-				if(!noteTitle[0].equals(updatedText)){
-					Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-					note.title = updatedText;
-					//note.modificationtime = currentDateStr;
-					note.save();
-					modifyNoteTime();
-					noteTitle[0] = updatedText;
-				}
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-
-
-
-		/** Layout Audio Recording **/
-
-		addlistners();
-		addScribbleControlListners();
-		addTextNoteControlsListners();
-		addAudioNoteListners();
-
-		updateHeaderControls(R.id.imageButtonHamburg);
-		imageButtonsquence.setVisibility(View.VISIBLE);
-		//imageButtoncalander.setVisibility(View.VISIBLE);
-
-		fonts_sizeName = getResources().getStringArray(R.array.Font_Size_px);
-		fontSizes = getResources().getStringArray(R.array.Font_Size);
-		fonts_Name_Display = getResources().getStringArray(
-				R.array.Font_Name_Display);
-
-	}
-
-	// public AudioRecorder createRecorder(String targetFileName) {
-	// mAudioRecorder = AudioRecorder.build(this, targetFileName);
-	// return mAudioRecorder;
-	// }
-	//
-	// public AudioRecorder getRecorder() {
-	// return mAudioRecorder;
-	// }
-
-	void initlizesAudioNoteControls(View contentview) {
-		layout_audio_notechooser = (LinearLayout) contentview
-				.findViewById(R.id.audioControls);
-		layout_audio_notechooser.setVisibility(View.GONE);
-		audioButtondrawback = (ImageButton) layout_audio_notechooser
-				.findViewById(R.id.imageButtondrawback);
-		audioButtondrawnew = (ImageButton) layout_audio_notechooser
-				.findViewById(R.id.imageButtondrawnew);
-		updateAudioNoteUI(R.id.imageButtondrawback);
-		audioButtondrawback.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				updateButtonUI(-1);
-			}
-		});
-
-	/*imageView53.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View v) {
-	String name = null;
-	NoteElement ne = NoteElement.findById(NoteElement.class, 1L);
-	name = ne.content;
-	*//*Bitmap b = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-	imageView53.setImageBitmap(b);*//*
-	Toast.makeText(getApplication(), name, Toast.LENGTH_LONG).show();
-	try {
-	MediaPlayer mp = new MediaPlayer();
-	mp.setDataSource(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
-	mp.prepare();
-	mp.start();
-	} catch (IOException e) {
-	e.printStackTrace();
-	}
-	}
-	});*/
-
-	}
-
-	void updateAudioNoteUI(int elementId) {
-
-		audioButtondrawback.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		audioButtondrawnew.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-
-		switch (elementId) {
-			case R.id.imageButtondrawback:
-				audioButtondrawback.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtondrawnew:
-				audioButtondrawnew.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-
-			default:
-				break;
-		}
-
-	}
-
-	void addAudioNoteListners() {
-
-		audioButtondrawback.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				updateAudioNoteUI(arg0.getId());
-				layout_audio_notechooser.setVisibility(View.GONE);
-			}
-		});
-
-		audioButtondrawnew.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				LayoutAudioRecording.setVisibility(View.VISIBLE);
-				buttonPlay.setVisibility(View.GONE);
-				buttonRecordPause.setVisibility(View.GONE);
-				buttonPause.setVisibility(View.GONE);
-
-				buttonRecord.setVisibility(View.VISIBLE);
-				buttonStop.setVisibility(View.VISIBLE);
-				progressRecord1.setVisibility(View.GONE);
-				textViewDuration.setVisibility(View.GONE);
-				buttonRecord.setEnabled(true);
-				buttonStop.setEnabled(true);
-
-				initlizeAudiorecoder();
-
-				updateAudioNoteUI(arg0.getId());
-			}
-		});
-	}
-
-	void initlizeAudiorecoder() {
-		//SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHH_mm_ss");
-		String timestamp = String.valueOf(System.currentTimeMillis());
-		audioName = "AUD-" + timestamp + ".3gp";
-
-		outputFile = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/NoteShare/NoteShare Audio/" + audioName;
-		;
-
-		myAudioRecorder = new MediaRecorder();
-		myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-		myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-		myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-		myAudioRecorder.setOutputFile(outputFile);
-	}
-
-	/*void audioRecording(View contentview) {
-	LayoutAudioRecording = (RelativeLayout) contentview
-	.findViewById(R.id.LayoutAudioRecording);
-	buttonPlay = (ImageButton) LayoutAudioRecording
-	.findViewById(R.id.buttonPlay);
-	buttonStop = (ImageButton) LayoutAudioRecording
-	.findViewById(R.id.buttonStop);
-	buttonRecord = (ImageButton) LayoutAudioRecording
-	.findViewById(R.id.buttonRecord);
-	buttonPause = (ImageButton) LayoutAudioRecording
-	.findViewById(R.id.buttonPause);
-	buttonRecordPause = (ImageButton) LayoutAudioRecording
-	.findViewById(R.id.buttonRecordPause);
-	progressRecord1 = (SeekBar) LayoutAudioRecording
-	.findViewById(R.id.progressRecord1);
-	textViewDuration = (TextView) LayoutAudioRecording
-	.findViewById(R.id.textViewDuration);
-	progressRecordtext=(TextView) LayoutAudioRecording
-	.findViewById(R.id.progressRecordtext);
-	textViewDuration.setVisibility(View.GONE);
-	LayoutAudioRecording.setVisibility(View.GONE);
-	progressRecord1.setVisibility(View.GONE);
-	progressRecordtext.setVisibility(View.GONE);
-	buttonRecordPause.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View v) {
-	buttonRecord.setVisibility(View.VISIBLE);
-	buttonRecordPause.setVisibility(View.GONE);
-	myAudioRecorder.stop();
-	progressRecordtext.setText("");
-	}
-	});
-	buttonPause.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View arg0) {
-	buttonPause.setVisibility(View.VISIBLE);
-	buttonPlay.setVisibility(View.VISIBLE);
-	buttonPlay.setEnabled(true);
-	buttonPause.setEnabled(false);
-	buttonStop.setEnabled(false);
-	progressRecordtext.setVisibility(View.GONE);
-	buttonRecord.setVisibility(View.GONE);
-	buttonStop.setVisibility(View.GONE);
-	try {
-	mediaPlayer.pause();
-	Toast.makeText(NoteMainActivity.this, "Recording pause",
-	Toast.LENGTH_SHORT).show();
-	} catch (Exception e) {
-	e.printStackTrace();
-	Toast.makeText(NoteMainActivity.this, "pause error",
-	Toast.LENGTH_SHORT).show();
-	}
-	progressRecordtext.setText("");
-	}
-	});
-	buttonPlay.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View arg0) throws IllegalArgumentException,
-	SecurityException, IllegalStateException {
-	// Button play Click
-	progressRecord1.setProgress(0);
-	mediaPlayer = new MediaPlayer();
-	progressRecordtext.setVisibility(View.GONE);
-	System.out.println("get total duration"
-	+ mediaPlayer.getDuration());
-	// final String
-	// duration=getDurationBreakdown(mediaPlayer.getDuration());
-	// final String
-	// currduration=getDurationBreakdown(mediaPlayer.getCurrentPosition());
-	// textViewDuration.setText(currduration+"/"+duration);
-	// / System.out.println("get total duration"
-	// + mediaPlayer.getDuration()+"duration in time:"+duration);
-	mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
-	@Override
-	public void onCompletion(MediaPlayer arg0) {
-	buttonPlay.setEnabled(true);
-	buttonPause.setEnabled(false);
-	// progressRecord1.setProgress(0);
-	}
-	});
-	textViewDuration.setVisibility(View.VISIBLE);
-	buttonPause.setVisibility(View.VISIBLE);
-	buttonPlay.setVisibility(View.VISIBLE);
-	buttonPlay.setEnabled(false);
-	buttonPause.setEnabled(true);
-	buttonRecord.setVisibility(View.GONE);
-	buttonStop.setVisibility(View.GONE);
-	try {
-	System.out.println("file playing path:" + outputFile);
-	mediaPlayer.setDataSource(outputFile);
-	} catch (IOException e) {
-	e.printStackTrace();
-	}
-	try {
-	mediaPlayer.prepare();
-	} catch (IOException e) {
-	e.printStackTrace();
-	}
-	progressRecord1.setMax(mediaPlayer.getDuration() / 1000);
-	mediaPlayer.start();
-	final Handler mHandler = new Handler();
-	// Make sure you update Seekbar on UI thread
-	runOnUiThread(new Runnable() {
-	@Override
-	public void run() {
-	if (mediaPlayer != null) {
-	int mCurrentPosition = mediaPlayer
-	.getCurrentPosition() / 1000;
-	String currentduration = getDurationBreakdown(mediaPlayer
-	.getCurrentPosition());
-	String currentduration1 = getDurationBreakdown(mediaPlayer
-	.getDuration());
-	if (mCurrentPosition <= mediaPlayer.getDuration() / 1000) {
-	System.out.println("CurrentDuration:"
-	+ currentduration);
-	progressRecord1.setProgress(mCurrentPosition);
-	textViewDuration.setText(currentduration + "/"
-	+ currentduration1);
-	}
-	}
-	mHandler.postDelayed(this, 1000);
-	}
-	});
-	Toast.makeText(NoteMainActivity.this, "Recording playing",
-	Toast.LENGTH_SHORT).show();
-	progressRecordtext.setText("");
-	}
-	});
-	buttonStop.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View arg0) {
-	progressRecord1.setVisibility(View.VISIBLE);
-	myAudioRecorder.stop();
-	myAudioRecorder.release();
-	myAudioRecorder = null;
-	buttonPause.setVisibility(View.VISIBLE);
-	buttonPlay.setVisibility(View.VISIBLE);
-	buttonPlay.setEnabled(true);
-	buttonPause.setEnabled(false);
-	// textViewDuration.setVisibility(View.VISIBLE);
-	buttonRecord.setVisibility(View.GONE);
-	buttonStop.setVisibility(View.GONE);
-	Toast.makeText(NoteMainActivity.this, "Recording stopped",
-	Toast.LENGTH_SHORT).show();
-	System.out.println("Current Index:" + currentAudioIndex);
-	*//*NoteListDataModel noteListdatamodel = new NoteListDataModel();
-	noteListdatamodel.noteType = NOTETYPE.AUDIOMODE;
+    public static final int TAKE_PHOTO_REQUEST = 0;
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    private static final int SELECT_PICTURE = 1;
+    private static final int REQUEST_CAMERA = 2;
+    public static String noteIdForDetails;
+    static String backgroundColor = "#FFFFFF";
+    final Context context = this;
+    public ImageButton imageButtonHamburg, imageButtoncalander,
+            imageButtonsquence, imageButtoncheckbox;
+    public ImageButton imageButtonTextMode, imageButtonImageMode,
+            imageButtonPaintMode, imageButtonAudioMode, imageButtonShareMode,
+            imageButtonDeleteMode, imageButtonMoreMode;
+    public SpannableString spanUpdted, spanold;
+    public int typefacae = Typeface.NORMAL;
+    public TextView progressRecordtext;
+    public RelativeLayout layoutHeader;
+    public int currentAudioIndex = 0;
+    public LinearLayout noteElements;
+    public RelativeLayout noteScribbleElements;
+    public ImageButton deleteCheckbox, deleteAudio;
+    public LinearLayout layOutDrawingView, textNoteControls,
+            layout_note_more_Info, layout_audio_notechooser, audioElement;
+    public TextView textViewAdd, textViewDuration;
+    public ArrayList<NoteListDataModel> arrNoteListData;
+    public ListView listviewNotes;
+    public NotesListAdapter adapter;
+    public DrawingView drawView;
+    public Dialog dialogColor;
+    public Dialog move;
+    public Dialog brushDialog1;
+    public int currentFontSize;
+    public String currentFontTypeface;
+    public int currentFontColor;
+    public LinearLayout drawingControls;
+    public RelativeLayout LayoutTextWritingView;
+    public HorizontalScrollView horizontal_scroll_editor;
+    public ScrollView scrollView;
+    public ImageButton imageButtondrawback, imageButtondrawnew,
+            imageButtonbrushdraw, imageButtondrawcolors,
+            imageButtonhighlightdraw, imageButtondrawerase,
+            imageButtondrawMore;
+    public ImageButton textButtondrawback, textButtondrawnew,
+            textButtondrawdraw, textButtondrawcolors, textButtondrawbrushsize,
+            textButtondrawerase, textButtondrawMore;
+    public ImageButton audioButtondrawback, audioButtondrawnew;
+    public boolean isMoreShown = false;
+    public boolean isTextmodeSelected = false;
+    public boolean isDeleteModeSelected = true;
+    public TextFont_Size_ChooseAdapter TextFont_sizeAdapter;
+    public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
+    public String[] fontSizes;
+    public String[] editortext = new String[1];
+    public List<View> textelementid = new ArrayList<View>();
+    public String[] noteTitle = new String[1];
+    public String[] noteCheckText = new String[1];
+    MediaPlayer mediaPlayer;// = new MediaPlayer();
+    EditText textViewheaderTitle;
+    List<ImageView> listImage = new ArrayList<ImageView>();
+    //Color picker
+    int color_selected = -16777216;
+    EditText edittextEditer, txtViewer;
+    Button btnAddText;
+    ImageButton buttonPlay;
+    ImageButton buttonStop;
+    ImageButton buttonRecord, buttonPause, buttonRecordPause;
+    ProgressBar progressRecord;
+    SeekBar progressRecord1;
+
+    // /Drawing Controls
+    RelativeLayout LayoutAudioRecording;
+    ImageButton bold = null, italic = null, underline = null, h1 = null, h2 = null, h3 = null, h4 = null, h5 = null, h6 = null, align_left = null, align_center = null, align_right = null, redo = null, undo = null;
+    /*LayoutInflater inflator = getLayoutInflater();
+    View viewText = inflator.inflate(R.layout.note_text, null, false);*/
+    View viewText;
+    List<RichEditor> allRe = new ArrayList<RichEditor>();
+    List<View> allCheckboxText = new ArrayList<View>();
+    List<View> allDelete = new ArrayList<View>();
+    boolean isErase;
+    boolean isUnderLine = false, isBold = false, isItalic = false;
+    boolean isRecordingAudio = false;
+    View contentView;
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String currentDateStr = formatter.format(new Date());
+    LinearLayout background_bg;
+    Uri mMediaUri;
+    Dialog scribbleDialog;
+    View highlightview, brushview, eraserview;
+    ImageButton buttonHighlight, buttonBrush, buttonEraser;
+    GradientDrawable brushshape;
+
+    // 8b241b selected bg
+    int lastBrushSize = 3, lastHighlightSize = 3, lastEraserSize = 3,
+            highlightViewSize = (lastHighlightSize * 4 + 20),
+            brushViewSize = (lastBrushSize * 4 + 20),
+            eraserViewSize = (lastEraserSize * 4 + 20),
+            lastBrushColor = 0, count = 0;
+    int firstHighlightColor, lastHighlightColor = Color.parseColor("#77FF5B1E");
+    TextWatcher watch = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable arg0) {
+        }
+
+        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                      int arg3) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int a, int b, int c) {
+
+            txtViewer.setText(s);
+
+            if (a == 9) {
+                Toast.makeText(getApplicationContext(), "Maximum Limit Reached", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    // public AudioRecorder createRecorder(String targetFileName) {
+    // mAudioRecorder = AudioRecorder.build(this, targetFileName);
+    // return mAudioRecorder;
+    // }
+    //
+    // public AudioRecorder getRecorder() {
+    // return mAudioRecorder;
+    // }
+    private float smallBrush, mediumBrush, largeBrush;
+    private AudioRecorder mAudioRecorder;
+    private String audioName;
+    private String mActiveRecordFileName;
+
+    /*void audioRecording(View contentview) {
+    LayoutAudioRecording = (RelativeLayout) contentview
+    .findViewById(R.id.LayoutAudioRecording);
+    buttonPlay = (ImageButton) LayoutAudioRecording
+    .findViewById(R.id.buttonPlay);
+    buttonStop = (ImageButton) LayoutAudioRecording
+    .findViewById(R.id.buttonStop);
+    buttonRecord = (ImageButton) LayoutAudioRecording
+    .findViewById(R.id.buttonRecord);
+    buttonPause = (ImageButton) LayoutAudioRecording
+    .findViewById(R.id.buttonPause);
+    buttonRecordPause = (ImageButton) LayoutAudioRecording
+    .findViewById(R.id.buttonRecordPause);
+    progressRecord1 = (SeekBar) LayoutAudioRecording
+    .findViewById(R.id.progressRecord1);
+    textViewDuration = (TextView) LayoutAudioRecording
+    .findViewById(R.id.textViewDuration);
+    progressRecordtext=(TextView) LayoutAudioRecording
+    .findViewById(R.id.progressRecordtext);
+    textViewDuration.setVisibility(View.GONE);
+    LayoutAudioRecording.setVisibility(View.GONE);
+    progressRecord1.setVisibility(View.GONE);
+    progressRecordtext.setVisibility(View.GONE);
+    buttonRecordPause.setOnClickListener(new OnClickListener() {
+    @Override
+    public void onClick(View v) {
+    buttonRecord.setVisibility(View.VISIBLE);
+    buttonRecordPause.setVisibility(View.GONE);
+    myAudioRecorder.stop();
+    progressRecordtext.setText("");
+    }
+    });
+    buttonPause.setOnClickListener(new OnClickListener() {
+    @Override
+    public void onClick(View arg0) {
+    buttonPause.setVisibility(View.VISIBLE);
+    buttonPlay.setVisibility(View.VISIBLE);
+    buttonPlay.setEnabled(true);
+    buttonPause.setEnabled(false);
+    buttonStop.setEnabled(false);
+    progressRecordtext.setVisibility(View.GONE);
+    buttonRecord.setVisibility(View.GONE);
+    buttonStop.setVisibility(View.GONE);
+    try {
+    mediaPlayer.pause();
+    Toast.makeText(NoteMainActivity.this, "Recording pause",
+    Toast.LENGTH_SHORT).show();
+    } catch (Exception e) {
+    e.printStackTrace();
+    Toast.makeText(NoteMainActivity.this, "pause error",
+    Toast.LENGTH_SHORT).show();
+    }
+    progressRecordtext.setText("");
+    }
+    });
+    buttonPlay.setOnClickListener(new OnClickListener() {
+    @Override
+    public void onClick(View arg0) throws IllegalArgumentException,
+    SecurityException, IllegalStateException {
+    // Button play Click
+    progressRecord1.setProgress(0);
+    mediaPlayer = new MediaPlayer();
+    progressRecordtext.setVisibility(View.GONE);
+    System.out.println("get total duration"
+    + mediaPlayer.getDuration());
+    // final String
+    // duration=getDurationBreakdown(mediaPlayer.getDuration());
+    // final String
+    // currduration=getDurationBreakdown(mediaPlayer.getCurrentPosition());
+    // textViewDuration.setText(currduration+"/"+duration);
+    // / System.out.println("get total duration"
+    // + mediaPlayer.getDuration()+"duration in time:"+duration);
+    mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+    @Override
+    public void onCompletion(MediaPlayer arg0) {
+    buttonPlay.setEnabled(true);
+    buttonPause.setEnabled(false);
+    // progressRecord1.setProgress(0);
+    }
+    });
+    textViewDuration.setVisibility(View.VISIBLE);
+    buttonPause.setVisibility(View.VISIBLE);
+    buttonPlay.setVisibility(View.VISIBLE);
+    buttonPlay.setEnabled(false);
+    buttonPause.setEnabled(true);
+    buttonRecord.setVisibility(View.GONE);
+    buttonStop.setVisibility(View.GONE);
+    try {
+    System.out.println("file playing path:" + outputFile);
+    mediaPlayer.setDataSource(outputFile);
+    } catch (IOException e) {
+    e.printStackTrace();
+    }
+    try {
+    mediaPlayer.prepare();
+    } catch (IOException e) {
+    e.printStackTrace();
+    }
+    progressRecord1.setMax(mediaPlayer.getDuration() / 1000);
+    mediaPlayer.start();
+    final Handler mHandler = new Handler();
+    // Make sure you update Seekbar on UI thread
+    runOnUiThread(new Runnable() {
+    @Override
+    public void run() {
+    if (mediaPlayer != null) {
+    int mCurrentPosition = mediaPlayer
+    .getCurrentPosition() / 1000;
+    String currentduration = getDurationBreakdown(mediaPlayer
+    .getCurrentPosition());
+    String currentduration1 = getDurationBreakdown(mediaPlayer
+    .getDuration());
+    if (mCurrentPosition <= mediaPlayer.getDuration() / 1000) {
+    System.out.println("CurrentDuration:"
+    + currentduration);
+    progressRecord1.setProgress(mCurrentPosition);
+    textViewDuration.setText(currentduration + "/"
+    + currentduration1);
+    }
+    }
+    mHandler.postDelayed(this, 1000);
+    }
+    });
+    Toast.makeText(NoteMainActivity.this, "Recording playing",
+    Toast.LENGTH_SHORT).show();
+    progressRecordtext.setText("");
+    }
+    });
+    buttonStop.setOnClickListener(new OnClickListener() {
+    @Override
+    public void onClick(View arg0) {
+    progressRecord1.setVisibility(View.VISIBLE);
+    myAudioRecorder.stop();
+    myAudioRecorder.release();
+    myAudioRecorder = null;
+    buttonPause.setVisibility(View.VISIBLE);
+    buttonPlay.setVisibility(View.VISIBLE);
+    buttonPlay.setEnabled(true);
+    buttonPause.setEnabled(false);
+    // textViewDuration.setVisibility(View.VISIBLE);
+    buttonRecord.setVisibility(View.GONE);
+    buttonStop.setVisibility(View.GONE);
+    Toast.makeText(NoteMainActivity.this, "Recording stopped",
+    Toast.LENGTH_SHORT).show();
+    System.out.println("Current Index:" + currentAudioIndex);
+    *//*NoteListDataModel noteListdatamodel = new NoteListDataModel();
+    noteListdatamodel.noteType = NOTETYPE.AUDIOMODE;
 	noteListdatamodel.setStrAudioFilePath(outputFile);
 	//arrNoteListData.add(currentAudioIndex, noteListdatamodel);*//*
-	//adapter.notifyDataSetChanged();
+    //adapter.notifyDataSetChanged();
 	//listviewNotes.smoothScrollToPosition(currentAudioIndex);
 	LayoutAudioRecording.setVisibility(View.GONE);
 	progressRecordtext.setText("");
@@ -646,16 +382,344 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	Toast.LENGTH_SHORT).show();
 	progressRecordtext.setText("Recording...");
 	*//*if (arrNoteListData.size() > 0) {
-	currentAudioIndex = arrNoteListData.size();
+    currentAudioIndex = arrNoteListData.size();
 	} else {
 	currentAudioIndex = 0;
 	}*//*
-	}
+    }
 	});
 	}*/
+    private ImageButton currPaint;
+    private ImageView imageView53;
+    private MediaRecorder myAudioRecorder;
+    private String outputFile = null;
 
-	void initlizesTextNoteControls(View contentview) {
-		//
+    public static String getDurationBreakdown(long millis) {
+        if (millis < 0) {
+            throw new IllegalArgumentException(
+                    "Duration must be greater than zero!");
+        }
+
+        // long days = TimeUnit.MILLISECONDS.toDays(millis);
+        // millis -= TimeUnit.DAYS.toMillis(days);
+        // long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        // millis -= TimeUnit.HOURS.toMillis(hours);
+        // long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        // millis -= TimeUnit.MINUTES.toMillis(minutes);
+        //
+        // long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        // StringBuilder sb = new StringBuilder(64);
+
+        StringBuffer sb = new StringBuffer();
+
+        int hours = (int) (millis / (1000 * 60 * 60));
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+
+        sb.append(String.format("%02d", hours)).append(":")
+                .append(String.format("%02d", minutes)).append(":")
+                .append(String.format("%02d", seconds));
+
+        System.out.println("time is:" + sb.toString());
+
+        return sb.toString();
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // setContentView(R.layout.activity_main);
+        Intent intent = this.getIntent();
+        noteIdForDetails = intent.getStringExtra("NoteId");
+        Log.v("select", "onCreate Note Id" + noteIdForDetails);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflate your activity layout here!
+        contentView = inflater
+                .inflate(R.layout.note_activity_main, null, false);
+        mDrawerLayout.addView(contentView, 0);
+        initlizeUIElement(contentView);
+        try {
+            fetchNoteElementsFromDb();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+	/*List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT con from NoteElement where  NOTEID= '1' AND TYPE ='image'");
+    for(NoteElement n :ne){
+	name = n.content;
+	}*/
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initlizeUIElement(contentView);
+        try {
+            fetchNoteElementsFromDb();
+            //deleteButton();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void initlizeUIElement(View contentview) {
+
+        scrollView = (ScrollView) contentview.findViewById(R.id.scrollView);
+
+        noteElements = (LinearLayout) findViewById(R.id.noteElements);
+
+
+	/* Default Initlization */
+        currentFontSize = 8;
+        currentFontTypeface = NoteShareFonts.arial;
+        currentFontColor = Color.BLACK;
+
+        background_bg = (LinearLayout) contentview
+                .findViewById(R.id.noteElements);
+        layoutHeader = (RelativeLayout) contentview
+                .findViewById(R.id.mainHeadermenue);
+        imageButtoncalander = (ImageButton) layoutHeader
+                .findViewById(R.id.imageButtoncalander);
+        imageButtoncheckbox = (ImageButton) layoutHeader
+                .findViewById(R.id.imageButtoncheckbox);
+
+        textViewheaderTitle = (EditText) layoutHeader
+                .findViewById(R.id.textViewheaderTitle);
+        imageButtonHamburg = (ImageButton) layoutHeader
+                .findViewById(R.id.imageButtonHamburg);
+        imageButtonsquence = (ImageButton) layoutHeader
+                .findViewById(R.id.imageButtonsquence);
+
+        imageButtonsquence.setImageResource(R.drawable.color_header_icon);
+        imageButtonHamburg.setImageResource(R.drawable.back_icon_1);
+        imageButtoncalander.setImageResource(R.drawable.done_icon);
+
+        horizontal_scroll_editor = (HorizontalScrollView) contentview.findViewById(R.id.horizontal_scroll_editor);
+        horizontal_scroll_editor.setVisibility(View.GONE);
+
+        //imageView53 = (ImageView) findViewById(R.id.imageView53);
+
+        // textViewAdd = (im) findViewById(R.id.textViewAdd);
+
+        // audio controls
+        //audioRecording(contentView);
+        initlizesAudioNoteControls(contentview);
+
+        // MoreInfo View
+
+        initlizesMoreInfoView(contentview);
+
+        // scribble controls
+        initlizesScibbleNoteControles(contentview);
+
+        // text note controls
+
+        initlizesTextNoteControls(contentview);
+
+        // Main controls
+
+        imageButtonAudioMode = (ImageButton) contentview
+                .findViewById(R.id.imageButtonAudioMode);
+        imageButtonImageMode = (ImageButton) contentview
+                .findViewById(R.id.imageButtonImageMode);
+        imageButtonPaintMode = (ImageButton) contentview
+                .findViewById(R.id.imageButtonPaintMode);
+        imageButtonShareMode = (ImageButton) contentview
+                .findViewById(R.id.imageButtonShareMode);
+        imageButtonTextMode = (ImageButton) contentview
+                .findViewById(R.id.imageButtonTextMode);
+        imageButtonMoreMode = (ImageButton) contentview
+                .findViewById(R.id.imageButtonMoreMode);
+        imageButtonDeleteMode = (ImageButton) contentview
+                .findViewById(R.id.imageButtonDeleteMode);
+
+        /*if(noteIdForDetails == null)
+            textViewheaderTitle.setText("NOTE");*/
+
+        textViewheaderTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (noteIdForDetails == null) {
+                    makeNote();
+                }
+
+                String updatedText = s.toString();
+                if (!noteTitle[0].equals(updatedText)) {
+                    Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+                    note.title = updatedText;
+                    //note.modificationtime = currentDateStr;
+                    note.save();
+                    modifyNoteTime();
+                    noteTitle[0] = updatedText;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+        /** Layout Audio Recording **/
+
+        addlistners();
+        addScribbleControlListners();
+        addTextNoteControlsListners();
+        addAudioNoteListners();
+
+        updateHeaderControls(R.id.imageButtonHamburg);
+        imageButtonsquence.setVisibility(View.VISIBLE);
+        //imageButtoncalander.setVisibility(View.VISIBLE);
+
+        fonts_sizeName = getResources().getStringArray(R.array.Font_Size_px);
+        fontSizes = getResources().getStringArray(R.array.Font_Size);
+        fonts_Name_Display = getResources().getStringArray(
+                R.array.Font_Name_Display);
+
+    }
+
+    void initlizesAudioNoteControls(View contentview) {
+        layout_audio_notechooser = (LinearLayout) contentview
+                .findViewById(R.id.audioControls);
+        layout_audio_notechooser.setVisibility(View.GONE);
+        audioButtondrawback = (ImageButton) layout_audio_notechooser
+                .findViewById(R.id.imageButtondrawback);
+        audioButtondrawnew = (ImageButton) layout_audio_notechooser
+                .findViewById(R.id.imageButtondrawnew);
+        updateAudioNoteUI(R.id.imageButtondrawback);
+        audioButtondrawback.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                updateButtonUI(-1);
+            }
+        });
+
+	/*imageView53.setOnClickListener(new OnClickListener() {
+    @Override
+	public void onClick(View v) {
+	String name = null;
+	NoteElement ne = NoteElement.findById(NoteElement.class, 1L);
+	name = ne.content;
+	*//*Bitmap b = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+    imageView53.setImageBitmap(b);*//*
+    Toast.makeText(getApplication(), name, Toast.LENGTH_LONG).show();
+	try {
+	MediaPlayer mp = new MediaPlayer();
+	mp.setDataSource(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+	mp.prepare();
+	mp.start();
+	} catch (IOException e) {
+	e.printStackTrace();
+	}
+	}
+	});*/
+
+    }
+
+    void updateAudioNoteUI(int elementId) {
+
+        audioButtondrawback.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        audioButtondrawnew.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+
+        switch (elementId) {
+            case R.id.imageButtondrawback:
+                audioButtondrawback.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtondrawnew:
+                audioButtondrawnew.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+	/*void updatenoteList(NOTETYPE notetype) {
+	NoteListDataModel noteListdatamodel = new NoteListDataModel();
+	noteListdatamodel.noteType = notetype;
+	if (notetype == NOTETYPE.AUDIOMODE) {
+	noteListdatamodel.setStrAudioFilePath("");
+	if (arrNoteListData.size() > 0) {
+	currentAudioIndex = arrNoteListData.size() - 1;
+	} else {
+	currentAudioIndex = 0;
+	}
+	} else {
+	arrNoteListData.add(noteListdatamodel);
+	}
+	adapter.notifyDataSetChanged();
+	listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
+	}*/
+
+    void addAudioNoteListners() {
+
+        audioButtondrawback.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                updateAudioNoteUI(arg0.getId());
+                layout_audio_notechooser.setVisibility(View.GONE);
+            }
+        });
+
+        audioButtondrawnew.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                LayoutAudioRecording.setVisibility(View.VISIBLE);
+                buttonPlay.setVisibility(View.GONE);
+                buttonRecordPause.setVisibility(View.GONE);
+                buttonPause.setVisibility(View.GONE);
+
+                buttonRecord.setVisibility(View.VISIBLE);
+                buttonStop.setVisibility(View.VISIBLE);
+                progressRecord1.setVisibility(View.GONE);
+                textViewDuration.setVisibility(View.GONE);
+                buttonRecord.setEnabled(true);
+                buttonStop.setEnabled(true);
+
+                initlizeAudiorecoder();
+
+                updateAudioNoteUI(arg0.getId());
+            }
+        });
+    }
+
+    void initlizeAudiorecoder() {
+        //SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHH_mm_ss");
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        audioName = "AUD-" + timestamp + ".3gp";
+
+        outputFile = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + "/NoteShare/NoteShare Audio/" + audioName;
+        ;
+
+        myAudioRecorder = new MediaRecorder();
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFile(outputFile);
+    }
+
+    void initlizesTextNoteControls(View contentview) {
+        //
 
 	/*textNoteControls = (LinearLayout) contentview
 	.findViewById(R.id.textNoteControls);
@@ -680,63 +744,63 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	isTextmodeSelected = false;
 	}
 	});*/
-		textNoteControls = (LinearLayout) contentview.findViewById(R.id.textNoteControls);
-		textNoteControls.setVisibility(View.GONE);
+        textNoteControls = (LinearLayout) contentview.findViewById(R.id.textNoteControls);
+        textNoteControls.setVisibility(View.GONE);
 
-		// bold italic underline h1 h2 h3 h4 h5 h6 align_left align_center align_right redo undo
-		bold = (ImageButton) findViewById(R.id.action_bold);
-		italic = (ImageButton) findViewById(R.id.action_italic);
-		underline = (ImageButton) findViewById(R.id.action_underline);
-		h1 = (ImageButton) findViewById(R.id.action_heading1);
-		h2 = (ImageButton) findViewById(R.id.action_heading2);
-		h3 = (ImageButton) findViewById(R.id.action_heading3);
-		h4 = (ImageButton) findViewById(R.id.action_heading4);
-		h5 = (ImageButton) findViewById(R.id.action_heading5);
-		h6 = (ImageButton) findViewById(R.id.action_heading6);
-		align_left = (ImageButton) findViewById(R.id.action_align_left);
-		align_center = (ImageButton) findViewById(R.id.action_align_center);
-		align_right = (ImageButton) findViewById(R.id.action_align_right);
-		redo = (ImageButton) findViewById(R.id.action_redo);
-		undo = (ImageButton) findViewById(R.id.action_undo);
+        // bold italic underline h1 h2 h3 h4 h5 h6 align_left align_center align_right redo undo
+        bold = (ImageButton) findViewById(R.id.action_bold);
+        italic = (ImageButton) findViewById(R.id.action_italic);
+        underline = (ImageButton) findViewById(R.id.action_underline);
+        h1 = (ImageButton) findViewById(R.id.action_heading1);
+        h2 = (ImageButton) findViewById(R.id.action_heading2);
+        h3 = (ImageButton) findViewById(R.id.action_heading3);
+        h4 = (ImageButton) findViewById(R.id.action_heading4);
+        h5 = (ImageButton) findViewById(R.id.action_heading5);
+        h6 = (ImageButton) findViewById(R.id.action_heading6);
+        align_left = (ImageButton) findViewById(R.id.action_align_left);
+        align_center = (ImageButton) findViewById(R.id.action_align_center);
+        align_right = (ImageButton) findViewById(R.id.action_align_right);
+        redo = (ImageButton) findViewById(R.id.action_redo);
+        undo = (ImageButton) findViewById(R.id.action_undo);
 
-	}
+    }
 
-	void initlizesScibbleNoteControles(View contentview) {
+    void initlizesScibbleNoteControles(View contentview) {
 
-		layOutDrawingView = (LinearLayout) contentview
-				.findViewById(R.id.layOutDrawingView);
-		drawView = (DrawingView) layOutDrawingView
-				.findViewById(R.id.viewScibble);
+        layOutDrawingView = (LinearLayout) contentview
+                .findViewById(R.id.layOutDrawingView);
+        drawView = (DrawingView) layOutDrawingView
+                .findViewById(R.id.viewScibble);
 
-		layOutDrawingView.setVisibility(View.GONE);
+        layOutDrawingView.setVisibility(View.GONE);
 
 	/*smallBrush = getResources().getInteger(R.integer.small_size);
 	mediumBrush = getResources().getInteger(R.integer.medium_size);
 	largeBrush = getResources().getInteger(R.integer.large_size);
 	drawView.setBrushSize(smallBrush);*/
 
-		drawingControls = (LinearLayout) contentview
-				.findViewById(R.id.drawingControls);
-		drawingControls.setVisibility(View.GONE);
+        drawingControls = (LinearLayout) contentview
+                .findViewById(R.id.drawingControls);
+        drawingControls.setVisibility(View.GONE);
 
-		imageButtondrawback = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtondrawback);
-		imageButtondrawnew = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtondrawnew);
-		imageButtonbrushdraw = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtonbrushdraw);
-		imageButtondrawcolors = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtondrawcolors);
-		imageButtonhighlightdraw = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtonhighlightdraw);
-		imageButtondrawerase = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtondrawerase);
-		imageButtondrawMore = (ImageButton) drawingControls
-				.findViewById(R.id.imageButtondrawMore);
+        imageButtondrawback = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtondrawback);
+        imageButtondrawnew = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtondrawnew);
+        imageButtonbrushdraw = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtonbrushdraw);
+        imageButtondrawcolors = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtondrawcolors);
+        imageButtonhighlightdraw = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtonhighlightdraw);
+        imageButtondrawerase = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtondrawerase);
+        imageButtondrawMore = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtondrawMore);
 
-	}
+    }
 
-	void addTextNoteControlsListners() {
+    void addTextNoteControlsListners() {
 
 	/*textButtondrawback.setOnClickListener(new OnClickListener() {
 	@Override
@@ -831,371 +895,452 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	// true*/
 
-		// redo
-		redo.setOnClickListener(new OnClickListener() {
+        // redo
+        redo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).redo();
+                //updateTextNoteControlListners(R.id.action_redo);
+            }
+        });
+
+        // undo
+        undo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).undo();
+                //updateTextNoteControlListners(R.id.action_undo);
+            }
+        });
+
+        // bold
+        bold.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setBold();
+                //updateTextNoteControlListners(R.id.action_bold);
+            }
+        });
+
+        // italic
+        italic.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setItalic();
+                //updateTextNoteControlListners(R.id.action_italic);
+            }
+        });
+
+        // underline
+        underline.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setUnderline();
+                //updateTextNoteControlListners(R.id.action_underline);
+            }
+        });
+
+        // h1
+        h1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(1);
+                //updateTextNoteControlListners(R.id.action_heading1);
+            }
+        });
+
+        // h2
+        h2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(2);
+                //updateTextNoteControlListners(R.id.action_heading2);
+            }
+        });
+
+        // h3
+        h3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(3);
+                //updateTextNoteControlListners(R.id.action_heading3);
+            }
+        });
+
+        // h4
+        h4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(4);
+                //updateTextNoteControlListners(R.id.action_heading4);
+            }
+        });
+
+        // h5
+        h5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(5);
+                //updateTextNoteControlListners(R.id.action_heading5);
+            }
+        });
+
+        // h6
+        h6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(6);
+                //updateTextNoteControlListners(R.id.action_heading6);
+            }
+        });
+
+        // align left
+        align_left.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setAlignLeft();
+                //updateTextNoteControlListners(R.id.action_align_left);
+            }
+        });
+
+        // align center
+        align_center.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setAlignCenter();
+                //updateTextNoteControlListners(R.id.action_align_center);
+            }
+        });
+
+        // align right
+        align_right.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setAlignRight();
+                //updateTextNoteControlListners(R.id.action_align_right);
+            }
+        });
+
+    }
+
+    void addScribbleControlListners() {
+        imageButtondrawback.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                updateScribbleControlListners(v.getId());
+
+                if (drawView.getUserDrawn() == true) {
+                    SaveDrawingDialog();
+                } else {
+
+                    drawingControls.setVisibility(View.GONE);
+                    layOutDrawingView.setVisibility(View.GONE);
+                    updateButtonUI(-1);
+                }
+
+            }
+        });
+        imageButtondrawnew.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                updateScribbleControlListners(v.getId());
+                showNewDrawingDialog();
+
+            }
+        });
+        imageButtonbrushdraw.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScribbleControlListners(v.getId());
+                //drawView.setErase(false);
+                //drawView.setBrushSize(drawView.getLastBrushSize());
+                //onCreateBrushDialog();
+                showScribbleDialog("brush");
+                openBrush();
+                updateScribbleButtonColor("brush");
+            }
+        });
+        imageButtondrawcolors.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScribbleControlListners(v.getId());
+                //showColorAlert("", NoteMainActivity.this);
+            }
+        });
+        imageButtonhighlightdraw.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScribbleControlListners(v.getId());
+                //showBrushSizeDialog(false);
+                //showHighLightAlert("", NoteMainActivity.this);
+                showScribbleDialog("highlight");
+                openHighlight();
+                updateScribbleButtonColor("highlight");
+            }
+        });
+        imageButtondrawerase.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScribbleControlListners(v.getId());
+                // showEraserDialog();
+                //showBrushSizeDialog(true);
+                //onCreateEraserDialog();
+                showScribbleDialog("eraser");
+                openEraser();
+                updateScribbleButtonColor("eraser");
+            }
+        });
+        imageButtondrawMore.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateScribbleControlListners(v.getId());
+
+            }
+        });
+    }
+
+    void updateTextNoteControlListners(int elementId) {
+
+        bold.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        italic.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        underline.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        h1.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        h2.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        h3.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        h4.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        h5.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        h6.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        align_left.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        align_center.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        align_right.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        redo.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        undo.setBackgroundColor(getResources().getColor(R.color.header_bg));
+
+        switch (elementId) {
+            case R.id.action_bold:
+                bold.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_italic:
+                italic.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_underline:
+                underline.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_heading1:
+                h1.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_heading2:
+                h2.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_heading3:
+                h3.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_heading4:
+                h4.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_heading5:
+                h5.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_heading6:
+                h6.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_align_left:
+                align_left.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_align_center:
+                align_center.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_align_right:
+                align_right.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_redo:
+                redo.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            case R.id.action_undo:
+                undo.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    void updateScribbleControlListners(int elementId) {
+
+        imageButtondrawback.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtondrawnew.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonbrushdraw.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtondrawcolors.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtondrawerase.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtondrawMore.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+
+        switch (elementId) {
+            case R.id.imageButtondrawback:
+                imageButtondrawback.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtondrawnew:
+                imageButtondrawnew.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtondrawdraw:
+                imageButtonbrushdraw.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtondrawcolors:
+                imageButtondrawcolors.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtonhighlightdraw:
+                imageButtonhighlightdraw.setBackgroundColor(getResources()
+                        .getColor(R.color.A8b241b));
+                break;
+            case R.id.imageButtondrawerase:
+                imageButtondrawerase.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtondrawMore:
+                imageButtondrawMore.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+	/*void showImageChooserAlertWith(String message, Context context) {
+
+		final Dialog dialog = new Dialog(context);
+
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.chooseimagealertview,
+				null, false);
+
+		TextView textViewTitleAlert = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("SELECT IMAGE");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		TextView buttonAlertCancel = (TextView) contentView
+				.findViewById(R.id.buttonAlertCancel);
+
+		TextView textViewTitleTakePicture = (TextView) contentView
+				.findViewById(R.id.textViewTitleTakePicture);
+
+		TextView textViewTitlechosserfromgallary = (TextView) contentView
+				.findViewById(R.id.textViewTitlechosserfromgallary);
+
+		buttonAlertCancel.setOnClickListener(new OnClickListener() {
+
 			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).redo();
-				//updateTextNoteControlListners(R.id.action_redo);
+			public void onClick(View arg0) {
+				dialog.dismiss();
+
 			}
 		});
-
-		// undo
-		undo.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).undo();
-				//updateTextNoteControlListners(R.id.action_undo);
-			}
-		});
-
-		// bold
-		bold.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setBold();
-				//updateTextNoteControlListners(R.id.action_bold);
-			}
-		});
-
-		// italic
-		italic.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setItalic();
-				//updateTextNoteControlListners(R.id.action_italic);
-			}
-		});
-
-		// underline
-		underline.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setUnderline();
-				//updateTextNoteControlListners(R.id.action_underline);
-			}
-		});
-
-		// h1
-		h1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(1);
-				//updateTextNoteControlListners(R.id.action_heading1);
-			}
-		});
-
-		// h2
-		h2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(2);
-				//updateTextNoteControlListners(R.id.action_heading2);
-			}
-		});
-
-		// h3
-		h3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(3);
-				//updateTextNoteControlListners(R.id.action_heading3);
-			}
-		});
-
-		// h4
-		h4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(4);
-				//updateTextNoteControlListners(R.id.action_heading4);
-			}
-		});
-
-		// h5
-		h5.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(5);
-				//updateTextNoteControlListners(R.id.action_heading5);
-			}
-		});
-
-		// h6
-		h6.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(6);
-				//updateTextNoteControlListners(R.id.action_heading6);
-			}
-		});
-
-		// align left
-		align_left.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignLeft();
-				//updateTextNoteControlListners(R.id.action_align_left);
-			}
-		});
-
-		// align center
-		align_center.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignCenter();
-				//updateTextNoteControlListners(R.id.action_align_center);
-			}
-		});
-
-		// align right
-		align_right.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				allRe.get(Integer.parseInt(v.getTag().toString())).setAlignRight();
-				//updateTextNoteControlListners(R.id.action_align_right);
-			}
-		});
-
-	}
-
-	void addScribbleControlListners() {
-		imageButtondrawback.setOnClickListener(new OnClickListener() {
+		textViewTitleTakePicture.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
-				updateScribbleControlListners(v.getId());
+			public void onClick(View arg0) {
+				// System.exit(0);
+				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
-				if (drawView.getUserDrawn() == true) {
-					SaveDrawingDialog();
-				} else {
-
-					drawingControls.setVisibility(View.GONE);
-					layOutDrawingView.setVisibility(View.GONE);
-					updateButtonUI(-1);
+				//captureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+				if (mMediaUri == null) {
+					// display an error
+					Toast.makeText(NoteMainActivity.this, "", Toast.LENGTH_LONG).show();
 				}
-
+				else {
+					takePhotoIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mMediaUri);
+					startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+				}
+	*//*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	startActivityForResult(intent, REQUEST_CAMERA);*//*
+				dialog.dismiss();
 			}
 		});
-		imageButtondrawnew.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				updateScribbleControlListners(v.getId());
-				showNewDrawingDialog();
+		textViewTitlechosserfromgallary
+				.setOnClickListener(new OnClickListener() {
 
-			}
-		});
-		imageButtonbrushdraw.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updateScribbleControlListners(v.getId());
-				//drawView.setErase(false);
-				//drawView.setBrushSize(drawView.getLastBrushSize());
-				//onCreateBrushDialog();
-				showScribbleDialog("brush");
-				openBrush();
-				updateScribbleButtonColor("brush");
-			}
-		});
-		imageButtondrawcolors.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updateScribbleControlListners(v.getId());
-				//showColorAlert("", NoteMainActivity.this);
-			}
-		});
-		imageButtonhighlightdraw.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updateScribbleControlListners(v.getId());
-				//showBrushSizeDialog(false);
-				//showHighLightAlert("", NoteMainActivity.this);
-				showScribbleDialog("highlight");
-				openHighlight();
-				updateScribbleButtonColor("highlight");
-			}
-		});
-		imageButtondrawerase.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updateScribbleControlListners(v.getId());
-				// showEraserDialog();
-				//showBrushSizeDialog(true);
-				//onCreateEraserDialog();
-				showScribbleDialog("eraser");
-				openEraser();
-				updateScribbleButtonColor("eraser");
-			}
-		});
-		imageButtondrawMore.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updateScribbleControlListners(v.getId());
+					@Override
+					public void onClick(View arg0) {
+						// System.exit(0);
+						Intent intent = new Intent(
+								Intent.ACTION_PICK,
+								android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+						intent.setType("image*//*");
+						startActivityForResult(
+								Intent.createChooser(intent, "Select File"),
+								SELECT_PICTURE);
+						dialog.dismiss();
+					}
+				});
 
-			}
-		});
-	}
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(true);
+		dialog.setContentView(contentView);
+		dialog.show();
 
-	void updateTextNoteControlListners(int elementId) {
+	}*/
 
-		bold.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		italic.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		underline.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		h1.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		h2.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		h3.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		h4.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		h5.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		h6.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		align_left.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		align_center.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		align_right.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		redo.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		undo.setBackgroundColor(getResources().getColor(R.color.header_bg));
+    void updateHeaderControls(int itemId) {
+        imageButtonHamburg.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtoncalander.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonsquence.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
 
-		switch (elementId) {
-			case R.id.action_bold:
-				bold.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_italic:
-				italic.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_underline:
-				underline.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_heading1:
-				h1.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_heading2:
-				h2.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_heading3:
-				h3.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_heading4:
-				h4.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_heading5:
-				h5.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_heading6:
-				h6.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_align_left:
-				align_left.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_align_center:
-				align_center.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_align_right:
-				align_right.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_redo:
-				redo.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			case R.id.action_undo:
-				undo.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				break;
-			default:
-				break;
-		}
+        switch (itemId) {
+            case R.id.imageButtonHamburg:
+                imageButtonHamburg.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtoncalander:
+                imageButtoncalander.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
+            case R.id.imageButtonsquence:
+                imageButtonsquence.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+                break;
 
-	}
+            default:
+                break;
+        }
 
-	void updateScribbleControlListners(int elementId) {
+    }
 
-		imageButtondrawback.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtondrawnew.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonbrushdraw.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtondrawcolors.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtondrawerase.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtondrawMore.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-
-		switch (elementId) {
-			case R.id.imageButtondrawback:
-				imageButtondrawback.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtondrawnew:
-				imageButtondrawnew.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtondrawdraw:
-				imageButtonbrushdraw.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtondrawcolors:
-				imageButtondrawcolors.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtonhighlightdraw:
-				imageButtonhighlightdraw.setBackgroundColor(getResources()
-						.getColor(R.color.A8b241b));
-				break;
-			case R.id.imageButtondrawerase:
-				imageButtondrawerase.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtondrawMore:
-				imageButtondrawMore.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-
-			default:
-				break;
-		}
-
-	}
-
-	void updateHeaderControls(int itemId) {
-		imageButtonHamburg.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtoncalander.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonsquence.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-
-		switch (itemId) {
-			case R.id.imageButtonHamburg:
-				imageButtonHamburg.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtoncalander:
-				imageButtoncalander.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-			case R.id.imageButtonsquence:
-				imageButtonsquence.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-				break;
-
-			default:
-				break;
-		}
-
-	}
-
-	/************* moreinfo control Here ************/
-	void initlizesMoreInfoView(View contentView) {
-		layout_note_more_Info = (LinearLayout) contentView
-				.findViewById(R.id.layout_note_more_Info);
-		layout_note_more_Info.setVisibility(View.GONE);
+    /*************
+     * moreinfo control Here
+     ************/
+    void initlizesMoreInfoView(View contentView) {
+        layout_note_more_Info = (LinearLayout) contentView
+                .findViewById(R.id.layout_note_more_Info);
+        layout_note_more_Info.setVisibility(View.GONE);
 
 	/*Button buttonLock = (Button) layout_note_more_Info
 	.findViewById(R.id.buttonLock);
 	Button buttonDelete = (Button) layout_note_more_Info
 	.findViewById(R.id.buttonDelete);*/
-		Button buttonRemind = (Button) layout_note_more_Info
-				.findViewById(R.id.btnRemind);
+        Button buttonRemind = (Button) layout_note_more_Info
+                .findViewById(R.id.btnRemind);
 	/*Button buttonTimeBomb = (Button) layout_note_more_Info
 	.findViewById(R.id.buttonTimeBomb);
 	Button buttonAttach = (Button) layout_note_more_Info
@@ -1213,11 +1358,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	System.out.println("button delete");
 	}
 	});*/
-	buttonRemind.setOnClickListener(new OnClickListener() {
-		@Override
-		public void onClick(View arg0) {
-			//finish();
-			//System.out.println("button remind");
+        buttonRemind.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                //finish();
+                //System.out.println("button remind");
 			/*NotificationCompat.Builder mBuilder =
 					new NotificationCompat.Builder(NoteMainActivity.this)
 						.setSmallIcon(R.drawable.reminder_sort_view)
@@ -1228,10 +1373,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			// mId allows you to update the notification later on.
 			int mId = 0;
 			mNotificationManager.notify(mId, mBuilder.build());*/
-			showDate(NoteMainActivity.this);
+                showDate(NoteMainActivity.this);
 
-		}
-	});
+            }
+        });
 	/*buttonTimeBomb.setOnClickListener(new OnClickListener() {
 	@Override
 	public void onClick(View arg0) {
@@ -1245,14 +1390,57 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	});
 */
+    }
+
+    /************* Erase control Here ************/
+	/*void showEraserDialog() {
+	final Dialog brushDialog1 = new Dialog(NoteMainActivity.this);
+	brushDialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	brushDialog1.setCancelable(true);
+	brushDialog1.setContentView(R.layout.brush_chooser);
+	TextView textViewSizesHeader = (TextView) brushDialog1
+	.findViewById(R.id.textViewSizesHeader);
+	textViewSizesHeader.setText("ERASER SIZES");
+	*//*ImageButton smallBtn = (ImageButton) brushDialog1
+	.findViewById(R.id.small_brush);
+	smallBtn.setOnClickListener(new OnClickListener() {
+	public void onClick(View v) {
+	drawView.setErase(true);
+	drawView.setBrushSize(smallBrush);
+	brushDialog1.dismiss();
 	}
+	});
+	ImageButton mediumBtn = (ImageButton) brushDialog1
+	.findViewById(R.id.medium_brush);
+	mediumBtn.setOnClickListener(new OnClickListener() {
+	@Override
+	public void onClick(View v) {
+	drawView.setErase(true);
+	drawView.setBrushSize(mediumBrush);
+	brushDialog1.dismiss();
+	}
+	});
+	ImageButton largeBtn = (ImageButton) brushDialog1
+	.findViewById(R.id.large_brush);
+	largeBtn.setOnClickListener(new OnClickListener() {
+	@Override
+	public void onClick(View v) {
+	drawView.setErase(true);
+	drawView.setBrushSize(largeBrush);
+	brushDialog1.dismiss();
+	}
+	});*//*
+	brushDialog1.show();
+	}*/
 
-	/************* main list control Here ************/
-	void addlistners() {
+    /*************
+     * main list control Here
+     ************/
+    void addlistners() {
 
-		//imageButtoncalander.setVisibility(View.VISIBLE); //changed by Jay
+        //imageButtoncalander.setVisibility(View.VISIBLE); //changed by Jay
 
-		// #NOTE ITEM CLCIK
+        // #NOTE ITEM CLCIK
 
 	/*listviewNotes.setOnItemClickListener(new OnItemClickListener() {
 	@Override
@@ -1300,247 +1488,248 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	});*/
 
-		// #BUTTON CHECKED CLICK TEXTSAVE
+        // #BUTTON CHECKED CLICK TEXTSAVE
 
-		imageButtoncalander.setOnClickListener(new OnClickListener() {
+        imageButtoncalander.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-				layout_note_more_Info.setVisibility(View.GONE);
-				imageButtonsquence.setVisibility(View.VISIBLE);
-				isMoreShown = false;
-				// Save click
-				updateHeaderControls(v.getId());
+                layout_note_more_Info.setVisibility(View.GONE);
+                imageButtonsquence.setVisibility(View.VISIBLE);
+                isMoreShown = false;
+                // Save click
+                updateHeaderControls(v.getId());
 
 
-				if (textelementid.size() > 0) {
-					textelementid.get(0).clearFocus();
+                if (textelementid.size() > 0) {
+                    textelementid.get(0).clearFocus();
 
-				}
-				if (allCheckboxText.size() > 0){
-					allCheckboxText.get(0).clearFocus();
-				}
+                }
+                if (allCheckboxText.size() > 0) {
+                    allCheckboxText.get(0).clearFocus();
+                }
 
-				textNoteControls.setVisibility(View.GONE);
-				horizontal_scroll_editor.setVisibility(View.GONE);
-				isTextmodeSelected=false;
+                textNoteControls.setVisibility(View.GONE);
+                horizontal_scroll_editor.setVisibility(View.GONE);
+                isTextmodeSelected = false;
 
-				try  {
-					InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-				} catch (Exception e) {}
+                try {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                }
 
-				//drawView.startNew();
-				drawView.setVisibility(View.GONE);
-				drawingControls.setVisibility(View.GONE);
-				imageButtonHamburg.setVisibility(View.VISIBLE);
-				imageButtoncalander.setVisibility(View.GONE);
-				imageButtonsquence.setVisibility(View.VISIBLE);
-				imageButtoncheckbox.setVisibility(View.VISIBLE);
-			}
-		});
+                //drawView.startNew();
+                drawView.setVisibility(View.GONE);
+                drawingControls.setVisibility(View.GONE);
+                imageButtonHamburg.setVisibility(View.VISIBLE);
+                imageButtoncalander.setVisibility(View.GONE);
+                imageButtonsquence.setVisibility(View.VISIBLE);
+                imageButtoncheckbox.setVisibility(View.VISIBLE);
+            }
+        });
 
-		imageButtonHamburg.setOnClickListener(new OnClickListener() {
+        imageButtonHamburg.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// openSlideMenu();
-				isTextmodeSelected = false;
-				layout_note_more_Info.setVisibility(View.GONE);
-				imageButtonsquence.setVisibility(View.VISIBLE);
-				layout_audio_notechooser.setVisibility(View.GONE);
-				imageButtoncalander.setVisibility(View.GONE);
-				isMoreShown = false;
-				finish();
+            @Override
+            public void onClick(View v) {
+                // openSlideMenu();
+                isTextmodeSelected = false;
+                layout_note_more_Info.setVisibility(View.GONE);
+                imageButtonsquence.setVisibility(View.VISIBLE);
+                layout_audio_notechooser.setVisibility(View.GONE);
+                imageButtoncalander.setVisibility(View.GONE);
+                isMoreShown = false;
+                finish();
 
-			}
-		});
+            }
+        });
 
-		imageButtoncheckbox.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				imageButtoncalander.setVisibility(View.VISIBLE);
-				noteElements = (LinearLayout) findViewById(R.id.noteElements);
-				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-				final View viewChecklist = inflater.inflate(R.layout.note_checklist, null, false);
-				final RelativeLayout checkbox = (RelativeLayout) viewChecklist.findViewById(R.id.checkbox);
-				final ImageView checklist_icon = (ImageView) viewChecklist.findViewById(R.id.checkboxIcon);
-				checklist_icon.setTag("0");
-				final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
-				final ImageButton checklistDelete = (ImageButton) viewChecklist.findViewById(R.id.deleteCheckbox);
+        imageButtoncheckbox.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageButtoncalander.setVisibility(View.VISIBLE);
+                noteElements = (LinearLayout) findViewById(R.id.noteElements);
+                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                final View viewChecklist = inflater.inflate(R.layout.note_checklist, null, false);
+                final RelativeLayout checkbox = (RelativeLayout) viewChecklist.findViewById(R.id.checkbox);
+                final ImageView checklist_icon = (ImageView) viewChecklist.findViewById(R.id.checkboxIcon);
+                checklist_icon.setTag("0");
+                final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
+                final ImageButton checklistDelete = (ImageButton) viewChecklist.findViewById(R.id.deleteCheckbox);
 
-				allDelete.add(checklistDelete);
+                allDelete.add(checklistDelete);
 
-				if (allCheckboxText.size() == 0)
-					allCheckboxText.add(checklist_text);
+                if (allCheckboxText.size() == 0)
+                    allCheckboxText.add(checklist_text);
 
-				checklist_text.requestFocus();
+                checklist_text.requestFocus();
 
-				noteElements.addView(checkbox);
+                noteElements.addView(checkbox);
 
-				drawingControls.setVisibility(View.GONE);
-				layout_note_more_Info.setVisibility(View.GONE);
-				isMoreShown = false;
-				layout_audio_notechooser.setVisibility(View.GONE);
-				imageButtoncalander.setVisibility(View.VISIBLE);
-				imageButtonHamburg.setVisibility(View.GONE);
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
+                drawingControls.setVisibility(View.GONE);
+                layout_note_more_Info.setVisibility(View.GONE);
+                isMoreShown = false;
+                layout_audio_notechooser.setVisibility(View.GONE);
+                imageButtoncalander.setVisibility(View.VISIBLE);
+                imageButtonHamburg.setVisibility(View.GONE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
 
-				// TODO hide
-				imageButtoncheckbox.setVisibility(View.GONE);
-				imageButtonsquence.setVisibility(View.GONE);
+                // TODO hide
+                imageButtoncheckbox.setVisibility(View.GONE);
+                imageButtonsquence.setVisibility(View.GONE);
 
-				final boolean[] cb_added = {false};
-				final long[] thisnoteelementid = new long[1];
+                final boolean[] cb_added = {false};
+                final long[] thisnoteelementid = new long[1];
 
-				final JSONObject checkBoxValue = new JSONObject();
-				try {
-					checkBoxValue.put("status", 0);
-					checkBoxValue.put("text", "");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+                final JSONObject checkBoxValue = new JSONObject();
+                try {
+                    checkBoxValue.put("status", 0);
+                    checkBoxValue.put("text", "");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-				checklist_text.addTextChangedListener(new TextWatcher() {
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                checklist_text.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-					}
+                    }
 
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count) {
-						if (noteIdForDetails == null) {
-							makeNote();
-						}
-						if (noteIdForDetails != null) {
-							String updatedText = s.toString();
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (noteIdForDetails == null) {
+                            makeNote();
+                        }
+                        if (noteIdForDetails != null) {
+                            String updatedText = s.toString();
 
-							if (!cb_added[0]) {
+                            if (!cb_added[0]) {
 
-								try {
-									checkBoxValue.put("status", 0);
-									checkBoxValue.put("text", updatedText);
-								} catch (JSONException e) {
-									e.printStackTrace();
-								}
+                                try {
+                                    checkBoxValue.put("status", 0);
+                                    checkBoxValue.put("text", updatedText);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
-								NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "checkbox", checkBoxValue.toString());
-								ne.save();
-								thisnoteelementid[0] = ne.getId();
-								cb_added[0] = true;
-							}
-							if (cb_added[0]) {
-								NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
-								try {
-									checkBoxValue.remove("text");
-									checkBoxValue.put("text", s.toString());
-								} catch (JSONException e) {
-									e.printStackTrace();
-								}
-								ne.content = checkBoxValue.toString();
-								Log.e("jay after text", ne.content);
-								ne.save();
-								modifyNoteTime();
+                                NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "checkbox", checkBoxValue.toString());
+                                ne.save();
+                                thisnoteelementid[0] = ne.getId();
+                                cb_added[0] = true;
+                            }
+                            if (cb_added[0]) {
+                                NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
+                                try {
+                                    checkBoxValue.remove("text");
+                                    checkBoxValue.put("text", s.toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                ne.content = checkBoxValue.toString();
+                                Log.e("jay after text", ne.content);
+                                ne.save();
+                                modifyNoteTime();
 
-							}
-						}
-					}
+                            }
+                        }
+                    }
 
-					@Override
-					public void afterTextChanged(Editable s) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
 
-					}
-				});
+                    }
+                });
 
-				checklist_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-					@Override
-					public void onFocusChange(View v, boolean hasFocus) {
-						drawingControls.setVisibility(View.GONE);
-						layout_note_more_Info.setVisibility(View.GONE);
-						isMoreShown = false;
-						layout_audio_notechooser.setVisibility(View.GONE);
-						imageButtoncalander.setVisibility(View.VISIBLE);
-						imageButtonHamburg.setVisibility(View.GONE);
-						InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-						imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
+                checklist_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        drawingControls.setVisibility(View.GONE);
+                        layout_note_more_Info.setVisibility(View.GONE);
+                        isMoreShown = false;
+                        layout_audio_notechooser.setVisibility(View.GONE);
+                        imageButtoncalander.setVisibility(View.VISIBLE);
+                        imageButtonHamburg.setVisibility(View.GONE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
 
-						// TODO hide
-						imageButtoncheckbox.setVisibility(View.GONE);
-						imageButtonsquence.setVisibility(View.GONE);
-						if (allCheckboxText.size() > 0)
-							allCheckboxText.remove(0);
+                        // TODO hide
+                        imageButtoncheckbox.setVisibility(View.GONE);
+                        imageButtonsquence.setVisibility(View.GONE);
+                        if (allCheckboxText.size() > 0)
+                            allCheckboxText.remove(0);
 
-						allCheckboxText.add(v);
-					}
-				});
+                        allCheckboxText.add(v);
+                    }
+                });
 
-				checklist_icon.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						String tag = v.getTag().toString();
+                checklist_icon.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String tag = v.getTag().toString();
 
-						NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
+                        NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
 
-						if (tag.equals("1")) {
-							checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
-							try {
-								checkBoxValue.remove("status");
-								checkBoxValue.put("status", 0);
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-							v.setTag("0");
-						} else {
-							checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
-							try {
-								checkBoxValue.remove("status");
-								checkBoxValue.put("status", 1);
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-							v.setTag("1");
-						}
+                        if (tag.equals("1")) {
+                            checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+                            try {
+                                checkBoxValue.remove("status");
+                                checkBoxValue.put("status", 0);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            v.setTag("0");
+                        } else {
+                            checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+                            try {
+                                checkBoxValue.remove("status");
+                                checkBoxValue.put("status", 1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            v.setTag("1");
+                        }
 
-						ne.content = checkBoxValue.toString();
-						Log.e("jay after image", ne.content);
+                        ne.content = checkBoxValue.toString();
+                        Log.e("jay after image", ne.content);
 
-						ne.save();
-						modifyNoteTime();
+                        ne.save();
+                        modifyNoteTime();
 
-					}
-				});
+                    }
+                });
 
-			}
-		});
+            }
+        });
 
-		imageButtonsquence.setOnClickListener(new OnClickListener() {
+        imageButtonsquence.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-				if (isTextmodeSelected == true) {
-					LayoutTextWritingView.setVisibility(View.VISIBLE);
-					imageButtoncalander.setVisibility(View.VISIBLE);
-				}
+                if (isTextmodeSelected == true) {
+                    LayoutTextWritingView.setVisibility(View.VISIBLE);
+                    imageButtoncalander.setVisibility(View.VISIBLE);
+                }
 
-				layout_note_more_Info.setVisibility(View.GONE);
-				layout_audio_notechooser.setVisibility(View.GONE);
-				isMoreShown = false;
+                layout_note_more_Info.setVisibility(View.GONE);
+                layout_audio_notechooser.setVisibility(View.GONE);
+                isMoreShown = false;
 
-				// Color ICON
-				updateHeaderControls(v.getId());
+                // Color ICON
+                updateHeaderControls(v.getId());
 
-				// Show IN TEXT NOTE
-				showTextNoteDialog();
+                // Show IN TEXT NOTE
+                showTextNoteDialog();
 
-			}
-		});
+            }
+        });
 
-		imageButtonDeleteMode.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
+        imageButtonDeleteMode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
 				/*LayoutInflater inflater = getLayoutInflater();
 				View deleteAudioView = inflater.inflate(R.layout.note_audio, null, false);
 				View deleteCheckboxView = inflater.inflate(R.layout.note_checklist, null, false);
@@ -1550,112 +1739,112 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 				deleteAudio.setVisibility(View.VISIBLE);
 				deleteCheckbox.setVisibility(View.VISIBLE);*/
-				deleteButton();
-				//Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_LONG).show();
-			}
-		});
+                deleteButton();
+                //Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_LONG).show();
+            }
+        });
 
-		imageButtonAudioMode.setOnClickListener(new OnClickListener() {
+        imageButtonAudioMode.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				drawingControls.setVisibility(View.GONE);
-				updateButtonUI(R.id.imageButtonAudioMode);
-				System.out.println("audio mode");
+            @Override
+            public void onClick(View v) {
+                drawingControls.setVisibility(View.GONE);
+                updateButtonUI(R.id.imageButtonAudioMode);
+                System.out.println("audio mode");
 
-				audioElement = (LinearLayout) findViewById(R.id.audioRecording);
-				LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-				final View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
-				LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
-				final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-				final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-				audio_play.setImageResource(R.drawable.stop_audio);
-				final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
+                audioElement = (LinearLayout) findViewById(R.id.audioRecording);
+                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                final View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
+                LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+                final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+                final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+                audio_play.setImageResource(R.drawable.stop_audio);
+                final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
 
-				allDelete.add(audioDelete);
-				NoteElement ne = null;
-				final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
+                allDelete.add(audioDelete);
+                NoteElement ne = null;
+                final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
 
-				audioElement.addView(note_audio);
+                audioElement.addView(note_audio);
 
-				try {
-					initlizeAudiorecoder();
+                try {
+                    initlizeAudiorecoder();
 
-					if (noteIdForDetails == null) {
-						makeNote();
-					}
-					if (noteIdForDetails != null) {
+                    if (noteIdForDetails == null) {
+                        makeNote();
+                    }
+                    if (noteIdForDetails != null) {
 
-						final JSONObject audioValue = new JSONObject();
-						try {
-							audioValue.put("status", 0);
-							audioValue.put("name", audioName);
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
+                        final JSONObject audioValue = new JSONObject();
+                        try {
+                            audioValue.put("status", 0);
+                            audioValue.put("name", audioName);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-						ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioValue.toString());
-						ne.save();
-						modifyNoteTime();
-					}
+                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioValue.toString());
+                        ne.save();
+                        modifyNoteTime();
+                    }
 
-					myAudioRecorder.prepare();
-					myAudioRecorder.start();
+                    myAudioRecorder.prepare();
+                    myAudioRecorder.start();
 
-					audio_play.setTag(1);
+                    audio_play.setTag(1);
 
-					final Long startTime = System.currentTimeMillis();
-					final Date startTimeDate = new Date(startTime);
-
-
-					//audio_seek.setMax(mp.getDuration() / 1000);
-					final Handler mHandler = new Handler();
-					// Make sure you update Seekbar on UI thread
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							String tag = audio_play.getTag().toString();
-							if (myAudioRecorder != null && tag.equals("1")) {
-								final Long currentTime = System.currentTimeMillis();
-								Date currentTimeDate = new Date(currentTime);
-
-								Long timeDifference = currentTimeDate.getTime() - startTimeDate.getTime();
-
-								long diffSeconds = timeDifference / 1000 % 60;
-								long diffMinutes = timeDifference / (60 * 1000) % 60;
-								long diffHours = timeDifference / (60 * 60 * 1000) % 24;
-
-								//String duration = "0" + diffHours +":"+ diffMinutes +":"+diffSeconds;
-								String duration = String.format("%02d:%02d:%02d", diffHours, diffMinutes, diffSeconds);
-
-								record_text.setText(String.valueOf(duration));
-								record_text.setVisibility(View.VISIBLE);
-							}
-							mHandler.postDelayed(this, 1000);
-							//mHandler.removeCallbacksAndMessages(this);
+                    final Long startTime = System.currentTimeMillis();
+                    final Date startTimeDate = new Date(startTime);
 
 
-						}
-					});
+                    //audio_seek.setMax(mp.getDuration() / 1000);
+                    final Handler mHandler = new Handler();
+                    // Make sure you update Seekbar on UI thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String tag = audio_play.getTag().toString();
+                            if (myAudioRecorder != null && tag.equals("1")) {
+                                final Long currentTime = System.currentTimeMillis();
+                                Date currentTimeDate = new Date(currentTime);
 
-					//audio_text.setText(myAudioRecorder.get);
+                                Long timeDifference = currentTimeDate.getTime() - startTimeDate.getTime();
 
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+                                long diffSeconds = timeDifference / 1000 % 60;
+                                long diffMinutes = timeDifference / (60 * 1000) % 60;
+                                long diffHours = timeDifference / (60 * 60 * 1000) % 24;
 
-				final NoteElement finalNe = ne;
-				audio_play.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
+                                //String duration = "0" + diffHours +":"+ diffMinutes +":"+diffSeconds;
+                                String duration = String.format("%02d:%02d:%02d", diffHours, diffMinutes, diffSeconds);
 
-						audio_play.setImageResource(R.drawable.play_audio);
-						myAudioRecorder.stop();
-						myAudioRecorder.release();
-						myAudioRecorder = null;
-						record_text.setVisibility(View.GONE);
+                                record_text.setText(String.valueOf(duration));
+                                record_text.setVisibility(View.VISIBLE);
+                            }
+                            mHandler.postDelayed(this, 1000);
+                            //mHandler.removeCallbacksAndMessages(this);
+
+
+                        }
+                    });
+
+                    //audio_text.setText(myAudioRecorder.get);
+
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                final NoteElement finalNe = ne;
+                audio_play.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        audio_play.setImageResource(R.drawable.play_audio);
+                        myAudioRecorder.stop();
+                        myAudioRecorder.release();
+                        myAudioRecorder = null;
+                        record_text.setVisibility(View.GONE);
 
 						/*if (noteIdForDetails == null) {
 							makeNote();
@@ -1666,24 +1855,24 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 							modifyNoteTime();
 						}*/
 
-						JSONObject audioValue = null;
-						try {
-							audioValue = new JSONObject(finalNe.content);
-							audioValue.remove("status");
-							audioValue.put("status", 1);
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-						finalNe.content = audioValue.toString();
-						finalNe.save();
+                        JSONObject audioValue = null;
+                        try {
+                            audioValue = new JSONObject(finalNe.content);
+                            audioValue.remove("status");
+                            audioValue.put("status", 1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        finalNe.content = audioValue.toString();
+                        finalNe.save();
 
-						Toast.makeText(NoteMainActivity.this, "Recording Saved",
-								Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NoteMainActivity.this, "Recording Saved",
+                                Toast.LENGTH_SHORT).show();
 
-						System.out.println("Current Index:" + currentAudioIndex);
+                        System.out.println("Current Index:" + currentAudioIndex);
 
-						audioElement.removeAllViews();
-						onResume();
+                        audioElement.removeAllViews();
+                        onResume();
 
 	/*final MediaPlayer mp = new MediaPlayer();
 	//final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
@@ -1739,357 +1928,335 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	});*/
 
 
-					}
-				});
+                    }
+                });
 
-				//fetchNoteElementsFromDb();
-			}
-		});
-		imageButtonImageMode.setOnClickListener(new OnClickListener() {
+                //fetchNoteElementsFromDb();
+            }
+        });
+        imageButtonImageMode.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				System.out.println("image mode");
-				updateButtonUI(R.id.imageButtonImageMode);
-				// listviewNotes.setScrollContainer(true);
-				// startActivity(new
-				// Intent(getApplicationContext(),ImageChooserActivity.class));
-				isTextmodeSelected = false;
-				drawingControls.setVisibility(View.GONE);
-				layOutDrawingView.setVisibility(View.GONE);
-				//showImageChooserAlertWith("", NoteMainActivity.this);
-				//ToDo Image
-				Intent intent = new Intent(NoteMainActivity.this, CameraActivity.class);
-				if(noteIdForDetails == null)
-					intent.putExtra("isNoteIdNull", true);
-				else
-					intent.putExtra("isNoteIdNull", false);
+            @Override
+            public void onClick(View v) {
+                System.out.println("image mode");
+                updateButtonUI(R.id.imageButtonImageMode);
+                // listviewNotes.setScrollContainer(true);
+                // startActivity(new
+                // Intent(getApplicationContext(),ImageChooserActivity.class));
+                isTextmodeSelected = false;
+                drawingControls.setVisibility(View.GONE);
+                layOutDrawingView.setVisibility(View.GONE);
+                //showImageChooserAlertWith("", NoteMainActivity.this);
+                //ToDo Image
+                Intent intent = new Intent(NoteMainActivity.this, CameraActivity.class);
+                if (noteIdForDetails == null)
+                    intent.putExtra("isNoteIdNull", true);
+                else
+                    intent.putExtra("isNoteIdNull", false);
 
-				intent.putExtra("noteid", noteIdForDetails);
-				//intent.putExtra("check", 0);
-				startActivity(intent);
-				imageButtonsquence.setVisibility(View.VISIBLE);
-				layout_note_more_Info.setVisibility(View.GONE);
-				isMoreShown = false;
-				layout_audio_notechooser.setVisibility(View.GONE);
-				imageButtoncalander.setVisibility(View.GONE);
-			}
-		});
-		imageButtonPaintMode.setOnClickListener(new OnClickListener() {
+                intent.putExtra("noteid", noteIdForDetails);
+                //intent.putExtra("check", 0);
+                startActivity(intent);
+                imageButtonsquence.setVisibility(View.VISIBLE);
+                layout_note_more_Info.setVisibility(View.GONE);
+                isMoreShown = false;
+                layout_audio_notechooser.setVisibility(View.GONE);
+                imageButtoncalander.setVisibility(View.GONE);
+            }
+        });
+        imageButtonPaintMode.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				System.out.println("paint mode");
-				//scrollView.setVisibility(View.INVISIBLE);
+            @Override
+            public void onClick(View v) {
+                System.out.println("paint mode");
+                //scrollView.setVisibility(View.INVISIBLE);
 
-				updateButtonUI(R.id.imageButtonPaintMode);
+                updateButtonUI(R.id.imageButtonPaintMode);
 
-				// startActivity(new
-				// Intent(getApplicationContext(),DrawingActivity.class));
-				// updatenoteList(NOTETYPE.SCRIBBLEMODE);
-				// listviewNotes.setScrollContainer(false);
+                // startActivity(new
+                // Intent(getApplicationContext(),DrawingActivity.class));
+                // updatenoteList(NOTETYPE.SCRIBBLEMODE);
+                // listviewNotes.setScrollContainer(false);
 
-				// drawView.clear();
+                // drawView.clear();
 
-				layOutDrawingView.setVisibility(View.VISIBLE);
-				drawingControls.setVisibility(View.VISIBLE);
+                layOutDrawingView.setVisibility(View.VISIBLE);
+                drawingControls.setVisibility(View.VISIBLE);
 
-				isTextmodeSelected = false;
-				updateScribbleControlListners(R.id.imageButtondrawback);
-				imageButtonsquence.setVisibility(View.GONE);
-				imageButtoncheckbox.setVisibility(View.GONE);
-				layout_note_more_Info.setVisibility(View.GONE);
-				isMoreShown = false;
-				layout_audio_notechooser.setVisibility(View.GONE);
-				imageButtonHamburg.setVisibility(View.GONE);
-				imageButtoncalander.setVisibility(View.VISIBLE);
-				drawView.setVisibility(View.VISIBLE);
-				//drawView.setDrawColor(getResources().getColor(R.color.black));
-				drawView.setDrawColor(color_selected);
-				drawView.setBrushSize(16);
-			}
-		});
-		imageButtonShareMode.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				drawingControls.setVisibility(View.GONE);
-				updateButtonUI(R.id.imageButtonShareMode);
-				System.out.println("share mode");
-				layOutDrawingView.setVisibility(View.GONE);
-				// listviewNotes.setScrollContainer(true);
-				imageButtonsquence.setVisibility(View.VISIBLE);
-				layout_note_more_Info.setVisibility(View.GONE);
-				isMoreShown = false;
-				layout_audio_notechooser.setVisibility(View.GONE);
-			}
-		});
-		imageButtonTextMode.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				updateButtonUI(R.id.imageButtonTextMode);
-				System.out.println("text mode");
-				//layOutDrawingView.setVisibility(View.GONE);
-				// startActivity(new
-				// Intent(getApplicationContext(),TextChooserActivity.class));
+                isTextmodeSelected = false;
+                updateScribbleControlListners(R.id.imageButtondrawback);
+                imageButtonsquence.setVisibility(View.GONE);
+                imageButtoncheckbox.setVisibility(View.GONE);
+                layout_note_more_Info.setVisibility(View.GONE);
+                isMoreShown = false;
+                layout_audio_notechooser.setVisibility(View.GONE);
+                imageButtonHamburg.setVisibility(View.GONE);
+                imageButtoncalander.setVisibility(View.VISIBLE);
+                drawView.setVisibility(View.VISIBLE);
+                //drawView.setDrawColor(getResources().getColor(R.color.black));
+                drawView.setDrawColor(color_selected);
+                drawView.setBrushSize(16);
+            }
+        });
+        imageButtonShareMode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawingControls.setVisibility(View.GONE);
+                updateButtonUI(R.id.imageButtonShareMode);
+                System.out.println("share mode");
+                layOutDrawingView.setVisibility(View.GONE);
+                // listviewNotes.setScrollContainer(true);
+                imageButtonsquence.setVisibility(View.VISIBLE);
+                layout_note_more_Info.setVisibility(View.GONE);
+                isMoreShown = false;
+                layout_audio_notechooser.setVisibility(View.GONE);
+            }
+        });
+        imageButtonTextMode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateButtonUI(R.id.imageButtonTextMode);
+                System.out.println("text mode");
+                //layOutDrawingView.setVisibility(View.GONE);
+                // startActivity(new
+                // Intent(getApplicationContext(),TextChooserActivity.class));
 
-				// updatenoteList(NOTETYPE.TEXTMODE);
-				// listviewNotes.setScrollContainer(true);
-				//LayoutTextWritingView.setVisibility(View.VISIBLE);
-				//isTextmodeSelected = true;
+                // updatenoteList(NOTETYPE.TEXTMODE);
+                // listviewNotes.setScrollContainer(true);
+                //LayoutTextWritingView.setVisibility(View.VISIBLE);
+                //isTextmodeSelected = true;
 
-				drawingControls.setVisibility(View.GONE);
-				//textNoteControls.setVisibility(View.VISIBLE);
-				//imageButtonsquence.setVisibility(View.VISIBLE);
-				layout_note_more_Info.setVisibility(View.GONE);
-				isMoreShown = false;
-				layout_audio_notechooser.setVisibility(View.GONE);
-				horizontal_scroll_editor.setVisibility(View.VISIBLE);
+                drawingControls.setVisibility(View.GONE);
+                //textNoteControls.setVisibility(View.VISIBLE);
+                //imageButtonsquence.setVisibility(View.VISIBLE);
+                layout_note_more_Info.setVisibility(View.GONE);
+                isMoreShown = false;
+                layout_audio_notechooser.setVisibility(View.GONE);
+                horizontal_scroll_editor.setVisibility(View.VISIBLE);
 
-				imageButtonHamburg.setVisibility(View.GONE);
-				imageButtoncalander.setVisibility(View.VISIBLE);
-				imageButtonsquence.setVisibility(View.GONE);
-				imageButtoncheckbox.setVisibility(View.GONE);
+                imageButtonHamburg.setVisibility(View.GONE);
+                imageButtoncalander.setVisibility(View.VISIBLE);
+                imageButtonsquence.setVisibility(View.GONE);
+                imageButtoncheckbox.setVisibility(View.GONE);
 
-				noteElements = (LinearLayout) findViewById(R.id.noteElements);
-				LayoutInflater inflator = getLayoutInflater();
-				viewText = inflator.inflate(R.layout.note_text, null, false);
-				final RelativeLayout textView = (RelativeLayout) viewText.findViewById(R.id.textView);
-				final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
-				final ImageButton deleteText = (ImageButton) viewText.findViewById(R.id.deleteText);
-				editor.setMinimumHeight(40);
-				editor.setEditorHeight(40);
-				editor.setBackgroundColor(0);
-				noteElements.addView(textView);
+                noteElements = (LinearLayout) findViewById(R.id.noteElements);
+                LayoutInflater inflator = getLayoutInflater();
+                viewText = inflator.inflate(R.layout.note_text, null, false);
+                final RelativeLayout textView = (RelativeLayout) viewText.findViewById(R.id.textView);
+                final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+                final ImageButton deleteText = (ImageButton) viewText.findViewById(R.id.deleteText);
+                editor.setMinimumHeight(40);
+                editor.setEditorHeight(40);
+                editor.setBackgroundColor(0);
+                noteElements.addView(textView);
 
-				allDelete.add(deleteText);
-				allRe.add(editor);
-				editor.setTag(allRe.size() - 1);
-				setFeatureTag(String.valueOf(allRe.size() - 1));
+                allDelete.add(deleteText);
+                allRe.add(editor);
+                editor.setTag(allRe.size() - 1);
+                setFeatureTag(String.valueOf(allRe.size() - 1));
 
-				final boolean[] ne_added = {false};
-				final long[] thisnoteid = new long[1];
-				//editor.setHtml(s);
+                final boolean[] ne_added = {false};
+                final long[] thisnoteid = new long[1];
+                //editor.setHtml(s);
 
-				//editor.requestFocus();
-				if (textelementid.size() == 0)
-					textelementid.add(editor);
-
-
-				editor.focusEditor();
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT);
-
-				// TODO editor up
-				editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-					@Override
-					public void onFocusChange(View v, boolean hasFocus) {
-						//mEditor.setEditorHeight(400);
-						String id = v.getTag().toString();
-
-						setFeatureTag(id);
-						drawingControls.setVisibility(View.GONE);
-						layout_note_more_Info.setVisibility(View.GONE);
-						isMoreShown = false;
-						layout_audio_notechooser.setVisibility(View.GONE);
-						horizontal_scroll_editor.setVisibility(View.VISIBLE);
-
-						imageButtonHamburg.setVisibility(View.GONE);
-						imageButtoncalander.setVisibility(View.VISIBLE);
-						imageButtonsquence.setVisibility(View.GONE);
-						imageButtoncheckbox.setVisibility(View.GONE);
-
-						if (textelementid.size() > 0)
-							textelementid.remove(0);
-
-						textelementid.add(v);
-
-					}
-				});
-
-				editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
-					@Override
-					public void onTextChange(String s) {
-						//editortext[0] = s;
-						//String tag = (String) editor.getTag();
-
-						if(noteIdForDetails == null)
-							makeNote();
-
-						if (!ne_added[0]) {
-							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s);
-							ne.save();
-							thisnoteid[0] = ne.getId();
-							ne_added[0] = true;
-						}
-						if (ne_added[0]) {
-							NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
-							ne.content = s;
-							ne.save();
-							modifyNoteTime();
-						}
-					}
-				});
-			}
-		});
+                //editor.requestFocus();
+                if (textelementid.size() == 0)
+                    textelementid.add(editor);
 
 
-		imageButtonMoreMode.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				imageButtonsquence.setVisibility(View.VISIBLE);
-				drawingControls.setVisibility(View.GONE);
-				System.out.println("more mode");
-				layOutDrawingView.setVisibility(View.GONE);
-				updateButtonUI(R.id.imageButtonMoreMode);
-				layout_audio_notechooser.setVisibility(View.GONE);
+                editor.focusEditor();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT);
 
-				if (isMoreShown == false) {
-					isMoreShown = true;
-					layout_note_more_Info.setVisibility(View.VISIBLE);
-					imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-				} else {
-					isMoreShown = false;
-					layout_note_more_Info.setVisibility(View.GONE);
-					imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
-				}
-				imageButtoncalander.setVisibility(View.GONE);
-			}
-		});
+                // TODO editor up
+                editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        //mEditor.setEditorHeight(400);
+                        String id = v.getTag().toString();
 
-	}
+                        setFeatureTag(id);
+                        drawingControls.setVisibility(View.GONE);
+                        layout_note_more_Info.setVisibility(View.GONE);
+                        isMoreShown = false;
+                        layout_audio_notechooser.setVisibility(View.GONE);
+                        horizontal_scroll_editor.setVisibility(View.VISIBLE);
 
-	private void setFeatureTag(String id){
+                        imageButtonHamburg.setVisibility(View.GONE);
+                        imageButtoncalander.setVisibility(View.VISIBLE);
+                        imageButtonsquence.setVisibility(View.GONE);
+                        imageButtoncheckbox.setVisibility(View.GONE);
 
-		bold.setTag(Integer.parseInt(id));
-		italic.setTag(Integer.parseInt(id));
-		underline.setTag(Integer.parseInt(id));
-		h1.setTag(Integer.parseInt(id));
-		h2.setTag(Integer.parseInt(id));
-		h3.setTag(Integer.parseInt(id));
-		h4.setTag(Integer.parseInt(id));
-		h5.setTag(Integer.parseInt(id));
-		h6.setTag(Integer.parseInt(id));
-		align_left.setTag(Integer.parseInt(id));
-		align_center.setTag(Integer.parseInt(id));
-		align_right.setTag(Integer.parseInt(id));
-		redo.setTag(Integer.parseInt(id));
-		undo.setTag(Integer.parseInt(id));
-	}
+                        if (textelementid.size() > 0)
+                            textelementid.remove(0);
 
-	/*void updatenoteList(NOTETYPE notetype) {
-	NoteListDataModel noteListdatamodel = new NoteListDataModel();
-	noteListdatamodel.noteType = notetype;
-	if (notetype == NOTETYPE.AUDIOMODE) {
-	noteListdatamodel.setStrAudioFilePath("");
-	if (arrNoteListData.size() > 0) {
-	currentAudioIndex = arrNoteListData.size() - 1;
-	} else {
-	currentAudioIndex = 0;
-	}
-	} else {
-	arrNoteListData.add(noteListdatamodel);
-	}
-	adapter.notifyDataSetChanged();
-	listviewNotes.smoothScrollToPosition(arrNoteListData.size() - 1);
-	}*/
+                        textelementid.add(v);
 
-	void updateButtonUI(int id) {
+                    }
+                });
 
-		imageButtonAudioMode.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonTextMode.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonShareMode.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonPaintMode.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonMoreMode.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
-		imageButtonImageMode.setBackgroundColor(getResources().getColor(
-				R.color.header_bg));
+                editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+                    @Override
+                    public void onTextChange(String s) {
+                        //editortext[0] = s;
+                        //String tag = (String) editor.getTag();
 
-		switch (id) {
+                        if (noteIdForDetails == null)
+                            makeNote();
 
-			case R.id.imageButtonMoreMode: {
-
-				imageButtonMoreMode.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-			}
-			break;
-			case R.id.imageButtonTextMode: {
-
-				imageButtonTextMode.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-
-			}
-			break;
-			case R.id.imageButtonPaintMode: {
-				imageButtonPaintMode.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-			}
-			break;
-			case R.id.imageButtonShareMode: {
-
-				imageButtonShareMode.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-
-			}
-			break;
-			case R.id.imageButtonAudioMode: {
-				imageButtonAudioMode.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-
-			}
-			break;
-			case R.id.imageButtonImageMode: {
-				imageButtonImageMode.setBackgroundColor(getResources().getColor(
-						R.color.A8b241b));
-
-			}
-			break;
-
-			default:
-				break;
-		}
-
-	}
-
-	public static final int TAKE_PHOTO_REQUEST = 0;
-	public static final int MEDIA_TYPE_IMAGE = 1;
-	private Uri getOutputMediaFileUri(int mediaType) {
-		// To be safe, you should check that the SDCard is mounted
-		// using Environment.getExternalStorageState() before doing this.
-		// 3. Create a file name
-		// 4. Create the file
-		String imgDir = "NoteShare Images";
-		String appName = "NoteShare";
-		appName = "../" + appName;
-		String p = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString().trim();
-		File mediaStorageDir = new File(p, appName);
-		String path = mediaStorageDir.getPath() + File.separator + imgDir + File.separator;
-		String timestamp = String.valueOf(System.currentTimeMillis());
-		if (mediaType == MEDIA_TYPE_IMAGE) {
-			mediaStorageDir = new File(path + "IMG-" + timestamp + ".jpg");
-		}
-		else {
-			return null;
-		}
-
-		Log.d("", "File: " + Uri.fromFile(mediaStorageDir));
-
-		// 5. Return the file's URI
-		return Uri.fromFile(mediaStorageDir);
-	}
-
-	Uri mMediaUri;
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+                        if (!ne_added[0]) {
+                            NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s);
+                            ne.save();
+                            thisnoteid[0] = ne.getId();
+                            ne_added[0] = true;
+                        }
+                        if (ne_added[0]) {
+                            NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
+                            ne.content = s;
+                            ne.save();
+                            modifyNoteTime();
+                        }
+                    }
+                });
+            }
+        });
 
 
-		if (resultCode == RESULT_OK) {
-			if (requestCode == TAKE_PHOTO_REQUEST) {
+        imageButtonMoreMode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageButtonsquence.setVisibility(View.VISIBLE);
+                drawingControls.setVisibility(View.GONE);
+                System.out.println("more mode");
+                layOutDrawingView.setVisibility(View.GONE);
+                updateButtonUI(R.id.imageButtonMoreMode);
+                layout_audio_notechooser.setVisibility(View.GONE);
+
+                if (isMoreShown == false) {
+                    isMoreShown = true;
+                    layout_note_more_Info.setVisibility(View.VISIBLE);
+                    imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                } else {
+                    isMoreShown = false;
+                    layout_note_more_Info.setVisibility(View.GONE);
+                    imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+                }
+                imageButtoncalander.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    private void setFeatureTag(String id) {
+
+        bold.setTag(Integer.parseInt(id));
+        italic.setTag(Integer.parseInt(id));
+        underline.setTag(Integer.parseInt(id));
+        h1.setTag(Integer.parseInt(id));
+        h2.setTag(Integer.parseInt(id));
+        h3.setTag(Integer.parseInt(id));
+        h4.setTag(Integer.parseInt(id));
+        h5.setTag(Integer.parseInt(id));
+        h6.setTag(Integer.parseInt(id));
+        align_left.setTag(Integer.parseInt(id));
+        align_center.setTag(Integer.parseInt(id));
+        align_right.setTag(Integer.parseInt(id));
+        redo.setTag(Integer.parseInt(id));
+        undo.setTag(Integer.parseInt(id));
+    }
+
+    void updateButtonUI(int id) {
+
+        imageButtonAudioMode.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonTextMode.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonShareMode.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonPaintMode.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonMoreMode.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+        imageButtonImageMode.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));
+
+        switch (id) {
+
+            case R.id.imageButtonMoreMode: {
+
+                imageButtonMoreMode.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+            }
+            break;
+            case R.id.imageButtonTextMode: {
+
+                imageButtonTextMode.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+
+            }
+            break;
+            case R.id.imageButtonPaintMode: {
+                imageButtonPaintMode.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+            }
+            break;
+            case R.id.imageButtonShareMode: {
+
+                imageButtonShareMode.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+
+            }
+            break;
+            case R.id.imageButtonAudioMode: {
+                imageButtonAudioMode.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+
+            }
+            break;
+            case R.id.imageButtonImageMode: {
+                imageButtonImageMode.setBackgroundColor(getResources().getColor(
+                        R.color.A8b241b));
+
+            }
+            break;
+
+            default:
+                break;
+        }
+
+    }
+
+    private Uri getOutputMediaFileUri(int mediaType) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        // 3. Create a file name
+        // 4. Create the file
+        String imgDir = "NoteShare Images";
+        String appName = "NoteShare";
+        appName = "../" + appName;
+        String p = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString().trim();
+        File mediaStorageDir = new File(p, appName);
+        String path = mediaStorageDir.getPath() + File.separator + imgDir + File.separator;
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        if (mediaType == MEDIA_TYPE_IMAGE) {
+            mediaStorageDir = new File(path + "IMG-" + timestamp + ".jpg");
+        } else {
+            return null;
+        }
+
+        Log.d("", "File: " + Uri.fromFile(mediaStorageDir));
+
+        // 5. Return the file's URI
+        return Uri.fromFile(mediaStorageDir);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PHOTO_REQUEST) {
 
 	/*int rotate = 0;
 	int orientation = 0;
@@ -2121,21 +2288,21 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	*//****** Image rotation ****//*
 	Matrix matrix = new Matrix();
 	matrix.postRotate(orientation);*/
-				//Bitmap cropped = Bitmap.createBitmap(scaled, x, y, width, height, matrix, true);
+                //Bitmap cropped = Bitmap.createBitmap(scaled, x, y, width, height, matrix, true);
 
-				//finish();
-				Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
-				cameraIntent.putExtra("image", mMediaUri.toString());
-				//send noteid
-				if(noteIdForDetails == null)
-					cameraIntent.putExtra("a", 0);
-				else
-					cameraIntent.putExtra("a", 1);
+                //finish();
+                Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
+                cameraIntent.putExtra("image", mMediaUri.toString());
+                //send noteid
+                if (noteIdForDetails == null)
+                    cameraIntent.putExtra("a", 0);
+                else
+                    cameraIntent.putExtra("a", 1);
 
-				cameraIntent.putExtra("noteid", noteIdForDetails);
-				cameraIntent.putExtra("check", 0);
-				//cameraIntent.putExtra()
-				startActivity(cameraIntent);
+                cameraIntent.putExtra("noteid", noteIdForDetails);
+                cameraIntent.putExtra("check", 0);
+                //cameraIntent.putExtra()
+                startActivity(cameraIntent);
 
 	/*noteElements = (LinearLayout) findViewById(R.id.noteElements);
 	LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
@@ -2164,23 +2331,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	} catch (Exception e) {
 	e.printStackTrace();
 	}*/
-			} else if (requestCode == SELECT_PICTURE) {
-				Uri imagePath = data.getData();
-				Intent selectIntent = new Intent(NoteMainActivity.this, CameraImage.class);
-				selectIntent.putExtra("select_image", imagePath.toString());
-				selectIntent.putExtra("noteid", noteIdForDetails);
+            } else if (requestCode == SELECT_PICTURE) {
+                Uri imagePath = data.getData();
+                Intent selectIntent = new Intent(NoteMainActivity.this, CameraImage.class);
+                selectIntent.putExtra("select_image", imagePath.toString());
+                selectIntent.putExtra("noteid", noteIdForDetails);
 
-				if(noteIdForDetails == null)
-					selectIntent.putExtra("a", 0);
-				else
-					selectIntent.putExtra("a", 1);
+                if (noteIdForDetails == null)
+                    selectIntent.putExtra("a", 0);
+                else
+                    selectIntent.putExtra("a", 1);
 
-				selectIntent.putExtra("check", 1);
-				Log.e("select pic", imagePath.toString());
-				//cameraIntent.putExtra()
-				startActivity(selectIntent);
-			}
-		}
+                selectIntent.putExtra("check", 1);
+                Log.e("select pic", imagePath.toString());
+                //cameraIntent.putExtra()
+                startActivity(selectIntent);
+            }
+        }
 
 	/*if (resultCode == RESULT_OK) {
 	imageButtoncalander.setVisibility(View.VISIBLE);
@@ -2264,364 +2431,287 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	}*/
 
-	}
+    }
 
-	void showColorAlert(String message, Context context) {
+    void showColorAlert(String message, Context context) {
 
-		dialogColor = new Dialog(context);
-		dialogColor.setCanceledOnTouchOutside(true);
+        dialogColor = new Dialog(context);
+        dialogColor.setCanceledOnTouchOutside(true);
 
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.paintcolor, null, false);
-		LinearLayout paintLayout = (LinearLayout) contentView
-				.findViewById(R.id.paint_colors);
-		LinearLayout paintLayout1 = (LinearLayout) contentView
-				.findViewById(R.id.paint_colors1);
-		// currPaint = (ImageButton) paintLayout.getChildAt(0);
-		// currPaint.setImageDrawable(getResources().getDrawable(
-		// R.drawable.paint_pressed));
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflate your activity layout here!
+        View contentView = inflater.inflate(R.layout.paintcolor, null, false);
+        LinearLayout paintLayout = (LinearLayout) contentView
+                .findViewById(R.id.paint_colors);
+        LinearLayout paintLayout1 = (LinearLayout) contentView
+                .findViewById(R.id.paint_colors1);
+        // currPaint = (ImageButton) paintLayout.getChildAt(0);
+        // currPaint.setImageDrawable(getResources().getDrawable(
+        // R.drawable.paint_pressed));
 
-		ImageButton colorbutton1 = (ImageButton) paintLayout
-				.findViewById(R.id.colorbutton1);
-		ImageButton colorbutton2 = (ImageButton) paintLayout
-				.findViewById(R.id.colorbutton2);
-		ImageButton colorbutton3 = (ImageButton) paintLayout
-				.findViewById(R.id.colorbutton3);
-		ImageButton colorbutton4 = (ImageButton) paintLayout
-				.findViewById(R.id.colorbutton4);
-		ImageButton colorbutton5 = (ImageButton) paintLayout
-				.findViewById(R.id.colorbutton5);
-		ImageButton colorbutton6 = (ImageButton) paintLayout
-				.findViewById(R.id.colorbutton6);
-		ImageButton colorbutton7 = (ImageButton) paintLayout
-				.findViewById(R.id.colorbutton7);
-		ImageButton colorbutton8 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton8);
-		ImageButton colorbutton9 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton9);
-		ImageButton colorbutton10 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton10);
+        ImageButton colorbutton1 = (ImageButton) paintLayout
+                .findViewById(R.id.colorbutton1);
+        ImageButton colorbutton2 = (ImageButton) paintLayout
+                .findViewById(R.id.colorbutton2);
+        ImageButton colorbutton3 = (ImageButton) paintLayout
+                .findViewById(R.id.colorbutton3);
+        ImageButton colorbutton4 = (ImageButton) paintLayout
+                .findViewById(R.id.colorbutton4);
+        ImageButton colorbutton5 = (ImageButton) paintLayout
+                .findViewById(R.id.colorbutton5);
+        ImageButton colorbutton6 = (ImageButton) paintLayout
+                .findViewById(R.id.colorbutton6);
+        ImageButton colorbutton7 = (ImageButton) paintLayout
+                .findViewById(R.id.colorbutton7);
+        ImageButton colorbutton8 = (ImageButton) paintLayout1
+                .findViewById(R.id.colorbutton8);
+        ImageButton colorbutton9 = (ImageButton) paintLayout1
+                .findViewById(R.id.colorbutton9);
+        ImageButton colorbutton10 = (ImageButton) paintLayout1
+                .findViewById(R.id.colorbutton10);
 
-		colorbutton1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		colorbutton2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		colorbutton3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		colorbutton4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		colorbutton5.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		colorbutton6.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		colorbutton7.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
+        colorbutton1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        colorbutton2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        colorbutton3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        colorbutton4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        colorbutton5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        colorbutton6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        colorbutton7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
 
-		colorbutton8.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
+        colorbutton8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
 
-		colorbutton9.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		colorbutton10.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
+        colorbutton9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        colorbutton10.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
 
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("SELECT COLOR");
-		textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("SELECT COLOR");
+        textViewTitleAlert.setTextColor(Color.WHITE);
 
-		dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialogColor.setContentView(contentView);
-		dialogColor.show();
-	}
+        dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogColor.setContentView(contentView);
+        dialogColor.show();
+    }
 
-	void showHighLightAlert(String message, Context context) {
+    void showHighLightAlert(String message, Context context) {
 
-		dialogColor = new Dialog(context);
-		dialogColor.setCanceledOnTouchOutside(true);
+        dialogColor = new Dialog(context);
+        dialogColor.setCanceledOnTouchOutside(true);
 
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.highlightcolor, null, false);
-		LinearLayout paintHighlight1 = (LinearLayout) contentView.findViewById(R.id.paint_highlight1);
-		LinearLayout paintHighlight2 = (LinearLayout) contentView.findViewById(R.id.paint_highlight2);
-		// currPaint = (ImageButton) paintLayout.getChildAt(0);
-		// currPaint.setImageDrawable(getResources().getDrawable(
-		// R.drawable.paint_pressed));
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflate your activity layout here!
+        View contentView = inflater.inflate(R.layout.highlightcolor, null, false);
+        LinearLayout paintHighlight1 = (LinearLayout) contentView.findViewById(R.id.paint_highlight1);
+        LinearLayout paintHighlight2 = (LinearLayout) contentView.findViewById(R.id.paint_highlight2);
+        // currPaint = (ImageButton) paintLayout.getChildAt(0);
+        // currPaint.setImageDrawable(getResources().getDrawable(
+        // R.drawable.paint_pressed));
 
-		ImageButton highlightbutton1 = (ImageButton) paintHighlight1
-				.findViewById(R.id.hightlightbutton1);
-		ImageButton highlightbutton2 = (ImageButton) paintHighlight1
-				.findViewById(R.id.hightlightbutton2);
-		ImageButton highlightbutton3 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton3);
-		ImageButton highlightbutton4 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton4);
-		ImageButton highlightbutton5 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton5);
-		ImageButton highlightbutton6 = (ImageButton) paintHighlight2
-				.findViewById(R.id.highlightbutton6);
-		ImageButton highlightbutton7 = (ImageButton) paintHighlight2
-				.findViewById(R.id.highlightbutton7);
-		ImageButton highlightbutton8 = (ImageButton) paintHighlight2
-				.findViewById(R.id.highlightbutton8);
-		ImageButton highlightbutton9 = (ImageButton) paintHighlight2
-				.findViewById(R.id.highlightbutton9);
-		ImageButton highlightbutton10 = (ImageButton) paintHighlight2
-				.findViewById(R.id.highlightbutton10);
+        ImageButton highlightbutton1 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton1);
+        ImageButton highlightbutton2 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton2);
+        ImageButton highlightbutton3 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton3);
+        ImageButton highlightbutton4 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton4);
+        ImageButton highlightbutton5 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton5);
+        ImageButton highlightbutton6 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton6);
+        ImageButton highlightbutton7 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton7);
+        ImageButton highlightbutton8 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton8);
+        ImageButton highlightbutton9 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton9);
+        ImageButton highlightbutton10 = (ImageButton) paintHighlight2
+                .findViewById(R.id.highlightbutton10);
 
-		highlightbutton1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		highlightbutton2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		highlightbutton3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		highlightbutton4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		highlightbutton5.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		highlightbutton6.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		highlightbutton7.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
+        highlightbutton1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
 
-		highlightbutton8.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
+        highlightbutton8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
 
-		highlightbutton9.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
-		highlightbutton10.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				paintClicked(v);
-			}
-		});
+        highlightbutton9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
+        highlightbutton10.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paintClicked(v);
+            }
+        });
 
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("SELECT COLOR");
-		textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("SELECT COLOR");
+        textViewTitleAlert.setTextColor(Color.WHITE);
 
-		dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialogColor.setContentView(contentView);
-		dialogColor.show();
-	}
+        dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogColor.setContentView(contentView);
+        dialogColor.show();
+    }
 
-	/*void showImageChooserAlertWith(String message, Context context) {
+    void showAlertWith(String message, Context context) {
 
-		final Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(context);
 
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.chooseimagealertview,
-				null, false);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("SELECT IMAGE");
-		textViewTitleAlert.setTextColor(Color.WHITE);
+        View contentView = inflater.inflate(R.layout.alert_view, null, false);
 
-		TextView buttonAlertCancel = (TextView) contentView
-				.findViewById(R.id.buttonAlertCancel);
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("ALERT");
+        textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlertMessage = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlertMessage);
+        textViewTitleAlertMessage.setText(message);
 
-		TextView textViewTitleTakePicture = (TextView) contentView
-				.findViewById(R.id.textViewTitleTakePicture);
+        Button buttonAlertCancel = (Button) contentView
+                .findViewById(R.id.buttonAlertCancel);
+        Button buttonAlertOk = (Button) contentView
+                .findViewById(R.id.buttonAlertOk);
+        buttonAlertCancel.setOnClickListener(new OnClickListener() {
 
-		TextView textViewTitlechosserfromgallary = (TextView) contentView
-				.findViewById(R.id.textViewTitlechosserfromgallary);
+            @Override
+            public void onClick(View arg0) {
+                dialog.dismiss();
 
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
+            }
+        });
+        buttonAlertOk.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                dialog.dismiss();
+            }
+        });
 
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(contentView);
+        dialog.show();
 
-			}
-		});
-		textViewTitleTakePicture.setOnClickListener(new OnClickListener() {
+    }
 
-			@Override
-			public void onClick(View arg0) {
-				// System.exit(0);
-				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+    /*************
+     * show brush control Here
+     ************/
+    void showBrushSizeDialog(boolean iserase) {
 
-				//captureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-				if (mMediaUri == null) {
-					// display an error
-					Toast.makeText(NoteMainActivity.this, "", Toast.LENGTH_LONG).show();
-				}
-				else {
-					takePhotoIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mMediaUri);
-					startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
-				}
-	*//*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	startActivityForResult(intent, REQUEST_CAMERA);*//*
-				dialog.dismiss();
-			}
-		});
-
-		textViewTitlechosserfromgallary
-				.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View arg0) {
-						// System.exit(0);
-						Intent intent = new Intent(
-								Intent.ACTION_PICK,
-								android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image*//*");
-						startActivityForResult(
-								Intent.createChooser(intent, "Select File"),
-								SELECT_PICTURE);
-						dialog.dismiss();
-					}
-				});
-
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(true);
-		dialog.setContentView(contentView);
-		dialog.show();
-
-	}*/
-
-	void showAlertWith(String message, Context context) {
-
-		final Dialog dialog = new Dialog(context);
-
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		View contentView = inflater.inflate(R.layout.alert_view, null, false);
-
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("ALERT");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-		TextView textViewTitleAlertMessage = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlertMessage);
-		textViewTitleAlertMessage.setText(message);
-
-		Button buttonAlertCancel = (Button) contentView
-				.findViewById(R.id.buttonAlertCancel);
-		Button buttonAlertOk = (Button) contentView
-				.findViewById(R.id.buttonAlertOk);
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
-
-			}
-		});
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
-			}
-		});
-
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(true);
-		dialog.setContentView(contentView);
-		dialog.show();
-
-	}
-
-	/************* show brush control Here ************/
-	void showBrushSizeDialog(boolean iserase) {
-
-		brushDialog1 = new Dialog(NoteMainActivity.this);
-		isErase = iserase;
-		brushDialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		brushDialog1.setCancelable(true);
-		brushDialog1.setContentView(R.layout.brush_chooser);
-		TextView textViewSizesHeader = (TextView) brushDialog1
-				.findViewById(R.id.textViewSizesHeader);
-		if (iserase == true) {
-			textViewSizesHeader.setText("ERASE SIZES");
-		} else {
-			textViewSizesHeader.setText("BRUSH SIZES");
-		}
+        brushDialog1 = new Dialog(NoteMainActivity.this);
+        isErase = iserase;
+        brushDialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        brushDialog1.setCancelable(true);
+        brushDialog1.setContentView(R.layout.brush_chooser);
+        TextView textViewSizesHeader = (TextView) brushDialog1
+                .findViewById(R.id.textViewSizesHeader);
+        if (iserase == true) {
+            textViewSizesHeader.setText("ERASE SIZES");
+        } else {
+            textViewSizesHeader.setText("BRUSH SIZES");
+        }
 
 	/*ImageButton smallBtn = (ImageButton) brushDialog1
 	.findViewById(R.id.small_brush);
@@ -2789,92 +2879,52 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	});*/
 
-		brushDialog1.show();
+        brushDialog1.show();
 
-	}
+    }
 
-	/************* Erase control Here ************/
-	/*void showEraserDialog() {
-	final Dialog brushDialog1 = new Dialog(NoteMainActivity.this);
-	brushDialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	brushDialog1.setCancelable(true);
-	brushDialog1.setContentView(R.layout.brush_chooser);
-	TextView textViewSizesHeader = (TextView) brushDialog1
-	.findViewById(R.id.textViewSizesHeader);
-	textViewSizesHeader.setText("ERASER SIZES");
-	*//*ImageButton smallBtn = (ImageButton) brushDialog1
-	.findViewById(R.id.small_brush);
-	smallBtn.setOnClickListener(new OnClickListener() {
-	public void onClick(View v) {
-	drawView.setErase(true);
-	drawView.setBrushSize(smallBrush);
-	brushDialog1.dismiss();
-	}
-	});
-	ImageButton mediumBtn = (ImageButton) brushDialog1
-	.findViewById(R.id.medium_brush);
-	mediumBtn.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View v) {
-	drawView.setErase(true);
-	drawView.setBrushSize(mediumBrush);
-	brushDialog1.dismiss();
-	}
-	});
-	ImageButton largeBtn = (ImageButton) brushDialog1
-	.findViewById(R.id.large_brush);
-	largeBtn.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View v) {
-	drawView.setErase(true);
-	drawView.setBrushSize(largeBrush);
-	brushDialog1.dismiss();
-	}
-	});*//*
-	brushDialog1.show();
-	}*/
+    /*************
+     * text control Here
+     ************/
+    void showTextNoteDialog() {
 
+        final Dialog dialog = new Dialog(NoteMainActivity.this);
 
-	/************* text control Here ************/
-	void showTextNoteDialog() {
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		final Dialog dialog = new Dialog(NoteMainActivity.this);
+        // View contentView = inflater.inflate(R.layout.note_text_style_chooser,
+        // null, false);
 
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setContentView(R.layout.note_text_style_chooser);
 
-		// View contentView = inflater.inflate(R.layout.note_text_style_chooser,
-		// null, false);
+        final LinearLayout layoutPapers = (LinearLayout) dialog
+                .findViewById(R.id.layoutPapers);
+        final LinearLayout layoutColors1 = (LinearLayout) dialog
+                .findViewById(R.id.layoutColors1);
+        //final ListView ListViewItems = (ListView) dialog
+        //.findViewById(R.id.ListViewItems);
 
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(true);
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.setContentView(R.layout.note_text_style_chooser);
+        //final Button buttonFont = (Button) dialog.findViewById(R.id.buttonFont);
+        //final Button buttonSize = (Button) dialog.findViewById(R.id.buttonSize);
+        final Button buttonColors = (Button) dialog.findViewById(R.id.buttonColors);
+        final Button buttonPaper = (Button) dialog.findViewById(R.id.buttonPaper);
 
-		final LinearLayout layoutPapers = (LinearLayout) dialog
-				.findViewById(R.id.layoutPapers);
-		final LinearLayout layoutColors1 = (LinearLayout) dialog
-				.findViewById(R.id.layoutColors1);
-		//final ListView ListViewItems = (ListView) dialog
-		//.findViewById(R.id.ListViewItems);
+        layoutPapers.setVisibility(View.GONE);
+        layoutColors1.setVisibility(View.VISIBLE);
 
-		//final Button buttonFont = (Button) dialog.findViewById(R.id.buttonFont);
-		//final Button buttonSize = (Button) dialog.findViewById(R.id.buttonSize);
-		final Button buttonColors = (Button) dialog.findViewById(R.id.buttonColors);
-		final Button buttonPaper = (Button) dialog.findViewById(R.id.buttonPaper);
+        buttonColors.setBackgroundColor(getResources().getColor(
+                R.color.eaeaea));
+        buttonColors.setTextColor(getResources().getColor(
+                R.color.header_bg));
 
-		layoutPapers.setVisibility(View.GONE);
-		layoutColors1.setVisibility(View.VISIBLE);
+        //ListViewItems.setVisibility(View.VISIBLE);
 
-		buttonColors.setBackgroundColor(getResources().getColor(
-				R.color.eaeaea));
-		buttonColors.setTextColor(getResources().getColor(
-				R.color.header_bg));
-
-		//ListViewItems.setVisibility(View.VISIBLE);
-
-		// fonts_sizeName=getResources().getStringArray(R.array.Font_Size_px);
-		//fontSizes = getResources().getStringArray(R.array.Font_Size);
+        // fonts_sizeName=getResources().getStringArray(R.array.Font_Size_px);
+        //fontSizes = getResources().getStringArray(R.array.Font_Size);
 
 	/*TextFont_sizeAdapter = new TextFont_Size_ChooseAdapter(
 	NoteMainActivity.this, fonts_Name_Display);// fonts_sizeName
@@ -2941,42 +2991,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	TextFont_sizeAdapter.notifyDataSetChanged();
 	}
 	});*/
-		buttonColors.setOnClickListener(new OnClickListener() {
+        buttonColors.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				layoutPapers.setVisibility(View.GONE);
-				layoutColors1.setVisibility(View.VISIBLE);
-				//ListViewItems.setVisibility(View.GONE);
-
-	/*buttonFont.setBackgroundColor(getResources().getColor(
-	R.color.header_bg));
-	buttonFont
-	.setTextColor(getResources().getColor(R.color.ffffff));
-	buttonSize.setBackgroundColor(getResources().getColor(
-	R.color.header_bg));
-	buttonSize
-	.setTextColor(getResources().getColor(R.color.ffffff));*/
-
-				buttonColors.setBackgroundColor(getResources().getColor(
-						R.color.eaeaea));
-				buttonColors.setTextColor(getResources().getColor(
-						R.color.header_bg));
-
-				buttonPaper.setBackgroundColor(getResources().getColor(
-						R.color.header_bg));
-				buttonPaper.setTextColor(getResources()
-						.getColor(R.color.ffffff));
-			}
-		});
-
-		buttonPaper.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				layoutPapers.setVisibility(View.VISIBLE);
-				layoutColors1.setVisibility(View.GONE);
-				//ListViewItems.setVisibility(View.GONE);
+            @Override
+            public void onClick(View arg0) {
+                layoutPapers.setVisibility(View.GONE);
+                layoutColors1.setVisibility(View.VISIBLE);
+                //ListViewItems.setVisibility(View.GONE);
 
 	/*buttonFont.setBackgroundColor(getResources().getColor(
 	R.color.header_bg));
@@ -2987,20 +3008,49 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	buttonSize
 	.setTextColor(getResources().getColor(R.color.ffffff));*/
 
-				buttonColors.setBackgroundColor(getResources().getColor(
-						R.color.header_bg));
-				buttonColors.setTextColor(getResources().getColor(
-						R.color.ffffff));
+                buttonColors.setBackgroundColor(getResources().getColor(
+                        R.color.eaeaea));
+                buttonColors.setTextColor(getResources().getColor(
+                        R.color.header_bg));
 
-				buttonPaper.setBackgroundColor(getResources().getColor(
-						R.color.eaeaea));
-				buttonPaper.setTextColor(getResources().getColor(
-						R.color.header_bg));
+                buttonPaper.setBackgroundColor(getResources().getColor(
+                        R.color.header_bg));
+                buttonPaper.setTextColor(getResources()
+                        .getColor(R.color.ffffff));
+            }
+        });
 
-			}
-		});
+        buttonPaper.setOnClickListener(new OnClickListener() {
 
-		// Onselected the size and font
+            @Override
+            public void onClick(View arg0) {
+                layoutPapers.setVisibility(View.VISIBLE);
+                layoutColors1.setVisibility(View.GONE);
+                //ListViewItems.setVisibility(View.GONE);
+
+	/*buttonFont.setBackgroundColor(getResources().getColor(
+	R.color.header_bg));
+	buttonFont
+	.setTextColor(getResources().getColor(R.color.ffffff));
+	buttonSize.setBackgroundColor(getResources().getColor(
+	R.color.header_bg));
+	buttonSize
+	.setTextColor(getResources().getColor(R.color.ffffff));*/
+
+                buttonColors.setBackgroundColor(getResources().getColor(
+                        R.color.header_bg));
+                buttonColors.setTextColor(getResources().getColor(
+                        R.color.ffffff));
+
+                buttonPaper.setBackgroundColor(getResources().getColor(
+                        R.color.eaeaea));
+                buttonPaper.setTextColor(getResources().getColor(
+                        R.color.header_bg));
+
+            }
+        });
+
+        // Onselected the size and font
 
 	/*ListViewItems.setOnItemClickListener(new OnItemClickListener() {
 	@Override
@@ -3023,12 +3073,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	});*/
 
-		// ListViewItems
+        // ListViewItems
 
-		// buttonFont
-		// buttonSize
-		// buttonColors
-		// buttonPaper
+        // buttonFont
+        // buttonSize
+        // buttonColors
+        // buttonPaper
 
 		/*ImageButton paper_bg_10 = (ImageButton) dialog
 				.findViewById(R.id.paper_bg_10);
@@ -3038,18 +3088,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				.findViewById(R.id.paper_bg_8);
 		ImageButton paper_bg_7 = (ImageButton) dialog
 				.findViewById(R.id.paper_bg_7);*/
-		ImageButton paper_bg_6 = (ImageButton) dialog
-				.findViewById(R.id.paper_bg_6);
-		ImageButton paper_bg_5 = (ImageButton) dialog
-				.findViewById(R.id.paper_bg_5);
-		ImageButton paper_bg_4 = (ImageButton) dialog
-				.findViewById(R.id.paper_bg_4);
-		ImageButton paper_bg_3 = (ImageButton) dialog
-				.findViewById(R.id.paper_bg_3);
-		ImageButton paper_bg_2 = (ImageButton) dialog
-				.findViewById(R.id.paper_bg_2);
-		ImageButton paper_bg_1 = (ImageButton) dialog
-				.findViewById(R.id.paper_bg_1);
+        ImageButton paper_bg_6 = (ImageButton) dialog
+                .findViewById(R.id.paper_bg_6);
+        ImageButton paper_bg_5 = (ImageButton) dialog
+                .findViewById(R.id.paper_bg_5);
+        ImageButton paper_bg_4 = (ImageButton) dialog
+                .findViewById(R.id.paper_bg_4);
+        ImageButton paper_bg_3 = (ImageButton) dialog
+                .findViewById(R.id.paper_bg_3);
+        ImageButton paper_bg_2 = (ImageButton) dialog
+                .findViewById(R.id.paper_bg_2);
+        ImageButton paper_bg_1 = (ImageButton) dialog
+                .findViewById(R.id.paper_bg_1);
 
 		/*paper_bg_10.setOnClickListener(new OnClickListener() {
 			@Override
@@ -3079,643 +3129,724 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 				dialog.dismiss();
 			}
 		});*/
-		paper_bg_6.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				paperButtonSelected(arg0);
-				dialog.dismiss();
-			}
-		});
-		paper_bg_5.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				paperButtonSelected(arg0);
-				dialog.dismiss();
-			}
-		});
-		paper_bg_4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				paperButtonSelected(arg0);
-				dialog.dismiss();
-			}
-		});
-		paper_bg_3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				paperButtonSelected(arg0);
-				dialog.dismiss();
-			}
-		});
-		paper_bg_2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				paperButtonSelected(arg0);
-				dialog.dismiss();
-			}
-		});
-		paper_bg_1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				paperButtonSelected(arg0);
-				dialog.dismiss();
-			}
-		});
-
-		ImageButton color_bg_10 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_10);
-		ImageButton color_bg_9 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_9);
-		ImageButton color_bg_8 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_8);
-		ImageButton color_bg_7 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_7);
-		ImageButton color_bg_6 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_6);
-		ImageButton color_bg_5 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_5);
-		ImageButton color_bg_4 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_4);
-		ImageButton color_bg_3 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_3);
-		ImageButton color_bg_2 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_2);
-		ImageButton color_bg_1 = (ImageButton) dialog
-				.findViewById(R.id.color_bg_1);
-
-		color_bg_10.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_9.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-
-		color_bg_8.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_7.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_6.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_7.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_6.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_5.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-		color_bg_1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				colorButtonSelected(v);
-				dialog.dismiss();
-			}
-		});
-
-		dialog.show();
-	}
-
-	Dialog scribbleDialog;
-	View highlightview, brushview, eraserview;
-	ImageButton buttonHighlight, buttonBrush, buttonEraser;
-	GradientDrawable brushshape;
-	int lastBrushSize = 3, lastHighlightSize = 3, lastEraserSize = 3,
-			highlightViewSize = (lastHighlightSize * 4 + 20),
-			brushViewSize = (lastBrushSize * 4 + 20),
-			eraserViewSize = (lastEraserSize * 4 + 20),
-			lastBrushColor = 0, count = 0;
-
-	// TODO highlight + brush + eraser dialog
-	public void showScribbleDialog(String name) {
-		scribbleDialog = new Dialog(NoteMainActivity.this);
-		scribbleDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		scribbleDialog.setCanceledOnTouchOutside(true);
-		scribbleDialog.setContentView(R.layout.scribble_dialog);
-
-		final LinearLayout layoutHighlight = (LinearLayout) scribbleDialog.findViewById(R.id.highlightView);
-		final LinearLayout layoutBrush = (LinearLayout) scribbleDialog.findViewById(R.id.brushView);
-		final LinearLayout layoutEraser = (LinearLayout) scribbleDialog.findViewById(R.id.eraserView);
-
-		buttonHighlight = (ImageButton) scribbleDialog.findViewById(R.id.buttonHighlight);
-		buttonBrush = (ImageButton) scribbleDialog.findViewById(R.id.buttonBrush);
-		buttonEraser = (ImageButton) scribbleDialog.findViewById(R.id.buttonEraser);
-
-		layoutHighlight.setVisibility(View.GONE);
-		layoutBrush.setVisibility(View.GONE);
-		layoutEraser.setVisibility(View.GONE);
-
-		if (name.equals("highlight"))
-			layoutHighlight.setVisibility(View.VISIBLE);
-		else if (name.equals("brush"))
-			layoutBrush.setVisibility(View.VISIBLE);
-		else if (name.equals("eraser"))
-			layoutEraser.setVisibility(View.VISIBLE);
-
-		buttonHighlight.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				layoutHighlight.setVisibility(View.VISIBLE);
-				layoutBrush.setVisibility(View.GONE);
-				layoutEraser.setVisibility(View.GONE);
-				openHighlight();
-				updateScribbleButtonColor("highlight");
-			}
-		});
-
-		buttonBrush.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				layoutHighlight.setVisibility(View.GONE);
-				layoutBrush.setVisibility(View.VISIBLE);
-				layoutEraser.setVisibility(View.GONE);
-				openBrush();
-				updateScribbleButtonColor("brush");
-			}
-		});
-
-		buttonEraser.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				layoutHighlight.setVisibility(View.GONE);
-				layoutBrush.setVisibility(View.GONE);
-				layoutEraser.setVisibility(View.VISIBLE);
-				openEraser();
-				updateScribbleButtonColor("eraser");
-			}
-		});
-
-		// Highlight
-		LinearLayout paintHighlight1 = (LinearLayout) layoutHighlight.findViewById(R.id.paint_highlight1);
-
-		ImageButton highlightbutton1 = (ImageButton) paintHighlight1
-				.findViewById(R.id.hightlightbutton1);
-		ImageButton highlightbutton2 = (ImageButton) paintHighlight1
-				.findViewById(R.id.hightlightbutton2);
-		ImageButton highlightbutton3 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton3);
-		ImageButton highlightbutton4 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton4);
-		ImageButton highlightbutton5 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton5);
-		ImageButton highlightbutton6 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton6);
-		ImageButton highlightbutton7 = (ImageButton) paintHighlight1
-				.findViewById(R.id.highlightbutton7);
-
-		highlightbutton1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				highlightClicked(v);
-			}
-		});
-		highlightbutton2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				highlightClicked(v);
-			}
-		});
-		highlightbutton3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				highlightClicked(v);
-			}
-		});
-		highlightbutton4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				highlightClicked(v);
-			}
-		});
-		highlightbutton5.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				highlightClicked(v);
-			}
-		});
-		highlightbutton6.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				highlightClicked(v);
-			}
-		});
-		highlightbutton7.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				highlightClicked(v);
-			}
-		});
-
-		final TextView tvHighlightSize = (TextView) layoutHighlight.findViewById(R.id.tvHighlightSize);
-		String hsize = String.valueOf(10 + (lastHighlightSize * 2));
-		tvHighlightSize.setText(hsize);
-		SeekBar hightlight_sizeSeekBar = (SeekBar) layoutHighlight.findViewById(R.id.hightlight_sizeSeekBar);
-		hightlight_sizeSeekBar.setMax(14);
-		hightlight_sizeSeekBar.setProgress(lastHighlightSize);
-		highlightview = layoutHighlight.findViewById(R.id.aview);
-		LayerDrawable bgDrawable = (LayerDrawable) highlightview.getBackground();
-		final GradientDrawable shape = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_id);
-		shape.setColor(lastHighlightColor);
-		//aview.setBackgroundColor(lastHighlightColor);
-
-		hightlight_sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				lastHighlightSize = progress;
-				drawView.setBrushSize(10 + (progress * 2));
-				drawView.setDrawColor(lastHighlightColor);
-				String esize = String.valueOf(10 + (lastHighlightSize * 2));
-				tvHighlightSize.setText(esize);
-				//highlightViewSize = (lastHighlightSize * 4 + 20);
-				highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
-				params.gravity = Gravity.CENTER;
-				highlightview.setLayoutParams(params);
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
-
-		// Brush
-		colorPickerSeekBar = (ColorPickerSeekBar) scribbleDialog.findViewById(R.id.colorpicker);
-
-		brushview = layoutBrush.findViewById(R.id.view);
-		LayerDrawable brushDrawable = (LayerDrawable) brushview.getBackground();
-		brushshape = (GradientDrawable) brushDrawable.findDrawableByLayerId(R.id.shape_id);
-		brushshape.setColor(color_selected);
-		brushview.setBackground(brushshape);
-
-		SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
-		sizeSeekBar.setMax(14);
-		sizeSeekBar.setProgress(lastBrushSize);
-
-		if(count == 0) {
-			drawView.setBrushSize(10 + (lastBrushSize * 2));
-			drawView.setDrawColor(Color.parseColor("#000000"));
-			colorPickerSeekBar.setProgress(0);
-		}
-
-		final TextView tvBrushSize = (TextView) scribbleDialog.findViewById(R.id.tvBrushSize);
-		String size = String.valueOf(10 + (lastBrushSize * 2));
-		tvBrushSize.setText(size);
-
-		drawView.setBrushSize(10 + (lastBrushSize * 2));
-
-		if (count > 0) {
-			brushview.setBackgroundColor(color_selected);
-		}
-		colorPickerSeekBar.setProgress(lastBrushColor);
-
-		colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
-			@Override
-			public void onColorChanged(SeekBar seekBar, int color, boolean b) {
-				color_selected = color;
-				drawView.setDrawColor(color_selected);
-				drawView.setBrushSize(10 + (lastBrushSize *2));
-				lastBrushColor = seekBar.getProgress();
-				brushview.setBackgroundColor(color_selected);
-				brushshape.setColor(color_selected);
-				brushview.setBackground(brushshape);
-				count++;
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
-		});
-
-		sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				lastBrushSize = progress;
-				drawView.setBrushSize(10 + (progress * 2));
-				String tvsize = String.valueOf(10 + (lastBrushSize * 2));
-				tvBrushSize.setText(tvsize);
-				//brushViewSize = (lastBrushSize * 4 + 20);
-				brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
-				params.gravity = Gravity.CENTER;
-				brushview.setLayoutParams(params);
-				brushshape.setColor(color_selected);
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
-		});
-
-		// Eraser
-		SeekBar sizeEraserSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.eraser_sizeSeekBar);
-		sizeEraserSeekBar.setMax(14);
-		sizeEraserSeekBar.setProgress(lastEraserSize);
-
-		final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
-		String esize = String.valueOf(10 + (lastEraserSize * 2));
-		tvEraserSize.setText(esize);
-
-		eraserview = layoutEraser.findViewById(R.id.eraser_view);
-		LayerDrawable eraserDrawable = (LayerDrawable) eraserview.getBackground();
-		final GradientDrawable erasershape = (GradientDrawable) eraserDrawable.findDrawableByLayerId(R.id.shape_id);
-		erasershape.setColor(Color.BLACK);
-
-		sizeEraserSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				lastEraserSize = progress;
-				drawView.setBrushSize(10 + (progress * 2));
-				drawView.setDrawColor(lastBrushColor);
-				String esize = String.valueOf(10 + (lastEraserSize * 2));
-				tvEraserSize.setText(esize);
-				//eraserViewSize = (lastEraserSize * 4 + 20);
-				eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
-				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
-				params.gravity = Gravity.CENTER;
-				eraserview.setLayoutParams(params);
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
-
-		scribbleDialog.show();
-	}
-
-	// TODO highlighter clicked
-	public void highlightClicked(View view) {
-		if (view != currPaint) {
-			ImageButton imgView = (ImageButton) view;
-			String color = view.getTag().toString();
-			imgView.setImageDrawable(getResources().getDrawable(R.drawable.paint_pressed));
-			lastHighlightColor = Color.parseColor(color);
-			scribbleDialog.dismiss();
-			drawView.setDrawColor(lastHighlightColor);
-		}
-
-	}
-
-	int firstHighlightColor, lastHighlightColor = Color.parseColor("#77FF5B1E");
-
-	// TODO open highlight
-	public void openHighlight() {
-		drawView.onClickEraser(1);
-		drawView.setBrushSize(10 + (lastHighlightSize * 2));
-		//drawView.setDrawColor(Color.parseColor("#00"));
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
-		params.gravity = Gravity.CENTER;
-		highlightview.setLayoutParams(params);
-		buttonHighlight.setBackgroundColor(getResources().getColor(R.color.eaeaea));
-		buttonHighlight.setImageResource(R.drawable.scrbble_highlight_red);
-		buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		buttonBrush.setImageResource(R.drawable.scrbble_draw);
-		buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		buttonEraser.setImageResource(R.drawable.scrbble_erase);
-		firstHighlightColor = lastHighlightColor;
-		//hview.setBackgroundColor(lastHighlightColor);
-		drawView.setDrawColor(lastHighlightColor);
-	}
-	// TODO open brush
-	public void openBrush() {
-		drawView.setDrawColor(color_selected);
-		drawView.onClickEraser(1);
-		drawView.setBrushSize(10 + (lastBrushSize * 2));
-		brushshape.setColor(color_selected);
-		brushview.setBackground(brushshape);
-		//drawView.setBrushSize(lastBrushSize);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
-		params.gravity = Gravity.CENTER;
-		brushview.setLayoutParams(params);
-		buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
-		buttonBrush.setBackgroundColor(getResources().getColor(R.color.eaeaea));
-		buttonBrush.setImageResource(R.drawable.scrbble_draw_red);
-		buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		buttonEraser.setImageResource(R.drawable.scrbble_erase);
-	}
-	// TODO open eraser
-	public void openEraser() {
-		//drawView.setDrawColor(Color.parseColor("#FFFFFF"));
-		drawView.setDrawColor(Color.WHITE);
-		drawView.onClickEraser(0);
-		drawView.setBrushSize(10 + (lastEraserSize * 2));
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
-		params.gravity = Gravity.CENTER;
-		eraserview.setLayoutParams(params);
-		buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
-		buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		buttonBrush.setImageResource(R.drawable.scrbble_draw);
-		buttonEraser.setBackgroundColor(getResources().getColor(R.color.eaeaea));
-		buttonEraser.setImageResource(R.drawable.scrbble_erase_red);
-	}
-	// TODO updateScribbleButtonColor
-	public void updateScribbleButtonColor(String name) {
-		if (name.equals("highlight")) {
-			imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-			imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
-			imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		}
-		if (name.equals("brush")) {
-			imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
-			imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-			imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.header_bg));
-		}
-		if (name.equals("eraser")) {
-			imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
-			imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
-			imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-		}
-	}
-
-	void showNewDrawingDialog() {
-
-		final Dialog dialog = new Dialog(NoteMainActivity.this);
-
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		View contentView = inflater.inflate(R.layout.alert_view, null, false);
-
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("NEW DRAWING");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-		TextView textViewTitleAlertMessage = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlertMessage);
-		textViewTitleAlertMessage
-				.setText("Start new drawing (you will lose the current drawing)?");
-
-		Button buttonAlertCancel = (Button) contentView
-				.findViewById(R.id.buttonAlertCancel);
-		Button buttonAlertOk = (Button) contentView
-				.findViewById(R.id.buttonAlertOk);
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
-			}
-		});
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				drawView.startNew();
-				dialog.dismiss();
-			}
-		});
-
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(true);
-		dialog.setContentView(contentView);
-		dialog.show();
-
-	}
-
-	void SaveDrawingDialog() {
-
-		final Dialog dialog = new Dialog(NoteMainActivity.this);
-
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		View contentView = inflater.inflate(R.layout.alert_view, null, false);
-
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("SAVE DRAWING");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-		TextView textViewTitleAlertMessage = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlertMessage);
-		textViewTitleAlertMessage.setText("Save drawing to device Gallery?");
-
-		Button buttonAlertCancel = (Button) contentView
-				.findViewById(R.id.buttonAlertCancel);
-		Button buttonAlertOk = (Button) contentView
-				.findViewById(R.id.buttonAlertOk);
-
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				drawingControls.setVisibility(View.GONE);
-				layOutDrawingView.setVisibility(View.GONE);
-				updateButtonUI(-1);
-
-				dialog.dismiss();
-
-			}
-		});
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				Date date = new Date();
-
-				drawingControls.setVisibility(View.GONE);
-				layOutDrawingView.setVisibility(View.GONE);
-				updateButtonUI(-1);
-
-				drawView.setDrawingCacheEnabled(true);
+        paper_bg_6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                paperButtonSelected(arg0);
+                dialog.dismiss();
+            }
+        });
+        paper_bg_5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                paperButtonSelected(arg0);
+                dialog.dismiss();
+            }
+        });
+        paper_bg_4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                paperButtonSelected(arg0);
+                dialog.dismiss();
+            }
+        });
+        paper_bg_3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                paperButtonSelected(arg0);
+                dialog.dismiss();
+            }
+        });
+        paper_bg_2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                paperButtonSelected(arg0);
+                dialog.dismiss();
+            }
+        });
+        paper_bg_1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                paperButtonSelected(arg0);
+                dialog.dismiss();
+            }
+        });
+
+        ImageButton color_bg_10 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_10);
+        ImageButton color_bg_9 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_9);
+        ImageButton color_bg_8 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_8);
+        ImageButton color_bg_7 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_7);
+        ImageButton color_bg_6 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_6);
+        ImageButton color_bg_5 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_5);
+        ImageButton color_bg_4 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_4);
+        ImageButton color_bg_3 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_3);
+        ImageButton color_bg_2 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_2);
+        ImageButton color_bg_1 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_1);
+
+        color_bg_10.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+
+        color_bg_8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+        color_bg_1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    // TODO highlight + brush + eraser dialog
+    public void showScribbleDialog(String name) {
+        scribbleDialog = new Dialog(NoteMainActivity.this);
+        scribbleDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        scribbleDialog.setCanceledOnTouchOutside(true);
+        scribbleDialog.setContentView(R.layout.scribble_dialog);
+
+        final LinearLayout layoutHighlight = (LinearLayout) scribbleDialog.findViewById(R.id.highlightView);
+        final LinearLayout layoutBrush = (LinearLayout) scribbleDialog.findViewById(R.id.brushView);
+        final LinearLayout layoutEraser = (LinearLayout) scribbleDialog.findViewById(R.id.eraserView);
+
+        buttonHighlight = (ImageButton) scribbleDialog.findViewById(R.id.buttonHighlight);
+        buttonBrush = (ImageButton) scribbleDialog.findViewById(R.id.buttonBrush);
+        buttonEraser = (ImageButton) scribbleDialog.findViewById(R.id.buttonEraser);
+
+        layoutHighlight.setVisibility(View.GONE);
+        layoutBrush.setVisibility(View.GONE);
+        layoutEraser.setVisibility(View.GONE);
+
+        if (name.equals("highlight"))
+            layoutHighlight.setVisibility(View.VISIBLE);
+        else if (name.equals("brush"))
+            layoutBrush.setVisibility(View.VISIBLE);
+        else if (name.equals("eraser"))
+            layoutEraser.setVisibility(View.VISIBLE);
+
+        buttonHighlight.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                layoutHighlight.setVisibility(View.VISIBLE);
+                layoutBrush.setVisibility(View.GONE);
+                layoutEraser.setVisibility(View.GONE);
+                openHighlight();
+                updateScribbleButtonColor("highlight");
+            }
+        });
+
+        buttonBrush.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                layoutHighlight.setVisibility(View.GONE);
+                layoutBrush.setVisibility(View.VISIBLE);
+                layoutEraser.setVisibility(View.GONE);
+                openBrush();
+                updateScribbleButtonColor("brush");
+            }
+        });
+
+        buttonEraser.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutHighlight.setVisibility(View.GONE);
+                layoutBrush.setVisibility(View.GONE);
+                layoutEraser.setVisibility(View.VISIBLE);
+                openEraser();
+                updateScribbleButtonColor("eraser");
+            }
+        });
+
+        // Highlight
+        LinearLayout paintHighlight1 = (LinearLayout) layoutHighlight.findViewById(R.id.paint_highlight1);
+
+        ImageButton highlightbutton1 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton1);
+        ImageButton highlightbutton2 = (ImageButton) paintHighlight1
+                .findViewById(R.id.hightlightbutton2);
+        ImageButton highlightbutton3 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton3);
+        ImageButton highlightbutton4 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton4);
+        ImageButton highlightbutton5 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton5);
+        ImageButton highlightbutton6 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton6);
+        ImageButton highlightbutton7 = (ImageButton) paintHighlight1
+                .findViewById(R.id.highlightbutton7);
+
+        highlightbutton1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+        highlightbutton7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightClicked(v);
+            }
+        });
+
+        final TextView tvHighlightSize = (TextView) layoutHighlight.findViewById(R.id.tvHighlightSize);
+        String hsize = String.valueOf(10 + (lastHighlightSize * 2));
+        tvHighlightSize.setText(hsize);
+        SeekBar hightlight_sizeSeekBar = (SeekBar) layoutHighlight.findViewById(R.id.hightlight_sizeSeekBar);
+        hightlight_sizeSeekBar.setMax(14);
+        hightlight_sizeSeekBar.setProgress(lastHighlightSize);
+        highlightview = layoutHighlight.findViewById(R.id.aview);
+        LayerDrawable bgDrawable = (LayerDrawable) highlightview.getBackground();
+        final GradientDrawable shape = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_id);
+        shape.setColor(lastHighlightColor);
+        //aview.setBackgroundColor(lastHighlightColor);
+
+        hightlight_sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lastHighlightSize = progress;
+                drawView.setBrushSize(10 + (progress * 2));
+                drawView.setDrawColor(lastHighlightColor);
+                String esize = String.valueOf(10 + (lastHighlightSize * 2));
+                tvHighlightSize.setText(esize);
+                //highlightViewSize = (lastHighlightSize * 4 + 20);
+                highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
+                params.gravity = Gravity.CENTER;
+                highlightview.setLayoutParams(params);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        // Brush
+        LinearLayout paint_brush1 = (LinearLayout) layoutBrush.findViewById(R.id.paint_brush1);
+        LinearLayout paint_brush2 = (LinearLayout) layoutBrush.findViewById(R.id.paint_brush2);
+
+        ImageButton brushButton1 = (ImageButton) paint_brush1.findViewById(R.id.brushbutton1);
+        ImageButton brushButton2 = (ImageButton) paint_brush1.findViewById(R.id.brushbutton2);
+        ImageButton brushButton3 = (ImageButton) paint_brush1.findViewById(R.id.brushbutton3);
+        ImageButton brushButton4 = (ImageButton) paint_brush1.findViewById(R.id.brushbutton4);
+        ImageButton brushButton5 = (ImageButton) paint_brush1.findViewById(R.id.brushbutton5);
+        ImageButton brushButton6 = (ImageButton) paint_brush1.findViewById(R.id.brushbutton6);
+        ImageButton brushButton7 = (ImageButton) paint_brush2.findViewById(R.id.brushbutton7);
+        ImageButton brushButton8 = (ImageButton) paint_brush2.findViewById(R.id.brushbutton8);
+        ImageButton brushButton9 = (ImageButton) paint_brush2.findViewById(R.id.brushbutton9);
+        ImageButton brushButton10 = (ImageButton) paint_brush2.findViewById(R.id.brushbutton10);
+        ImageButton brushButton11 = (ImageButton) paint_brush2.findViewById(R.id.brushbutton11);
+        ImageButton brushButton12 = (ImageButton) paint_brush2.findViewById(R.id.brushbutton12);
+
+        brushButton1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton4.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton5.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton6.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton7.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton8.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton9.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton10.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton11.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        brushButton12.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                brushClicked(v);
+            }
+        });
+
+        SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
+        sizeSeekBar.setMax(14);
+        sizeSeekBar.setProgress(lastBrushSize);
+
+        brushview = layoutBrush.findViewById(R.id.view);
+        LayerDrawable brushDrawable = (LayerDrawable) brushview.getBackground();
+        brushshape = (GradientDrawable) brushDrawable.findDrawableByLayerId(R.id.shape_id);
+        brushshape.setColor(lastBrushColor);
+        brushview.setBackground(brushshape);
+
+        if (count == 0) {
+            drawView.setBrushSize(10 + (lastBrushSize * 2));
+            drawView.setDrawColor(Color.parseColor("#000000"));
+            lastBrushColor = Color.BLACK;
+            brushshape.setColor(lastBrushColor);
+            brushview.setBackground(brushshape);
+        }
+
+        final TextView tvBrushSize = (TextView) scribbleDialog.findViewById(R.id.tvBrushSize);
+        String size = String.valueOf(10 + (lastBrushSize * 2));
+        tvBrushSize.setText(size);
+        drawView.setBrushSize(10 + (lastBrushSize * 2));
+
+        if (count > 0) {
+            brushview.setBackgroundColor(color_selected);
+        }
+
+        sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lastBrushSize = progress;
+                drawView.setBrushSize(10 + (progress * 2));
+                String tvsize = String.valueOf(10 + (lastBrushSize * 2));
+                tvBrushSize.setText(tvsize);
+                //brushViewSize = (lastBrushSize * 4 + 20);
+                brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
+                params.gravity = Gravity.CENTER;
+                brushview.setLayoutParams(params);
+                //brushshape.setColor(color_selected);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        // Eraser
+        SeekBar sizeEraserSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.eraser_sizeSeekBar);
+        sizeEraserSeekBar.setMax(14);
+        sizeEraserSeekBar.setProgress(lastEraserSize);
+
+        final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
+        String esize = String.valueOf(10 + (lastEraserSize * 2));
+        tvEraserSize.setText(esize);
+
+        eraserview = layoutEraser.findViewById(R.id.eraser_view);
+        LayerDrawable eraserDrawable = (LayerDrawable) eraserview.getBackground();
+        final GradientDrawable erasershape = (GradientDrawable) eraserDrawable.findDrawableByLayerId(R.id.shape_id);
+        erasershape.setColor(Color.BLACK);
+
+        sizeEraserSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lastEraserSize = progress;
+                drawView.setBrushSize(10 + (progress * 2));
+                drawView.setDrawColor(lastBrushColor);
+                String esize = String.valueOf(10 + (lastEraserSize * 2));
+                tvEraserSize.setText(esize);
+                //eraserViewSize = (lastEraserSize * 4 + 20);
+                eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
+                params.gravity = Gravity.CENTER;
+                eraserview.setLayoutParams(params);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        scribbleDialog.show();
+    }
+
+    // TODO highlighter clicked
+    public void highlightClicked(View view) {
+        if (view != currPaint) {
+            String color = view.getTag().toString();
+            lastHighlightColor = Color.parseColor(color);
+            brushshape.setColor(lastHighlightColor);
+            highlightview.setBackground(brushshape);
+            drawView.setDrawColor(lastHighlightColor);
+        }
+    }
+
+    // TODO brush clicked
+    public void brushClicked(View view) {
+        if (view != currPaint) {
+            String color = view.getTag().toString();
+            lastBrushColor = Color.parseColor(color);
+            drawView.setDrawColor(lastBrushColor);
+            drawView.setBrushSize(10 + (lastBrushSize * 2));
+            brushshape.setColor(lastBrushColor);
+            brushview.setBackground(brushshape);
+            count++;
+        }
+    }
+
+    // TODO open highlight
+    public void openHighlight() {
+        drawView.onClickEraser(1);
+        drawView.setBrushSize(10 + (lastHighlightSize * 2));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
+        params.gravity = Gravity.CENTER;
+        highlightview.setLayoutParams(params);
+        buttonHighlight.setBackgroundColor(getResources().getColor(R.color.eaeaea));
+        buttonHighlight.setImageResource(R.drawable.scrbble_highlight_red);
+        buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonBrush.setImageResource(R.drawable.scrbble_draw);
+        buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonEraser.setImageResource(R.drawable.scrbble_erase);
+        firstHighlightColor = lastHighlightColor;
+        drawView.setDrawColor(lastHighlightColor);
+    }
+
+    // TODO open brush
+    public void openBrush() {
+        drawView.onClickEraser(1);
+        drawView.setDrawColor(lastBrushColor);
+        drawView.setBrushSize(10 + (lastBrushSize * 2));
+        brushview.setBackgroundColor(lastBrushColor);
+        brushshape.setColor(lastBrushColor);
+        brushview.setBackground(brushshape);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
+        params.gravity = Gravity.CENTER;
+        brushview.setLayoutParams(params);
+        buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
+        buttonBrush.setBackgroundColor(getResources().getColor(R.color.eaeaea));
+        buttonBrush.setImageResource(R.drawable.scrbble_draw_red);
+        buttonEraser.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonEraser.setImageResource(R.drawable.scrbble_erase);
+        drawView.setDrawColor(lastBrushColor);
+    }
+
+    // TODO open eraser
+    public void openEraser() {
+        //drawView.setDrawColor(Color.parseColor("#FFFFFF"));
+        drawView.setDrawColor(Color.WHITE);
+        drawView.onClickEraser(0);
+        drawView.setBrushSize(10 + (lastEraserSize * 2));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
+        params.gravity = Gravity.CENTER;
+        eraserview.setLayoutParams(params);
+        buttonHighlight.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonHighlight.setImageResource(R.drawable.scrbble_highlight);
+        buttonBrush.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        buttonBrush.setImageResource(R.drawable.scrbble_draw);
+        buttonEraser.setBackgroundColor(getResources().getColor(R.color.eaeaea));
+        buttonEraser.setImageResource(R.drawable.scrbble_erase_red);
+    }
+
+    // TODO updateScribbleButtonColor
+    public void updateScribbleButtonColor(String name) {
+        if (name.equals("highlight")) {
+            imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+            imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+            imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        }
+        if (name.equals("brush")) {
+            imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+            imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+            imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.header_bg));
+        }
+        if (name.equals("eraser")) {
+            imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+            imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+            imageButtondrawerase.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+        }
+    }
+
+    void showNewDrawingDialog() {
+
+        final Dialog dialog = new Dialog(NoteMainActivity.this);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View contentView = inflater.inflate(R.layout.alert_view, null, false);
+
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("NEW DRAWING");
+        textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlertMessage = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlertMessage);
+        textViewTitleAlertMessage
+                .setText("Start new drawing (you will lose the current drawing)?");
+
+        Button buttonAlertCancel = (Button) contentView
+                .findViewById(R.id.buttonAlertCancel);
+        Button buttonAlertOk = (Button) contentView
+                .findViewById(R.id.buttonAlertOk);
+        buttonAlertCancel.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                dialog.dismiss();
+            }
+        });
+        buttonAlertOk.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                drawView.startNew();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(contentView);
+        dialog.show();
+
+    }
+
+    void SaveDrawingDialog() {
+
+        final Dialog dialog = new Dialog(NoteMainActivity.this);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View contentView = inflater.inflate(R.layout.alert_view, null, false);
+
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("SAVE DRAWING");
+        textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlertMessage = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlertMessage);
+        textViewTitleAlertMessage.setText("Save drawing to device Gallery?");
+
+        Button buttonAlertCancel = (Button) contentView
+                .findViewById(R.id.buttonAlertCancel);
+        Button buttonAlertOk = (Button) contentView
+                .findViewById(R.id.buttonAlertOk);
+
+        buttonAlertCancel.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                drawingControls.setVisibility(View.GONE);
+                layOutDrawingView.setVisibility(View.GONE);
+                updateButtonUI(-1);
+
+                dialog.dismiss();
+
+            }
+        });
+        buttonAlertOk.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                Date date = new Date();
+
+                drawingControls.setVisibility(View.GONE);
+                layOutDrawingView.setVisibility(View.GONE);
+                updateButtonUI(-1);
+
+                drawView.setDrawingCacheEnabled(true);
 
 	/*String imgSaved = MediaStore.Images.Media.insertImage(
 	getContentResolver(), drawView.getDrawingCache(), *//*UUID.randomUUID().toString()*//*
 	"IMG" + new Timestamp(date.getTime()), "drawing");
 	System.out.println("the string uri:" + imgSaved);*/
 
-				String timestamp = String.valueOf(System.currentTimeMillis());
-				File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".jpg");
-				File file2 = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".png");
+                String timestamp = String.valueOf(System.currentTimeMillis());
+                File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".jpg");
+                File file2 = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".png");
 
-				try {
-					drawView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
-					drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file2));
+                try {
+                    drawView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
+                    drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file2));
 
-					ContentValues values = new ContentValues();
-					values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
-					values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
-					getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
+                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-					ContentValues values2 = new ContentValues();
-					values2.put(MediaStore.Images.Media.DATA, file2.getAbsolutePath());
-					values2.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
-					getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values2);
+                    ContentValues values2 = new ContentValues();
+                    values2.put(MediaStore.Images.Media.DATA, file2.getAbsolutePath());
+                    values2.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
+                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values2);
 
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 	/*ContentResolver cr = getContentResolver();
 	private void addImageGallery(File f) {
@@ -3726,11 +3857,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 */
 
-				if (file != null) {
-					Toast.makeText(getApplicationContext(),
-							"Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
-					// savedToast.show();
-					drawView.destroyDrawingCache();
+                if (file != null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
+                    // savedToast.show();
+                    drawView.destroyDrawingCache();
 
 	/*if (DataManager.sharedDataManager().getArrNoteListData() != null) {
 	arrNoteListData = DataManager.sharedDataManager()
@@ -3758,80 +3889,78 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	.size() - 1);
 	}*/
 
-					drawView.setUserDrawn(false);
+                    drawView.setUserDrawn(false);
 
-				} else {
-					Toast.makeText(getApplicationContext(),
-							"Oops! Image could not be saved.",
-							Toast.LENGTH_SHORT).show();
-				}
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Oops! Image could not be saved.",
+                            Toast.LENGTH_SHORT).show();
+                }
 
-				dialog.dismiss();
-			}
-		});
+                dialog.dismiss();
+            }
+        });
 
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(true);
-		dialog.setContentView(contentView);
-		dialog.show();
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(contentView);
+        dialog.show();
 
-	}
+    }
 
-	@Override
-	public void onBackPressed() {
-		// super.onBackPressed();
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
 
-		// if (drawView.getUserDrawn() == true) {
-		// SaveDrawingDialog();
-		// } else {
+        // if (drawView.getUserDrawn() == true) {
+        // SaveDrawingDialog();
+        // } else {
 
-		finish();
+        finish();
 
-		// }
+        // }
 
-	}
+    }
 
-	public void paintClicked(View view) {
-		// use chosen color
-		if (view != currPaint) {
-			// update color
-			ImageButton imgView = (ImageButton) view;
-			String color = view.getTag().toString();
+    public void paintClicked(View view) {
+        // use chosen color
+        if (view != currPaint) {
+            // update color
+            ImageButton imgView = (ImageButton) view;
+            String color = view.getTag().toString();
 
-			imgView.setImageDrawable(getResources().getDrawable(
-					R.drawable.paint_pressed));
-			// currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
-			// currPaint = (ImageButton) view;
-			System.out.println("selected color:" + color);
+            imgView.setImageDrawable(getResources().getDrawable(
+                    R.drawable.paint_pressed));
+            // currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
+            // currPaint = (ImageButton) view;
+            System.out.println("selected color:" + color);
 
-			int colorCode = Color.parseColor(color);
-			dialogColor.dismiss();
-			drawView.setDrawColor(colorCode);
-		}
+            int colorCode = Color.parseColor(color);
+            dialogColor.dismiss();
+            drawView.setDrawColor(colorCode);
+        }
 
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		paintClicked(v);
-	}
+    @Override
+    public void onClick(View v) {
+        paintClicked(v);
+    }
 
-	static String backgroundColor = "#FFFFFF";
-
-	public void paperButtonSelected(View view) {
-		if (view.getId() == R.id.paper_bg_1) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_1);
-		} else if (view.getId() == R.id.paper_bg_2) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_2);
-		} else if (view.getId() == R.id.paper_bg_3) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_3);
-		} else if (view.getId() == R.id.paper_bg_4) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_4);
-		} else if (view.getId() == R.id.paper_bg_5) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_5);
-		} else if (view.getId() == R.id.paper_bg_6) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_6);
-		}/* else if (view.getId() == R.id.paper_bg_7) {
+    public void paperButtonSelected(View view) {
+        if (view.getId() == R.id.paper_bg_1) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_1);
+        } else if (view.getId() == R.id.paper_bg_2) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_2);
+        } else if (view.getId() == R.id.paper_bg_3) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_3);
+        } else if (view.getId() == R.id.paper_bg_4) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_4);
+        } else if (view.getId() == R.id.paper_bg_5) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_5);
+        } else if (view.getId() == R.id.paper_bg_6) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_6);
+        }/* else if (view.getId() == R.id.paper_bg_7) {
 			background_bg.setBackgroundResource(R.drawable.paper_bg_7);
 		} else if (view.getId() == R.id.paper_bg_8) {
 			background_bg.setBackgroundResource(R.drawable.paper_bg_8);
@@ -3841,104 +3970,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			background_bg.setBackgroundResource(R.drawable.paper_bg_10);
 		}*/
 
-	}
-
-	public void colorButtonSelected(View view) {
-
-		currentFontColor = Color.BLACK;
-		background_bg.setBackgroundColor(Color.parseColor(view.getTag()
-				.toString()));
-		backgroundColor = view.getTag().toString();
-
-		if (noteIdForDetails == null) {
-			makeNote();
-		}
-
-		if (noteIdForDetails != null) {
-			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-			note.setColor(backgroundColor);
-			note.setModificationtime(currentDateStr);
-			note.save();
-		}
-
-	}
-
-	/************* Update text Here ************/
-
-	void updatedText(boolean undrLine, boolean bold, boolean italic, int fontSize, int textcolor, String text) {
-
-		spanUpdted = new SpannableString(text);
-		if (txtViewer.getText().length() > 0) {
-			spanold = new SpannableString(txtViewer.getText());
-			txtViewer.setText(TextUtils.concat(spanold, " ", spanUpdted));
-		} else {
-			txtViewer.setText(TextUtils.concat(spanUpdted));
-		}
-
-//	String strFaimly = NoteShareFonts.arial;
-
-	/*if (text.length() > 0) {
-	Typeface typeface;
-	if (currentFontTypeface.length() > 0)
-	{
-	typeface = NoteShareFonts.asTypeface(NoteMainActivity.this,
-	currentFontTypeface);
-	strFaimly = NoteShareFonts
-	.asTypefacefaimly(currentFontTypeface);
-	if (typeface == null) {
-	typeface = NoteShareFonts.asTypeface(NoteMainActivity.this,
-	NoteShareFonts.arial);
-	}
-	} else {
-	typeface = NoteShareFonts.asTypeface(NoteMainActivity.this,
-	NoteShareFonts.arial);
-	}
-	typefacae = Typeface.NORMAL;
-	if (bold == true && italic == true) {
-	typefacae = Typeface.BOLD_ITALIC;
-	} else if (bold == false && italic == true) {
-	typefacae = Typeface.ITALIC;
-	} else if (bold == true && italic == false) {
-	typefacae = Typeface.BOLD;
-	}
-	//FONT SIZE ADDED
-	spanUpdted.setSpan(new AbsoluteSizeSpan(fontSize * 2, true), 0,
-	spanUpdted.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-	//FONT STYLE
-	spanUpdted.setSpan(new StyleSpan(typefacae), 0,
-	spanUpdted.length(), 0);
-	//CUSTOM FONT ADDED
-	spanUpdted.setSpan(new CustomTypefaceSpan("", typeface), 0,
-	spanUpdted.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-	//UNDERLINE ADDED
-	if (undrLine)
-	{
-	spanUpdted.setSpan(new UnderlineSpan(), 0, spanUpdted.length(),
-	0);
-	}
-	{
-	 spanUpdted.setSpan(new BackgroundColorSpan(textbgxcolor), 0,
-	 spanUpdted.length(), 0);
-	}
-	{
-	spanUpdted.setSpan(new ForegroundColorSpan(textcolor), 0,
-	spanUpdted.length(), 0);
-	}
-	runOnUiThread(new Runnable() {
-	@Override
-	public void run() {
-	if (txtViewer.getText().length() > 0) {
-	spanold = new SpannableString(txtViewer.getText());
-	txtViewer.setText(TextUtils.concat(spanold, " ",
-	spanUpdted));
-	} else {
-	txtViewer.setText(TextUtils.concat(spanUpdted));
-	}
-	}
-	});
-	}*/
-
-	}
+    }
 
 	/*private String getNextFileName() {
 	return Environment.getExternalStorageDirectory() + File.separator
@@ -4009,392 +4041,337 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	}*/
 
-	public static String getDurationBreakdown(long millis) {
-		if (millis < 0) {
-			throw new IllegalArgumentException(
-					"Duration must be greater than zero!");
-		}
+    public void colorButtonSelected(View view) {
 
-		// long days = TimeUnit.MILLISECONDS.toDays(millis);
-		// millis -= TimeUnit.DAYS.toMillis(days);
-		// long hours = TimeUnit.MILLISECONDS.toHours(millis);
-		// millis -= TimeUnit.HOURS.toMillis(hours);
-		// long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-		// millis -= TimeUnit.MINUTES.toMillis(minutes);
-		//
-		// long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+        currentFontColor = Color.BLACK;
+        background_bg.setBackgroundColor(Color.parseColor(view.getTag()
+                .toString()));
+        backgroundColor = view.getTag().toString();
 
-		// StringBuilder sb = new StringBuilder(64);
+        if (noteIdForDetails == null) {
+            makeNote();
+        }
 
-		StringBuffer sb = new StringBuffer();
+        if (noteIdForDetails != null) {
+            Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+            note.setColor(backgroundColor);
+            note.setModificationtime(currentDateStr);
+            note.save();
+        }
 
-		int hours = (int) (millis / (1000 * 60 * 60));
-		int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
-		int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+    }
 
-		sb.append(String.format("%02d", hours)).append(":")
-				.append(String.format("%02d", minutes)).append(":")
-				.append(String.format("%02d", seconds));
 
-		System.out.println("time is:" + sb.toString());
+    //TEXT WATCHER
 
-		return sb.toString();
+    /*************
+     * Update text Here
+     ************/
 
+    void updatedText(boolean undrLine, boolean bold, boolean italic, int fontSize, int textcolor, String text) {
+
+        spanUpdted = new SpannableString(text);
+        if (txtViewer.getText().length() > 0) {
+            spanold = new SpannableString(txtViewer.getText());
+            txtViewer.setText(TextUtils.concat(spanold, " ", spanUpdted));
+        } else {
+            txtViewer.setText(TextUtils.concat(spanUpdted));
+        }
+
+//	String strFaimly = NoteShareFonts.arial;
+
+	/*if (text.length() > 0) {
+	Typeface typeface;
+	if (currentFontTypeface.length() > 0)
+	{
+	typeface = NoteShareFonts.asTypeface(NoteMainActivity.this,
+	currentFontTypeface);
+	strFaimly = NoteShareFonts
+	.asTypefacefaimly(currentFontTypeface);
+	if (typeface == null) {
+	typeface = NoteShareFonts.asTypeface(NoteMainActivity.this,
+	NoteShareFonts.arial);
 	}
-
-
-
-	//TEXT WATCHER
-
-	TextWatcher watch = new TextWatcher(){
-
-		@Override
-		public void afterTextChanged(Editable arg0) {
-		}
-
-		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-									  int arg3)
-		{}
-
-		@Override
-		public void onTextChanged(CharSequence s, int a, int b, int c) {
-
-			txtViewer.setText(s);
-
-			if(a == 9){
-				Toast.makeText(getApplicationContext(), "Maximum Limit Reached", Toast.LENGTH_SHORT).show();
-			}
-		}};
-
-	public void onCreateBrushDialog() {
-
-		Dialog brushDialog = new Dialog(NoteMainActivity.this);
-		brushDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		brushDialog.setCancelable(true);
-		brushDialog.setContentView(R.layout.brush_chooser);
-
-		final View v = brushDialog.findViewById(R.id.view);
-
-		TextView textViewSizesHeader = (TextView) brushDialog.findViewById(R.id.textViewSizesHeader);
-		textViewSizesHeader.setText("BRUSH SIZES");
-		colorPickerSeekBar = (ColorPickerSeekBar) brushDialog.findViewById(R.id.colorpicker);
-
-		SeekBar sizeSeekBar = (SeekBar) brushDialog.findViewById(R.id.sizeSeekBar);
-		sizeSeekBar.setMax(14);
-		sizeSeekBar.setProgress(lastBrushSize);
-
-		final TextView tvBrushSize = (TextView) brushDialog.findViewById(R.id.tvBrushSize);
-		String size = String.valueOf(10 + (lastBrushSize * 2));
-		tvBrushSize.setText(size);
-
-		drawView.setBrushSize(10 + (lastBrushSize * 2));
-
-		if (count > 0) {
-			v.setBackgroundColor(color_selected);
-		}
-		colorPickerSeekBar.setProgress(lastBrushColor);
-
-		colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
-			@Override
-			public void onColorChanged(SeekBar seekBar, int color, boolean b) {
-				v.setBackgroundColor(color);
-				color_selected = color;
-				drawView.setDrawColor(color);
-				lastBrushColor = seekBar.getProgress();
-				count++;
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
-		});
-
-		sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-				lastBrushSize = progress;
-				drawView.setBrushSize(10 + (progress * 2));
-				String size = String.valueOf(10 + (lastBrushSize * 2));
-				tvBrushSize.setText(size);
-
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
-		});
-
-		brushDialog.show();
+	} else {
+	typeface = NoteShareFonts.asTypeface(NoteMainActivity.this,
+	NoteShareFonts.arial);
 	}
-
-	/*public void onCreateEraserDialog() {
-	Dialog brushDialog = new Dialog(NoteMainActivity.this);
-	brushDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	brushDialog.setCancelable(true);
-	brushDialog.setContentView(R.layout.eraser_chooser);
-	final View v = brushDialog.findViewById(R.id.view);
-	TextView textViewSizesHeader = (TextView) brushDialog.findViewById(R.id.textViewSizesHeader);
-	textViewSizesHeader.setText("ERASER SIZES");
-	SeekBar sizeSeekBar = (SeekBar) brushDialog.findViewById(R.id.sizeSeekBar);
-	sizeSeekBar.setMax(14);
-	sizeSeekBar.setProgress(lastBrushSize);
-	final TextView tvBrushSize = (TextView) brushDialog.findViewById(R.id.tvBrushSize);
-	String size = String.valueOf(10 + (lastBrushSize * 2));
-	tvBrushSize.setText(size);
-	drawView.setBrushSize(10 + (lastBrushSize * 2));
-	drawView.setDrawColor(Color.parseColor("#FFFFFF"));
-	sizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+	typefacae = Typeface.NORMAL;
+	if (bold == true && italic == true) {
+	typefacae = Typeface.BOLD_ITALIC;
+	} else if (bold == false && italic == true) {
+	typefacae = Typeface.ITALIC;
+	} else if (bold == true && italic == false) {
+	typefacae = Typeface.BOLD;
+	}
+	//FONT SIZE ADDED
+	spanUpdted.setSpan(new AbsoluteSizeSpan(fontSize * 2, true), 0,
+	spanUpdted.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+	//FONT STYLE
+	spanUpdted.setSpan(new StyleSpan(typefacae), 0,
+	spanUpdted.length(), 0);
+	//CUSTOM FONT ADDED
+	spanUpdted.setSpan(new CustomTypefaceSpan("", typeface), 0,
+	spanUpdted.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+	//UNDERLINE ADDED
+	if (undrLine)
+	{
+	spanUpdted.setSpan(new UnderlineSpan(), 0, spanUpdted.length(),
+	0);
+	}
+	{
+	 spanUpdted.setSpan(new BackgroundColorSpan(textbgxcolor), 0,
+	 spanUpdted.length(), 0);
+	}
+	{
+	spanUpdted.setSpan(new ForegroundColorSpan(textcolor), 0,
+	spanUpdted.length(), 0);
+	}
+	runOnUiThread(new Runnable() {
 	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-	lastBrushSize = progress;
-	drawView.setBrushSize(10 + (progress * 2));
-	String size = String.valueOf(10 + (lastBrushSize * 2));
-	tvBrushSize.setText(size);
+	public void run() {
+	if (txtViewer.getText().length() > 0) {
+	spanold = new SpannableString(txtViewer.getText());
+	txtViewer.setText(TextUtils.concat(spanold, " ",
+	spanUpdted));
+	} else {
+	txtViewer.setText(TextUtils.concat(spanUpdted));
 	}
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-	}
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
 	}
 	});
-	brushDialog.show();
 	}*/
 
-	public void remindClick(View v) {
-		//String id = v.getTag().toString();
-		//setDateTime.showDate(this, id);
-		layout_note_more_Info.setVisibility(View.GONE);
-		showDate(this);
-		//layout_note_more_Info.setVisibility(View.GONE);
-	}
+    }
+
+    public void remindClick(View v) {
+        //String id = v.getTag().toString();
+        //setDateTime.showDate(this, id);
+        layout_note_more_Info.setVisibility(View.GONE);
+        showDate(this);
+        //layout_note_more_Info.setVisibility(View.GONE);
+    }
 
 
-	//public void showDate(Context context, final String noteid ){
-	public void showDate(Context context){
+    //public void showDate(Context context, final String noteid ){
+    public void showDate(Context context) {
 
-		move = new Dialog(context);
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.datetime, null, false);
+        move = new Dialog(context);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflate your activity layout here!
+        View contentView = inflater.inflate(R.layout.datetime, null, false);
 
-		LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
-		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("Set Remainder");
-		textViewTitleAlert.setTextColor(Color.WHITE);
+        LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
+        TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("Set Remainder");
+        textViewTitleAlert.setTextColor(Color.WHITE);
 
-		DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
-		TimePicker tp = (TimePicker) contentView.findViewById(R.id.tp);
-
-
-		//final int[1] hour;/* = tp.getCurrentHour();*/
-		final int[] time = new int[2];
-		time[0] = tp.getCurrentHour();
-		time[1] = tp.getCurrentMinute();
-
-		final int[] date = new int[3];
-		date[0] = dp.getDayOfMonth();
-		date[1] = dp.getMonth() +1;
-		date[2] = dp.getYear();
+        DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
+        TimePicker tp = (TimePicker) contentView.findViewById(R.id.tp);
 
 
-		tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+        //final int[1] hour;/* = tp.getCurrentHour();*/
+        final int[] time = new int[2];
+        time[0] = tp.getCurrentHour();
+        time[1] = tp.getCurrentMinute();
 
-			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-				time[0] = hourOfDay;
-				time[1] = minute;
-			}
-		});
-
-		Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
-		Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
-
-		dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
-
-		dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-			@Override
-			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-				//Log.d("tag", "finally found the listener, the date is: year " + year + ", month " + month + ", dayOfMonth " + dayOfMonth);
-				date[0] = dayOfMonth;
-				date[1] = month + 1;
-				date[2] = year;
-			}
-		});
-
-		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
-				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
-
-				String reminderTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
-
-				Note n = Note.findById(Note.class, Long.valueOf(noteIdForDetails));
-				n.remindertime = reminderTime;
-				n.save();
-
-				move.dismiss();
-				Toast.makeText(getApplication(),"Remind Set: " + reminderTime, Toast.LENGTH_LONG).show();
-			}
-		});
-
-		buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				move.dismiss();
-			}
-		});
+        final int[] date = new int[3];
+        date[0] = dp.getDayOfMonth();
+        date[1] = dp.getMonth() + 1;
+        date[2] = dp.getYear();
 
 
-		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		move.setCancelable(true);
+        tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
-		move.setContentView(contentView);
-		move.show();
-	}
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                time[0] = hourOfDay;
+                time[1] = minute;
+            }
+        });
+
+        Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+        Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
+
+        dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
+
+        dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                //Log.d("tag", "finally found the listener, the date is: year " + year + ", month " + month + ", dayOfMonth " + dayOfMonth);
+                date[0] = dayOfMonth;
+                date[1] = month + 1;
+                date[2] = year;
+            }
+        });
+
+        buttonAlertOk.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
+
+                String reminderTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
+
+                Note n = Note.findById(Note.class, Long.valueOf(noteIdForDetails));
+                n.remindertime = reminderTime;
+                n.save();
+
+                move.dismiss();
+                Toast.makeText(getApplication(), "Remind Set: " + reminderTime, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                move.dismiss();
+            }
+        });
 
 
-	public String check(int value){
-		String newvalue;
-		if (value < 10) // minute
-			newvalue = "0" + String.valueOf(value);
-		else
-			newvalue =  String.valueOf(value);
-		return newvalue;
-	}
+        move.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        move.setCancelable(true);
 
-	public void makeNote() {
-		Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
-		note.save();
-		noteIdForDetails = note.getId().toString();
+        move.setContentView(contentView);
+        move.show();
+    }
 
-		Log.e("jay notetitle:", note.getTitle());
 
-		noteTitle[0] = note.getTitle();
-	}
+    public String check(int value) {
+        String newvalue;
+        if (value < 10) // minute
+            newvalue = "0" + String.valueOf(value);
+        else
+            newvalue = String.valueOf(value);
+        return newvalue;
+    }
 
-	public void modifyNoteTime() {
-		Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-		n.modificationtime = currentDateStr;
-		n.save();
-	}
+    public void makeNote() {
+        Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
+        note.save();
+        noteIdForDetails = note.getId().toString();
 
-	public void deleteElements(String tag) {
-		NoteElement ne = NoteElement.findById(NoteElement.class, Long.parseLong(tag));
-		ne.delete();
-		onResume();
-	}
+        Log.e("jay notetitle:", note.getTitle());
 
-	public void fetchNoteElementsFromDb() throws FileNotFoundException {
+        noteTitle[0] = note.getTitle();
+    }
 
-		if(noteIdForDetails != null) {
+    public void modifyNoteTime() {
+        Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+        n.modificationtime = currentDateStr;
+        n.save();
+    }
 
-			noteElements.removeAllViews();
-			List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
+    public void deleteElements(String tag) {
+        NoteElement ne = NoteElement.findById(NoteElement.class, Long.parseLong(tag));
+        ne.delete();
+        onResume();
+    }
 
-			Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+    public void fetchNoteElementsFromDb() throws FileNotFoundException {
 
-			noteTitle[0] = note.title;
+        if (noteIdForDetails != null) {
 
-			textViewheaderTitle.setText(note.getTitle());
+            noteElements.removeAllViews();
+            List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT * FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
 
-			String background = note.getColor();
-			background_bg.setBackgroundColor(Color.parseColor(background));
+            Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 
-			for (final NoteElement n : ne) {
-				if (n.type.equals("text")) {
-					String s = n.content;
-					noteElements = (LinearLayout) findViewById(R.id.noteElements);
-					LayoutInflater inflator = getLayoutInflater();
-					View viewText = inflator.inflate(R.layout.note_text, null, false);
-					final RelativeLayout textView = (RelativeLayout) viewText.findViewById(R.id.textView);
-					final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
-					final ImageButton deleteText = (ImageButton) viewText.findViewById(R.id.deleteText);
-					deleteText.setTag(n.getId());
+            noteTitle[0] = note.title;
 
-					allDelete.add(deleteText);
-					allRe.add(editor);
-					editor.setTag(allRe.size() - 1);
-					editor.setHtml(s);
-					editor.setBackgroundColor(0);
-					editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-						@Override
-						public void onFocusChange(View v, boolean hasFocus) {
-							String id = v.getTag().toString();
-							setFeatureTag(id);
-							drawingControls.setVisibility(View.GONE);
-							layout_note_more_Info.setVisibility(View.GONE);
-							isMoreShown = false;
-							layout_audio_notechooser.setVisibility(View.GONE);
-							horizontal_scroll_editor.setVisibility(View.VISIBLE);
-							imageButtoncalander.setVisibility(View.VISIBLE);
-							imageButtonHamburg.setVisibility(View.GONE);
+            textViewheaderTitle.setText(note.getTitle());
 
-							// TODO hide
-							imageButtoncheckbox.setVisibility(View.GONE);
-							imageButtonsquence.setVisibility(View.GONE);
-							if (textelementid.size() > 0)
-								textelementid.remove(0);
+            String background = note.getColor();
+            background_bg.setBackgroundColor(Color.parseColor(background));
 
-							textelementid.add(v);
-						}
-					});
+            for (final NoteElement n : ne) {
+                if (n.type.equals("text")) {
+                    String s = n.content;
+                    noteElements = (LinearLayout) findViewById(R.id.noteElements);
+                    LayoutInflater inflator = getLayoutInflater();
+                    View viewText = inflator.inflate(R.layout.note_text, null, false);
+                    final RelativeLayout textView = (RelativeLayout) viewText.findViewById(R.id.textView);
+                    final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
+                    final ImageButton deleteText = (ImageButton) viewText.findViewById(R.id.deleteText);
+                    deleteText.setTag(n.getId());
 
-					editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
-						@Override
-						public void onTextChange(String s) {
-							//editortext[0] = s;
-							//String tag = (String) editor.getTag();
+                    allDelete.add(deleteText);
+                    allRe.add(editor);
+                    editor.setTag(allRe.size() - 1);
+                    editor.setHtml(s);
+                    editor.setBackgroundColor(0);
+                    editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            String id = v.getTag().toString();
+                            setFeatureTag(id);
+                            drawingControls.setVisibility(View.GONE);
+                            layout_note_more_Info.setVisibility(View.GONE);
+                            isMoreShown = false;
+                            layout_audio_notechooser.setVisibility(View.GONE);
+                            horizontal_scroll_editor.setVisibility(View.VISIBLE);
+                            imageButtoncalander.setVisibility(View.VISIBLE);
+                            imageButtonHamburg.setVisibility(View.GONE);
+
+                            // TODO hide
+                            imageButtoncheckbox.setVisibility(View.GONE);
+                            imageButtonsquence.setVisibility(View.GONE);
+                            if (textelementid.size() > 0)
+                                textelementid.remove(0);
+
+                            textelementid.add(v);
+                        }
+                    });
+
+                    editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+                        @Override
+                        public void onTextChange(String s) {
+                            //editortext[0] = s;
+                            //String tag = (String) editor.getTag();
 							/*NoteElement ne = NoteElement.findById(NoteElement.class, Long.parseLong(n.getId()));
 							ne.content = s;
 							ne.save();*/
-							n.content = s;
-							n.save();
-							modifyNoteTime();
-						}
-					});
+                            n.content = s;
+                            n.save();
+                            modifyNoteTime();
+                        }
+                    });
 
-					deleteText.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
-						}
-					});
+                    deleteText.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                        }
+                    });
 
-					noteElements.addView(textView);
-				} else if (n.type.equals("image")) {
-					// add image layout
-					noteElements = (LinearLayout) findViewById(R.id.noteElements);
-					LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
-					View viewImage = inflator.inflate(R.layout.note_image, null, false);
-					RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
-					ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
-					final ImageButton imageDelete = (ImageButton) viewImage.findViewById(R.id.deleteImage);
-					allDelete.add(imageDelete);
-					imageDelete.setTag(n.getId());
+                    noteElements.addView(textView);
+                } else if (n.type.equals("image")) {
+                    // add image layout
+                    noteElements = (LinearLayout) findViewById(R.id.noteElements);
+                    LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
+                    View viewImage = inflator.inflate(R.layout.note_image, null, false);
+                    RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
+                    ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
+                    final ImageButton imageDelete = (ImageButton) viewImage.findViewById(R.id.deleteImage);
+                    allDelete.add(imageDelete);
+                    imageDelete.setTag(n.getId());
 
-					imageDelete.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							//Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
-							//deleteElements(v.getTag().toString());
-							showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
-						}
-					});
-					String name = n.content;
-					File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-					//int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
-					//int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
-					Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
-					//Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
+                    imageDelete.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
+                            //deleteElements(v.getTag().toString());
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                        }
+                    });
+                    String name = n.content;
+                    File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+                    //int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
+                    //int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
+                    Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
+                    //Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
 					/*BitmapFactory.Options op = new BitmapFactory.Options();
 					op.inJustDecodeBounds = true;
 					int imageWidth = b.getWidth();
@@ -4409,9 +4386,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					} else if (imageWidth < imageHeight) { // portrait
 						scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
 					}*/
-					note_imageview.setImageBitmap(b);
-					noteElements.addView(note_image);
-				} else if(n.type.equals("scribble")) {
+                    note_imageview.setImageBitmap(b);
+                    noteElements.addView(note_image);
+                } else if (n.type.equals("scribble")) {
 
 					/*noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
 					LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
@@ -4431,227 +4408,227 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					//note_image.setTop(n.getOrdernumber());
 					noteScribbleElements.addView(note_image, params);*/
 
-				}else if (n.type.equals("audio")) {
-					// add audio layout
-					Log.e("jay n.con", n.content);
-					String name = null;
-					int status = 0;
-					JSONObject audioJson = null;
-					try {
-						audioJson = new JSONObject(n.content);
-						Log.e("jay audio Json", audioJson.toString());
-						name = audioJson.get("name").toString();
-						//status = audioJson.get("status").toString();
-						status = audioJson.getInt("status");
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
+                } else if (n.type.equals("audio")) {
+                    // add audio layout
+                    Log.e("jay n.con", n.content);
+                    String name = null;
+                    int status = 0;
+                    JSONObject audioJson = null;
+                    try {
+                        audioJson = new JSONObject(n.content);
+                        Log.e("jay audio Json", audioJson.toString());
+                        name = audioJson.get("name").toString();
+                        //status = audioJson.get("status").toString();
+                        status = audioJson.getInt("status");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-					Log.e("jay status", String.valueOf(status));
+                    Log.e("jay status", String.valueOf(status));
 
-					//addAudio(name);
-					noteElements = (LinearLayout) findViewById(R.id.noteElements);
-					LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-					View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
-					LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+                    //addAudio(name);
+                    noteElements = (LinearLayout) findViewById(R.id.noteElements);
+                    LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                    View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
+                    LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
 
-					final MediaPlayer mp = new MediaPlayer();
-					final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-					final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
-					final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-					final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
-					allDelete.add(audioDelete);
-					audioDelete.setTag(n.getId());
+                    final MediaPlayer mp = new MediaPlayer();
+                    final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+                    final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
+                    final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+                    final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
+                    allDelete.add(audioDelete);
+                    audioDelete.setTag(n.getId());
 
-					audioDelete.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							//Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
-							//deleteElements(v.getTag().toString());
-							showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
-						}
-					});
+                    audioDelete.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
+                            //deleteElements(v.getTag().toString());
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                        }
+                    });
 
-					final File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
-					try {
-						mp.setDataSource(f.getAbsolutePath());
-						mp.prepare();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+                    final File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+                    try {
+                        mp.setDataSource(f.getAbsolutePath());
+                        mp.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-					// Audio Play
-					audio_play.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							if (mp.isPlaying()) {
-								mp.pause();
-								audio_play.setImageResource(R.drawable.play_audio);
-							} else {
-								audio_play.setImageResource(R.drawable.pause_audio);
-								mp.start();
-								audio_seek.setMax(mp.getDuration() / 1000);
-								final Handler mHandler = new Handler();
-								// Make sure you update Seekbar on UI thread
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										if (mp != null) {
-											int mCurrentPosition = mp.getCurrentPosition() / 1000;
-											String currentduration = getDurationBreakdown(mp.getCurrentPosition());
-											String currentduration1 = getDurationBreakdown(mp.getDuration());
-											if (mCurrentPosition <= mp.getDuration() / 1000) {
-												System.out.println("CurrentDuration:" + currentduration);
-												audio_seek.setProgress(mCurrentPosition);
-												audio_text.setVisibility(View.VISIBLE);
-												audio_text.setText(currentduration + "/" + currentduration1);
-											}
-										}
-										mHandler.postDelayed(this, 1000);
-									}
-								});
-								mp.setOnCompletionListener(new OnCompletionListener() {
-									@Override
-									public void onCompletion(MediaPlayer mp) {
-										audio_play.setImageResource(R.drawable.play_audio);
-									}
-								});
-							}
-						}
-					});
-					if(status == 1)
-						noteElements.addView(note_audio);
+                    // Audio Play
+                    audio_play.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mp.isPlaying()) {
+                                mp.pause();
+                                audio_play.setImageResource(R.drawable.play_audio);
+                            } else {
+                                audio_play.setImageResource(R.drawable.pause_audio);
+                                mp.start();
+                                audio_seek.setMax(mp.getDuration() / 1000);
+                                final Handler mHandler = new Handler();
+                                // Make sure you update Seekbar on UI thread
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (mp != null) {
+                                            int mCurrentPosition = mp.getCurrentPosition() / 1000;
+                                            String currentduration = getDurationBreakdown(mp.getCurrentPosition());
+                                            String currentduration1 = getDurationBreakdown(mp.getDuration());
+                                            if (mCurrentPosition <= mp.getDuration() / 1000) {
+                                                System.out.println("CurrentDuration:" + currentduration);
+                                                audio_seek.setProgress(mCurrentPosition);
+                                                audio_text.setVisibility(View.VISIBLE);
+                                                audio_text.setText(currentduration + "/" + currentduration1);
+                                            }
+                                        }
+                                        mHandler.postDelayed(this, 1000);
+                                    }
+                                });
+                                mp.setOnCompletionListener(new OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        audio_play.setImageResource(R.drawable.play_audio);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    if (status == 1)
+                        noteElements.addView(note_audio);
 
-				} else if (n.type.equals("checkbox")) {
-					String text = null ,status = null;
-					JSONObject checkBoxJson = null;
-					try {
-						checkBoxJson = new JSONObject(n.content);
-						text = checkBoxJson.get("text").toString();
-						status = checkBoxJson.get("status").toString();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
+                } else if (n.type.equals("checkbox")) {
+                    String text = null, status = null;
+                    JSONObject checkBoxJson = null;
+                    try {
+                        checkBoxJson = new JSONObject(n.content);
+                        text = checkBoxJson.get("text").toString();
+                        status = checkBoxJson.get("status").toString();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-					noteElements = (LinearLayout) findViewById(R.id.noteElements);
-					LayoutInflater inflator = getLayoutInflater();
-					View viewChecklist = inflator.inflate(R.layout.note_checklist, null, false);
-					final RelativeLayout checkbox = (RelativeLayout) viewChecklist.findViewById(R.id.checkbox);
-					final ImageView checklist_icon = (ImageView) viewChecklist.findViewById(R.id.checkboxIcon);
-					final ImageButton checklistDelete = (ImageButton) viewChecklist.findViewById(R.id.deleteCheckbox);
-					allDelete.add(checklistDelete);
-					checklistDelete.setTag(n.getId());
-					checklist_icon.setTag(status);
+                    noteElements = (LinearLayout) findViewById(R.id.noteElements);
+                    LayoutInflater inflator = getLayoutInflater();
+                    View viewChecklist = inflator.inflate(R.layout.note_checklist, null, false);
+                    final RelativeLayout checkbox = (RelativeLayout) viewChecklist.findViewById(R.id.checkbox);
+                    final ImageView checklist_icon = (ImageView) viewChecklist.findViewById(R.id.checkboxIcon);
+                    final ImageButton checklistDelete = (ImageButton) viewChecklist.findViewById(R.id.deleteCheckbox);
+                    allDelete.add(checklistDelete);
+                    checklistDelete.setTag(n.getId());
+                    checklist_icon.setTag(status);
 
-					if(status.equals("1"))
-						checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
-					else
-						checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+                    if (status.equals("1"))
+                        checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+                    else
+                        checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
 
-					final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
+                    final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
 
-					checklist_text.setText(text);
-					//checklist_text.setTag(allCheckboxText.size()-1);
-					noteElements.addView(checkbox);
+                    checklist_text.setText(text);
+                    //checklist_text.setTag(allCheckboxText.size()-1);
+                    noteElements.addView(checkbox);
 
-					checklistDelete.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							//Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
-							//deleteElements(v.getTag().toString());
-							showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
-						}
-					});
+                    checklistDelete.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
+                            //deleteElements(v.getTag().toString());
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                        }
+                    });
 
-					final JSONObject finalCheckBoxJson = checkBoxJson;
-					checklist_text.addTextChangedListener(new TextWatcher() {
-						@Override
-						public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-						}
+                    final JSONObject finalCheckBoxJson = checkBoxJson;
+                    checklist_text.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
 
-						@Override
-						public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-							try {
-								finalCheckBoxJson.remove("text");
-								finalCheckBoxJson.put("text", s.toString());
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-							n.content = finalCheckBoxJson.toString();
-							Log.e("jay after text", n.content);
-							n.save();
-							modifyNoteTime();
+                            try {
+                                finalCheckBoxJson.remove("text");
+                                finalCheckBoxJson.put("text", s.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            n.content = finalCheckBoxJson.toString();
+                            Log.e("jay after text", n.content);
+                            n.save();
+                            modifyNoteTime();
 
-						}
+                        }
 
-						@Override
-						public void afterTextChanged(Editable s) {
-						}
-					});
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
 
-					checklist_icon.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							String tag = v.getTag().toString();
-							if (tag.equals("1")) {
-								checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
-								try {
-									finalCheckBoxJson.remove("status");
-									finalCheckBoxJson.put("status", 0);
-								} catch (JSONException e) {
-									e.printStackTrace();
-								}
-								v.setTag("0");
-							} else {
-								checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
-								try {
-									finalCheckBoxJson.remove("status");
-									finalCheckBoxJson.put("status", 1);
-								} catch (JSONException e) {
-									e.printStackTrace();
-								}
-								v.setTag("1");
-							}
+                    checklist_icon.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String tag = v.getTag().toString();
+                            if (tag.equals("1")) {
+                                checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+                                try {
+                                    finalCheckBoxJson.remove("status");
+                                    finalCheckBoxJson.put("status", 0);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                v.setTag("0");
+                            } else {
+                                checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+                                try {
+                                    finalCheckBoxJson.remove("status");
+                                    finalCheckBoxJson.put("status", 1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                v.setTag("1");
+                            }
 
-							n.content = finalCheckBoxJson.toString();
-							Log.e("jay after image", n.content);
+                            n.content = finalCheckBoxJson.toString();
+                            Log.e("jay after image", n.content);
 
-							n.save();
-							modifyNoteTime();
-						}
-					});
+                            n.save();
+                            modifyNoteTime();
+                        }
+                    });
 
-					checklist_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-						@Override
-						public void onFocusChange(View v, boolean hasFocus) {
-							//String id = v.getTag().toString();
-							drawingControls.setVisibility(View.GONE);
-							layout_note_more_Info.setVisibility(View.GONE);
-							isMoreShown = false;
-							layout_audio_notechooser.setVisibility(View.GONE);
-							imageButtoncalander.setVisibility(View.VISIBLE);
-							imageButtonHamburg.setVisibility(View.GONE);
-							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-							imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
+                    checklist_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            //String id = v.getTag().toString();
+                            drawingControls.setVisibility(View.GONE);
+                            layout_note_more_Info.setVisibility(View.GONE);
+                            isMoreShown = false;
+                            layout_audio_notechooser.setVisibility(View.GONE);
+                            imageButtoncalander.setVisibility(View.VISIBLE);
+                            imageButtonHamburg.setVisibility(View.GONE);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(checklist_text, InputMethodManager.SHOW_IMPLICIT);
 
-							// TODO hide
-							imageButtoncheckbox.setVisibility(View.GONE);
-							imageButtonsquence.setVisibility(View.GONE);
+                            // TODO hide
+                            imageButtoncheckbox.setVisibility(View.GONE);
+                            imageButtonsquence.setVisibility(View.GONE);
 
-							if (allCheckboxText.size() > 0)
-								allCheckboxText.remove(0);
+                            if (allCheckboxText.size() > 0)
+                                allCheckboxText.remove(0);
 
-							allCheckboxText.add((EditText) v);
-						}
-					});
+                            allCheckboxText.add((EditText) v);
+                        }
+                    });
 
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 
-	public void addAudio(String name) {
+    public void addAudio(String name) {
 		/*noteElements = (LinearLayout) findViewById(R.id.noteElements);
 		LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
 		View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
@@ -4713,65 +4690,65 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			}
 		});
 		noteElements.addView(note_audio);*/
-	}
+    }
 
-	void showDeleteAlert(final String tag, Context context) {
+    void showDeleteAlert(final String tag, Context context) {
 
-		final Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(context);
 
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		View contentView = inflater.inflate(R.layout.alert_view, null, false);
+        View contentView = inflater.inflate(R.layout.alert_view, null, false);
 
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("ALERT");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-		TextView textViewTitleAlertMessage = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlertMessage);
-		textViewTitleAlertMessage.setText("ARE YOU SURE WANT TO DELETE THIS ITEM?");
+        TextView textViewTitleAlert = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("ALERT");
+        textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlertMessage = (TextView) contentView
+                .findViewById(R.id.textViewTitleAlertMessage);
+        textViewTitleAlertMessage.setText("ARE YOU SURE WANT TO DELETE THIS ITEM?");
 
-		Button buttonAlertCancel = (Button) contentView
-				.findViewById(R.id.buttonAlertCancel);
-		Button buttonAlertOk = (Button) contentView
-				.findViewById(R.id.buttonAlertOk);
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
-			}
-		});
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				//dialog.dismiss();
-				deleteElements(tag);
-				dialog.dismiss();
-			}
-		});
+        Button buttonAlertCancel = (Button) contentView
+                .findViewById(R.id.buttonAlertCancel);
+        Button buttonAlertOk = (Button) contentView
+                .findViewById(R.id.buttonAlertOk);
+        buttonAlertCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                dialog.dismiss();
+            }
+        });
+        buttonAlertOk.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                //dialog.dismiss();
+                deleteElements(tag);
+                dialog.dismiss();
+            }
+        });
 
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(true);
-		dialog.setContentView(contentView);
-		dialog.show();
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(contentView);
+        dialog.show();
 
-	}
+    }
 
-	public void deleteButton(){
-		if(!isDeleteModeSelected) {
-			imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-			for (int i = 0; i < allDelete.size(); i++) {
-				allDelete.get(i).setVisibility(View.VISIBLE);
-			}
-			isDeleteModeSelected = true;
-		}else{
-			imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
-			for (int i = 0; i < allDelete.size(); i++) {
-				allDelete.get(i).setVisibility(View.GONE);
-			}
-			isDeleteModeSelected = false;
-		}
-	}
+    public void deleteButton() {
+        if (!isDeleteModeSelected) {
+            imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+            for (int i = 0; i < allDelete.size(); i++) {
+                allDelete.get(i).setVisibility(View.VISIBLE);
+            }
+            isDeleteModeSelected = true;
+        } else {
+            imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+            for (int i = 0; i < allDelete.size(); i++) {
+                allDelete.get(i).setVisibility(View.GONE);
+            }
+            isDeleteModeSelected = false;
+        }
+    }
 
 }

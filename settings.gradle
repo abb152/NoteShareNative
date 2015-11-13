@@ -1,3 +1,2 @@
 include ':app'
-include ':app:libs:ColorPickerSeekBar'
 include ':app:libs:cropper'

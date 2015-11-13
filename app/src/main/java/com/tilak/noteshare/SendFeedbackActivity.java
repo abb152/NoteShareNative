@@ -113,6 +113,7 @@ public class SendFeedbackActivity extends DrawerActivity {
 		Config con = Config.findById(Config.class, 1L);
 		//String email = con.email;
 		String message = textViewFeedbackText.getText().toString();
+		String serverId = LoginActivity.responseServerId;
 
 		Log.e("jay in getServerData","");
 		ArrayList<String> stringData = new ArrayList<String>();
@@ -121,7 +122,8 @@ public class SendFeedbackActivity extends DrawerActivity {
 		HttpPost postMethod = new HttpPost("http://104.197.122.116/feed/save");
 
 		JSONObject json = new JSONObject();
-		json.put("user", "56120af8a89c4c8f043a0285");
+		//json.put("user", "56120af8a89c4c8f043a0285");
+		json.put("user", serverId);
 		//json.put("email", email);
 		json.put("text", message);
 		//postMethod.setHeader("Content-Type", "application/json" );
