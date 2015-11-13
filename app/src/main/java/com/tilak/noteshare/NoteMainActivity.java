@@ -3403,10 +3403,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         final TextView tvHighlightSize = (TextView) layoutHighlight.findViewById(R.id.tvHighlightSize);
-        String hsize = String.valueOf(10 + (lastHighlightSize * 2));
+        String hsize = String.valueOf(lastHighlightSize);
         tvHighlightSize.setText(hsize);
         SeekBar hightlight_sizeSeekBar = (SeekBar) layoutHighlight.findViewById(R.id.hightlight_sizeSeekBar);
-        hightlight_sizeSeekBar.setMax(14);
+        hightlight_sizeSeekBar.setMax(10);
         hightlight_sizeSeekBar.setProgress(lastHighlightSize);
         highlightview = layoutHighlight.findViewById(R.id.aview);
         LayerDrawable bgDrawable = (LayerDrawable) highlightview.getBackground();
@@ -3418,12 +3418,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 lastHighlightSize = progress;
-                drawView.setBrushSize(10 + (progress * 2));
+                drawView.setBrushSize((int)(progress * 6.299));
                 drawView.setDrawColor(lastHighlightColor);
-                String esize = String.valueOf(10 + (lastHighlightSize * 2));
+                String esize = String.valueOf(lastHighlightSize);
                 tvHighlightSize.setText(esize);
                 //highlightViewSize = (lastHighlightSize * 4 + 20);
-                highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
+                highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(progress * 6.299), getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
                 params.gravity = Gravity.CENTER;
                 highlightview.setLayoutParams(params);
@@ -3540,7 +3540,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         SeekBar sizeSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.sizeSeekBar);
-        sizeSeekBar.setMax(14);
+        sizeSeekBar.setMax(10);
         sizeSeekBar.setProgress(lastBrushSize);
 
         brushview = layoutBrush.findViewById(R.id.view);
@@ -3550,7 +3550,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         brushview.setBackground(brushshape);
 
         if (count == 0) {
-            drawView.setBrushSize(10 + (lastBrushSize * 2));
+            drawView.setBrushSize((int)(lastBrushSize * 6.299));
             drawView.setDrawColor(Color.parseColor("#000000"));
             lastBrushColor = Color.BLACK;
             brushshape.setColor(lastBrushColor);
@@ -3558,9 +3558,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
 
         final TextView tvBrushSize = (TextView) scribbleDialog.findViewById(R.id.tvBrushSize);
-        String size = String.valueOf(10 + (lastBrushSize * 2));
+        String size = String.valueOf(lastBrushSize);
         tvBrushSize.setText(size);
-        drawView.setBrushSize(10 + (lastBrushSize * 2));
+        drawView.setBrushSize((int)(lastBrushSize * 6.299));
 
         if (count > 0) {
             brushview.setBackgroundColor(color_selected);
@@ -3570,11 +3570,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 lastBrushSize = progress;
-                drawView.setBrushSize(10 + (progress * 2));
-                String tvsize = String.valueOf(10 + (lastBrushSize * 2));
+                drawView.setBrushSize((int)(progress * 6.299));
+                String tvsize = String.valueOf(lastBrushSize);
                 tvBrushSize.setText(tvsize);
                 //brushViewSize = (lastBrushSize * 4 + 20);
-                brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
+                brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(progress * 6.299), getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
                 params.gravity = Gravity.CENTER;
                 brushview.setLayoutParams(params);
@@ -3592,11 +3592,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         // Eraser
         SeekBar sizeEraserSeekBar = (SeekBar) scribbleDialog.findViewById(R.id.eraser_sizeSeekBar);
-        sizeEraserSeekBar.setMax(14);
+        sizeEraserSeekBar.setMax(10);
         sizeEraserSeekBar.setProgress(lastEraserSize);
 
         final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
-        String esize = String.valueOf(10 + (lastEraserSize * 2));
+        String esize = String.valueOf(lastEraserSize);
         tvEraserSize.setText(esize);
 
         eraserview = layoutEraser.findViewById(R.id.eraser_view);
@@ -3608,12 +3608,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 lastEraserSize = progress;
-                drawView.setBrushSize(10 + (progress * 2));
+                drawView.setBrushSize((int)(progress * 6.299));
                 drawView.setDrawColor(lastBrushColor);
-                String esize = String.valueOf(10 + (lastEraserSize * 2));
+                String esize = String.valueOf(lastEraserSize);
                 tvEraserSize.setText(esize);
                 //eraserViewSize = (lastEraserSize * 4 + 20);
-                eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10 + (progress * 2), getResources().getDisplayMetrics());
+                eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(progress * 6.299), getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
                 params.gravity = Gravity.CENTER;
                 eraserview.setLayoutParams(params);
@@ -3648,7 +3648,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             String color = view.getTag().toString();
             lastBrushColor = Color.parseColor(color);
             drawView.setDrawColor(lastBrushColor);
-            drawView.setBrushSize(10 + (lastBrushSize * 2));
+            drawView.setBrushSize((int)(lastBrushSize * 6.299));
             brushshape.setColor(lastBrushColor);
             brushview.setBackground(brushshape);
             count++;
@@ -3658,7 +3658,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     // TODO open highlight
     public void openHighlight() {
         drawView.onClickEraser(1);
-        drawView.setBrushSize(10 + (lastHighlightSize * 2));
+        drawView.setBrushSize((int)(lastHighlightSize * 6.299));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
         params.gravity = Gravity.CENTER;
         highlightview.setLayoutParams(params);
@@ -3676,7 +3676,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void openBrush() {
         drawView.onClickEraser(1);
         drawView.setDrawColor(lastBrushColor);
-        drawView.setBrushSize(10 + (lastBrushSize * 2));
+        drawView.setBrushSize((int)(lastBrushSize * 6.299));
         brushview.setBackgroundColor(lastBrushColor);
         brushshape.setColor(lastBrushColor);
         brushview.setBackground(brushshape);
@@ -3697,7 +3697,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         //drawView.setDrawColor(Color.parseColor("#FFFFFF"));
         drawView.setDrawColor(Color.WHITE);
         drawView.onClickEraser(0);
-        drawView.setBrushSize(10 + (lastEraserSize * 2));
+        drawView.setBrushSize((int)(lastEraserSize * 6.299));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
         params.gravity = Gravity.CENTER;
         eraserview.setLayoutParams(params);
@@ -3948,28 +3948,38 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     public void paperButtonSelected(View view) {
-        if (view.getId() == R.id.paper_bg_1) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_1);
-        } else if (view.getId() == R.id.paper_bg_2) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_2);
-        } else if (view.getId() == R.id.paper_bg_3) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_3);
-        } else if (view.getId() == R.id.paper_bg_4) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_4);
-        } else if (view.getId() == R.id.paper_bg_5) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_5);
-        } else if (view.getId() == R.id.paper_bg_6) {
-            background_bg.setBackgroundResource(R.drawable.paper_bg_6);
-        }/* else if (view.getId() == R.id.paper_bg_7) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_7);
-		} else if (view.getId() == R.id.paper_bg_8) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_8);
-		} else if (view.getId() == R.id.paper_bg_9) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_9);
-		} else if (view.getId() == R.id.paper_bg_10) {
-			background_bg.setBackgroundResource(R.drawable.paper_bg_10);
-		}*/
 
+        paperBackground(view.getTag().toString());
+
+        String viewTag = view.getTag().toString();
+
+        if (noteIdForDetails == null) {
+            makeNote();
+        }
+
+        if (noteIdForDetails != null) {
+            Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+            note.setColor(viewTag);
+            note.setModificationtime(currentDateStr);
+            note.save();
+        }
+
+    }
+
+    public void paperBackground(String background) {
+        if (background.equals("paper_bg_1")) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_1);
+        } else if (background.equals("paper_bg_2")) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_2);
+        } else if (background.equals("paper_bg_3")) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_3);
+        } else if (background.equals("paper_bg_4")) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_4);
+        } else if (background.equals("paper_bg_5")) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_5);
+        } else if (background.equals("paper_bg_6")) {
+            background_bg.setBackgroundResource(R.drawable.paper_bg_6);
+        }
     }
 
 	/*private String getNextFileName() {
@@ -4284,7 +4294,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             textViewheaderTitle.setText(note.getTitle());
 
             String background = note.getColor();
-            background_bg.setBackgroundColor(Color.parseColor(background));
+
+            if (background.contains("#")){
+                background_bg.setBackgroundColor(Color.parseColor(background));
+            } else {
+                paperBackground(background);
+            }
 
             for (final NoteElement n : ne) {
                 if (n.type.equals("text")) {

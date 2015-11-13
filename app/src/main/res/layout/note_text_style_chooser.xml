@@ -233,7 +233,7 @@
                 android:background="#d0d0d0"
                  android:layout_weight="1"
                android:src="@drawable/paper_1"
-                android:tag="#96ceee" />
+                android:tag="paper_bg_1" />
 
             <ImageButton
                 android:id="@+id/paper_bg_2"
@@ -244,7 +244,7 @@
                 android:background="#d0d0d0"
                  android:layout_weight="1"
                 android:src="@drawable/paper_2"
-                android:tag="#fae8ce" />
+                android:tag="paper_bg_2" />
 
             <ImageButton
                 android:id="@+id/paper_bg_3"
@@ -255,7 +255,7 @@
                 android:background="#d0d0d0"
                  android:layout_weight="1"
                 android:src="@drawable/paper_3"
-                android:tag="#97e1cc" />
+                android:tag="paper_bg_3" />
 
             <ImageButton
                 android:id="@+id/paper_bg_4"
@@ -266,7 +266,7 @@
                 android:background="#d0d0d0"
                  android:layout_weight="1"
                 android:src="@drawable/paper_4"
-                android:tag="#fdff7f" />
+                android:tag="paper_bg_4" />
 
             <ImageButton
                 android:id="@+id/paper_bg_5"
@@ -275,9 +275,9 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="#d0d0d0"
-                 android:layout_weight="1"
+                android:layout_weight="1"
                 android:src="@drawable/paper_5"
-                android:tag="#9fdb86" />
+                android:tag="paper_bg_5" />
 
             <ImageButton
                 android:id="@+id/paper_bg_6"
@@ -288,7 +288,7 @@
                 android:background="#d0d0d0"
                 android:layout_weight="1"
                 android:src="@drawable/paper_5"
-                android:tag="#9fdb86" />
+                android:tag="paper_bg_6" />
 
         </LinearLayout>
 
