@@ -44,7 +44,7 @@
                 android:padding="5dp"
                 android:background="@drawable/circular_view"
                 android:scaleType="fitXY"
-                android:src="@drawable/gallary_icon_1" />
+                android:src="@drawable/gallary_icon" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

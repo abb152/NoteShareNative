@@ -1052,16 +1052,13 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void delete(String id){
-
 		Note n = Note.findById(Note.class, Long.parseLong(id));
 		n.delete();
 		onRestart();
-
 	}
 
 	public void deleteNote(View v){
 		listView.closeAnimate(lastItemOpened[0]);
-
 		String id = v.getTag().toString();
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();

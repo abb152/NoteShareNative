@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -141,6 +142,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     ProgressBar progressRecord;
     SeekBar progressRecord1;
 
+    public MainActivity mainActivity = new MainActivity();
+
     // /Drawing Controls
     RelativeLayout LayoutAudioRecording;
     ImageButton bold = null, italic = null, underline = null, h1 = null, h2 = null, h3 = null, h4 = null, h5 = null, h6 = null, align_left = null, align_center = null, align_right = null, redo = null, undo = null;
@@ -156,7 +159,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     View contentView;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String currentDateStr = formatter.format(new Date());
-    LinearLayout background_bg;
+    RelativeLayout background_bg;
     Uri mMediaUri;
     Dialog scribbleDialog;
     View highlightview, brushview, eraserview;
@@ -481,8 +484,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         currentFontTypeface = NoteShareFonts.arial;
         currentFontColor = Color.BLACK;
 
-        background_bg = (LinearLayout) contentview
-                .findViewById(R.id.noteElements);
+        background_bg = (RelativeLayout) contentview
+                .findViewById(R.id.background_bg);
         layoutHeader = (RelativeLayout) contentview
                 .findViewById(R.id.mainHeadermenue);
         imageButtoncalander = (ImageButton) layoutHeader
@@ -1341,8 +1344,26 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	.findViewById(R.id.buttonLock);
 	Button buttonDelete = (Button) layout_note_more_Info
 	.findViewById(R.id.buttonDelete);*/
+        Button buttonLock = (Button) layout_note_more_Info
+                .findViewById(R.id.buttonLock);
+        Button buttonTimebomb = (Button) layout_note_more_Info
+                .findViewById(R.id.buttonTimebomb);
         Button buttonRemind = (Button) layout_note_more_Info
-                .findViewById(R.id.btnRemind);
+                .findViewById(R.id.buttonRemind);
+        Button buttonMove = (Button) layout_note_more_Info
+                .findViewById(R.id.buttonMove);
+        Button buttonDelete = (Button) layout_note_more_Info
+                .findViewById(R.id.buttonDelete);
+        Button buttonShare = (Button) layout_note_more_Info
+                .findViewById(R.id.buttonShare);
+
+        buttonLock.setTag(noteIdForDetails);
+        buttonTimebomb.setTag(noteIdForDetails);
+        buttonRemind.setTag(noteIdForDetails);
+        buttonMove.setTag(noteIdForDetails);
+        buttonDelete.setTag(noteIdForDetails);
+        buttonShare.setTag(noteIdForDetails);
+
 	/*Button buttonTimeBomb = (Button) layout_note_more_Info
 	.findViewById(R.id.buttonTimeBomb);
 	Button buttonAttach = (Button) layout_note_more_Info
@@ -1360,6 +1381,42 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	System.out.println("button delete");
 	}
 	});*/
+
+        /*buttonLock.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.passCode(v);
+            }
+        });
+
+        buttonMove.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.move(v);
+            }
+        });
+
+        buttonDelete.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.deleteNote(v);
+            }
+        });
+
+        buttonTimebomb.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.timeBomb(v);
+            }
+        });
+
+        buttonShare.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Share
+            }
+        });*/
+
         buttonRemind.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -1376,9 +1433,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 			int mId = 0;
 			mNotificationManager.notify(mId, mBuilder.build());*/
                 showDate(NoteMainActivity.this);
-
             }
         });
+
 	/*buttonTimeBomb.setOnClickListener(new OnClickListener() {
 	@Override
 	public void onClick(View arg0) {
@@ -1392,6 +1449,19 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	}
 	});
 */
+    }
+
+    public void move (View v) {
+        //String noteid = v.getTag().toString();
+        String note_id = noteIdForDetails;
+        mainActivity.showMenuAlert(this, note_id);
+    }
+
+    public void timebomb (View v) {
+        //String id = v.getTag().toString();
+        /*String id = v.getTag().toString();
+        mainActivity.showDate(this, noteIdForDetails);*/
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     /************* Erase control Here ************/
@@ -1679,6 +1749,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             try {
                                 checkBoxValue.remove("status");
                                 checkBoxValue.put("status", 0);
+                                checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -1688,6 +1759,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             try {
                                 checkBoxValue.remove("status");
                                 checkBoxValue.put("status", 1);
+                                checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -4556,16 +4628,20 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     checklistDelete.setTag(n.getId());
                     checklist_icon.setTag(status);
 
-                    if (status.equals("1"))
-                        checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
-                    else
-                        checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
-
                     final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
 
                     checklist_text.setText(text);
                     //checklist_text.setTag(allCheckboxText.size()-1);
                     noteElements.addView(checkbox);
+
+                    if (status.equals("1")) {
+                        checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+                        checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    }
+                    else {
+                        checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+                        checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    }
 
                     checklistDelete.setOnClickListener(new OnClickListener() {
                         @Override
@@ -4612,6 +4688,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                 try {
                                     finalCheckBoxJson.remove("status");
                                     finalCheckBoxJson.put("status", 0);
+                                    checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -4621,6 +4698,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                 try {
                                     finalCheckBoxJson.remove("status");
                                     finalCheckBoxJson.put("status", 1);
+                                    checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
