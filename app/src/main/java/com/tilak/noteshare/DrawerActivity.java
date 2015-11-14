@@ -6,9 +6,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -70,9 +70,9 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		}*/
 
 		String strresponse = loadJSONFromAsset();
+		Log.e("jay json", strresponse);
 		try {
 			JSONObject jsonObject = new JSONObject(strresponse);
-
 			menu = new SlideMenu(jsonObject);
 
 		} catch (JSONException e) {
@@ -86,49 +86,50 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		arrMenuTitle = menu.getSideMenuitems();
 		arrMenu = new ArrayList<SideMenuitems>();
 
+		Log.e("jay arrMenuTitle", arrMenuTitle.toString());
+		Log.e("jay size", String.valueOf(arrMenuTitle.size()));
 		for (int i = 0; i < arrMenuTitle.size(); i++) {
 			SideMenuitems items = arrMenuTitle.get(i);
 			int menuid = Integer.parseInt(items.getMenuid());
 			switch (menuid) {
-
-			case 2:
-				items.setResourceId(R.drawable.check_list_icon);
-				break;
-			case 1:
-				items.setResourceId(R.drawable.note_menu_icon);
-				break;
-			case 3:
-				items.setResourceId(R.drawable.folder_icon);
-				break;
-			case 4:
-				items.setResourceId(R.drawable.about_us_icon);
-				break;
-			case 5:
-				items.setResourceId(R.drawable.termsandcondition_icon);
-				break;
-			case 6:
-				items.setResourceId(R.drawable.notification_icon);
-				break;
-			case 7:
-				items.setResourceId(R.drawable.rate_us_icon);
-				break;
-			case 8:
-				items.setResourceId(R.drawable.likeus_on_icon);
-				break;
-			case 9:
-				items.setResourceId(R.drawable.send_feedback_icon);
-				break;
-			case 10:
-				items.setResourceId(R.drawable.invite_icon);
-				break;
-			case 11:
-				items.setResourceId(R.drawable.setting_icon);
-				break;
-			case 12:
-				items.setResourceId(R.drawable.logout_icon);
-				break;
-			default:
-				break;
+				case 1:
+					items.setResourceId(R.drawable.note_menu_icon);
+					break;
+				case 2:
+					items.setResourceId(R.drawable.folder_icon);
+					break;
+				/*case 3:
+					items.setResourceId(R.drawable.folder_icon);
+					break;*/
+				/*case 4:
+					items.setResourceId(R.drawable.about_us_icon);
+					break;
+				case 5:
+					items.setResourceId(R.drawable.termsandcondition_icon);
+					break;*/
+				case 3:
+					items.setResourceId(R.drawable.notification_icon);
+					break;
+				/*case 7:
+					items.setResourceId(R.drawable.rate_us_icon);
+					break;
+				case 8:
+					items.setResourceId(R.drawable.likeus_on_icon);
+					break;
+				case 9:
+					items.setResourceId(R.drawable.send_feedback_icon);
+					break;
+				case 10:
+					items.setResourceId(R.drawable.invite_icon);
+					break;*/
+				case 4:
+					items.setResourceId(R.drawable.setting_icon);
+					break;
+				case 5:
+					items.setResourceId(R.drawable.logout_icon);
+					break;
+				default:
+					break;
 			}
 			arrMenu.add(items);
 
@@ -198,88 +199,36 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			int menuid = Integer.parseInt(modeldata.getMenuid());
 
 			switch (menuid) {
-			case 2: {
-				// openinitilaActivity(0);
-				System.out.println("check list");
-				startActivity(new Intent(this, CheckListActivity.class));
-				// finish();
-			}
+				case 1: {
+					System.out.println("notes");
+					openinitilaActivity(0);
+				}
 				break;
-
-			case 1: {
-				System.out.println("notes");
-				openinitilaActivity(0);
-			}
+				case 2: {
+					// openinitilaActivity(0);
+					System.out.println("folder");
+					startActivity(new Intent(this, NewFolderMainActivity.class));
+					// finish();
+				}
 				break;
-			case 3: {
-				System.out.println("folder");
-				startActivity(new Intent(this, NewFolderMainActivity.class));
-				//finish();
-			}
+				case 3: {
+					System.out.println("notification center");
+					startActivity(new Intent(this, NotificationCenterActivity.class));
+					//finish();
+				}
 				break;
-
-			case 4: {
-				System.out.println("about note share");
-				startActivity(new Intent(this, AboutNoteShareActivity.class));
-				//finish();
-			}
+				case 4: {
+					System.out.println("setting");
+					startActivity(new Intent(this, SettingActivity.class));
+					//finish();
+				}
 				break;
-			case 5: {
-				System.out.println("terms and conditions");
-				startActivity(new Intent(this, TermsAndConditionsActivity.class));
-				//finish();
-			}
+				case 5: {
+					System.out.println("logout");
+					showAlertWith("ARE YOU SURE?", "Are you sure you want to Log Out?", DrawerActivity.this);
+				}
 				break;
-			case 6: {
-				System.out.println("notification center");
-				startActivity(new Intent(this, NotificationCenterActivity.class));
-				//finish();
-			}
-				break;
-			case 7: {
-				System.out.println("rate us");
-				startActivity(new Intent(this, RateUsActivity.class));
-				//finish();
-			}
-				break;
-			case 8: {
-				System.out.println("like us on facebook");
-				//startActivity(new Intent(this, LikeUsOnFacebookActivity.class));
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/wohlig/"));
-				startActivity(browserIntent);
-				//finish();
-			}
-				break;
-			case 9: {
-				System.out.println("send feed back");
-				startActivity(new Intent(this, SendFeedbackActivity.class));
-				 finish();
-			}
-				break;
-			case 10: {
-				System.out.println("invites friends");
-				//startActivity(new Intent(this, InviteFriendsActivity.class));
-				//finish();
-				Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
-				Intent share = new Intent(Intent.ACTION_SEND);
-				share.setType("image/*");
-				share.putExtra(Intent.EXTRA_STREAM, uri);
-				share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
-				startActivity(Intent.createChooser(share, "Invite your friends"));
-			}
-				break;
-			case 11: {
-				System.out.println("setting");
-				startActivity(new Intent(this, SettingActivity.class));
-				//finish();
-			}
-				break;
-			case 12: {
-				System.out.println("logout");
-				showAlertWith("ARE YOU SURE?", "Are you sure you want to Log Out?", DrawerActivity.this);
-			}
-				break;
-			default: {}
+				default: {}
 				break;
 			}
 		}
