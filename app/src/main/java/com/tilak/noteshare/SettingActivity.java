@@ -2,6 +2,7 @@ package com.tilak.noteshare;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ public class SettingActivity extends DrawerActivity {
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
 	public TextView textheadertitle,textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
-
+	public TextView tvAbout, tvInvite, tvLikeFacebook, tvFeedback, tvTerms;
 
 protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -37,6 +38,11 @@ void  initlizeUIElement(View contentView)
 	//mainHeadermenue
 	layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
 	btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
+	tvAbout = (TextView) findViewById(R.id.tvAbout);
+	tvInvite = (TextView) findViewById(R.id.tvInvite);
+	tvLikeFacebook = (TextView) findViewById(R.id.tvLikeFacebook);
+	tvFeedback = (TextView) findViewById(R.id.tvFeedback);
+	tvTerms = (TextView) findViewById(R.id.tvTerms);
 	
 	/*btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
 	btncalander=(ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
@@ -63,20 +69,59 @@ void  initlizeUIElement(View contentView)
 	}
 }
 
-@Override
-public void addListners() {
-	// TODO Auto-generated method stub
-	super.addListners();
-	btnheaderMenu.setOnClickListener(new OnClickListener() {
+	@Override
+	public void addListners() {
+		// TODO Auto-generated method stub
+		super.addListners();
+		btnheaderMenu.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				openSlideMenu();
+			}
+		});
 
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			openSlideMenu();
-		}
-	});
-	
-}
+		tvAbout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(SettingActivity.this, AboutNoteShareActivity.class));
+			}
+		});
+
+		tvInvite.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
+				Intent share = new Intent(Intent.ACTION_SEND);
+				share.setType("image/*");
+				share.putExtra(Intent.EXTRA_STREAM, uri);
+				share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
+				startActivity(Intent.createChooser(share, "Invite friends"));
+			}
+		});
+
+		tvLikeFacebook.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/wohlig/")));
+			}
+		});
+
+		tvFeedback.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(SettingActivity.this, SendFeedbackActivity.class));
+			}
+		});
+
+		tvTerms.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(SettingActivity.this, TermsAndConditionsActivity.class));
+			}
+		});
+
+	}
 	public void setPasscode(View v){
 		Config con = Config.findById(Config.class, 1L);
 		if (con.getPasscode() == 0) {
