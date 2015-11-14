@@ -1453,15 +1453,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     public void move (View v) {
         //String noteid = v.getTag().toString();
-        String note_id = noteIdForDetails;
-        mainActivity.showMenuAlert(this, note_id);
+        /*String note_id = noteIdForDetails;
+        mainActivity.showMenuAlert(this, note_id);*/
     }
 
     public void timebomb (View v) {
         //String id = v.getTag().toString();
         /*String id = v.getTag().toString();
         mainActivity.showDate(this, noteIdForDetails);*/
-        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     /************* Erase control Here ************/

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tilak.db.Config;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class SettingActivity extends DrawerActivity {
 
-	public RelativeLayout layoutHeder;
+	public LinearLayout layoutHeder;
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
 	public TextView textheadertitle,textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
@@ -36,22 +35,25 @@ protected void onCreate(Bundle savedInstanceState) {
 void  initlizeUIElement(View contentView)
 {
 	//mainHeadermenue
-	layoutHeder=(RelativeLayout) contentView.findViewById(R.id.mainHeadermenue);
+	layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
 	btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
 	
-	btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
+	/*btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
 	btncalander=(ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
 	btncalander.setVisibility(View.GONE);
-	btnsequence.setVisibility(View.GONE);
+	btnsequence.setVisibility(View.GONE);*/
 	
 	///textheadertitle=(TextView) layoutHeder.findViewById(R.id.textViewheaderTitle);
 	//textheadertitle.setText("");
 	
 	
-	layoutTitleHeaderview=(LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
+	/*layoutTitleHeaderview=(LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
 	textViewSubHeaderTitle=(TextView) layoutTitleHeaderview.findViewById(R.id.textViewHeaderTitle1);
-	textViewSubHeaderTitle.setText("Settings");
-	
+	textViewSubHeaderTitle.setText("Settings");*/
+
+	/*Button b = (Button) findViewById(R.id.syncButton);
+	b.setText(Html.fromHtml("Auto Sync<br><span style=\"color: #cccccc; font-size: 14px;\">Last Sync:<span>"));*/
+
 	addListners();
 
 	List<Config> config = Config.listAll(Config.class);

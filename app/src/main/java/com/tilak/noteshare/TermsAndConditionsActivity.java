@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 public class TermsAndConditionsActivity extends DrawerActivity {
-	public RelativeLayout layoutHeder;
+	public LinearLayout layoutHeder;
 	public ImageButton btnheaderMenu, btnsequence, btncalander;
 	public LinearLayout layoutTitleHeaderview;
 
@@ -27,12 +26,12 @@ public class TermsAndConditionsActivity extends DrawerActivity {
 
 	void initlizeUIElement(View contentView) {
 		// mainHeadermenue
-		layoutHeder = (RelativeLayout) contentView
-				.findViewById(R.id.mainHeadermenue);
+		layoutHeder = (LinearLayout) contentView
+				.findViewById(R.id.actionBar);
 		btnheaderMenu = (ImageButton) layoutHeder
 				.findViewById(R.id.imageButtonHamburg);
 
-		btnsequence = (ImageButton) layoutHeder
+		/*btnsequence = (ImageButton) layoutHeder
 				.findViewById(R.id.imageButtonsquence);
 		btncalander = (ImageButton) layoutHeder
 				.findViewById(R.id.imageButtoncalander);
@@ -44,7 +43,7 @@ public class TermsAndConditionsActivity extends DrawerActivity {
 		// textheadertitle.setText("");
 
 		layoutTitleHeaderview = (LinearLayout) contentView
-				.findViewById(R.id.titleHeaderview1);
+				.findViewById(R.id.titleHeaderview1);*/
 
 		addListners();
 	}

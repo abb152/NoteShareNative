@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SendFeedbackActivity extends DrawerActivity {
-	public RelativeLayout layoutHeder;
+	public LinearLayout layoutHeder;
 	public ImageButton btnheaderMenu, btnsequence, btncalander;
 	public TextView textheadertitle, textViewSubHeaderTitle;
 	public EditText textViewFeedbackText;
@@ -57,10 +56,10 @@ public class SendFeedbackActivity extends DrawerActivity {
 
 	void initlizeUIElement(View contentView) {
 		//mainHeadermenue
-		layoutHeder = (RelativeLayout) contentView.findViewById(R.id.mainHeadermenue);
+		layoutHeder = (LinearLayout) contentView.findViewById(R.id.actionBar);
 		btnheaderMenu = (ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
 
-		btnsequence = (ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
+		/*btnsequence = (ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
 		btncalander = (ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
 		btncalander.setVisibility(View.GONE);
 		btnsequence.setVisibility(View.GONE);
@@ -74,7 +73,7 @@ public class SendFeedbackActivity extends DrawerActivity {
 
 		layoutTitleHeaderview = (LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
 		textViewSubHeaderTitle = (TextView) layoutTitleHeaderview.findViewById(R.id.textViewHeaderTitle1);
-		textViewSubHeaderTitle.setText("Send Feedback");
+		textViewSubHeaderTitle.setText("Send Feedback");*/
 
 		btSubmit = (Button) findViewById(R.id.btSubmit);
 

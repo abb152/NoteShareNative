@@ -73,7 +73,6 @@
         android:padding="5dp"
         android:visibility="gone"
         android:src="@drawable/note_header_icon"
-        android:textColor="@android:color/holo_blue_dark"
-         />
+        android:textColor="@android:color/holo_blue_dark" />
 
 </RelativeLayout>
