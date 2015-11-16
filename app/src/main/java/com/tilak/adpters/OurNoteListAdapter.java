@@ -9,6 +9,7 @@ import android.widget.AbsListView.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,10 +26,10 @@ public class OurNoteListAdapter extends BaseAdapter {
     Activity activity;
     TextView noteDesc;
 
-    public OurNoteListAdapter(Activity activity,ArrayList<HashMap<String,String>> list, String listwiew){
+    public OurNoteListAdapter(Activity activity, ArrayList<HashMap<String,String>> list, String listwiew){
         super();
-        this.activity=activity;
-        this.list=list;
+        this.activity = activity;
+        this.list = list;
         this.listview = listwiew;
     }
 
@@ -50,7 +51,8 @@ public class OurNoteListAdapter extends BaseAdapter {
     private class ViewHolder{
         //all the fields in layout specified
         TextView txtNoteName,txtNoteDesc,txtNoteDate, tvIdHidden;
-        ImageButton btnLock, btnTimebomb, btnMove, btnDelete ,btnShare;
+        ImageButton btnLock, btnTimebomb, btnMove, btnDelete, btnShare, btnRemind;
+        ImageView isLockedIcon;
         LinearLayout linearLayout;
         LinearLayout main;
         Button btn3;
@@ -73,6 +75,7 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.txtNoteName = (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
             holder.txtNoteDesc = (TextView) convertView.findViewById(R.id.tvNoteDesc);
             holder.txtNoteDate = (TextView) convertView.findViewById(R.id.tvNoteDate);
+            holder.isLockedIcon = (ImageView) convertView.findViewById(R.id.isLockedIcon);
 
             //holder.btn3 = (Button) convertView.findViewById(R.id.btn3); // remove this
 
@@ -84,7 +87,6 @@ public class OurNoteListAdapter extends BaseAdapter {
                 holder.txtNoteDesc.setVisibility(View.GONE);
                 holder.txtNoteDate.setVisibility(View.GONE);
                 holder.linearLayout.setPadding(20, 30, 20, 20);
-
             }
             if(listview == "detail"){
                 //holder.txtNoteName.setHeight(50);
@@ -97,13 +99,12 @@ public class OurNoteListAdapter extends BaseAdapter {
 
             if(listview != "grid") {
                 holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdHidden);
-
                 holder.btnLock = (ImageButton) convertView.findViewById(R.id.btnlock);
                 holder.btnTimebomb = (ImageButton) convertView.findViewById(R.id.btntimebomb);
                 holder.btnMove = (ImageButton) convertView.findViewById(R.id.btnmove);
                 holder.btnDelete = (ImageButton) convertView.findViewById(R.id.btndelete);
                 holder.btnShare = (ImageButton) convertView.findViewById(R.id.btnshare);
-
+                holder.btnRemind = (ImageButton) convertView.findViewById(R.id.btnRemind);
             }
             convertView.setTag(holder);
         }else{
@@ -124,17 +125,17 @@ public class OurNoteListAdapter extends BaseAdapter {
 
         if(map.get("noteLock").equalsIgnoreCase("1") && listview!="grid"){
             holder.btnLock.setImageResource(R.drawable.image_option_unlock);
+            holder.isLockedIcon.setVisibility(View.VISIBLE);
         }
 
         if(listview != "grid") {
             holder.tvIdHidden.setText(map.get("noteId"));
-
             holder.btnLock.setTag(map.get("noteId"));
             holder.btnTimebomb.setTag(map.get("noteId"));
             holder.btnMove.setTag(map.get("noteId"));
             holder.btnDelete.setTag(map.get("noteId"));
             holder.btnShare.setTag(map.get("noteId"));
-
+            holder.btnRemind.setTag(map.get("noteId"));
         }
 
         return convertView;

@@ -53,6 +53,17 @@
             android:onClick="timeBomb"/>
 
         <ImageButton
+            android:id="@+id/btnRemind"
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/image_option_reminder"
+            android:onClick="remind"/>
+
+        <ImageButton
             android:id="@+id/btnmove"
             android:layout_width="15dp"
             android:layout_height="match_parent"

@@ -31,12 +31,10 @@ import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.tilak.adpters.NoteFolderAdapter;
 import com.tilak.adpters.NoteFolderGridAdapter;
-import com.tilak.adpters.OurMoveMenuAdapter;
 import com.tilak.adpters.OurNoteListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Config;
-import com.tilak.db.Folder;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
@@ -84,7 +82,7 @@ public class MainActivity extends DrawerActivity {
 	public LinearLayout textNoteSort, textNoteView;
 	
 	public SORTTYPE sortType;
-	public NoteFunctions noteFunctions;
+	public NoteFunctions noteFunctions = new NoteFunctions();
 
 	private ArrayList<HashMap<String,String>> list;
 	public Dialog dialogColor;
@@ -723,11 +721,10 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     public void onBackPressed() {
-        showAlertWith("QUIT THE APP", "Are you sure, Do you want to quit the app?",
-				MainActivity.this, "exit", "");
+        showAlertWith(this);
     }
 
-    void showAlertWith(String title, String message, Context context, final String type, final String id) {
+    void showAlertWith(Context context) {
 
         final Dialog dialog = new Dialog(context);
 
@@ -738,11 +735,11 @@ public class MainActivity extends DrawerActivity {
 
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText(title);
+        textViewTitleAlert.setText("QUIT THE APP");
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlertMessage);
-        textViewTitleAlertMessage.setText(message);
+        textViewTitleAlertMessage.setText("Are you sure, Do you want to quit the app?");
 
         Button buttonAlertCancel = (Button) contentView
                 .findViewById(R.id.buttonAlertCancel);
@@ -757,22 +754,14 @@ public class MainActivity extends DrawerActivity {
             }
         });
         buttonAlertOk.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
-				if (type.equals("exit")) {
-					System.exit(0);
-				}
-				if (type.equals("delete")){
-					delete(id);
-					dialog.dismiss();
-				}
+				System.exit(0);
             }
         });
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
-
         dialog.setContentView(contentView);
         dialog.show();
 
@@ -1054,21 +1043,6 @@ public class MainActivity extends DrawerActivity {
 		onRestart();
 	}
 
-	public void deleteNote(View v){
-		listView.closeAnimate(lastItemOpened[0]);
-		String id = v.getTag().toString();
-		//Long noteid = (long) tvIdHidden.getText();
-		//String id = tvIdHidden.getText().toString();
-		showAlertWith("DELETE NOTE", "Are you sure you want to delete?",
-				MainActivity.this, "delete", id);
-	}
-
-	public void passCode(View v){
-		listView.closeAnimate(lastItemOpened[0]);
-		String id = v.getTag().toString();
-		noteFunctions.setPasscode(getApplicationContext(), id);
-	}
-
 	public void swipeListView(){
 		listView = (SwipeListView) findViewById(R.id.notefoleserList);
 		GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
@@ -1252,75 +1226,35 @@ public class MainActivity extends DrawerActivity {
 		}
 	}
 
-
-	public void showMenuAlert(Context context, String noteid) {
-		move = new Dialog(context);
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.movefiletofolder, null, false);
-
-		LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
-		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("Move to");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-
-		ListView lvFolder = (ListView) contentView.findViewById(R.id.lvFolder);
-		TextView empty = (TextView) contentView.findViewById(R.id.empty);
-		lvFolder.setEmptyView(empty);
-
-		ArrayList<HashMap<String,String>> folderList = new ArrayList<HashMap<String, String>>();
-
-		List<Folder> folder = Folder.findWithQuery(Folder.class, "Select * from Folder ORDER BY ID DESC");
-		for(Folder folderloop : folder){
-			HashMap<String,String> map = new HashMap<String,String>();
-			map.put("folderName", folderloop.getName());
-			map.put("folderId", String.valueOf(folderloop.getId()));
-			map.put("noteId",noteid);
-			folderList.add(map);
-		}
-
-		OurMoveMenuAdapter moveMenuAdapter = new OurMoveMenuAdapter(this,folderList);
-		lvFolder.setAdapter(moveMenuAdapter);
-
-		lvFolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-				int itemPosition = position;
-				String folderid = null, foldername = null;
-				Long noteid;
-
-				HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
-
-				folderid = map.get("folderId");
-				foldername = map.get("folderName");
-				noteid = Long.parseLong(map.get("noteId"));
-
-				Note n = Note.findById(Note.class,noteid);
-				n.folder = folderid;
-				n.save();
-				move.dismiss();
-				Toast.makeText(getApplicationContext(), "Note "+ n.getTitle() + " moved to " + foldername +" folder.", Toast.LENGTH_SHORT).show();
-			}
-		});
-
-		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		move.setCancelable(true);
-		move.setContentView(contentView);
-		move.show();
-	}
-
 	public void move(View v){
 		listView.closeAnimate(lastItemOpened[0]);
 		String noteid = v.getTag().toString();
-		noteFunctions.showMenuAlert(getApplicationContext(), noteid, MainActivity.this);
+		noteFunctions.showMoveAlert(this, noteid);
 	}
 
 	public void timeBomb(View v){
 		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		noteFunctions.showDate(getApplicationContext(), id, "SET TIMEBOMB", "timebomb");
+		noteFunctions.showDate(this, id, "SET TIMEBOMB", "timebomb");
+	}
+
+	public void remind(View v) {
+		listView.closeAnimate(lastItemOpened[0]);
+		String id = v.getTag().toString();
+		noteFunctions.showDate(this, id, "SET REMINDER", "remainder");
+	}
+
+	public void deleteNote(View v){
+		listView.closeAnimate(lastItemOpened[0]);
+		String id = v.getTag().toString();
+		//showAlertWith("DELETE NOTE", "Are you sure you want to delete?", MainActivity.this, "delete", id);
+		noteFunctions.showDeleteAlert(this, id);
+	}
+
+	public void passCode(View v){
+		listView.closeAnimate(lastItemOpened[0]);
+		String id = v.getTag().toString();
+		noteFunctions.setPasscode(getApplicationContext(), id);
 	}
 
 	public void openNoteDetail(View v){

@@ -140,7 +140,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     ProgressBar progressRecord;
     SeekBar progressRecord1;
 
-    public NoteFunctions noteFunctions;
+    public NoteFunctions noteFunctions = new NoteFunctions();
 
     // /Drawing Controls
     RelativeLayout LayoutAudioRecording;
@@ -1340,6 +1340,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     /*************
      * moreinfo control Here
      ************/
+
+    Button buttonLock;
+
     void initlizesMoreInfoView(View contentView) {
         layout_note_more_Info = (LinearLayout) contentView
                 .findViewById(R.id.layout_note_more_Info);
@@ -1349,18 +1352,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	.findViewById(R.id.buttonLock);
 	Button buttonDelete = (Button) layout_note_more_Info
 	.findViewById(R.id.buttonDelete);*/
-        Button buttonLock = (Button) layout_note_more_Info
-                .findViewById(R.id.buttonLock);
-        Button buttonTimebomb = (Button) layout_note_more_Info
-                .findViewById(R.id.buttonTimebomb);
-        Button buttonRemind = (Button) layout_note_more_Info
-                .findViewById(R.id.buttonRemind);
-        Button buttonMove = (Button) layout_note_more_Info
-                .findViewById(R.id.buttonMove);
-        Button buttonDelete = (Button) layout_note_more_Info
-                .findViewById(R.id.buttonDelete);
-        Button buttonShare = (Button) layout_note_more_Info
-                .findViewById(R.id.buttonShare);
+        buttonLock = (Button) layout_note_more_Info.findViewById(R.id.buttonLock);
+        Button buttonTimebomb = (Button) layout_note_more_Info.findViewById(R.id.buttonTimebomb);
+        Button buttonRemind = (Button) layout_note_more_Info.findViewById(R.id.buttonRemind);
+        Button buttonMove = (Button) layout_note_more_Info.findViewById(R.id.buttonMove);
+        Button buttonDelete = (Button) layout_note_more_Info.findViewById(R.id.buttonDelete);
+        Button buttonShare = (Button) layout_note_more_Info.findViewById(R.id.buttonShare);
 
         /*buttonRemind.setOnClickListener(new OnClickListener() {
             @Override
@@ -1381,19 +1378,42 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     public void move (View v) {
-        noteFunctions.showMenuAlert(getApplicationContext(), noteIdForDetails, this);
+        if (noteIdForDetails == null)
+            makeNote();
+        noteFunctions.showMoveAlert(this, noteIdForDetails);
     }
 
     public void timebomb (View v) {
-        noteFunctions.showDate(getApplicationContext(), noteIdForDetails, "SET TIMEBOMB", "timebomb");
+        if (noteIdForDetails == null)
+            makeNote();
+        noteFunctions.showDate(this, noteIdForDetails, "SET TIMEBOMB", "timebomb");
     }
 
     public void remindClick(View v) {
-        noteFunctions.showDate(getApplicationContext(), noteIdForDetails, "SET REMAINDER", "remainder");
+        if (noteIdForDetails == null)
+            makeNote();
+        noteFunctions.showDate(this, noteIdForDetails, "SET REMAINDER", "remainder");
     }
 
-    public void passcode() {
-        noteFunctions.setPasscode(getApplicationContext(), noteIdForDetails);
+    public void passcode(View v) {
+        if (noteIdForDetails == null)
+            makeNote();
+        noteFunctions.setPasscode(this, noteIdForDetails);
+        updateButtonUI(R.id.imageButtonMoreMode);
+        if (isMoreShown == false) {
+            isMoreShown = true;
+            layout_note_more_Info.setVisibility(View.VISIBLE);
+        } else {
+            isMoreShown = false;
+            layout_note_more_Info.setVisibility(View.GONE);
+        }
+    }
+
+    public void delete(View v) {
+        if (noteIdForDetails == null)
+            makeNote();
+        noteFunctions.showDeleteAlert(this, noteIdForDetails);
+
     }
 
     /************* Erase control Here ************/
@@ -4209,6 +4229,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
             Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 
+            if (note.islocked == 1)
+                buttonLock.setText("Unlock");
+            else
+                buttonLock.setText("Lock");
+
             noteTitle[0] = note.title;
 
             textViewheaderTitle.setText(note.getTitle());
@@ -4600,70 +4625,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
     }
 
-    public void addAudio(String name) {
-		/*noteElements = (LinearLayout) findViewById(R.id.noteElements);
-		LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-		View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
-		LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
-
-		final MediaPlayer mp = new MediaPlayer();
-		final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-		final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
-		final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-		final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
-		allDelete.add(audioDelete);
-		audioDelete.setTag(n.getId());
-
-		final File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
-		try {
-			mp.setDataSource(f.getAbsolutePath());
-			mp.prepare();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// Audio Play
-		audio_play.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mp.isPlaying()) {
-					mp.pause();
-					audio_play.setImageResource(R.drawable.play_audio);
-				} else {
-					audio_play.setImageResource(R.drawable.pause_audio);
-					mp.start();
-					audio_seek.setMax(mp.getDuration() / 1000);
-					final Handler mHandler = new Handler();
-					// Make sure you update Seekbar on UI thread
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if (mp != null) {
-								int mCurrentPosition = mp.getCurrentPosition() / 1000;
-								String currentduration = getDurationBreakdown(mp.getCurrentPosition());
-								String currentduration1 = getDurationBreakdown(mp.getDuration());
-								if (mCurrentPosition <= mp.getDuration() / 1000) {
-									System.out.println("CurrentDuration:" + currentduration);
-									audio_seek.setProgress(mCurrentPosition);
-									audio_text.setVisibility(View.VISIBLE);
-									audio_text.setText(currentduration + "/" + currentduration1);
-								}
-							}
-							mHandler.postDelayed(this, 1000);
-						}
-					});
-					mp.setOnCompletionListener(new OnCompletionListener() {
-						@Override
-						public void onCompletion(MediaPlayer mp) {
-							audio_play.setImageResource(R.drawable.play_audio);
-						}
-					});
-				}
-			}
-		});
-		noteElements.addView(note_audio);*/
-    }
-
     void showDeleteAlert(final String tag, Context context) {
 
         final Dialog dialog = new Dialog(context);
@@ -4704,7 +4665,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         dialog.setCancelable(true);
         dialog.setContentView(contentView);
         dialog.show();
-
     }
 
     public void deleteButton() {

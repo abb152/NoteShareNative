@@ -158,7 +158,7 @@ public class NoteFunctions {
     }
 
     // MOVE
-    public void showMenuAlert(final Context context, String noteid, Activity activity) {
+    public void showMoveAlert(final Context context, String noteid) {
         move = new Dialog(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // inflate your activity layout here!
@@ -184,7 +184,7 @@ public class NoteFunctions {
             folderList.add(map);
         }
 
-        OurMoveMenuAdapter moveMenuAdapter = new OurMoveMenuAdapter(activity, folderList);
+        OurMoveMenuAdapter moveMenuAdapter = new OurMoveMenuAdapter((Activity) context, folderList);
         lvFolder.setAdapter(moveMenuAdapter);
 
         lvFolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -216,7 +216,47 @@ public class NoteFunctions {
     }
 
     // DELETE
-    public void delete() {}
+    public void showDeleteAlert(final Context context, final String id) {
+
+        final Dialog dialog = new Dialog(context);
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.alert_view, null, false);
+
+        TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+        textViewTitleAlert.setText("DELETE NOTE");
+        textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView textViewTitleAlertMessage = (TextView) contentView.findViewById(R.id.textViewTitleAlertMessage);
+        textViewTitleAlertMessage.setText("Are you sure you want to delete?");
+
+        Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
+        Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+
+        buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                dialog.dismiss();
+            }
+        });
+        buttonAlertOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                delete(id);
+                dialog.dismiss();
+                context.startActivity(new Intent(context, MainActivity.class));
+            }
+        });
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(contentView);
+        dialog.show();
+    }
+
+    public void delete(String id){
+        Note n = Note.findById(Note.class, Long.parseLong(id));
+        n.delete();
+    }
 
     // SHARE
     public void share() {}
