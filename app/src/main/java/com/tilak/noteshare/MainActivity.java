@@ -16,8 +16,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -27,7 +25,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -87,6 +84,7 @@ public class MainActivity extends DrawerActivity {
 	public LinearLayout textNoteSort, textNoteView;
 	
 	public SORTTYPE sortType;
+	public NoteFunctions noteFunctions;
 
 	private ArrayList<HashMap<String,String>> list;
 	public Dialog dialogColor;
@@ -176,7 +174,6 @@ public class MainActivity extends DrawerActivity {
 		sortingArray();
 		//swipeListView();
 	}
-
 
 	public void	 btnCallbacks(Object data)
 	{
@@ -1067,33 +1064,9 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void passCode(View v){
-
 		listView.closeAnimate(lastItemOpened[0]);
-
 		String id = v.getTag().toString();
-
-		Note n = Note.findById(Note.class, Long.parseLong(id));
-		if(n.islocked == 1){
-			setPasscode(id, 3);
-		}else {
-			Config con = Config.findById(Config.class, 1L);
-			Log.e("jay con.passcode", String.valueOf(con.getPasscode()));
-			if (con.getPasscode() == 0)
-				Toast.makeText(getApplicationContext(), "Please set passcode in Setting page", Toast.LENGTH_LONG).show();
-			else
-				setPasscode(id, 1);
-		}
-	}
-
-	public void setPasscode(String id, int i){
-		Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
-		intent.putExtra("FileId", id);
-		if (i == 1) {
-			intent.putExtra("Check", "1");
-		} else if (i == 3) {
-			intent.putExtra("Check", "3");
-		}
-		startActivity(intent);
+		noteFunctions.setPasscode(getApplicationContext(), id);
 	}
 
 	public void swipeListView(){
@@ -1279,8 +1252,8 @@ public class MainActivity extends DrawerActivity {
 		}
 	}
 
-	public void showMenuAlert(Context context, String noteid){
 
+	public void showMenuAlert(Context context, String noteid) {
 		move = new Dialog(context);
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1334,7 +1307,6 @@ public class MainActivity extends DrawerActivity {
 
 		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		move.setCancelable(true);
-
 		move.setContentView(contentView);
 		move.show();
 	}
@@ -1342,108 +1314,13 @@ public class MainActivity extends DrawerActivity {
 	public void move(View v){
 		listView.closeAnimate(lastItemOpened[0]);
 		String noteid = v.getTag().toString();
-		showMenuAlert(this, noteid);
+		noteFunctions.showMenuAlert(getApplicationContext(), noteid, MainActivity.this);
 	}
 
 	public void timeBomb(View v){
 		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		//setDateTime.showDate(this, id);
-		showDate(this, id);
-	}
-
-	public void showDate(Context context, final String noteid ){
-
-		move = new Dialog(context);
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.datetime, null, false);
-
-		LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
-		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("Date Time");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-
-		DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
-		TimePicker tp = (TimePicker) contentView.findViewById(R.id.tp);
-
-
-		//final int[1] hour;/* = tp.getCurrentHour();*/
-		final int[] time = new int[2];
-		time[0] = tp.getCurrentHour();
-		time[1] = tp.getCurrentMinute();
-
-		final int[] date = new int[3];
-		date[0] = dp.getDayOfMonth();
-		date[1] = dp.getMonth() +1;
-		date[2] = dp.getYear();
-
-
-		tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-
-			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-				time[0] = hourOfDay;
-				time[1] = minute;
-			}
-		});
-
-		Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
-		Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
-
-		dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
-
-		dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-			@Override
-			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-				//Log.d("tag", "finally found the listener, the date is: year " + year + ", month " + month + ", dayOfMonth " + dayOfMonth);
-				date[0] = dayOfMonth;
-				date[1] = month + 1;
-				date[2] = year;
-			}
-		});
-
-		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				//Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
-				//Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
-
-				String timebombTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
-
-				Note n = Note.findById(Note.class, Long.valueOf(noteid));
-				n.timebomb = timebombTime;
-				n.save();
-
-				move.dismiss();
-				Toast.makeText(getApplication(),"Timebomb Set: " + timebombTime, Toast.LENGTH_LONG).show();
-			}
-		});
-
-		buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				move.dismiss();
-			}
-		});
-
-
-		move.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		move.setCancelable(true);
-
-		move.setContentView(contentView);
-		move.show();
-	}
-
-	public String check(int value){
-		String newvalue;
-		if (value < 10) // minute
-			newvalue = "0" + String.valueOf(value);
-		else
-			newvalue =  String.valueOf(value);
-		return newvalue;
+		noteFunctions.showDate(getApplicationContext(), id, "SET TIMEBOMB", "timebomb");
 	}
 
 	public void openNoteDetail(View v){

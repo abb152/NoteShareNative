@@ -35,8 +35,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -48,7 +46,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.tilak.adpters.NotesListAdapter;
@@ -143,7 +140,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     ProgressBar progressRecord;
     SeekBar progressRecord1;
 
-    public MainActivity mainActivity = new MainActivity();
+    public NoteFunctions noteFunctions;
 
     // /Drawing Controls
     RelativeLayout LayoutAudioRecording;
@@ -1365,110 +1362,38 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Button buttonShare = (Button) layout_note_more_Info
                 .findViewById(R.id.buttonShare);
 
-        buttonLock.setTag(noteIdForDetails);
-        buttonTimebomb.setTag(noteIdForDetails);
-        buttonRemind.setTag(noteIdForDetails);
-        buttonMove.setTag(noteIdForDetails);
-        buttonDelete.setTag(noteIdForDetails);
-        buttonShare.setTag(noteIdForDetails);
-
-	/*Button buttonTimeBomb = (Button) layout_note_more_Info
-	.findViewById(R.id.buttonTimeBomb);
-	Button buttonAttach = (Button) layout_note_more_Info
-	.findViewById(R.id.buttonAttach);*/
-
-	/*buttonLock.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View arg0) {
-	System.out.println("button lock");
-	}
-	});
-	buttonDelete.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View arg0) {
-	System.out.println("button delete");
-	}
-	});*/
-
-        /*buttonLock.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.passCode(v);
-            }
-        });
-
-        buttonMove.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.move(v);
-            }
-        });
-
-        buttonDelete.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.deleteNote(v);
-            }
-        });
-
-        buttonTimebomb.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.timeBomb(v);
-            }
-        });
-
-        buttonShare.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Share
-            }
-        });*/
-
-        buttonRemind.setOnClickListener(new OnClickListener() {
+        /*buttonRemind.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //finish();
-                //System.out.println("button remind");
-			/*NotificationCompat.Builder mBuilder =
-					new NotificationCompat.Builder(NoteMainActivity.this)
-						.setSmallIcon(R.drawable.reminder_sort_view)
-						.setContentTitle("NoteShare")
-						.setContentText("");
-			NotificationManager mNotificationManager =
-					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			// mId allows you to update the notification later on.
-			int mId = 0;
-			mNotificationManager.notify(mId, mBuilder.build());*/
+                *//*NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(NoteMainActivity.this)
+                            .setSmallIcon(R.drawable.reminder_sort_view)
+                            .setContentTitle("NoteShare")
+                            .setContentText("");
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                // mId allows you to update the notification later on.
+                int mId = 0;
+                mNotificationManager.notify(mId, mBuilder.build());*//*
                 showDate(NoteMainActivity.this);
             }
-        });
-
-	/*buttonTimeBomb.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View arg0) {
-	System.out.println("button time bomb");
-	}
-	});
-	buttonAttach.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View arg0) {
-	System.out.println("button attached");
-	}
-	});
-*/
+        });*/
     }
 
     public void move (View v) {
-        //String noteid = v.getTag().toString();
-        /*String note_id = noteIdForDetails;
-        mainActivity.showMenuAlert(this, note_id);*/
+        noteFunctions.showMenuAlert(getApplicationContext(), noteIdForDetails, this);
     }
 
     public void timebomb (View v) {
-        //String id = v.getTag().toString();
-        /*String id = v.getTag().toString();
-        mainActivity.showDate(this, noteIdForDetails);*/
+        noteFunctions.showDate(getApplicationContext(), noteIdForDetails, "SET TIMEBOMB", "timebomb");
+    }
+
+    public void remindClick(View v) {
+        noteFunctions.showDate(getApplicationContext(), noteIdForDetails, "SET REMAINDER", "remainder");
+    }
+
+    public void passcode() {
+        noteFunctions.setPasscode(getApplicationContext(), noteIdForDetails);
     }
 
     /************* Erase control Here ************/
@@ -4251,111 +4176,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 	});
 	}*/
 
-    }
-
-    public void remindClick(View v) {
-        //String id = v.getTag().toString();
-        //setDateTime.showDate(this, id);
-        layout_note_more_Info.setVisibility(View.GONE);
-        showDate(this);
-        //layout_note_more_Info.setVisibility(View.GONE);
-    }
-
-
-    //public void showDate(Context context, final String noteid ){
-    public void showDate(Context context) {
-
-        move = new Dialog(context);
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        // inflate your activity layout here!
-        View contentView = inflater.inflate(R.layout.datetime, null, false);
-
-        LinearLayout ll = (LinearLayout) findViewById(R.id.layoutAlertbox);
-        TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("Set Remainder");
-        textViewTitleAlert.setTextColor(Color.WHITE);
-
-        DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
-        TimePicker tp = (TimePicker) contentView.findViewById(R.id.tp);
-
-
-        //final int[1] hour;/* = tp.getCurrentHour();*/
-        final int[] time = new int[2];
-        time[0] = tp.getCurrentHour();
-        time[1] = tp.getCurrentMinute();
-
-        final int[] date = new int[3];
-        date[0] = dp.getDayOfMonth();
-        date[1] = dp.getMonth() + 1;
-        date[2] = dp.getYear();
-
-
-        tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                time[0] = hourOfDay;
-                time[1] = minute;
-            }
-        });
-
-        Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
-        Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
-
-        dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
-
-        dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                //Log.d("tag", "finally found the listener, the date is: year " + year + ", month " + month + ", dayOfMonth " + dayOfMonth);
-                date[0] = dayOfMonth;
-                date[1] = month + 1;
-                date[2] = year;
-            }
-        });
-
-        buttonAlertOk.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
-
-                String reminderTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
-
-                Note n = Note.findById(Note.class, Long.valueOf(noteIdForDetails));
-                n.remindertime = reminderTime;
-                n.save();
-
-                move.dismiss();
-                Toast.makeText(getApplication(), "Remind Set: " + reminderTime, Toast.LENGTH_LONG).show();
-            }
-        });
-
-        buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                move.dismiss();
-            }
-        });
-
-
-        move.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        move.setCancelable(true);
-
-        move.setContentView(contentView);
-        move.show();
-    }
-
-
-    public String check(int value) {
-        String newvalue;
-        if (value < 10) // minute
-            newvalue = "0" + String.valueOf(value);
-        else
-            newvalue = String.valueOf(value);
-        return newvalue;
     }
 
     public void makeNote() {
