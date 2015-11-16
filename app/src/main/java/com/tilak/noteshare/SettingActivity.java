@@ -21,7 +21,7 @@ public class SettingActivity extends DrawerActivity {
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
 	public TextView textheadertitle,textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
-	public TextView tvAbout, tvInvite, tvLikeFacebook, tvFeedback, tvTerms;
+	public TextView tvInvite, tvLikeFacebook, tvFeedback;
 
 protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -38,11 +38,9 @@ void  initlizeUIElement(View contentView)
 	//mainHeadermenue
 	layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
 	btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
-	tvAbout = (TextView) findViewById(R.id.tvAbout);
 	tvInvite = (TextView) findViewById(R.id.tvInvite);
 	tvLikeFacebook = (TextView) findViewById(R.id.tvLikeFacebook);
 	tvFeedback = (TextView) findViewById(R.id.tvFeedback);
-	tvTerms = (TextView) findViewById(R.id.tvTerms);
 	
 	/*btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
 	btncalander=(ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
@@ -81,13 +79,6 @@ void  initlizeUIElement(View contentView)
 			}
 		});
 
-		tvAbout.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(SettingActivity.this, AboutNoteShareActivity.class));
-			}
-		});
-
 		tvInvite.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -111,13 +102,6 @@ void  initlizeUIElement(View contentView)
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(SettingActivity.this, SendFeedbackActivity.class));
-			}
-		});
-
-		tvTerms.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(SettingActivity.this, TermsAndConditionsActivity.class));
 			}
 		});
 

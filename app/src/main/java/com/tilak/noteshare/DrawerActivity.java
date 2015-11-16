@@ -119,9 +119,12 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					items.setResourceId(R.drawable.invite_icon);
 					break;*/
 				case 4:
-					items.setResourceId(R.drawable.setting_icon);
+					items.setResourceId(R.drawable.about_us_icon);
 					break;
 				case 5:
+					items.setResourceId(R.drawable.setting_icon);
+					break;
+				case 6:
 					items.setResourceId(R.drawable.logout_icon);
 					break;
 				default:
@@ -214,12 +217,18 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				}
 				break;
 				case 4: {
+					System.out.println("about");
+					startActivity(new Intent(this, AboutNoteShareActivity.class));
+					//finish();
+				}
+				break;
+				case 5: {
 					System.out.println("setting");
 					startActivity(new Intent(this, SettingActivity.class));
 					//finish();
 				}
 				break;
-				case 5: {
+				case 6: {
 					System.out.println("logout");
 					showAlertWith("ARE YOU SURE?", "Are you sure you want to Log Out?", DrawerActivity.this);
 				}

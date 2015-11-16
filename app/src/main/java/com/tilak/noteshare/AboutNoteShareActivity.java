@@ -1,6 +1,7 @@
 package com.tilak.noteshare;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,7 @@ public class AboutNoteShareActivity extends DrawerActivity {
 
 	public LinearLayout layoutHeder;
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
-	public TextView textViewSubHeaderTitle;
+	public TextView textViewSubHeaderTitle, tvTerms;
 	public LinearLayout layoutTitleHeaderview;
 	
 	
@@ -32,6 +33,7 @@ public class AboutNoteShareActivity extends DrawerActivity {
 		//mainHeadermenue
 		layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
 		btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
+		tvTerms = (TextView) findViewById(R.id.tvTerms);
 		
 		/*btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
 		btncalander=(ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
@@ -60,7 +62,14 @@ public class AboutNoteShareActivity extends DrawerActivity {
 				openSlideMenu();
 			}
 		});
-		
+
+		tvTerms.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(AboutNoteShareActivity.this, TermsAndConditionsActivity.class));
+			}
+		});
+
 	}
 	
 	String getTandC()

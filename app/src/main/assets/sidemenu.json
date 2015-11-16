@@ -13,12 +13,16 @@
       "menuid": "3"
     },
     {
-      "menuName": "Settings",
+      "menuName": "About",
       "menuid": "4"
     },
     {
-      "menuName": "Logout",
+      "menuName": "Settings",
       "menuid": "5"
+    },
+    {
+      "menuName": "Logout",
+      "menuid": "6"
     }
   ]
 }
