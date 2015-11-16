@@ -26,11 +26,11 @@ public class OurNoteListAdapter extends BaseAdapter {
     Activity activity;
     TextView noteDesc;
 
-    public OurNoteListAdapter(Activity activity, ArrayList<HashMap<String,String>> list, String listwiew){
+    public OurNoteListAdapter(Activity activity, ArrayList<HashMap<String,String>> list, String listview){
         super();
         this.activity = activity;
         this.list = list;
-        this.listview = listwiew;
+        this.listview = listview;
     }
 
     @Override

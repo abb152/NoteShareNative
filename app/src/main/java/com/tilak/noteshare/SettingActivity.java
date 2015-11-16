@@ -61,7 +61,7 @@ void  initlizeUIElement(View contentView)
 
 	List<Config> config = Config.listAll(Config.class);
 	if(config.size() == 0) {
-		Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1");
+		Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1", "", "");
 		c.save();
 	}
 }

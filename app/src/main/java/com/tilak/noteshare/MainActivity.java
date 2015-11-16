@@ -48,8 +48,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-enum SORTTYPE
-{
+enum SORTTYPE {
 	ALPHABET,
 	COLOURS,
 	CREATED_TIME,
@@ -57,6 +56,12 @@ enum SORTTYPE
 	REMINDER_TIME,
 	TIME_BOMB
 };
+
+enum VIEWTYPE {
+	DETAIL,
+	LIST,
+	GRID
+}
 
 public class MainActivity extends DrawerActivity {
 
@@ -82,6 +87,7 @@ public class MainActivity extends DrawerActivity {
 	public LinearLayout textNoteSort, textNoteView;
 	
 	public SORTTYPE sortType;
+	public VIEWTYPE viewType;
 	public NoteFunctions noteFunctions = new NoteFunctions();
 	public Config con = Config.findById(Config.class, 1L);
 
@@ -171,7 +177,8 @@ public class MainActivity extends DrawerActivity {
 		//sortType = SORTTYPE.MODIFIED_TIME;
 		Config con = Config.findById(Config.class, 1L);
 		sortType = SORTTYPE.valueOf(con.getSort());
-		setListView = con.getView();
+		//setListView = con.getView();
+		viewType = VIEWTYPE.valueOf(con.getView());
 		populate();
 		sortingArray();
 		//swipeListView();
@@ -225,8 +232,8 @@ public class MainActivity extends DrawerActivity {
 		Config con = Config.findById(Config.class, 1L);
 		//sortType = SORTTYPE.MODIFIED_TIME;
 		sortType = SORTTYPE.valueOf(con.getSort());
-		setListView = con.getView();
-		con.save();
+		//setListView = con.getView();
+		viewType = VIEWTYPE.valueOf(con.getView());
 
 		checkTimeClicked();
 		populate();
@@ -467,9 +474,10 @@ public class MainActivity extends DrawerActivity {
 				notefoleserGridList.setVisibility(View.VISIBLE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.GONE);
-				con.setView("grid");
+				con.setView(VIEWTYPE.GRID.name());
 				con.save();
-				setListView = "grid";
+				//setListView = "grid";
+				viewType = VIEWTYPE.GRID;
 				swipeListView();
 				myDialog.dismiss();
 			}
@@ -498,9 +506,10 @@ public class MainActivity extends DrawerActivity {
 				notefoleserGridList.setVisibility(View.GONE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.VISIBLE);
-				con.setView("detail");
+				con.setView(VIEWTYPE.DETAIL.name());
 				con.save();
-				setListView = "detail";
+				//setListView = "detail";
+				viewType = VIEWTYPE.DETAIL;
 				swipeListView();
 				myDialog.dismiss();
 			}
@@ -520,9 +529,10 @@ public class MainActivity extends DrawerActivity {
 				notefoleserGridList.setVisibility(View.GONE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.VISIBLE);
-				con.setView("list");
+				con.setView(VIEWTYPE.LIST.name());
 				con.save();
-				setListView = "list";
+				//setListView = "list";
+				viewType = VIEWTYPE.LIST;
 				swipeListView();
 				myDialog.dismiss();
 
@@ -530,10 +540,8 @@ public class MainActivity extends DrawerActivity {
 		});
 
 		buttonDissmiss.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
 				myDialog.dismiss();
 			}
 		});
@@ -1055,8 +1063,9 @@ public class MainActivity extends DrawerActivity {
 		listView = (SwipeListView) findViewById(R.id.notefoleserList);
 		GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
 
-		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, setListView);
-		if(setListView != "grid") {
+		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, con.getView());
+		//if(setListView != "grid") {
+		if(con.getView() != "GRID") {
 			listView.setOffsetLeft(170L);
 
 			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
