@@ -25,6 +25,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -4478,6 +4479,36 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     //int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
                     //int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
                     Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
+
+                    DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+                    DisplayMetrics dm = new DisplayMetrics();
+                    this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+                    float height = dm.heightPixels;
+                    float width = dm.widthPixels;
+
+
+                    /*DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+                    float dpHeight = displayMetrics.heightPixels;// / displayMetrics.density;
+                    float dpWidth = displayMetrics.widthPixels;// / displayMetrics.density;
+                    Log.e("********","");
+                    Log.e("jay dpheight", String.valueOf(dpHeight));
+                    Log.e("jay dpwidth", String.valueOf(dpWidth));
+                    Log.e("jay densityDpi", String.valueOf(displayMetrics.densityDpi));
+                    Log.e("jay density", String.valueOf(displayMetrics.density));
+                    Log.e("jay bitmap pxheight", String.valueOf(b.getHeight() ));
+                    Log.e("jay bitmap pxwidth", String.valueOf(b.getWidth() ));
+
+                    Configuration configuration = this.getResources().getConfiguration();
+                    int screenWidthDp = configuration.screenWidthDp;
+                    int screenHeightDp = configuration.screenHeightDp;
+
+                    Log.e("jay screenWidthdp", String.valueOf(screenWidthDp));
+                    Log.e("jay screenHeightdp", String.valueOf(screenHeightDp));
+
+                    Log.e("jay h", String.valueOf((height / 1.5) - 40));
+                    Log.e("jay w", String.valueOf(width));*/
+
                     //Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
 					/*BitmapFactory.Options op = new BitmapFactory.Options();
 					op.inJustDecodeBounds = true;
@@ -4494,6 +4525,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 						scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
 					}*/
                     note_imageview.setImageBitmap(b);
+                    note_imageview.setMaxHeight((int) (height / 1.5));
                     noteElements.addView(note_image);
                 } else if (n.type.equals("scribble")) {
 
