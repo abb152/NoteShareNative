@@ -83,13 +83,14 @@ public class MainActivity extends DrawerActivity {
 	
 	public SORTTYPE sortType;
 	public NoteFunctions noteFunctions = new NoteFunctions();
+	public Config con = Config.findById(Config.class, 1L);
 
 	private ArrayList<HashMap<String,String>> list;
 	public Dialog dialogColor;
 	public Dialog move;
 
 	public List<Note> sortallnotes;
-	public String setListView = "detail";
+	public String setListView;
 	public static String folderIdforNotes;
 
 	public ArrayList<String> noteIdList = new ArrayList<String>();
@@ -167,7 +168,10 @@ public class MainActivity extends DrawerActivity {
 			e.printStackTrace();
 		}
 
-		sortType = SORTTYPE.MODIFIED_TIME;
+		//sortType = SORTTYPE.MODIFIED_TIME;
+		Config con = Config.findById(Config.class, 1L);
+		sortType = SORTTYPE.valueOf(con.getSort());
+		setListView = con.getView();
 		populate();
 		sortingArray();
 		//swipeListView();
@@ -215,15 +219,15 @@ public class MainActivity extends DrawerActivity {
 		//adapter = new NoteFolderAdapter(this, arrDataNote);
 		//notefoleserList.setAdapter(adapter);
 
-		List<Config> config = Config.listAll(Config.class);
-		if(config.size() == 0) {
-			Config c = new Config("Noteshare", "", "", "", "", "", 0, "", "username", "1", "1");
-			c.save();
-		}
 
 		addlistners();
 		// getDeafultNote();
-		sortType = SORTTYPE.MODIFIED_TIME;
+		Config con = Config.findById(Config.class, 1L);
+		//sortType = SORTTYPE.MODIFIED_TIME;
+		sortType = SORTTYPE.valueOf(con.getSort());
+		setListView = con.getView();
+		con.save();
+
 		checkTimeClicked();
 		populate();
 		sortingArray();
@@ -463,6 +467,8 @@ public class MainActivity extends DrawerActivity {
 				notefoleserGridList.setVisibility(View.VISIBLE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.GONE);
+				con.setView("grid");
+				con.save();
 				setListView = "grid";
 				swipeListView();
 				myDialog.dismiss();
@@ -492,6 +498,8 @@ public class MainActivity extends DrawerActivity {
 				notefoleserGridList.setVisibility(View.GONE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.VISIBLE);
+				con.setView("detail");
+				con.save();
 				setListView = "detail";
 				swipeListView();
 				myDialog.dismiss();
@@ -512,6 +520,8 @@ public class MainActivity extends DrawerActivity {
 				notefoleserGridList.setVisibility(View.GONE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.VISIBLE);
+				con.setView("list");
+				con.save();
 				setListView = "list";
 				swipeListView();
 				myDialog.dismiss();
@@ -613,10 +623,10 @@ public class MainActivity extends DrawerActivity {
 				Toast.makeText(getApplicationContext(), "Created Time",
 						Toast.LENGTH_SHORT).show();
 				sortType = SORTTYPE.CREATED_TIME;
+				con.setSort(SORTTYPE.CREATED_TIME.name());
+				con.save();
 				sortingArray();
-
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -627,10 +637,10 @@ public class MainActivity extends DrawerActivity {
 				Toast.makeText(getApplicationContext(), "Modified Time",
 						Toast.LENGTH_SHORT).show();
 				sortType=SORTTYPE.MODIFIED_TIME;
+				con.setSort(SORTTYPE.MODIFIED_TIME.name());
+				con.save();
 				sortingArray();
-
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -641,12 +651,11 @@ public class MainActivity extends DrawerActivity {
 
 				Toast.makeText(getApplicationContext(), "Colours",
 						Toast.LENGTH_SHORT).show();
-				
 				sortType=SORTTYPE.COLOURS;
+				con.setSort(SORTTYPE.COLOURS.name());
+				con.save();
 				sortingArray();
-				
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -655,14 +664,18 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 //				adapter.notifyDataSetChanged();
+				//sortType=SORTTYPE.ALPHABET;
+				//sortType=SORTTYPE.valueOf("ALPHABET");
 				sortType=SORTTYPE.ALPHABET;
+				con.setSort(SORTTYPE.ALPHABET.name());
+				con.save();
+				//String alpha = SORTTYPE.ALPHABET.name();
+				//Toast.makeText(getApplicationContext(), alpha,
+				//		Toast.LENGTH_SHORT).show();
 				sortingArray();
-
 				Toast.makeText(getApplicationContext(), "Alphabetical",
 						Toast.LENGTH_SHORT).show();
-
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -671,13 +684,12 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				sortType=SORTTYPE.TIME_BOMB;
+				con.setSort(SORTTYPE.TIME_BOMB.name());
+				con.save();
 				sortingArray();
-
 				Toast.makeText(getApplicationContext(), "Time Bomb",
 						Toast.LENGTH_SHORT).show();
-
 				myDialog.dismiss();
-
 			}
 		});
 
@@ -686,19 +698,15 @@ public class MainActivity extends DrawerActivity {
 
 					@Override
 					public void onClick(View v) {
-
 						Toast.makeText(getApplicationContext(),
 								"Reminder Time", Toast.LENGTH_SHORT).show();
-
 						myDialog.dismiss();
 					}
 				});
 
 		buttonDissmiss.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
 				myDialog.dismiss();
 			}
 		});

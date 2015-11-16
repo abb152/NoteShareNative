@@ -19,12 +19,14 @@ public class Config extends SugarRecord {
     public String username;
     public String deviceid;
     public String serverid;
+    public String sort;
+    public String view;
 
     public Config() {
         super();
     }
 
-    public Config(String firstname, String lastname, String email, String password, String fbid, String googleid, int passcode, String profilepic, String username, String deviceid, String serverid) {
+    public Config(String firstname, String lastname, String email, String password, String fbid, String googleid, int passcode, String profilepic, String username, String deviceid, String serverid, String sort, String view) {
         super();
         this.firstname = firstname;
         this.lastname = lastname;
@@ -37,6 +39,8 @@ public class Config extends SugarRecord {
         this.username = username;
         this.deviceid = deviceid;
         this.serverid = serverid;
+        this.sort = sort;
+        this.view = view;
     }
 
     public String getFirstname() {
@@ -126,4 +130,21 @@ public class Config extends SugarRecord {
     public void setServerid(String serverid) {
         this.serverid = serverid;
     }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
+    }
+
 }

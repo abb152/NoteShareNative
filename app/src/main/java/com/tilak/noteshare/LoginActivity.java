@@ -82,7 +82,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         Log.e("jay config size: ", String.valueOf(config.size()));
         //Log.e("jay config id: ", String.valueOf(config.get(0).getId()));
         if(config.size() == 0) {
-            Config c = new Config("", "", "", "", "", "", 0, "", "", "", "");
+            Config c = new Config("", "", "", "", "", "", 0, "", "", "", "", "MODIFIED_TIME", "detail");
             c.save();
             Log.e("jay config id: ", String.valueOf(c.getId()));
         }
