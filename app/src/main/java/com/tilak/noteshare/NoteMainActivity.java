@@ -711,16 +711,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     void initlizeAudiorecoder() {
         //SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHH_mm_ss");
         String timestamp = String.valueOf(System.currentTimeMillis());
-        audioName = "AUD-" + timestamp + ".3gp";
+        audioName = "AUD-" + timestamp + ".m4a";
 
         outputFile = Environment.getExternalStorageDirectory()
                 .getAbsolutePath() + "/NoteShare/NoteShare Audio/" + audioName;
         ;
 
         myAudioRecorder = new MediaRecorder();
+        //myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        //myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        //myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+        //myAudioRecorder.setAudioSamplingRate(16000);
+        //myAudioRecorder.setAudioChannels(1);
+
         myAudioRecorder.setOutputFile(outputFile);
     }
 

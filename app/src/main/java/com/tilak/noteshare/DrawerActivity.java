@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -70,7 +69,6 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		}*/
 
 		String strresponse = loadJSONFromAsset();
-		Log.e("jay json", strresponse);
 		try {
 			JSONObject jsonObject = new JSONObject(strresponse);
 			menu = new SlideMenu(jsonObject);
@@ -86,8 +84,6 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		arrMenuTitle = menu.getSideMenuitems();
 		arrMenu = new ArrayList<SideMenuitems>();
 
-		Log.e("jay arrMenuTitle", arrMenuTitle.toString());
-		Log.e("jay size", String.valueOf(arrMenuTitle.size()));
 		for (int i = 0; i < arrMenuTitle.size(); i++) {
 			SideMenuitems items = arrMenuTitle.get(i);
 			int menuid = Integer.parseInt(items.getMenuid());
