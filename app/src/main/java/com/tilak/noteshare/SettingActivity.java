@@ -21,7 +21,7 @@ public class SettingActivity extends DrawerActivity {
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
 	public TextView textheadertitle,textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
-	public TextView tvInvite, tvLikeFacebook, tvFeedback;
+	public TextView tvLikeFacebook, tvFeedback;
 
 protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -38,7 +38,6 @@ void  initlizeUIElement(View contentView)
 	//mainHeadermenue
 	layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
 	btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
-	tvInvite = (TextView) findViewById(R.id.tvInvite);
 	tvLikeFacebook = (TextView) findViewById(R.id.tvLikeFacebook);
 	tvFeedback = (TextView) findViewById(R.id.tvFeedback);
 	
@@ -76,18 +75,6 @@ void  initlizeUIElement(View contentView)
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				openSlideMenu();
-			}
-		});
-
-		tvInvite.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
-				Intent share = new Intent(Intent.ACTION_SEND);
-				share.setType("image/*");
-				share.putExtra(Intent.EXTRA_STREAM, uri);
-				share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
-				startActivity(Intent.createChooser(share, "Invite friends"));
 			}
 		});
 

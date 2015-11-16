@@ -13,16 +13,20 @@
       "menuid": "3"
     },
     {
-      "menuName": "About",
+      "menuName": "Invite Friends",
       "menuid": "4"
     },
     {
-      "menuName": "Settings",
+      "menuName": "About",
       "menuid": "5"
     },
     {
-      "menuName": "Logout",
+      "menuName": "Settings",
       "menuid": "6"
+    },
+    {
+      "menuName": "Logout",
+      "menuid": "7"
     }
   ]
 }

@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -119,12 +120,15 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					items.setResourceId(R.drawable.invite_icon);
 					break;*/
 				case 4:
-					items.setResourceId(R.drawable.about_us_icon);
+					items.setResourceId(R.drawable.invite_icon);
 					break;
 				case 5:
-					items.setResourceId(R.drawable.setting_icon);
+					items.setResourceId(R.drawable.about_us_icon);
 					break;
 				case 6:
+					items.setResourceId(R.drawable.setting_icon);
+					break;
+				case 7:
 					items.setResourceId(R.drawable.logout_icon);
 					break;
 				default:
@@ -217,18 +221,29 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				}
 				break;
 				case 4: {
+					System.out.println("invite friends");
+					Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
+					Intent share = new Intent(Intent.ACTION_SEND);
+					share.setType("image/*");
+					share.putExtra(Intent.EXTRA_STREAM, uri);
+					share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
+					startActivity(Intent.createChooser(share, "Invite friends"));
+					//finish();
+				}
+				break;
+				case 5: {
 					System.out.println("about");
 					startActivity(new Intent(this, AboutNoteShareActivity.class));
 					//finish();
 				}
 				break;
-				case 5: {
+				case 6: {
 					System.out.println("setting");
 					startActivity(new Intent(this, SettingActivity.class));
 					//finish();
 				}
 				break;
-				case 6: {
+				case 7: {
 					System.out.println("logout");
 					showAlertWith("ARE YOU SURE?", "Are you sure you want to Log Out?", DrawerActivity.this);
 				}
