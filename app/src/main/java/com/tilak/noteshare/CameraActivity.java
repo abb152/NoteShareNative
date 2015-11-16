@@ -146,7 +146,7 @@ public class CameraActivity extends Activity {
             // Saving Image file
             String timestamp = String.valueOf(System.currentTimeMillis());
             File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".jpg");
-            croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
+            croppedImage.compress(Bitmap.CompressFormat.JPEG, 87, new FileOutputStream(mediaStorageDir));
 
             // Refreshing Gallery to view Image in Gallery
             ContentValues values = new ContentValues();
