@@ -722,6 +722,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+        myAudioRecorder.setAudioSamplingRate(44100);
+        myAudioRecorder.setAudioEncodingBitRate(320000);
+        myAudioRecorder.setAudioChannels(2);
+
         //myAudioRecorder.setAudioSamplingRate(16000);
         //myAudioRecorder.setAudioChannels(1);
 
