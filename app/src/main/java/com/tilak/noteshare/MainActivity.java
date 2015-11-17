@@ -151,7 +151,6 @@ public class MainActivity extends DrawerActivity {
 				if (sortallnotes.toString() == "[]") {
 					putInList();
 					swipeListView();
-//					d.setText("Nothing to display"); set your message
 				} else {
 					putInList();
 					swipeListView();
@@ -159,7 +158,6 @@ public class MainActivity extends DrawerActivity {
 			}
 		});
 
-		//getDeafultNote();
 		createDirectory();
 
 	}
@@ -177,7 +175,6 @@ public class MainActivity extends DrawerActivity {
 		//sortType = SORTTYPE.MODIFIED_TIME;
 		Config con = Config.findById(Config.class, 1L);
 		sortType = SORTTYPE.valueOf(con.getSort());
-		//setListView = con.getView();
 		viewType = VIEWTYPE.valueOf(con.getView());
 		populate();
 		sortingArray();
@@ -193,7 +190,7 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	void initlizeUIElement(View contentview) throws ParseException{
-		DataManager.sharedDataManager().setTypeofListView(false);
+		//DataManager.sharedDataManager().setTypeofListView(false);
 
 		layoutHeader = (RelativeLayout) contentview
 				.findViewById(R.id.mainHeadermenue);
@@ -216,23 +213,10 @@ public class MainActivity extends DrawerActivity {
 		Layout1 = (LinearLayout) findViewById(R.id.Layout1);
 		Layout2 = (LinearLayout) findViewById(R.id.Layout2);
 
-		// Grid adapter
-
-		//gridAdapter = new NoteFolderGridAdapter(this, arrDataNote);
-		//notefoleserGridList.setAdapter(gridAdapter);
-
-		// list adapter
-
-		//adapter = new NoteFolderAdapter(this, arrDataNote);
-		//notefoleserList.setAdapter(adapter);
-
-
 		addlistners();
 		// getDeafultNote();
 		Config con = Config.findById(Config.class, 1L);
-		//sortType = SORTTYPE.MODIFIED_TIME;
 		sortType = SORTTYPE.valueOf(con.getSort());
-		//setListView = con.getView();
 		viewType = VIEWTYPE.valueOf(con.getView());
 
 		checkTimeClicked();
@@ -300,13 +284,6 @@ public class MainActivity extends DrawerActivity {
 			Collections.sort(sortallnotes, new colorComparator());
 			putInList();
 			swipeListView();
-//			Collections.sort(arrDataNote, new Comparator<SideMenuitems>() {
-//
-//				@Override
-//				public int compare(SideMenuitems lhs, SideMenuitems rhs) {
-//				return lhs.getColours().compareToIgnoreCase(rhs.getColours());
-//				}
-//			});
 		}
 			break;
 		case CREATED_TIME:
@@ -340,12 +317,6 @@ public class MainActivity extends DrawerActivity {
 			break;
 		}
 	}
-	
-	void updateGridView() {
-
-		gridAdapter.notifyDataSetChanged();
-	}
-
 
 	void addlistners() {
 
@@ -387,33 +358,6 @@ public class MainActivity extends DrawerActivity {
 				startActivity(new Intent(context, NoteMainActivity.class));
 			}
 		});
-
-		/*notefoleserList.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                startActivity(new Intent(context, NoteMainActivity.class));
-            }
-        });
-		
-		notefoleserList.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int arg2, long arg3) {
-                if (DataManager.sharedDataManager().getSelectedIndex() == arg2) {
-                    DataManager.sharedDataManager().setSelectedIndex(-1);
-                } else {
-                    DataManager.sharedDataManager().setSelectedIndex(arg2);
-                }
-                adapter.notifyDataSetChanged();
-                return true;
-            }
-        });*/
-
-
 	}
 
 
@@ -467,26 +411,24 @@ public class MainActivity extends DrawerActivity {
 		layoutGridImageView.setImageResource(R.drawable.grid_view_logo);
 		layoutGridTextView.setText("Tiles");
 
-		layoutGridTextView.setOnClickListener(new OnClickListener() {
-
+		layoutPintrestTextView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				notefoleserGridList.setVisibility(View.VISIBLE);
-				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
-				listView.setVisibility(View.GONE);
-				con.setView(VIEWTYPE.GRID.name());
-				con.save();
-				//setListView = "grid";
-				viewType = VIEWTYPE.GRID;
-				swipeListView();
 				myDialog.dismiss();
 			}
 		});
 
-		layoutPintrestTextView.setOnClickListener(new OnClickListener() {
+		layoutGridTextView.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
+				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
+				listView.setVisibility(View.GONE);
+				notefoleserGridList.setVisibility(View.VISIBLE);
+				con.setView(VIEWTYPE.GRID.name());
+				con.save();
+				viewType = VIEWTYPE.GRID;
+				swipeListView();
 				myDialog.dismiss();
 			}
 		});
@@ -495,20 +437,11 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				/*DataManager.sharedDataManager().setTypeofListView(false);
-				adapter.notifyDataSetChanged();
-				notefoleserGridList.setVisibility(View.GONE);
-				notefoleserList.setVisibility(View.VISIBLE);
-				//notefoleserPintrestList.setVisibility(View.GONE);
-
-				DataManager.sharedDataManager().setSelectedIndex(-1);
-				adapter.notifyDataSetChanged();*/
 				notefoleserGridList.setVisibility(View.GONE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.VISIBLE);
 				con.setView(VIEWTYPE.DETAIL.name());
 				con.save();
-				//setListView = "detail";
 				viewType = VIEWTYPE.DETAIL;
 				swipeListView();
 				myDialog.dismiss();
@@ -519,19 +452,11 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				/*DataManager.sharedDataManager().setTypeofListView(true);
-				adapter.notifyDataSetChanged();
-				notefoleserGridList.setVisibility(View.GONE);
-				notefoleserList.setVisibility(View.VISIBLE);
-				//notefoleserPintrestList.setVisibility(View.GONE);
-				DataManager.sharedDataManager().setSelectedIndex(-1);
-				adapter.notifyDataSetChanged();*/
 				notefoleserGridList.setVisibility(View.GONE);
 				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
 				listView.setVisibility(View.VISIBLE);
 				con.setView(VIEWTYPE.LIST.name());
 				con.save();
-				//setListView = "list";
 				viewType = VIEWTYPE.LIST;
 				swipeListView();
 				myDialog.dismiss();
@@ -671,15 +596,10 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-//				adapter.notifyDataSetChanged();
-				//sortType=SORTTYPE.ALPHABET;
-				//sortType=SORTTYPE.valueOf("ALPHABET");
+//
 				sortType=SORTTYPE.ALPHABET;
 				con.setSort(SORTTYPE.ALPHABET.name());
 				con.save();
-				//String alpha = SORTTYPE.ALPHABET.name();
-				//Toast.makeText(getApplicationContext(), alpha,
-				//		Toast.LENGTH_SHORT).show();
 				sortingArray();
 				Toast.makeText(getApplicationContext(), "Alphabetical",
 						Toast.LENGTH_SHORT).show();
@@ -728,9 +648,6 @@ public class MainActivity extends DrawerActivity {
 	}
 
     /******* bottom sorting menu end *******/
-
-
-
 
 
     /******* onBackPressed start *******/
@@ -847,15 +764,10 @@ public class MainActivity extends DrawerActivity {
 			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' AND folder = " + folderIdforNotes + " ORDER BY ID DESC");
 
 		sortallnotes = allnotes;
-//		sortingArray();
 		putInList();
 
-		//adapter.notifyDataSetChanged();
 		String strCout = "(" + list.size() + ")";
 		textViewheaderTitle.setText("NOTE " + strCout);
-		//sortType=SORTTYPE.ALPHABET;
-		//updateGridView();
-		//updatePintrestView();
 
 	}
 
@@ -1035,21 +947,13 @@ public class MainActivity extends DrawerActivity {
 			ImageButton imgView = (ImageButton) view;
 			String color = view.getTag().toString();
 
-			imgView.setImageDrawable(getResources().getDrawable(
-					R.drawable.paint_pressed));
-			// currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
-			// currPaint = (ImageButton) view;
-			System.out.println("selected color:" + color);
-
-			//int colorCode = Color.parseColor(color);
+			imgView.setImageDrawable(getResources().getDrawable(R.drawable.paint_pressed));
 
 			Note n = Note.findById(Note.class,(long) nid);
 			n.background = color;
 			n.save();
 			onRestart();
 			dialogColor.dismiss();
-			//listView.setDrawColor(colorCode);
-
 		}
 	}
 
@@ -1063,9 +967,11 @@ public class MainActivity extends DrawerActivity {
 		listView = (SwipeListView) findViewById(R.id.notefoleserList);
 		GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
 
-		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, con.getView());
-		//if(setListView != "grid") {
-		if(con.getView() != "GRID") {
+		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, viewType.name());
+
+		Log.e("jay viewType", viewType.name());
+
+		if(viewType != VIEWTYPE.GRID){
 			listView.setOffsetLeft(170L);
 
 			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -1083,7 +989,6 @@ public class MainActivity extends DrawerActivity {
 
 
 			listView.setSwipeListViewListener(new BaseSwipeListViewListener() {
-
 				@Override
 				public void onClickFrontView(int position) {
 
@@ -1115,7 +1020,6 @@ public class MainActivity extends DrawerActivity {
 				@Override
 				public void onOpened(int position, boolean toRight) {
 					super.onOpened(position, toRight);
-					//listView.closeOpenedItems();
 					if (lastItemOpened[0] != -1 && lastItemOpened[0] != position)
 						listView.closeAnimate(lastItemOpened[0]);
 					lastItemOpened[0] = position;
@@ -1124,10 +1028,11 @@ public class MainActivity extends DrawerActivity {
 			});
 
 			listView.setAdapter(noteAdapter);
+			notefoleserGridList.setVisibility(View.GONE);
 			listView.setAnimationTime(200);
 
-			}else{
-
+			}if(viewType == VIEWTYPE.GRID){
+				Log.e("jay inside grid","");
 				listGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1164,13 +1069,13 @@ public class MainActivity extends DrawerActivity {
 				});
 
 				listGridView.setAdapter(noteAdapter);
+				notefoleserGridList.setVisibility(View.VISIBLE);
 			}
 
 	}
 	class TitleComparator implements Comparator<Note> {
 
 		public int compare(Note c1, Note c2) {
-			Log.d("rohan","difference "+(c1.getTitle().compareTo(c2.getTitle())));
 			return c1.getTitle().compareTo(c2.getTitle());
 		}
 	}
@@ -1264,7 +1169,6 @@ public class MainActivity extends DrawerActivity {
 	public void deleteNote(View v){
 		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		//showAlertWith("DELETE NOTE", "Are you sure you want to delete?", MainActivity.this, "delete", id);
 		noteFunctions.showDeleteAlert(this, id);
 	}
 

@@ -67,7 +67,7 @@ public class OurNoteListAdapter extends BaseAdapter {
         if(convertView == null){
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.our_note_list,null); //change the name of the layout
-            if(listview == "grid"){
+            if(listview == "GRID"){
                 convertView = inflater.inflate(R.layout.our_note_list_grid,null); //change the name of the layout
             }
 
@@ -81,14 +81,14 @@ public class OurNoteListAdapter extends BaseAdapter {
 
             holder.main = (LinearLayout) convertView.findViewById(R.id.noteMain);
 
-            if(listview == "list") {
+            if(listview == "LIST") {
                 holder.txtNoteName.setHeight(50);
                 holder.txtNoteName.setTextSize(18F);
                 holder.txtNoteDesc.setVisibility(View.GONE);
                 holder.txtNoteDate.setVisibility(View.GONE);
                 holder.linearLayout.setPadding(20, 30, 20, 20);
             }
-            if(listview == "detail"){
+            if(listview == "DETAIL"){
                 //holder.txtNoteName.setHeight(50);
                 /*FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                         FrameLayout.LayoutParams.WRAP_CONTENT);*/
@@ -97,7 +97,7 @@ public class OurNoteListAdapter extends BaseAdapter {
                 holder.main.setLayoutParams(params);
             }
 
-            if(listview != "grid") {
+            if(listview != "GRID") {
                 holder.tvIdHidden = (TextView) convertView.findViewById(R.id.tvIdHidden);
                 holder.btnLock = (ImageButton) convertView.findViewById(R.id.btnlock);
                 holder.btnTimebomb = (ImageButton) convertView.findViewById(R.id.btntimebomb);
@@ -117,18 +117,18 @@ public class OurNoteListAdapter extends BaseAdapter {
 
         holder.txtNoteDate.setText(dbToAdapterDate(map.get("noteDate")));
 
-        if(map.get("noteBgColor").toString().equals("#FFFFFF") && listview == "grid")
+        if(map.get("noteBgColor").toString().equals("#FFFFFF") && listview == "GRID")
             holder.linearLayout.setBackgroundColor(Color.parseColor("#F0F0F0"));
         else
             holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
 
 
-        if(map.get("noteLock").equalsIgnoreCase("1") && listview!="grid"){
+        if(map.get("noteLock").equalsIgnoreCase("1") && listview!="GRID"){
             holder.btnLock.setImageResource(R.drawable.image_option_unlock);
             holder.isLockedIcon.setVisibility(View.VISIBLE);
         }
 
-        if(listview != "grid") {
+        if(listview != "GRID") {
             holder.tvIdHidden.setText(map.get("noteId"));
             holder.btnLock.setTag(map.get("noteId"));
             holder.btnTimebomb.setTag(map.get("noteId"));

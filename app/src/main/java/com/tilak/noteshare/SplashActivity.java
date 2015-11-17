@@ -17,7 +17,7 @@ public class SplashActivity extends Activity
 	// Splash screen timer
   public ImageView imageviewSplashLogo;
 	
-	private static int SPLASH_TIME_OUT = 4000;
+	private static int SPLASH_TIME_OUT = 1000;
  
     @SuppressLint("NewApi")
 	@Override
