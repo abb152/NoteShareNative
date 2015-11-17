@@ -107,8 +107,11 @@ public class PasscodeActivity extends DrawerActivity {
                     et3.setText("");
                     et4.setText("");
                     passcode = "";
+                    tv.setText("");
                     i = 0;
                     //newpasscode += tv.getText().toString();
+                    passcode += tv.getText().toString();
+
                     if (i == 4) {
                         et4.setText("*");
                         t.setText("Confirm Password");
@@ -140,7 +143,7 @@ public class PasscodeActivity extends DrawerActivity {
                                 i = 0;
                             }
                         }
-                    } if (i < 4) {
+                    } else {
                         if (i == 1) {
                             Log.d("&&&&&&&&&", passcode);
                             et1.setText("*");
@@ -155,6 +158,7 @@ public class PasscodeActivity extends DrawerActivity {
                             i++;
                         }
                     }
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Invalid Password", Toast.LENGTH_LONG).show();
                     et1.setText("");
