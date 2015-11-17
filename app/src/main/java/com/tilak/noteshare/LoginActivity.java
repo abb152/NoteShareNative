@@ -11,11 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -73,23 +71,17 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
     private SignInButton btnSignIn;
 
-    //getBitmapFromURL("https://lh5.googleusercontent.com/-NcmQ7wanfmo/AAAAAAAAAAI/AAAAAAAALxY/_Vfnvjx6a40/photo.jpg?sz=250");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         List<Config> config = Config.listAll(Config.class);
-        Log.e("jay config size: ", String.valueOf(config.size()));
-        //Log.e("jay config id: ", String.valueOf(config.get(0).getId()));
         if(config.size() == 0) {
             Config c = new Config("", "", "", "", "", "", 0, "", "", "", "", "MODIFIED_TIME", "DETAIL");
             c.save();
-            Log.e("jay config id: ", String.valueOf(c.getId()));
         }
 
         Config configCheck = Config.findById(Config.class,1l);
-        Log.e("jay fbid", configCheck.fbid);
-        Log.e("jay gpid", configCheck.googleid);
         if(!configCheck.fbid.isEmpty() || !configCheck.googleid.isEmpty()){
             goToMain();
         }
@@ -141,8 +133,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                 FacebookSdk.setIsDebugEnabled(true);
                                 FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
-                                Log.e("Harsh: AccessToken", AccessToken.getCurrentAccessToken().toString());
-
                                 Profile profile = Profile.getCurrentProfile();
                                 if (profile != null) {
                                     //String firstName = profile.getFirstName();
@@ -151,7 +141,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                     Uri pictureUri = profile.getProfilePictureUri(200, 200);
                                     String email = object.optString("email");
                                     String uid = object.optString("id");
-                                    //Toast.makeText(getApplicationContext(), "" + uid + " " + firstName + " " + lastName + " " + email + " " + pictureUri.toString(), Toast.LENGTH_LONG).show();
                                     try {
                                         sendLogin(uid, name, email, pictureUri.toString(), "fb");
                                     } catch (JSONException e) {
@@ -159,17 +148,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-
-                                    /*Config c = Config.findById(Config.class,1l);
-                                    //c.setFirstname(firstName);
-                                    //c.setLastname(lastName);
-                                    c.setFirstname(name);
-                                    c.setEmail(email);
-                                    c.setFbid(uid);
-                                    c.setProfilepic(pictureUri.toString());
-                                    c.save();
-                                    getBitmapFromURL(c.profilepic);*/
-                                    //goToMain();
                                     facebookLogout();
                                 } else {
                                     //facebookLogout();
@@ -344,17 +322,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
                 personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + 200;
 
-                /*Config c = Config.findById(Config.class,1l);
-                //c.setFirstname(firstName);
-                //c.setLastname(lastName);
-                c.setFirstname(personName);
-                c.setEmail(email);
-                c.setGoogleid(personGooglePlusId);
-                c.setProfilepic(personPhotoUrl);
-                c.save();
-                getBitmapFromURL(c.profilepic);*/
-                //goToMain();
-
                 try {
                     sendLogin(personGooglePlusId, personName, email, personPhotoUrl, "gp");
                 } catch (JSONException e) {
@@ -362,27 +329,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                Log.e(TAG, "Name: " + personName +
-                        ", person Id:" + personGooglePlusId +
-                        ", plusProfile: " + personGooglePlusProfile +
-                        ", email: " + email +
-                        ", Image: " + personPhotoUrl);
-
-                /*Toast.makeText(getApplicationContext(), "Name: " + personName +
-                        ", person Id:" + personGooglePlusId +
-                        ", plusProfile: " + personGooglePlusProfile +
-                        ", email: " + email +
-                        ", Image: " + personPhotoUrl, Toast.LENGTH_LONG).show();*/
-
-                // by default the profile url gives 50x50 px image only
-                // we can replace the value with whatever dimension we want by
-                // replacing sz=X
-                /*personPhotoUrl = personPhotoUrl.substring(0,
-                        personPhotoUrl.length() - 2)
-                        + PROFILE_PIC_SIZE;*/
-
-                //new LoadProfileImage(imgProfilePic).execute(personPhotoUrl);
 
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -417,18 +363,14 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     }
 
     public void sendLogin(String id, String name, String email, String profilePic, String type) throws JSONException, ClientProtocolException, IOException {
-        //Config con = Config.findById(Config.class, 1L);
-        //String email = con.email;
-        //String message = textViewFeedbackText.getText().toString();
 
-        Log.e("jay in getServerData","");
+
         ArrayList<String> stringData = new ArrayList<String>();
         DefaultHttpClient httpClient = new DefaultHttpClient();
         ResponseHandler<String> resonseHandler = new BasicResponseHandler();
         HttpPost postMethod = new HttpPost("http://104.197.122.116/user/sociallogin");
 
         JSONObject json = new JSONObject();
-        //json.put("user", "56120af8a89c4c8f043a0285");
         if (type.equals("fb")) {
             json.put("fbid", id);
         } else if (type.equals("gp")) {
@@ -440,27 +382,17 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         //postMethod.setHeader("Content-Type", "application/json" );
         postMethod.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
         String response = httpClient.execute(postMethod,resonseHandler);
-        Log.e("jay response :", response);
         JSONObject responseJson = new JSONObject(response);
-        Log.e("response json", responseJson.toString());
+
         responseServerId = responseJson.get("_id").toString();
-        //responseServerId = responseJson.getString("_id");
-        //String responseFbId; // = responseJson.get("fbid").toString();
-        //String responseGpId; // = responseJson.get("googleid").toString();
         String responseName = responseJson.get("name").toString();
         String responseEmail = responseJson.get("email").toString();
         String responseProfilePic = responseJson.get("profilepic").toString();
-        Log.e("jay fbid", responseFbId);
-        Log.e("jay gpid", responseGpId);
 
         if (type.equals("fb"))
             responseFbId = responseJson.get("fbid").toString();
         else if (type.equals("gp"))
             responseGpId = responseJson.get("googleid").toString();
-
-        //Log.e("response data", responseServerId + ", " + responseFbId + responseGpId);
-
-        //String message = responseJson.get("message").toString();
 
         if (responseServerId.isEmpty()) {
             Toast.makeText(getApplicationContext(), "No response from Server", Toast.LENGTH_LONG).show();
@@ -472,9 +404,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             c.setGoogleid(responseGpId);
             c.setProfilepic(responseProfilePic);
             c.save();
-            Log.e("jay fbid", c.fbid);
-            Log.e("jay gpid", c.googleid);
-            Log.e("jay inside conf","");
             getBitmapFromURL(c.profilepic);
             goToMain();
         }

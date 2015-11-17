@@ -969,8 +969,6 @@ public class MainActivity extends DrawerActivity {
 
 		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, viewType.name());
 
-		Log.e("jay viewType", viewType.name());
-
 		if(viewType != VIEWTYPE.GRID){
 			listView.setOffsetLeft(170L);
 
@@ -1032,7 +1030,6 @@ public class MainActivity extends DrawerActivity {
 			listView.setAnimationTime(200);
 
 			}if(viewType == VIEWTYPE.GRID){
-				Log.e("jay inside grid","");
 				listGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1042,9 +1039,6 @@ public class MainActivity extends DrawerActivity {
 						HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 
 						noteid = map.get("noteId");
-
-						for (int j = 0; j < 20; j++)
-							Log.e("NoteId: ", String.valueOf(noteid));
 
 						try {
 							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
