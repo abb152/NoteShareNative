@@ -79,6 +79,7 @@
                     style="@style/settingTextViewTitle"/>
 
                 <TextView
+                    android:id="@+id/tvSyncVia"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
@@ -180,6 +181,7 @@
                         android:background="#DDD"/>
 
                     <TextView
+                        android:id="@+id/tvRateUs"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"

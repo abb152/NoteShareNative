@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +34,7 @@ public class SendFeedbackActivity extends DrawerActivity {
 	public TextView textheadertitle, textViewSubHeaderTitle;
 	public EditText textViewFeedbackText;
 	public LinearLayout layoutTitleHeaderview;
-	public Button btSubmit;
+	public Button btSubmit, btCancel;
 
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,8 @@ public class SendFeedbackActivity extends DrawerActivity {
 		layoutHeder = (LinearLayout) contentView.findViewById(R.id.actionBar);
 		btnheaderMenu = (ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
 
+		textViewFeedbackText = (EditText) findViewById(R.id.etFeedback);
+
 		/*btnsequence = (ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
 		btncalander = (ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
 		btncalander.setVisibility(View.GONE);
@@ -76,6 +77,7 @@ public class SendFeedbackActivity extends DrawerActivity {
 		textViewSubHeaderTitle.setText("Send Feedback");*/
 
 		btSubmit = (Button) findViewById(R.id.btSubmit);
+		btCancel = (Button) findViewById(R.id.btCancel);
 
 		addListners();
 	}
@@ -85,7 +87,6 @@ public class SendFeedbackActivity extends DrawerActivity {
 		// TODO Auto-generated method stub
 		super.addListners();
 		btnheaderMenu.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -105,6 +106,13 @@ public class SendFeedbackActivity extends DrawerActivity {
 			}
 		});
 
+		btCancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				textViewFeedbackText.setText("");
+			}
+		});
+
 	}
 
 	public void sendFeedback() throws JSONException, ClientProtocolException, IOException {
@@ -112,9 +120,9 @@ public class SendFeedbackActivity extends DrawerActivity {
 		Config con = Config.findById(Config.class, 1L);
 		//String email = con.email;
 		String message = textViewFeedbackText.getText().toString();
-		String serverId = LoginActivity.responseServerId;
+		//String serverId = LoginActivity.responseServerId;
+		String serverId = con.getServerid();
 
-		Log.e("jay in getServerData","");
 		ArrayList<String> stringData = new ArrayList<String>();
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		ResponseHandler<String> resonseHandler = new BasicResponseHandler();
@@ -128,7 +136,6 @@ public class SendFeedbackActivity extends DrawerActivity {
 		//postMethod.setHeader("Content-Type", "application/json" );
 		postMethod.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
 		String response = httpClient.execute(postMethod,resonseHandler);
-		Log.e("jay response :", response);
 		JSONObject responseJson = new JSONObject(response);
 		String value = responseJson.get("value").toString();
 		//String message = responseJson.get("message").toString();

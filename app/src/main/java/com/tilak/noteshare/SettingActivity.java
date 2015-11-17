@@ -1,12 +1,16 @@
 package com.tilak.noteshare;
 
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +23,7 @@ public class SettingActivity extends DrawerActivity {
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
 	public TextView textheadertitle,textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
-	public TextView tvLikeFacebook, tvFeedback;
+	public TextView tvLikeFacebook, tvFeedback, tvRateUs, tvSyncVia;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +42,8 @@ public class SettingActivity extends DrawerActivity {
 		btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
 		tvLikeFacebook = (TextView) findViewById(R.id.tvLikeFacebook);
 		tvFeedback = (TextView) findViewById(R.id.tvFeedback);
+		tvRateUs = (TextView) findViewById(R.id.tvRateUs);
+		tvSyncVia = (TextView) findViewById(R.id.tvSyncVia);
 
 		/*btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
 		btncalander=(ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
@@ -84,6 +90,29 @@ public class SettingActivity extends DrawerActivity {
 			}
 		});
 
+		tvRateUs.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Uri uri = Uri.parse("market://details?id=" + "com.wohlig.stakes");
+				Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+				// To count with Play market backstack, After pressing back button,
+				// to taken back to our application, we need to add following flags to intent.
+				goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+				try {
+					startActivity(goToMarket);
+				} catch (ActivityNotFoundException e) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.wohlig.stakes")));
+				}
+			}
+		});
+
+		tvSyncVia.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				syncDialog(SettingActivity.this);
+			}
+		});
+
 	}
 	public void setPasscode(View v){
 		Config con = Config.findById(Config.class, 1L);
@@ -97,5 +126,22 @@ public class SettingActivity extends DrawerActivity {
 			intent.putExtra("Check", "4");
 			startActivity(intent);
 		}
+	}
+
+	public void syncDialog(Context context) {
+
+		final Dialog dialog = new Dialog(context);
+
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View contentView = inflater.inflate(R.layout.sync_dialog, null, false);
+
+		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("Sync Via");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(true);
+		dialog.setContentView(contentView);
+		dialog.show();
 	}
 }

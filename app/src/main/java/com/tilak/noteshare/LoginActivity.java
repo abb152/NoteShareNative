@@ -403,6 +403,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             c.setFbid(responseFbId);
             c.setGoogleid(responseGpId);
             c.setProfilepic(responseProfilePic);
+            c.setServerid(responseServerId);
             c.save();
             getBitmapFromURL(c.profilepic);
             goToMain();
