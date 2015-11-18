@@ -145,6 +145,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     // /Drawing Controls
     RelativeLayout LayoutAudioRecording;
     ImageButton bold = null, italic = null, underline = null, h1 = null, h2 = null, h3 = null, h4 = null, h5 = null, h6 = null, align_left = null, align_center = null, align_right = null, redo = null, undo = null;
+    ImageButton orderedList = null , unorderedList = null;
     /*LayoutInflater inflator = getLayoutInflater();
     View viewText = inflator.inflate(R.layout.note_text, null, false);*/
     View viewText;
@@ -1034,6 +1035,24 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 //updateTextNoteControlListners(R.id.action_align_right);
             }
         });
+
+        /*// ordered list
+        orderedList.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setOrderedList();
+                //updateTextNoteControlListners(R.id.action_align_center);
+            }
+        });
+
+        // unordered list
+        unorderedList.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setUnorderedList(););
+                //updateTextNoteControlListners(R.id.action_align_right);
+            }
+        });*/
 
     }
 

@@ -1,2 +1,3 @@
-include ':app'
-include ':app:libs:cropper'
+include ':app' , ':cropper' , ':richeditor'
+project(':cropper').projectDir = new File('libs/cropper')
+project(':richeditor').projectDir = new File('libs/richeditor')
