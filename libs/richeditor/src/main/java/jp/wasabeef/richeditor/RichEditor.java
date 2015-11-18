@@ -302,14 +302,6 @@ public class RichEditor extends WebView {
     exec("javascript:RE.setBold();");
   }
 
-
-  public void setOrderedList() {
-    exec("javascript:RE.setOrderedList();");
-  }
-
-  public void setUnorderedList() {
-    exec("javascript:RE.setUnorderedList();");
-  }
   public void setItalic() {
     exec("javascript:RE.setItalic();");
   }
@@ -452,9 +444,19 @@ public class RichEditor extends WebView {
     }
   }
 
-  //custom
+  //custom start
   public String getText(){
     String test = mContents.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
     return test.replace("&nbsp;","");
   }
+
+  public void setOrderedList() {
+    exec("javascript:RE.setOrderedList();");
+  }
+
+  public void setUnorderedList() {
+    exec("javascript:RE.setUnorderedList();");
+  }
+
+  //custom end
 }

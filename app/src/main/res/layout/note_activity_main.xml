@@ -310,6 +310,22 @@
                 android:src="@drawable/underline" />
 
             <ImageButton
+                android:id="@+id/action_ordered"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:src="@drawable/text_note_numbering" />
+
+            <ImageButton
+                android:id="@+id/action_unordered"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:src="@drawable/text_note_bullet" />
+
+            <ImageButton
                 android:id="@+id/action_heading1"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

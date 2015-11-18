@@ -20,10 +20,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -491,6 +491,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         bold = (ImageButton) findViewById(R.id.action_bold);
         italic = (ImageButton) findViewById(R.id.action_italic);
         underline = (ImageButton) findViewById(R.id.action_underline);
+        orderedList = (ImageButton) findViewById(R.id.action_ordered);
+        unorderedList = (ImageButton) findViewById(R.id.action_unordered);
         h1 = (ImageButton) findViewById(R.id.action_heading1);
         h2 = (ImageButton) findViewById(R.id.action_heading2);
         h3 = (ImageButton) findViewById(R.id.action_heading3);
@@ -513,11 +515,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 .findViewById(R.id.viewScibble);
 
         layOutDrawingView.setVisibility(View.GONE);
-
-	/*smallBrush = getResources().getInteger(R.integer.small_size);
-	mediumBrush = getResources().getInteger(R.integer.medium_size);
-	largeBrush = getResources().getInteger(R.integer.large_size);
-	drawView.setBrushSize(smallBrush);*/
 
         drawingControls = (LinearLayout) contentview
                 .findViewById(R.id.drawingControls);
@@ -547,7 +544,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).redo();
-                //updateTextNoteControlListners(R.id.action_redo);
             }
         });
 
@@ -556,7 +552,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).undo();
-                //updateTextNoteControlListners(R.id.action_undo);
             }
         });
 
@@ -565,7 +560,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setBold();
-                //updateTextNoteControlListners(R.id.action_bold);
             }
         });
 
@@ -574,7 +568,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setItalic();
-                //updateTextNoteControlListners(R.id.action_italic);
             }
         });
 
@@ -583,7 +576,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setUnderline();
-                //updateTextNoteControlListners(R.id.action_underline);
             }
         });
 
@@ -592,7 +584,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(1);
-                //updateTextNoteControlListners(R.id.action_heading1);
             }
         });
 
@@ -601,7 +592,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(2);
-                //updateTextNoteControlListners(R.id.action_heading2);
             }
         });
 
@@ -610,7 +600,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(3);
-                //updateTextNoteControlListners(R.id.action_heading3);
             }
         });
 
@@ -619,7 +608,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(4);
-                //updateTextNoteControlListners(R.id.action_heading4);
             }
         });
 
@@ -628,7 +616,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(5);
-                //updateTextNoteControlListners(R.id.action_heading5);
             }
         });
 
@@ -637,7 +624,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setHeading(6);
-                //updateTextNoteControlListners(R.id.action_heading6);
             }
         });
 
@@ -646,7 +632,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setAlignLeft();
-                //updateTextNoteControlListners(R.id.action_align_left);
             }
         });
 
@@ -655,7 +640,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setAlignCenter();
-                //updateTextNoteControlListners(R.id.action_align_center);
             }
         });
 
@@ -664,16 +648,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setAlignRight();
-                //updateTextNoteControlListners(R.id.action_align_right);
             }
         });
 
-        /*// ordered list
+        // ordered list
         orderedList.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setOrderedList();
-                //updateTextNoteControlListners(R.id.action_align_center);
             }
         });
 
@@ -681,10 +663,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         unorderedList.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                allRe.get(Integer.parseInt(v.getTag().toString())).setUnorderedList(););
-                //updateTextNoteControlListners(R.id.action_align_right);
+                allRe.get(Integer.parseInt(v.getTag().toString())).setUnorderedList();
             }
-        });*/
+        });
 
     }
 
@@ -1014,22 +995,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Button buttonDelete = (Button) layout_note_more_Info.findViewById(R.id.buttonDelete);
         Button buttonShare = (Button) layout_note_more_Info.findViewById(R.id.buttonShare);
 
-        /*buttonRemind.setOnClickListener(new OnClickListener() {
+        buttonRemind.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View arg0) {
-                *//*NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(NoteMainActivity.this)
-                            .setSmallIcon(R.drawable.reminder_sort_view)
-                            .setContentTitle("NoteShare")
-                            .setContentText("");
-                NotificationManager mNotificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                // mId allows you to update the notification later on.
-                int mId = 0;
-                mNotificationManager.notify(mId, mBuilder.build());*//*
-                showDate(NoteMainActivity.this);
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+
+                /*intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,endTime);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+                intent.putExtra(CalendarContract.Events.TITLE, "Neel Birthday");
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, "This is a sample description");
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "My Guest House");
+                intent.putExtra(CalendarContract.Events.RRULE, "FREQ=YEARLY");
+*/
+                startActivity(intent);
             }
-        });*/
+        });
     }
 
     public void move (View v) {
@@ -1071,106 +1053,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
-    /************* Erase control Here ************/
-	/*void showEraserDialog() {
-	final Dialog brushDialog1 = new Dialog(NoteMainActivity.this);
-	brushDialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	brushDialog1.setCancelable(true);
-	brushDialog1.setContentView(R.layout.brush_chooser);
-	TextView textViewSizesHeader = (TextView) brushDialog1
-	.findViewById(R.id.textViewSizesHeader);
-	textViewSizesHeader.setText("ERASER SIZES");
-	*//*ImageButton smallBtn = (ImageButton) brushDialog1
-	.findViewById(R.id.small_brush);
-	smallBtn.setOnClickListener(new OnClickListener() {
-	public void onClick(View v) {
-	drawView.setErase(true);
-	drawView.setBrushSize(smallBrush);
-	brushDialog1.dismiss();
-	}
-	});
-	ImageButton mediumBtn = (ImageButton) brushDialog1
-	.findViewById(R.id.medium_brush);
-	mediumBtn.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View v) {
-	drawView.setErase(true);
-	drawView.setBrushSize(mediumBrush);
-	brushDialog1.dismiss();
-	}
-	});
-	ImageButton largeBtn = (ImageButton) brushDialog1
-	.findViewById(R.id.large_brush);
-	largeBtn.setOnClickListener(new OnClickListener() {
-	@Override
-	public void onClick(View v) {
-	drawView.setErase(true);
-	drawView.setBrushSize(largeBrush);
-	brushDialog1.dismiss();
-	}
-	});*//*
-	brushDialog1.show();
-	}*/
-
-    /*************
-     * main list control Here
-     ************/
     void addlistners() {
 
         //imageButtoncalander.setVisibility(View.VISIBLE); //changed by Jay
 
-        // #NOTE ITEM CLCIK
-
-	/*listviewNotes.setOnItemClickListener(new OnItemClickListener() {
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-	long arg3) {
-	NoteListDataModel notelistitem = arrNoteListData.get(arg2);
-	Toast.makeText(getApplicationContext(), "clicke",
-	Toast.LENGTH_SHORT).show();
-	Log.v("GET ITEM", "seletecd item" + arg2 + "TYPE:"
-	+ notelistitem.noteType);
-	switch (notelistitem.noteType) {
-	case TEXTMODE: {
-	Toast.makeText(getApplicationContext(), "Text mode",
-	Toast.LENGTH_SHORT).show();
-	DataManager.sharedDataManager().setNotelistData(
-	notelistitem);
-	startActivity(new Intent(NoteMainActivity.this,
-	NoteTextIItemFullScreen.class));
-	}
-	break;
-	case IMAGEMODE: {
-	Toast.makeText(getApplicationContext(), "Image mode",
-	Toast.LENGTH_SHORT).show();
-	DataManager.sharedDataManager().setNotelistData(
-	notelistitem);
-	startActivity(new Intent(NoteMainActivity.this,
-	NoteItemFullScreen.class));
-	}
-	break;
-	case SCRIBBLEMODE: {
-	Toast.makeText(getApplicationContext(), "scribble mode",
-	Toast.LENGTH_SHORT).show();
-	DataManager.sharedDataManager().setNotelistData(
-	notelistitem);
-	}
-	break;
-	case AUDIOMODE: {
-	Toast.makeText(getApplicationContext(), "audio mode",
-	Toast.LENGTH_SHORT).show();
-	}
-	break;
-	default:
-	break;
-	}
-	}
-	});*/
-
-        // #BUTTON CHECKED CLICK TEXTSAVE
-
         imageButtoncalander.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
@@ -1210,7 +1097,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         imageButtonHamburg.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // openSlideMenu();
@@ -1386,7 +1272,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         imageButtonsquence.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
@@ -1416,7 +1301,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         imageButtonAudioMode.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 drawingControls.setVisibility(View.GONE);
@@ -1551,7 +1435,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
         imageButtonImageMode.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 System.out.println("image mode");
@@ -1581,7 +1464,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
         imageButtonPaintMode.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 System.out.println("paint mode");
@@ -1760,6 +1642,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         bold.setTag(Integer.parseInt(id));
         italic.setTag(Integer.parseInt(id));
         underline.setTag(Integer.parseInt(id));
+        orderedList.setTag(Integer.parseInt(id));
+        unorderedList.setTag(Integer.parseInt(id));
         h1.setTag(Integer.parseInt(id));
         h2.setTag(Integer.parseInt(id));
         h3.setTag(Integer.parseInt(id));
