@@ -759,9 +759,9 @@ public class MainActivity extends DrawerActivity {
 		list = new ArrayList<HashMap<String, String>>();
 		List<Note> allnotes;
 		if(folderIdforNotes == null || folderIdforNotes == "-1")
-			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' ORDER BY ID DESC");
+			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE creationtime != 0 ORDER BY ID DESC");
 		else
-			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE shownote = '1' AND folder = " + folderIdforNotes + " ORDER BY ID DESC");
+			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE creationtime != 0 AND folder = " + folderIdforNotes + " ORDER BY ID DESC");
 
 		sortallnotes = allnotes;
 		putInList();
@@ -815,13 +815,9 @@ public class MainActivity extends DrawerActivity {
 
 			Date timebomb = formatter.parse(timebomb_time);
 			if (currentDate.compareTo(timebomb) >= 0) {
-				currentnote.setShownote("0");
-				currentnote.save();
-			} else {
-				currentnote.setShownote("1");
+				currentnote.setCreationtime("0");
 				currentnote.save();
 			}
-
 		}
 	}
 
@@ -959,7 +955,8 @@ public class MainActivity extends DrawerActivity {
 
 	public void delete(String id){
 		Note n = Note.findById(Note.class, Long.parseLong(id));
-		n.delete();
+		n.setCreationtime("0");
+		n.save();
 		onRestart();
 	}
 

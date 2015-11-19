@@ -271,7 +271,6 @@ public class NoteFunctions {
             public void onClick(View arg0) {
                 delete(id);
                 dialog.dismiss();
-                context.startActivity(new Intent(context, MainActivity.class));
             }
         });
 
@@ -283,7 +282,8 @@ public class NoteFunctions {
 
     public void delete(String id){
         Note n = Note.findById(Note.class, Long.parseLong(id));
-        n.delete();
+        n.setCreationtime("0");
+        n.save();
     }
 
     // SHARE

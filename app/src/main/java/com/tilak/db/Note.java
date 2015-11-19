@@ -21,7 +21,7 @@ public class Note extends SugarRecord {
         super();
     }
 
-    public Note(String title, String tags, String color, String folder, Long remindertime, String timebomb, String background, String creationtime, String modifytime, String serverid, String shownote, int islocked) {
+    public Note(String title, String tags, String color, String folder, Long remindertime, String timebomb, String background, String creationtime, String modifytime, String serverid, int islocked) {
         this.background = background;
         this.color = color;
         this.creationtime = creationtime;
@@ -30,7 +30,6 @@ public class Note extends SugarRecord {
         this.modifytime = modifytime;
         this.remindertime = remindertime;
         this.serverid = serverid;
-        this.shownote = shownote;
         this.tags = tags;
         this.timebomb = timebomb;
         this.title = title;
@@ -98,14 +97,6 @@ public class Note extends SugarRecord {
 
     public void setServerid(String serverid) {
         this.serverid = serverid;
-    }
-
-    public String getShownote() {
-        return shownote;
-    }
-
-    public void setShownote(String shownote) {
-        this.shownote = shownote;
     }
 
     public String getTags() {

@@ -952,6 +952,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         if (noteIdForDetails == null)
             makeNote();
         noteFunctions.showDeleteAlert(this, noteIdForDetails);
+        context.startActivity(new Intent(context, MainActivity.class));
 
     }
 
@@ -1582,45 +1583,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         // 5. Return the file's URI
         return Uri.fromFile(mediaStorageDir);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == TAKE_PHOTO_REQUEST) {
-                //finish();
-                Intent cameraIntent = new Intent(NoteMainActivity.this, CameraImage.class);
-                cameraIntent.putExtra("image", mMediaUri.toString());
-                //send noteid
-                if (noteIdForDetails == null)
-                    cameraIntent.putExtra("a", 0);
-                else
-                    cameraIntent.putExtra("a", 1);
-
-                cameraIntent.putExtra("noteid", noteIdForDetails);
-                cameraIntent.putExtra("check", 0);
-                startActivity(cameraIntent);
-
-            } else if (requestCode == SELECT_PICTURE) {
-                Uri imagePath = data.getData();
-                Intent selectIntent = new Intent(NoteMainActivity.this, CameraImage.class);
-                selectIntent.putExtra("select_image", imagePath.toString());
-                selectIntent.putExtra("noteid", noteIdForDetails);
-
-                if (noteIdForDetails == null)
-                    selectIntent.putExtra("a", 0);
-                else
-                    selectIntent.putExtra("a", 1);
-
-                selectIntent.putExtra("check", 1);
-                Log.e("select pic", imagePath.toString());
-                //cameraIntent.putExtra()
-                startActivity(selectIntent);
-            }
-        }
     }
 
     void showColorAlert(String message, Context context) {
@@ -2773,12 +2735,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     public void makeNote() {
-        Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", 0L , "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
+        Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", 0L , "", "#FFFFFF", currentDateStr, currentDateStr, "", 0);
         note.save();
         noteIdForDetails = note.getId().toString();
-
-        Log.e("jay notetitle:", note.getTitle());
-
         noteTitle[0] = note.getTitle();
     }
 

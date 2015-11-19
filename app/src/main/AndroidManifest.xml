@@ -156,11 +156,6 @@
             android:name=".PasscodeActivity"
             android:label="@string/title_activity_passcode" >
         </activity>
-        <activity
-            android:name=".CameraImage"
-            android:label="CameraImage"
-            android:screenOrientation="portrait" >
-        </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity
             android:name=".CameraActivity"
