@@ -8,7 +8,7 @@ public class Note extends SugarRecord {
     public String tags;
     public String color; //in hex
     public String folder;
-    public String remindertime; //epoch
+    public Long remindertime; //epoch
     public String timebomb;
     public String background;
     public String creationtime;
@@ -21,7 +21,7 @@ public class Note extends SugarRecord {
         super();
     }
 
-    public Note(String title, String tags, String color, String folder, String remindertime, String timebomb, String background, String creationtime, String modifytime, String serverid, String shownote, int islocked) {
+    public Note(String title, String tags, String color, String folder, Long remindertime, String timebomb, String background, String creationtime, String modifytime, String serverid, String shownote, int islocked) {
         this.background = background;
         this.color = color;
         this.creationtime = creationtime;
@@ -84,11 +84,11 @@ public class Note extends SugarRecord {
         this.modifytime = modifytime;
     }
 
-    public String getRemindertime() {
+    public Long getRemindertime() {
         return remindertime;
     }
 
-    public void setRemindertime(String remindertime) {
+    public void setRemindertime(Long remindertime) {
         this.remindertime = remindertime;
     }
 

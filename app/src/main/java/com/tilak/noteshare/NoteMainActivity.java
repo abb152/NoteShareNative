@@ -931,7 +931,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void remindClick(View v) {
         if (noteIdForDetails == null)
             makeNote();
-        noteFunctions.showDate(this, noteIdForDetails, "SET REMAINDER", "remainder");
+        noteFunctions.showDate(this, noteIdForDetails, "SET REMAINDER", "reminder");
     }
 
     public void passcode(View v) {
@@ -2773,7 +2773,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     public void makeNote() {
-        Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
+        Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", 0L , "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
         note.save();
         noteIdForDetails = note.getId().toString();
 

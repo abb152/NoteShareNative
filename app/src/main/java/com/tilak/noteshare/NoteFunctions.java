@@ -2,9 +2,12 @@ package com.tilak.noteshare;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +27,10 @@ import com.tilak.db.Config;
 import com.tilak.db.Folder;
 import com.tilak.db.Note;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,8 +82,6 @@ public class NoteFunctions {
         DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
         TimePicker tp = (TimePicker) contentView.findViewById(R.id.tp);
 
-
-        //final int[1] hour;/* = tp.getCurrentHour();*/
         final int[] time = new int[2];
         time[0] = tp.getCurrentHour();
         time[1] = tp.getCurrentMinute();
@@ -104,7 +108,6 @@ public class NoteFunctions {
         dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                //Log.d("tag", "finally found the listener, the date is: year " + year + ", month " + month + ", dayOfMonth " + dayOfMonth);
                 date[0] = dayOfMonth;
                 date[1] = month + 1;
                 date[2] = year;
@@ -114,21 +117,29 @@ public class NoteFunctions {
         buttonAlertOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getApplication(),"Day: " + date[0] + ", Month: " + date[1] + ", Year: " + date[2] ,Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplication(),"Hour: "+ time[0] + "Minute" + time[1],Toast.LENGTH_LONG).show();
 
-                String timebombTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
+                String selectedTime = check(date[2]) + "-" + check(date[1]) + "-" + check(date[0]) + " " + check(time[0]) + ":" + check(time[1]) + ":00";
+
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = null;
+                try {
+                    date = df.parse(selectedTime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                long epochTime = date.getTime();
 
                 if (type.equals("timebomb")) {
                     Note n = Note.findById(Note.class, Long.valueOf(noteid));
-                    n.timebomb = timebombTime;
+                    n.timebomb = selectedTime;
                     n.save();
-                    Toast.makeText(context, "Timebomb Set: " + timebombTime, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Timebomb Set: " + selectedTime, Toast.LENGTH_LONG).show();
                 } else if (type.equals("reminder")) {
                     Note n = Note.findById(Note.class, Long.valueOf(noteid));
-                    n.remindertime = timebombTime;
+                    n.remindertime = epochTime;
                     n.save();
-                    Toast.makeText(context, "Reminder Set: " + timebombTime, Toast.LENGTH_LONG).show();
+                    setReminder(context, noteid, epochTime);
+                    Toast.makeText(context, "Reminder Set: " + selectedTime, Toast.LENGTH_LONG).show();
                 }
 
                 move.dismiss();
@@ -146,6 +157,23 @@ public class NoteFunctions {
         move.setCancelable(true);
         move.setContentView(contentView);
         move.show();
+    }
+
+    public void setReminder(Context context, String noteid, long startTime) {
+
+        Note n = Note.findById(Note.class, Long.valueOf(noteid));
+
+        CalendarEvent evt = new CalendarEvent();
+        //evt.setDescr("this is desc");
+        evt.setTitle(n.getTitle());
+        //evt.setLocation("Mumbai");
+        evt.setStartTime(startTime);
+        evt.setEndTime(startTime + 3600000);
+        evt.setIdCalendar("1");
+
+        ContentResolver cr = context.getContentResolver();
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, CalendarEvent.toICSContentValues(evt));
+        System.out.println("Event URI ["+uri+"]");
     }
 
     public String check(int value){
@@ -180,7 +208,7 @@ public class NoteFunctions {
             HashMap<String,String> map = new HashMap<String,String>();
             map.put("folderName", folderloop.getName());
             map.put("folderId", String.valueOf(folderloop.getId()));
-            map.put("noteId",noteid);
+            map.put("noteId", noteid);
             folderList.add(map);
         }
 
@@ -201,7 +229,7 @@ public class NoteFunctions {
                 foldername = map.get("folderName");
                 noteid = Long.parseLong(map.get("noteId"));
 
-                Note n = Note.findById(Note.class,noteid);
+                Note n = Note.findById(Note.class, noteid);
                 n.folder = folderid;
                 n.save();
                 move.dismiss();
@@ -260,5 +288,6 @@ public class NoteFunctions {
 
     // SHARE
     public void share() {}
+
 
 }

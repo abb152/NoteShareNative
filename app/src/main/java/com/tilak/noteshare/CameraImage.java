@@ -90,7 +90,7 @@ public class CameraImage extends Activity {
     public void makeNote() {
         SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateStr = formatter.format(new Date());
-        Note note = new Note("NOTE", "","#FFFFFF", "", "", "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
+        Note note = new Note("NOTE", "","#FFFFFF", "", 0L, "", "#FFFFFF", currentDateStr, currentDateStr, "", "1", 0);
         note.save();
         noteMainActivity.noteIdForDetails = note.getId().toString();
         noteid = noteMainActivity.noteIdForDetails;

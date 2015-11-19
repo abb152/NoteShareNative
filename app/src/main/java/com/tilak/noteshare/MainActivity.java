@@ -789,7 +789,7 @@ public class MainActivity extends DrawerActivity {
 			HashMap<String,String> map = new HashMap<String,String>();
 			map.put("noteName", currentnote.getTitle());
 			map.put("noteDesc", noteDesc); // change this later
-			map.put("noteDate", currentnote.getModificationtime());
+			map.put("noteDate", currentnote.getModifytime());
 			map.put("noteId", currentnote.getId().toString());
 			map.put("noteBgColor",currentnote.getBackground());
 			map.put("noteLock", String.valueOf(currentnote.getIslocked()));
@@ -970,7 +970,7 @@ public class MainActivity extends DrawerActivity {
 		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, viewType.name());
 
 		if(viewType != VIEWTYPE.GRID){
-			listView.setOffsetLeft(170L);
+			listView.setOffsetLeft(140L);
 
 			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1110,7 +1110,7 @@ public class MainActivity extends DrawerActivity {
 		public int compare(Note c1, Note c2) {
 			try{
 				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String modifiedtime1 = c1.getModificationtime();
+				String modifiedtime1 = c1.getModifytime();
 				Date modification1 = formatter.parse(modifiedtime1);
 				String modifiedtime2 = c2.getCreationtime();
 				Date modification2 = formatter.parse(modifiedtime2);
@@ -1119,7 +1119,7 @@ public class MainActivity extends DrawerActivity {
 			catch (Exception e) {
 			}
 			finally {
-				return c2.getModificationtime().compareTo(c1.getModificationtime());
+				return c2.getModifytime().compareTo(c1.getModifytime());
 			}
 		}
 	}
@@ -1128,7 +1128,7 @@ public class MainActivity extends DrawerActivity {
 		public int compare(Note c1, Note c2) {
 			try{
 				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String timebomb1 = c1.getModificationtime();
+				String timebomb1 = c1.getModifytime();
 				Date timebombdate1 = formatter.parse(timebomb1);
 				String timebomb2 = c2.getCreationtime();
 				Date timebombdate2 = formatter.parse(timebomb2);
@@ -1157,7 +1157,7 @@ public class MainActivity extends DrawerActivity {
 	public void remind(View v) {
 		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		noteFunctions.showDate(this, id, "SET REMINDER", "remainder");
+		noteFunctions.showDate(this, id, "SET REMINDER", "reminder");
 	}
 
 	public void deleteNote(View v){
