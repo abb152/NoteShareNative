@@ -1,6 +1,7 @@
 package com.tilak.noteshare;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -389,7 +390,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 .findViewById(R.id.imageButtondrawnew);
         updateAudioNoteUI(R.id.imageButtondrawback);
         audioButtondrawback.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 updateButtonUI(-1);
@@ -671,7 +671,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     void addScribbleControlListners() {
         imageButtondrawback.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
@@ -688,7 +687,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
         imageButtondrawnew.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
@@ -866,85 +864,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
-	/*void showImageChooserAlertWith(String message, Context context) {
-
-		final Dialog dialog = new Dialog(context);
-
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		View contentView = inflater.inflate(R.layout.chooseimagealertview,
-				null, false);
-
-		TextView textViewTitleAlert = (TextView) contentView
-				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("SELECT IMAGE");
-		textViewTitleAlert.setTextColor(Color.WHITE);
-
-		TextView buttonAlertCancel = (TextView) contentView
-				.findViewById(R.id.buttonAlertCancel);
-
-		TextView textViewTitleTakePicture = (TextView) contentView
-				.findViewById(R.id.textViewTitleTakePicture);
-
-		TextView textViewTitlechosserfromgallary = (TextView) contentView
-				.findViewById(R.id.textViewTitlechosserfromgallary);
-
-		buttonAlertCancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				dialog.dismiss();
-
-			}
-		});
-		textViewTitleTakePicture.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// System.exit(0);
-				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
-				//captureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-				if (mMediaUri == null) {
-					// display an error
-					Toast.makeText(NoteMainActivity.this, "", Toast.LENGTH_LONG).show();
-				}
-				else {
-					takePhotoIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mMediaUri);
-					startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
-				}
-	*//*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	startActivityForResult(intent, REQUEST_CAMERA);*//*
-				dialog.dismiss();
-			}
-		});
-
-		textViewTitlechosserfromgallary
-				.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View arg0) {
-						// System.exit(0);
-						Intent intent = new Intent(
-								Intent.ACTION_PICK,
-								android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image*//*");
-						startActivityForResult(
-								Intent.createChooser(intent, "Select File"),
-								SELECT_PICTURE);
-						dialog.dismiss();
-					}
-				});
-
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setCancelable(true);
-		dialog.setContentView(contentView);
-		dialog.show();
-
-	}*/
-
     void updateHeaderControls(int itemId) {
         imageButtonHamburg.setBackgroundColor(getResources().getColor(
                 R.color.header_bg));
@@ -994,25 +913,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Button buttonMove = (Button) layout_note_more_Info.findViewById(R.id.buttonMove);
         Button buttonDelete = (Button) layout_note_more_Info.findViewById(R.id.buttonDelete);
         Button buttonShare = (Button) layout_note_more_Info.findViewById(R.id.buttonShare);
-
-        buttonRemind.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
-                intent.setType("vnd.android.cursor.item/event");
-
-                /*intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime);
-                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,endTime);
-                intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
-                intent.putExtra(CalendarContract.Events.TITLE, "Neel Birthday");
-                intent.putExtra(CalendarContract.Events.DESCRIPTION, "This is a sample description");
-                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "My Guest House");
-                intent.putExtra(CalendarContract.Events.RRULE, "FREQ=YEARLY");
-*/
-                startActivity(intent);
-            }
-        });
     }
+
 
     public void move (View v) {
         if (noteIdForDetails == null)
@@ -1149,14 +1051,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 final boolean[] cb_added = {false};
                 final long[] thisnoteelementid = new long[1];
 
-                final JSONObject checkBoxValue = new JSONObject();
-                try {
-                    checkBoxValue.put("status", 0);
-                    checkBoxValue.put("text", "");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
                 checklist_text.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1172,29 +1066,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             String updatedText = s.toString();
 
                             if (!cb_added[0]) {
-
-                                try {
-                                    checkBoxValue.put("status", 0);
-                                    checkBoxValue.put("text", updatedText);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "checkbox", checkBoxValue.toString());
+                                NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "checkbox", s.toString(), "false", "");
                                 ne.save();
                                 thisnoteelementid[0] = ne.getId();
                                 cb_added[0] = true;
                             }
                             if (cb_added[0]) {
                                 NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
-                                try {
-                                    checkBoxValue.remove("text");
-                                    checkBoxValue.put("text", s.toString());
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                ne.content = checkBoxValue.toString();
-                                Log.e("jay after text", ne.content);
+                                ne.setContent(s.toString());
                                 ne.save();
                                 modifyNoteTime();
 
@@ -1239,29 +1118,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                         if (tag.equals("1")) {
                             checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
-                            try {
-                                checkBoxValue.remove("status");
-                                checkBoxValue.put("status", 0);
-                                checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            ne.setContentA("false");
+                            checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             v.setTag("0");
                         } else {
                             checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
-                            try {
-                                checkBoxValue.remove("status");
-                                checkBoxValue.put("status", 1);
-                                checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            ne.setContentA("true");
+                            checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
                             v.setTag("1");
                         }
-
-                        ne.content = checkBoxValue.toString();
-                        Log.e("jay after image", ne.content);
-
                         ne.save();
                         modifyNoteTime();
 
@@ -1329,16 +1195,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         makeNote();
                     }
                     if (noteIdForDetails != null) {
-
-                        final JSONObject audioValue = new JSONObject();
-                        try {
-                            audioValue.put("status", 0);
-                            audioValue.put("name", audioName);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioValue.toString());
+                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
                         ne.save();
                         modifyNoteTime();
                     }
@@ -1401,24 +1258,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         myAudioRecorder = null;
                         record_text.setVisibility(View.GONE);
 
-						/*if (noteIdForDetails == null) {
-							makeNote();
-						}
-						if (noteIdForDetails != null) {
-							NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName);
-							ne.save();
-							modifyNoteTime();
-						}*/
-
-                        JSONObject audioValue = null;
-                        try {
-                            audioValue = new JSONObject(finalNe.content);
-                            audioValue.remove("status");
-                            audioValue.put("status", 1);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        finalNe.content = audioValue.toString();
+                        finalNe.contentA = "true";
                         finalNe.save();
 
                         Toast.makeText(NoteMainActivity.this, "Recording Saved",
@@ -1590,19 +1430,21 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     public void onTextChange(String s) {
                         //editortext[0] = s;
                         //String tag = (String) editor.getTag();
+                        String plainText = getPlainText(s);
 
                         if (noteIdForDetails == null)
                             makeNote();
 
                         if (!ne_added[0]) {
-                            NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s);
+                            NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s, plainText ,"");
                             ne.save();
                             thisnoteid[0] = ne.getId();
                             ne_added[0] = true;
                         }
                         if (ne_added[0]) {
                             NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
-                            ne.content = s;
+                            ne.setContent(s);
+                            ne.setContentA(plainText);
                             ne.save();
                             modifyNoteTime();
                         }
@@ -2616,7 +2458,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     // TODO open highlight
     public void openHighlight() {
         drawView.onClickEraser(1);
-        drawView.setBrushSize((int)(lastHighlightSize * 6.299));
+        drawView.setBrushSize((int) (lastHighlightSize * 6.299));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
         params.gravity = Gravity.CENTER;
         highlightview.setLayoutParams(params);
@@ -2865,7 +2707,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         if (noteIdForDetails != null) {
             Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
             note.setColor(viewTag);
-            note.setModificationtime(currentDateStr);
+            note.setModifytime(currentDateStr);
             note.save();
         }
     }
@@ -2924,7 +2766,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         if (noteIdForDetails != null) {
             Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
             note.setColor(backgroundColor);
-            note.setModificationtime(currentDateStr);
+            note.setModifytime(currentDateStr);
             note.save();
         }
 
@@ -2942,7 +2784,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     public void modifyNoteTime() {
         Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-        n.modificationtime = currentDateStr;
+        n.setModifytime(currentDateStr);
         n.save();
     }
 
@@ -3128,21 +2970,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                 } else if (n.type.equals("audio")) {
                     // add audio layout
-                    Log.e("jay n.con", n.content);
                     String name = null;
-                    int status = 0;
-                    JSONObject audioJson = null;
-                    try {
-                        audioJson = new JSONObject(n.content);
-                        Log.e("jay audio Json", audioJson.toString());
-                        name = audioJson.get("name").toString();
-                        //status = audioJson.get("status").toString();
-                        status = audioJson.getInt("status");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    String status;
 
-                    Log.e("jay status", String.valueOf(status));
+                    name = n.content;
+                    status = n.contentA;
 
                     //addAudio(name);
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);
@@ -3161,8 +2993,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     audioDelete.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
-                            //deleteElements(v.getTag().toString());
                             showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
                         }
                     });
@@ -3174,7 +3004,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     // Audio Play
                     audio_play.setOnClickListener(new OnClickListener() {
                         @Override
@@ -3214,19 +3043,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             }
                         }
                     });
-                    if (status == 1)
+                    if (status.equals("true"))
                         noteElements.addView(note_audio);
 
                 } else if (n.type.equals("checkbox")) {
-                    String text = null, status = null;
-                    JSONObject checkBoxJson = null;
-                    try {
-                        checkBoxJson = new JSONObject(n.content);
-                        text = checkBoxJson.get("text").toString();
-                        status = checkBoxJson.get("status").toString();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    Boolean status = Boolean.valueOf(n.contentA);
+                    String text = n.content;
 
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);
                     LayoutInflater inflator = getLayoutInflater();
@@ -3236,7 +3058,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     final ImageButton checklistDelete = (ImageButton) viewChecklist.findViewById(R.id.deleteCheckbox);
                     allDelete.add(checklistDelete);
                     checklistDelete.setTag(n.getId());
-                    checklist_icon.setTag(status);
+                    if(status)
+                        checklist_icon.setTag(1);
+                    else
+                        checklist_icon.setTag(0);
 
                     final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
 
@@ -3244,7 +3069,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     //checklist_text.setTag(allCheckboxText.size()-1);
                     noteElements.addView(checkbox);
 
-                    if (status.equals("1")) {
+                    if (status) {
                         checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
                         checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     }
@@ -3262,7 +3087,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         }
                     });
 
-                    final JSONObject finalCheckBoxJson = checkBoxJson;
                     checklist_text.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -3271,14 +3095,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                            try {
-                                finalCheckBoxJson.remove("text");
-                                finalCheckBoxJson.put("text", s.toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            n.content = finalCheckBoxJson.toString();
-                            Log.e("jay after text", n.content);
+                            n.setContent(s.toString());
                             n.save();
                             modifyNoteTime();
 
@@ -3295,29 +3112,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             String tag = v.getTag().toString();
                             if (tag.equals("1")) {
                                 checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
-                                try {
-                                    finalCheckBoxJson.remove("status");
-                                    finalCheckBoxJson.put("status", 0);
-                                    checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                n.setContentA("false");
+                                checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                                 v.setTag("0");
                             } else {
                                 checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
-                                try {
-                                    finalCheckBoxJson.remove("status");
-                                    finalCheckBoxJson.put("status", 1);
-                                    checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                n.setContentA("true");
+                                checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                                 v.setTag("1");
                             }
-
-                            n.content = finalCheckBoxJson.toString();
-                            Log.e("jay after image", n.content);
-
                             n.save();
                             modifyNoteTime();
                         }
@@ -3408,6 +3211,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
             isDeleteModeSelected = false;
         }
+    }
+
+    public String getPlainText(String htmlText){
+        String plainText = htmlText.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+        return plainText.replace("&nbsp;","");
     }
 
 }

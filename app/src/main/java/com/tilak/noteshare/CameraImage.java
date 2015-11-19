@@ -79,7 +79,7 @@ public class CameraImage extends Activity {
             if (a == 0) { makeNote(); }
 
             if (a == 1) {
-                NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", "IMG-" + timestamp + ".jpg");
+                NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", "IMG-" + timestamp + ".jpg","","");
                 noteElement.save();
                 modifyNoteTime();
             }
@@ -101,7 +101,7 @@ public class CameraImage extends Activity {
         SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateStr = formatter.format(new Date());
         Note n = Note.findById(Note.class, Long.parseLong(noteid));
-        n.modificationtime = currentDateStr;
+        n.setModifytime(currentDateStr);
         n.save();
     }
 
