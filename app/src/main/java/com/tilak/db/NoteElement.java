@@ -7,6 +7,8 @@ public class NoteElement extends SugarRecord {
     public long noteid;
     public int ordernumber;
     public String content;
+    public String contentA;
+    public String contentB;
     public String type;
     public String isSync;
 
@@ -14,20 +16,14 @@ public class NoteElement extends SugarRecord {
         super();
     }
 
-    public long getNoteid() {
-        return noteid;
-    }
-
-    public void setNoteid(long noteid) {
+    public NoteElement(long noteid, int ordernumber, String isSync, String type, String content, String contentA, String contentB) {
+        this.content = content;
+        this.contentA = contentA;
+        this.contentB = contentB;
+        this.isSync = isSync;
         this.noteid = noteid;
-    }
-
-    public int getOrdernumber() {
-        return ordernumber;
-    }
-
-    public void setOrdernumber(int ordernumber) {
         this.ordernumber = ordernumber;
+        this.type = type;
     }
 
     public String getContent() {
@@ -38,12 +34,20 @@ public class NoteElement extends SugarRecord {
         this.content = content;
     }
 
-    public String getType() {
-        return type;
+    public String getContentA() {
+        return contentA;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setContentA(String contentA) {
+        this.contentA = contentA;
+    }
+
+    public String getContentB() {
+        return contentB;
+    }
+
+    public void setContentB(String contentB) {
+        this.contentB = contentB;
     }
 
     public String getIsSync() {
@@ -54,12 +58,27 @@ public class NoteElement extends SugarRecord {
         this.isSync = isSync;
     }
 
-    public NoteElement(long noteid, int ordernumber, String isSync, String type, String content) {
+    public long getNoteid() {
+        return noteid;
+    }
 
+    public void setNoteid(long noteid) {
         this.noteid = noteid;
-        this.ordernumber = ordernumber;
-        this.isSync = isSync;
+    }
+
+    public int getOrderNumber() {
+        return ordernumber;
+    }
+
+    public void setOrderNumber(int order) {
+        this.ordernumber = order;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
         this.type = type;
-        this.content = content;
     }
 }

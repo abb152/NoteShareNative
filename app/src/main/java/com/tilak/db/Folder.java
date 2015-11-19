@@ -11,42 +11,17 @@ public class Folder extends SugarRecord {
     public int ordernumber;
     public String serverid;
     public String creationtime;
-    public String modificationtime;
+    public String modifytime;
 
     public Folder() {
         super();
     }
 
-    public Folder(String name, int ordernumber, String serverid, String creationtime, String modificationtime) {
-        super();
-        this.name = name;
-        this.ordernumber = ordernumber;
-        this.serverid = serverid;
+    public Folder(String name, int ordernumber, String serverid, String creationtime, String modifytime) {
         this.creationtime = creationtime;
-        this.modificationtime = modificationtime;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+        this.modifytime = modifytime;
         this.name = name;
-    }
-
-    public int getOrdernumber() {
-        return ordernumber;
-    }
-
-    public void setOrdernumber(int ordernumber) {
         this.ordernumber = ordernumber;
-    }
-
-    public String getServerid() {
-        return serverid;
-    }
-
-    public void setServerid(String serverid) {
         this.serverid = serverid;
     }
 
@@ -58,11 +33,35 @@ public class Folder extends SugarRecord {
         this.creationtime = creationtime;
     }
 
-    public String getModificationtime() {
-        return modificationtime;
+    public String getModifytime() {
+        return modifytime;
     }
 
-    public void setModificationtime(String modificationtime) {
-        this.modificationtime = modificationtime;
+    public void setModifytime(String modifytime) {
+        this.modifytime = modifytime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getOrderNumber() {
+        return ordernumber;
+    }
+
+    public void setOrderNumber(int order) {
+        this.ordernumber = order;
+    }
+
+    public String getServerid() {
+        return serverid;
+    }
+
+    public void setServerid(String serverid) {
+        this.serverid = serverid;
     }
 }
