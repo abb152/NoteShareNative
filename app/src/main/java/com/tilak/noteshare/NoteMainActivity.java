@@ -458,7 +458,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     void initlizeAudiorecoder() {
         //SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHH_mm_ss");
         String timestamp = String.valueOf(System.currentTimeMillis());
-        audioName = "AUD-" + timestamp + ".m4a";
+        FileNameGenerator fileNameGenerator = new FileNameGenerator();
+        audioName = fileNameGenerator.getFileName("AUDIO");
 
         outputFile = Environment.getExternalStorageDirectory()
                 .getAbsolutePath() + "/NoteShare/NoteShare Audio/" + audioName;
@@ -487,7 +488,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         textNoteControls = (LinearLayout) contentview.findViewById(R.id.textNoteControls);
         textNoteControls.setVisibility(View.GONE);
 
-        // bold italic underline h1 h2 h3 h4 h5 h6 align_left align_center align_right redo undo
+        // bold italic underline ol ul h1 h2 h3 h4 h5 h6 align_left align_center align_right redo undo
         bold = (ImageButton) findViewById(R.id.action_bold);
         italic = (ImageButton) findViewById(R.id.action_italic);
         underline = (ImageButton) findViewById(R.id.action_underline);
@@ -579,6 +580,22 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
 
+        // ordered list
+        orderedList.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setOrderedList();
+            }
+        });
+
+        // unordered list
+        unorderedList.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRe.get(Integer.parseInt(v.getTag().toString())).setUnorderedList();
+            }
+        });
+
         // h1
         h1.setOnClickListener(new OnClickListener() {
             @Override
@@ -648,22 +665,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 allRe.get(Integer.parseInt(v.getTag().toString())).setAlignRight();
-            }
-        });
-
-        // ordered list
-        orderedList.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                allRe.get(Integer.parseInt(v.getTag().toString())).setOrderedList();
-            }
-        });
-
-        // unordered list
-        unorderedList.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                allRe.get(Integer.parseInt(v.getTag().toString())).setUnorderedList();
             }
         });
 
@@ -1437,7 +1438,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             makeNote();
 
                         if (!ne_added[0]) {
-                            NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s, plainText ,"");
+                            NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s, plainText, "");
                             ne.save();
                             thisnoteid[0] = ne.getId();
                             ne_added[0] = true;
@@ -2574,31 +2575,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View arg0) {
 
-                Date date = new Date();
-
                 drawingControls.setVisibility(View.GONE);
                 layOutDrawingView.setVisibility(View.GONE);
                 updateButtonUI(-1);
 
                 drawView.setDrawingCacheEnabled(true);
 
-                String timestamp = String.valueOf(System.currentTimeMillis());
-                File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".jpg");
-                File file2 = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".png");
+                FileNameGenerator fileNameGenerator = new FileNameGenerator();
+                String fileName = fileNameGenerator.getFileName("SCRIBBLE");
+                File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
 
                 try {
-                    drawView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
-                    drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file2));
+                    drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
 
-                    ContentValues values = new ContentValues();
+                    /*ContentValues values = new ContentValues();
                     values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
-                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
-                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-                    ContentValues values2 = new ContentValues();
-                    values2.put(MediaStore.Images.Media.DATA, file2.getAbsolutePath());
-                    values2.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
-                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values2);
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
+                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
 
 
                 } catch (Exception e) {
@@ -2613,9 +2606,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                    drawView.setUserDrawn(false);
 
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            "Oops! Image could not be saved.",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Oops! Image could not be saved.", Toast.LENGTH_SHORT).show();
                 }
 
                 dialog.dismiss();

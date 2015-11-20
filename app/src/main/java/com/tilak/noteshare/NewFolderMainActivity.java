@@ -1158,12 +1158,9 @@ public class NewFolderMainActivity extends DrawerActivity {
 			@Override
 			public void onClickFrontView(int position) {
 
-				Log.d("select position", "Position = " + position);
 				int itemPosition = position;
 				String folid = null;
 				folid = folderIdList.get(position);
-
-				Log.d("select folid", "FOlder" + folid);
 
 				try {
 					Intent intent = new Intent(NewFolderMainActivity.this, MainActivity.class);
@@ -1184,7 +1181,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-				Log.d("select position", "Position = " + position);
 				int itemPosition = position;
 				String folid = null;
 
@@ -1192,17 +1188,12 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 				folid = map.get("folderId");
 
-				Log.d("select folid", "FOlder"+folid);
-
 				Intent intent = new Intent(NewFolderMainActivity.this, MainActivity.class);
 				intent.putExtra("FolderId", folid);
 				startActivity(intent);
 
 			}
 		});
-
-
-
 	}
 
 	public void delete(String id){
@@ -1218,16 +1209,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		tvIdHidden = (TextView) v.findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();
-		showDeleteAlert("Are you sure you want to delete ?",
-				NewFolderMainActivity.this, id);
+		showDeleteAlert("Are you sure you want to delete ?", NewFolderMainActivity.this, id);
 	}
 
-//	public void getNotesInFolder(View v){
-//		String id = v.getTag().toString();
-//		Log.v("oncrea","Folder id = " + id);
-//		Intent intent = new Intent(NewFolderMainActivity.this, MainActivity.class);
-//		intent.putExtra("FolderId", id);
-//		finish();
-//		startActivity(intent);
-//	}
 }

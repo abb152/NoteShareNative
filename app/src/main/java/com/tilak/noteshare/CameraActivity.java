@@ -144,8 +144,10 @@ public class CameraActivity extends Activity {
 
         try {
             // Saving Image file
-            String timestamp = String.valueOf(System.currentTimeMillis());
-            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + "IMG-" + timestamp + ".jpg");
+            FileNameGenerator fileNameGenerator = new FileNameGenerator();
+            String filename = fileNameGenerator.getFileName("IMAGE");
+
+            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + filename);
             croppedImage.compress(Bitmap.CompressFormat.JPEG, 87, new FileOutputStream(mediaStorageDir));
 
             // Refreshing Gallery to view Image in Gallery
@@ -158,7 +160,7 @@ public class CameraActivity extends Activity {
             if (isNoteIdNull) { makeNote(); }
 
             if (!isNoteIdNull) {
-                NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", "IMG-" + timestamp + ".jpg","","");
+                NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", filename ,"","");
                 noteElement.save();
                 modifyNoteTime();
             }
