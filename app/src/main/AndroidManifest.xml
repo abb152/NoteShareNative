@@ -133,10 +133,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".TextChooserActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".NewFolderMainActivity"
             android:screenOrientation="portrait" >
         </activity>

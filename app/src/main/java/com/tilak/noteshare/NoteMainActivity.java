@@ -1,8 +1,6 @@
 package com.tilak.noteshare;
 
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,8 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.CalendarContract;
-import android.provider.MediaStore;
+import android.support.v4.view.MarginLayoutParamsCompat;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -54,9 +51,6 @@ import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.datamodels.NoteListDataModel;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -149,6 +143,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     List<View> allCheckboxText = new ArrayList<View>();
     List<View> allDelete = new ArrayList<View>();
     boolean isErase;
+    boolean isPaintMode = false;
     boolean isUnderLine = false, isBold = false, isItalic = false;
     boolean isRecordingAudio = false;
     View contentView;
@@ -990,9 +985,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 } catch (Exception e) {
                 }
 
+                if(isPaintMode){
+                    SaveDrawingDialog();
+                    isPaintMode = false;
+                }
+                else{
+                    drawView.setVisibility(View.GONE);
+                    drawingControls.setVisibility(View.GONE);
+                }
+
                 //drawView.startNew();
-                drawView.setVisibility(View.GONE);
-                drawingControls.setVisibility(View.GONE);
+                /*drawView.setVisibility(View.GONE);
+                drawingControls.setVisibility(View.GONE);*/
                 imageButtonHamburg.setVisibility(View.VISIBLE);
                 imageButtoncalander.setVisibility(View.GONE);
                 imageButtonsquence.setVisibility(View.VISIBLE);
@@ -1308,9 +1312,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         imageButtonPaintMode.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("paint mode");
                 //scrollView.setVisibility(View.INVISIBLE);
 
+                isPaintMode = true;
                 updateButtonUI(R.id.imageButtonPaintMode);
                 layOutDrawingView.setVisibility(View.VISIBLE);
                 drawingControls.setVisibility(View.VISIBLE);
@@ -2566,6 +2570,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 layOutDrawingView.setVisibility(View.GONE);
                 updateButtonUI(-1);
 
+                isPaintMode = false;
                 dialog.dismiss();
 
             }
@@ -2592,24 +2597,28 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
                     values.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
                     getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 if (file != null) {
-                    Toast.makeText(getApplicationContext(),
-                            "Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
                     // savedToast.show();
+
+                    int top = scrollView.getScrollY();
+
+                    NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails),1,"Yes","scribble", fileName,String.valueOf(top),"");
+                    noteElement.save();
                     drawView.destroyDrawingCache();
-                   drawView.setUserDrawn(false);
+                    drawView.setUserDrawn(false);
+                    onRestart();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Oops! Image could not be saved.", Toast.LENGTH_SHORT).show();
                 }
-
+                isPaintMode = false;
                 dialog.dismiss();
+                onRestart();
             }
         });
 
@@ -2900,8 +2909,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     note_imageview.setMaxHeight((int) (height / 1.5));
                     noteElements.addView(note_image);
                 } else if (n.type.equals("scribble")) {
-
-					/*noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
+					noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
 					LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
 					View viewImage = inflator.inflate(R.layout.note_image, null, false);
 					RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
@@ -2911,13 +2919,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 					note_imageview.setImageBitmap(b);
 
-					//note_imageview.setTop(n.getOrdernumber());
-
-					LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-					params.setMargins(0, n.getOrdernumber(), 0, 0);
-					note_imageview.setLayoutParams(params);
-					//note_image.setTop(n.getOrdernumber());
-					noteScribbleElements.addView(note_image, params);*/
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, Integer.parseInt(n.getContentA()), 0, 0);
+                    note_imageview.setLayoutParams(params);
+                    noteScribbleElements.addView(note_image);
 
                 } else if (n.type.equals("audio")) {
                     // add audio layout

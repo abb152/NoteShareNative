@@ -1024,7 +1024,7 @@ public class MainActivity extends DrawerActivity {
 		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, viewType.name());
 
 		if(viewType != VIEWTYPE.GRID){
-			listView.setOffsetLeft(140L);
+			listView.setOffsetLeft(130L);
 
 			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1057,7 +1057,7 @@ public class MainActivity extends DrawerActivity {
 							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
-							editTextsearchNote.setText("");
+							//editTextsearchNote.setText("");
 						} else {
 							Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
 							intent.putExtra("FileId", noteid);
