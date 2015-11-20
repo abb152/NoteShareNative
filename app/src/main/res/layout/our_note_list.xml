@@ -125,7 +125,8 @@
             android:layout_marginBottom="2dp"
             android:text="Lorem Ipsum is simply"
             android:textSize="14sp"
-            android:textColor="#000"/>
+            android:textColor="#000"
+            android:maxLines="2"/>
 
         <LinearLayout
             android:layout_width="match_parent"

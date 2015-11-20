@@ -2812,7 +2812,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
                         @Override
                         public void onTextChange(String s) {
-                            n.content = s;
+                            n.setContent(s);
+                            n.setContentA(getPlainText(s));
                             n.save();
                             modifyNoteTime();
                         }

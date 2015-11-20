@@ -836,13 +836,23 @@ public class MainActivity extends DrawerActivity {
 			noteIdList.add(currentnote.getId().toString());
 			String noteDesc = "";
 
-			List<NoteElement> noteElements = NoteElement.findWithQuery(NoteElement.class, "SELECT DISTINCT TYPE FROM NOTE_ELEMENT WHERE NOTEID = " + currentnote.getId());
+			/*List<NoteElement> noteElements = NoteElement.findWithQuery(NoteElement.class, "SELECT DISTINCT TYPE FROM NOTE_ELEMENT WHERE NOTEID = " + currentnote.getId());
 			for (NoteElement currentNoteElement : noteElements){
 				noteDesc += currentNoteElement.getType().toUpperCase() + " ";
+			}*/
+			//List<NoteElement> noteElements = NoteElement.findWithQuery(NoteElement.class, "SELECT DISTINCT TYPE FROM NOTE_ELEMENT WHERE NOTEID = " + currentnote.getId() + " AND ");
+			List<NoteElement> noteElements = NoteElement.find(NoteElement.class,"type = ? and noteid = ?", "text", currentnote.getId().toString());
+
+			if(noteElements.size() != 0 && noteElements.get(0).getContentA() != null){
+				noteDesc = noteElements.get(0).getContentA();
+			}else{
+				noteDesc = "";
 			}
+
 			HashMap<String,String> map = new HashMap<String,String>();
 			map.put("noteName", currentnote.getTitle());
-			map.put("noteDesc", noteDesc); // change this later
+			//map.put("noteDesc", noteDesc); // change this later
+			map.put("noteDesc", noteDesc);
 			map.put("noteDate", currentnote.getModifytime());
 			map.put("noteId", currentnote.getId().toString());
 			map.put("noteBgColor",currentnote.getBackground());
