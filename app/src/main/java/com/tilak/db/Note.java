@@ -8,13 +8,12 @@ public class Note extends SugarRecord {
     public String tags;
     public String color; //in hex
     public String folder;
-    public Long remindertime; //epoch
+    public Long remindertime;
     public String timebomb;
     public String background;
     public String creationtime;
     public String modifytime;
     public String serverid;
-    public String shownote; //remove
     public int islocked;
 
     public Note() {

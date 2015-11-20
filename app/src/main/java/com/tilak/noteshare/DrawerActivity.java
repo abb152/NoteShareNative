@@ -23,6 +23,9 @@ import com.tilak.adpters.SlideMenuAdapter;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.datamodels.SlideMenu;
 import com.tilak.db.Config;
+import com.tilak.db.Folder;
+import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -351,19 +354,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Config c = Config.findById(Config.class, 1l);
-				c.setFirstname("");
-				c.setLastname("");
-				c.setEmail("");
-				c.setPassword("");
-				c.setFbid("");
-				c.setGoogleid("");
-				c.setPasscode(0);
-				c.setProfilepic("");
-				c.setUsername("");
-				c.setDeviceid("");
-				c.setServerid("");
-				c.save();
+				flushDatabase();
 				finish();
 				startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
 			}
@@ -373,6 +364,36 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		dialog.setCancelable(false);
 		dialog.setContentView(contentView);
 		dialog.show();
+
+	}
+
+	public void flushDatabase(){
+
+		//flush config values
+		Config c = Config.findById(Config.class, 1l);
+		c.setFirstname("");
+		c.setLastname("");
+		c.setEmail("");
+		c.setPassword("");
+		c.setFbid("");
+		c.setGoogleid("");
+		c.setPasscode(0);
+		c.setProfilepic("");
+		c.setUsername("");
+		c.setDeviceid("");
+		c.setServerid("");
+		c.save();
+
+		//Config.deleteAll(Config.class);
+
+		//delete all folders
+		Folder.deleteAll(Folder.class);
+
+		//delete all notes
+		Note.deleteAll(Note.class);
+
+		//delete all noteElements
+		NoteElement.deleteAll(NoteElement.class);
 
 	}
 

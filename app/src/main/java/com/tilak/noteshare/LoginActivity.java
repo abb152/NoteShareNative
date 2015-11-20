@@ -198,7 +198,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
     public void goToMain(){
         Intent i = new Intent(getApplication(), MainActivity.class);
-        i.putExtra("FolderId", "-1");
+        i.putExtra("FolderId","-1");
         startActivity(i);
         finish();
     }
