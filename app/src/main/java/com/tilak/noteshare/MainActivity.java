@@ -46,7 +46,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 enum SORTTYPE {
 	ALPHABET,
@@ -137,11 +139,62 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-//				Log.v("select",folderIdforNotes);
-				if (folderIdforNotes == null || folderIdforNotes == "-1")
-					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
-				else
-					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where SHOWNOTE = '1' AND TITLE LIKE ? AND folder = " + folderIdforNotes, "%" + editTextsearchNote.getText().toString() + "%");
+				Log.e("jay *****", "****");
+				List<Long> idList = new ArrayList<Long>();
+
+				if (folderIdforNotes == null || folderIdforNotes.equals("-1")) {
+
+					//find note
+					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where creationtime != 0 AND title LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				}
+				else {
+					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where creationtime != 0 AND title LIKE ? AND folder = " + folderIdforNotes, "%" + editTextsearchNote.getText().toString() + "%");
+
+				}
+					//Log.e("jay sortall size", String.valueOf(sortallnotes.size()));
+
+					for(int i=0; i < sortallnotes.size(); i++){
+						idList.add(sortallnotes.get(i).getId());
+						//Log.e("jay sortall id", String.valueOf(sortallnotes.get(i).getId()));
+					}
+
+					// find elements
+					List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "Select DISTINCT NOTEID from NOTE_ELEMENT where content_A LIKE ?", "%" + editTextsearchNote.getText().toString() + "%" );
+					//Log.e("jay ne size", String.valueOf(ne.size()));
+					for(int i=0; i < ne.size(); i++){
+						idList.add(ne.get(i).getNoteid());
+						//Log.e("jay ne id", String.valueOf(ne.get(i).getNoteid()));
+					}
+
+					//get only unique ids using set
+					Set<Long> set = new HashSet<Long>(idList);
+					//Log.e("jay set size", String.valueOf(set.size()));
+					sortallnotes.clear();
+
+					//convert set to list and add notes into sortallnotes
+					List<Long> list;// = new ArrayList<Long>();
+
+					if(folderIdforNotes == null || folderIdforNotes.equals("-1")){
+						list = new ArrayList<Long>(set);
+					}else{
+						List<Note> notes = Note.findWithQuery(Note.class,"Select * from Note where creationtime != 0 AND folder = " + folderIdforNotes);
+						List<Long> folderId = new ArrayList<Long>();
+						for(int i =0; i < notes.size(); i++){
+							folderId.add(notes.get(i).getId());
+						}
+						Set<Long> folderSet = new HashSet<Long>();
+						folderSet.addAll(folderId);
+						set.retainAll(folderSet);
+						list = new ArrayList<Long>(set);
+					}
+
+				//List<Long> list = new ArrayList<Long>(set);
+
+				for(int i=0; i < list.size(); i++){
+					sortallnotes.add(Note.findById(Note.class, list.get(i).longValue()));
+					Log.e("jay list id", String.valueOf(list.get(i).longValue()));
+				}
+
 				String strCout = "(" + sortallnotes.size() + ")";
 				textViewheaderTitle.setText("NOTE " + strCout);
 			}
@@ -166,6 +219,7 @@ public class MainActivity extends DrawerActivity {
 	protected void onRestart() {
 		super.onRestart();
 
+		//editTextsearchNote.setText("");
 		try {
 			checkTimeClicked();
 		} catch (ParseException e) {
@@ -953,13 +1007,6 @@ public class MainActivity extends DrawerActivity {
 		}
 	}
 
-	public void delete(String id){
-		Note n = Note.findById(Note.class, Long.parseLong(id));
-		n.setCreationtime("0");
-		n.save();
-		onRestart();
-	}
-
 	public void swipeListView(){
 		listView = (SwipeListView) findViewById(R.id.notefoleserList);
 		GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
@@ -1000,11 +1047,13 @@ public class MainActivity extends DrawerActivity {
 							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
+							editTextsearchNote.setText("");
 						} else {
 							Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
 							intent.putExtra("FileId", noteid);
 							intent.putExtra("Check", "2");
 							startActivity(intent);
+							//editTextsearchNote.setText("");
 						}
 						// TODO if passcode != null
 					} catch (Exception e) {
@@ -1088,12 +1137,9 @@ public class MainActivity extends DrawerActivity {
 			try{
 				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String creationtime1 = c1.getCreationtime();
-				Log.d("rohan", creationtime1);
 				Date creation1 = formatter.parse(creationtime1);
 				String creationtime2 = c2.getCreationtime();
-				Log.d("rohan", creationtime2);
 				Date creation2 = formatter.parse(creationtime2);
-				Log.d("rohan","difference "+(creationtime1.compareTo(creationtime2)));
 				return creationtime2.compareTo(creationtime1);
 			}catch (Exception e) {
 			}
@@ -1161,6 +1207,7 @@ public class MainActivity extends DrawerActivity {
 		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		noteFunctions.showDeleteAlert(this, id);
+		onRestart();
 	}
 
 	public void passCode(View v){
@@ -1168,14 +1215,4 @@ public class MainActivity extends DrawerActivity {
 		String id = v.getTag().toString();
 		noteFunctions.setPasscode(getApplicationContext(), id);
 	}
-
-	public void openNoteDetail(View v){
-		String id = v.getTag().toString();
-		Log.v("oncrea","Note id = " + id);
-		Intent intent = new Intent(MainActivity.this, NoteMainActivity.class);
-		intent.putExtra("NoteId", id);
-		finish();
-		startActivity(intent);
-	}
-
 }
