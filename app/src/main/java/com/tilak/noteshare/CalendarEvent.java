@@ -81,14 +81,21 @@ public class CalendarEvent {
         TimeZone tz = cal.getTimeZone();
 
         cv.put(CalendarContract.Events.EVENT_TIMEZONE, tz.getDisplayName());
-    /*
-    cv.put(Events.STATUS, 1);
-    cv.put(Events.VISIBLE, 0);
-    cv.put("transparency", 0);
-
-    return cv;
-    */
+        /*
+        cv.put(Events.STATUS, 1);
+        cv.put(Events.VISIBLE, 0);
+        cv.put("transparency", 0);
+        */
 
         return cv;
+    }
+
+    public static ContentValues setReminder(Long eventID){
+        ContentValues reminders = new ContentValues();
+        reminders.put(CalendarContract.Reminders.EVENT_ID, eventID);
+        reminders.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        reminders.put(CalendarContract.Reminders.MINUTES, 0);
+
+        return  reminders;
     }
 }

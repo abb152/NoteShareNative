@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -43,7 +42,7 @@ public class NoteFunctions {
             passcode(context, id, 3);
         } else {
             Config con = Config.findById(Config.class, 1L);
-            Log.e("jay con.passcode", String.valueOf(con.getPasscode()));
+            //Log.e("jay con.passcode", String.valueOf(con.getPasscode()));
             if (con.getPasscode() == 0)
                 Toast.makeText(context, "Please set passcode in Setting page", Toast.LENGTH_LONG).show();
             else {
@@ -173,7 +172,12 @@ public class NoteFunctions {
 
         ContentResolver cr = context.getContentResolver();
         Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, CalendarEvent.toICSContentValues(evt));
-        System.out.println("Event URI ["+uri+"]");
+
+        long eventID = Long.parseLong(uri.getLastPathSegment());
+
+        ContentResolver crReminder = context.getContentResolver();
+        Uri uriReminder = crReminder.insert(CalendarContract.Reminders.CONTENT_URI, CalendarEvent.setReminder(eventID));
+        //System.out.println("Event URI ["+uri+"]");
     }
 
     public String check(int value){
