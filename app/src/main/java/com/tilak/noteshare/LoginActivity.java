@@ -75,6 +75,9 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //List<Note> notes = Note.findWithQuery(Note.class,"Select * from NOTE INNER JOIN NOTE_ELEMENT on NOTE.id = NOTE_ELEMENT.noteid where NOTE_ELEMENT.type = 'checkbox'");
+        //Log.e("jay size",String.valueOf(notes.size()));
+
         List<Config> config = Config.listAll(Config.class);
         if(config.size() == 0) {
             Config c = new Config("", "", "", "", "", "", 0, "", "", "", "", "MODIFIED_TIME", "DETAIL");
