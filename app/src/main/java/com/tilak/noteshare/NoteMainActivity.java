@@ -984,11 +984,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 } catch (Exception e) {
                 }
 
-                if(isPaintMode){
+                if (isPaintMode) {
                     SaveDrawingDialog();
                     isPaintMode = false;
-                }
-                else{
+                } else {
                     drawView.setVisibility(View.GONE);
                     drawingControls.setVisibility(View.GONE);
                 }
@@ -1007,14 +1006,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 // openSlideMenu();
-                isTextmodeSelected = false;
-                layout_note_more_Info.setVisibility(View.GONE);
-                imageButtonsquence.setVisibility(View.VISIBLE);
-                layout_audio_notechooser.setVisibility(View.GONE);
-                imageButtoncalander.setVisibility(View.GONE);
-                isMoreShown = false;
-                finish();
-
+                if(isRecordingAudio){
+                    Toast.makeText(getApplicationContext(),"Audio recording is going on!", Toast.LENGTH_LONG).show();
+                }else {
+                    isTextmodeSelected = false;
+                    layout_note_more_Info.setVisibility(View.GONE);
+                    imageButtonsquence.setVisibility(View.VISIBLE);
+                    layout_audio_notechooser.setVisibility(View.GONE);
+                    imageButtoncalander.setVisibility(View.GONE);
+                    isMoreShown = false;
+                    finish();
+                }
             }
         });
 
@@ -1176,107 +1178,114 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             public void onClick(View v) {
                 drawingControls.setVisibility(View.GONE);
                 updateButtonUI(R.id.imageButtonAudioMode);
-                System.out.println("audio mode");
 
-                audioElement = (LinearLayout) findViewById(R.id.audioRecording);
-                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-                final View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
-                LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
-                final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-                final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-                audio_play.setImageResource(R.drawable.stop_audio);
-                final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
+                if (isRecordingAudio) {
+                    Toast.makeText(getApplication(), "Already recording previous audio!", Toast.LENGTH_LONG).show();
+                } else {
 
-                allDelete.add(audioDelete);
-                NoteElement ne = null;
-                final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
+                    audioElement = (LinearLayout) findViewById(R.id.audioRecording);
+                    LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                    final View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
+                    LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+                    final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
+                    final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+                    audio_play.setImageResource(R.drawable.stop_audio);
+                    final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
 
-                audioElement.addView(note_audio);
+                    allDelete.add(audioDelete);
+                    NoteElement ne = null;
+                    final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
 
-                try {
-                    initlizeAudiorecoder();
+                    audioElement.addView(note_audio);
 
-                    if (noteIdForDetails == null) {
-                        makeNote();
-                    }
-                    if (noteIdForDetails != null) {
-                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
-                        ne.save();
-                        modifyNoteTime();
-                    }
+                    try {
+                        initlizeAudiorecoder();
 
-                    myAudioRecorder.prepare();
-                    myAudioRecorder.start();
+                        if (noteIdForDetails == null) {
+                            makeNote();
+                        }
+                        if (noteIdForDetails != null) {
+                            ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
+                            ne.save();
+                            modifyNoteTime();
+                        }
 
-                    audio_play.setTag(1);
+                        isRecordingAudio = true;
 
-                    final Long startTime = System.currentTimeMillis();
-                    final Date startTimeDate = new Date(startTime);
+                        myAudioRecorder.prepare();
+                        myAudioRecorder.start();
+
+                        audio_play.setTag(1);
+
+                        final Long startTime = System.currentTimeMillis();
+                        final Date startTimeDate = new Date(startTime);
 
 
-                    //audio_seek.setMax(mp.getDuration() / 1000);
-                    final Handler mHandler = new Handler();
-                    // Make sure you update Seekbar on UI thread
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String tag = audio_play.getTag().toString();
-                            if (myAudioRecorder != null && tag.equals("1")) {
-                                final Long currentTime = System.currentTimeMillis();
-                                Date currentTimeDate = new Date(currentTime);
+                        //audio_seek.setMax(mp.getDuration() / 1000);
+                        final Handler mHandler = new Handler();
+                        // Make sure you update Seekbar on UI thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String tag = audio_play.getTag().toString();
+                                if (myAudioRecorder != null && tag.equals("1")) {
+                                    final Long currentTime = System.currentTimeMillis();
+                                    Date currentTimeDate = new Date(currentTime);
 
-                                Long timeDifference = currentTimeDate.getTime() - startTimeDate.getTime();
+                                    Long timeDifference = currentTimeDate.getTime() - startTimeDate.getTime();
 
-                                long diffSeconds = timeDifference / 1000 % 60;
-                                long diffMinutes = timeDifference / (60 * 1000) % 60;
-                                long diffHours = timeDifference / (60 * 60 * 1000) % 24;
+                                    long diffSeconds = timeDifference / 1000 % 60;
+                                    long diffMinutes = timeDifference / (60 * 1000) % 60;
+                                    long diffHours = timeDifference / (60 * 60 * 1000) % 24;
 
-                                //String duration = "0" + diffHours +":"+ diffMinutes +":"+diffSeconds;
-                                String duration = String.format("%02d:%02d:%02d", diffHours, diffMinutes, diffSeconds);
+                                    //String duration = "0" + diffHours +":"+ diffMinutes +":"+diffSeconds;
+                                    String duration = String.format("%02d:%02d:%02d", diffHours, diffMinutes, diffSeconds);
 
-                                record_text.setText(String.valueOf(duration));
-                                record_text.setVisibility(View.VISIBLE);
+                                    record_text.setText(String.valueOf(duration));
+                                    record_text.setVisibility(View.VISIBLE);
+                                }
+                                mHandler.postDelayed(this, 1000);
+                                //mHandler.removeCallbacksAndMessages(this);
+
+
                             }
-                            mHandler.postDelayed(this, 1000);
-                            //mHandler.removeCallbacksAndMessages(this);
+                        });
 
+                        //audio_text.setText(myAudioRecorder.get);
 
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    final NoteElement finalNe = ne;
+                    audio_play.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            audio_play.setImageResource(R.drawable.play_audio);
+                            myAudioRecorder.stop();
+                            myAudioRecorder.release();
+                            myAudioRecorder = null;
+                            record_text.setVisibility(View.GONE);
+
+                            finalNe.contentA = "true";
+                            finalNe.save();
+
+                            isRecordingAudio = false;
+
+                            Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
+
+                            System.out.println("Current Index:" + currentAudioIndex);
+
+                            audioElement.removeAllViews();
+                            onResume();
                         }
                     });
 
-                    //audio_text.setText(myAudioRecorder.get);
-
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    //fetchNoteElementsFromDb();
                 }
-
-                final NoteElement finalNe = ne;
-                audio_play.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        audio_play.setImageResource(R.drawable.play_audio);
-                        myAudioRecorder.stop();
-                        myAudioRecorder.release();
-                        myAudioRecorder = null;
-                        record_text.setVisibility(View.GONE);
-
-                        finalNe.contentA = "true";
-                        finalNe.save();
-
-                        Toast.makeText(NoteMainActivity.this, "Recording Saved",
-                                Toast.LENGTH_SHORT).show();
-
-                        System.out.println("Current Index:" + currentAudioIndex);
-
-                        audioElement.removeAllViews();
-                        onResume();
-                    }
-                });
-
-                //fetchNoteElementsFromDb();
             }
         });
         imageButtonImageMode.setOnClickListener(new OnClickListener() {
@@ -2611,14 +2620,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     modifyNoteTime();
                     drawView.destroyDrawingCache();
                     drawView.setUserDrawn(false);
-                    onRestart();
+                    onResume();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Oops! Image could not be saved.", Toast.LENGTH_SHORT).show();
                 }
                 isPaintMode = false;
                 dialog.dismiss();
-                onRestart();
+                onResume();
             }
         });
 
@@ -2632,7 +2641,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-        finish();
+        if(isRecordingAudio){
+            Toast.makeText(getApplicationContext(),"Audio recording is going on!", Toast.LENGTH_LONG).show();
+        }else {
+            finish();
+        }
     }
 
     public void paintClicked(View view) {
