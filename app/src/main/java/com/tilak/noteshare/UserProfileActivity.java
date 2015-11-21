@@ -331,4 +331,13 @@ public class UserProfileActivity extends Activity {
 		return output;
 
 	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Intent i = new Intent(getApplication(), MainActivity.class);
+		//i.putExtra("FolderId","-1");
+		startActivity(i);
+		finish();
+	}
 }

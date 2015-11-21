@@ -237,7 +237,7 @@ public class NoteFunctions {
                 n.folder = folderid;
                 n.save();
                 move.dismiss();
-                Toast.makeText(context, "Note "+ n.getTitle() + " moved to " + foldername +" folder.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Note " + n.getTitle() + " moved to " + foldername + " folder.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -248,7 +248,7 @@ public class NoteFunctions {
     }
 
     // DELETE
-    public void showDeleteAlert(final Context context, final String id) {
+    public void showDeleteAlert(final Context context, final String id, final boolean insideNote) {
 
         final Dialog dialog = new Dialog(context);
 
@@ -273,8 +273,16 @@ public class NoteFunctions {
         buttonAlertOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                delete(id);
                 dialog.dismiss();
+                delete(id);
+                if (insideNote) {
+                    //delete(id);
+                    context.startActivity(new Intent(context, MainActivity.class));
+                }
+                else {
+                    MainActivity mainActivity = new MainActivity();
+                    mainActivity.onRestart();
+                }
             }
         });
 

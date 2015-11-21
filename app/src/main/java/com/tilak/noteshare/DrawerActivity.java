@@ -201,7 +201,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			i.putExtra("hide", "hide");
 			startActivity(i);
 			System.out.println("profile setting");
-			//finish();
+			finish();
 		} else {
 			SideMenuitems modeldata = arrMenu.get(position1 - 1);
 

@@ -1235,8 +1235,8 @@ public class MainActivity extends DrawerActivity {
 	public void deleteNote(View v){
 		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		noteFunctions.showDeleteAlert(this, id);
-		onRestart();
+		noteFunctions.showDeleteAlert(this, id, false);
+		//onRestart();
 	}
 
 	public void passCode(View v){
@@ -1268,4 +1268,5 @@ public class MainActivity extends DrawerActivity {
 		}
 
 	}
+
 }

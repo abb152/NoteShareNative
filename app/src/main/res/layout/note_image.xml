@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/note_image"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/note_imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
 
     <ImageButton
         android:id="@+id/deleteImage"
@@ -22,6 +22,7 @@
         android:scaleType="centerInside"
         android:background="@color/header_bg"
         android:src="@drawable/image_option_delete2"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_marginTop="5dp"/>
 
 </RelativeLayout>

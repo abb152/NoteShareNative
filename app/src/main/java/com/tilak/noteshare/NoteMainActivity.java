@@ -946,8 +946,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void delete(View v) {
         if (noteIdForDetails == null)
             makeNote();
-        noteFunctions.showDeleteAlert(this, noteIdForDetails);
-        context.startActivity(new Intent(context, MainActivity.class));
+
+        noteFunctions.showDeleteAlert(this, noteIdForDetails, true);
+        //context.startActivity(new Intent(context, MainActivity.class));
 
     }
 
@@ -1300,6 +1301,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             NoteElement noteElement = NoteElement.findById(NoteElement.class,noteElementId);
                             noteElement.setContentA("true");
                             noteElement.save();
+                            modifyNoteTime();
                             Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
 
                             audioElement.removeAllViews();
