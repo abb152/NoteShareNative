@@ -54,6 +54,8 @@ public class CameraActivity extends Activity {
 
     private int mAspectRatioY = DEFAULT_ASPECT_RATIO_VALUES;
 
+    private static boolean IMAGE_SET = false;
+
     Bitmap croppedImage, bitmap;
 
     String noteid;
@@ -95,8 +97,12 @@ public class CameraActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                cropImageView.rotateImage(ROTATE_NINETY_DEGREES);
-                croppedImage = rotateBitmap(croppedImage, 90);
+                if(IMAGE_SET) {
+                    cropImageView.rotateImage(ROTATE_NINETY_DEGREES);
+                    croppedImage = rotateBitmap(croppedImage, 90);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please choose an Image First.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -108,7 +114,12 @@ public class CameraActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                showImageChooserAlertWith("SELECT IMAGE SIZE", CameraActivity.this);
+
+                if (IMAGE_SET) {
+                    showImageChooserAlertWith("SELECT IMAGE SIZE", CameraActivity.this);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please choose an Image First.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -196,6 +207,7 @@ public class CameraActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             Uri imageUri = getPickImageResultUri(data);
             ((CropImageView) findViewById(R.id.CropImageView)).setImageUri(imageUri);
+            IMAGE_SET = true;
             try {
                 croppedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
             } catch (IOException e) {
