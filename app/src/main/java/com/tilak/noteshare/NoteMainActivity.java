@@ -45,6 +45,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.tilak.adpters.NotesListAdapter;
 import com.tilak.adpters.TextFont_Size_ChooseAdapter;
 import com.tilak.datamodels.NoteListDataModel;
@@ -128,6 +129,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     ImageButton buttonPlay;
     ImageButton buttonStop;
     ImageButton buttonRecord, buttonPause, buttonRecordPause;
+    public long noteElementId;
     ProgressBar progressRecord;
     SeekBar progressRecord1;
 
@@ -144,7 +146,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     boolean isErase;
     boolean isPaintMode = false;
     boolean isUnderLine = false, isBold = false, isItalic = false;
-    boolean isRecordingAudio = false;
+    boolean isRecordingAudio = false, recordingPlay = false;
     View contentView;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String currentDateStr = formatter.format(new Date());
@@ -455,9 +457,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         FileNameGenerator fileNameGenerator = new FileNameGenerator();
         audioName = fileNameGenerator.getFileName("AUDIO");
 
-        outputFile = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/NoteShare/NoteShare Audio/" + audioName;
-        ;
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/NoteShare/NoteShare Audio/" + audioName;
 
         myAudioRecorder = new MediaRecorder();
         //myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -1185,19 +1185,146 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                     audioElement = (LinearLayout) findViewById(R.id.audioRecording);
                     LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-                    final View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
-                    LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+                    final View viewAudio = inflater.inflate(R.layout.note_audio_recording, null, false);
+                    LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio_recording);
                     final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-                    final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-                    audio_play.setImageResource(R.drawable.stop_audio);
+                    //final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+                    audio_play.setImageResource(R.drawable.play_audio);
                     final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
+
+                    final ImageView audio_stop = (ImageView) viewAudio.findViewById(R.id.audio_stop);
 
                     allDelete.add(audioDelete);
                     NoteElement ne = null;
+                    //long noteElementId = 0;
+                    isRecordingAudio = true;
+
                     final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
+
+                    FileNameGenerator fileNameGenerator = new FileNameGenerator();
+                    audioName = fileNameGenerator.getFileName("AUDIO");
+                    final com.github.lassana.recorder.AudioRecorder recorder = AudioRecorderBuilder.with(context)
+                            .fileName(getNextFileName(audioName))
+                            .config(com.github.lassana.recorder.AudioRecorder.MediaRecorderConfig.DEFAULT)
+                            .loggable()
+                            .build();
+
+                    if (noteIdForDetails == null) {
+                        makeNote();
+                    }
+                    if (noteIdForDetails != null) {
+                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
+                        ne.save();
+                        noteElementId = ne.getId();
+                        modifyNoteTime();
+                    }
+                    recorder.start(new com.github.lassana.recorder.AudioRecorder.OnStartListener() {
+                        @Override
+                        public void onStarted() {
+                            // started
+                            Toast.makeText(NoteMainActivity.this, "Recording started", Toast.LENGTH_SHORT).show();
+                            audio_play.setImageResource(R.drawable.pause_audio);
+                            recordingPlay = true;
+                        }
+
+                        @Override
+                        public void onException(Exception e) {
+                            // error
+                        }
+                    });
+
+                    audio_play.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if(recordingPlay){
+                                //already playing and now pause
+                                recorder.pause(new com.github.lassana.recorder.AudioRecorder.OnPauseListener() {
+                                    @Override
+                                    public void onPaused(String activeRecordFileName) {
+                                        // paused
+                                        Toast.makeText(NoteMainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
+                                        audio_play.setImageResource(R.drawable.play_audio);
+                                        recordingPlay = false;
+                                    }
+
+                                    @Override
+                                    public void onException(Exception e) {
+                                        // error
+                                    }
+                                });
+                            }
+                            else{
+                                //pause and now start playing it again
+                                recorder.start(new com.github.lassana.recorder.AudioRecorder.OnStartListener() {
+                                    @Override
+                                    public void onStarted() {
+                                        // started
+                                        Toast.makeText(NoteMainActivity.this, "Play again", Toast.LENGTH_SHORT).show();
+                                        audio_play.setImageResource(R.drawable.pause_audio);
+                                        recordingPlay = true;
+                                    }
+
+                                    @Override
+                                    public void onException(Exception e) {
+                                        // error
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+
+                    audio_stop.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            //if user clicks on stop and recording is still playing
+                            if(recordingPlay){
+                                recorder.pause(new com.github.lassana.recorder.AudioRecorder.OnPauseListener() {
+                                    @Override
+                                    public void onPaused(String activeRecordFileName) {
+                                        // paused
+                                        Toast.makeText(getApplicationContext(),"Paused and Stop",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onException(Exception e) {
+                                        // error
+                                    }
+                                });
+                                recordingPlay = false;
+                            }
+
+                            isRecordingAudio = false;
+                            NoteElement noteElement = NoteElement.findById(NoteElement.class,noteElementId);
+                            noteElement.setContentA("true");
+                            noteElement.save();
+                            Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
+
+                            audioElement.removeAllViews();
+                            onResume();
+
+                        }
+                    });
+
+
+
 
                     audioElement.addView(note_audio);
 
+
+                    /*if (noteIdForDetails == null) {
+                        makeNote();
+                    }
+                    if (noteIdForDetails != null) {
+                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
+                        ne.save();
+                        modifyNoteTime();
+                    }*/
+
+
+/*
                     try {
                         initlizeAudiorecoder();
 
@@ -1259,6 +1386,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         e.printStackTrace();
                     }
 
+
                     final NoteElement finalNe = ne;
                     audio_play.setOnClickListener(new OnClickListener() {
                         @Override
@@ -1285,6 +1413,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     });
 
                     //fetchNoteElementsFromDb();
+                    */
                 }
             }
         });
@@ -2945,6 +3074,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     name = n.content;
                     status = n.contentA;
 
+                    Log.e("jay",name);
+                    Log.e("jay status", status);
+
+
                     //addAudio(name);
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);
                     LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
@@ -3187,4 +3320,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         return plainText.replace("&nbsp;","");
     }
 
+    private String getNextFileName(String name) {
+        return Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name;
+    }
 }

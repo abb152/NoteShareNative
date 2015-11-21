@@ -21,11 +21,12 @@ android {
 
 repositories {
     mavenCentral()
+    jcenter()
     maven { url 'http://clinker.47deg.com/nexus/content/groups/public' }
 }
 
 dependencies {
-    compile files('libs/isoparser-1.0.2.jar')
+    //compile files('libs/isoparser-1.0.2.jar')
     compile project(':cropper')
     compile project(':richeditor')
     compile('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
@@ -36,4 +37,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
     compile 'com.google.android.gms:play-services-identity:8.1.0'
     compile 'com.google.android.gms:play-services-plus:8.1.0'
+
+    compile "com.googlecode.mp4parser:isoparser:1.0.2"
+    compile "com.github.lassana:continuous-audiorecorder:1.1.0"
 }
