@@ -1285,7 +1285,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                     @Override
                                     public void onPaused(String activeRecordFileName) {
                                         // paused
-                                        Toast.makeText(getApplicationContext(),"Paused and Stop",Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getApplicationContext(),"Paused and Stop",Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
@@ -1307,9 +1307,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                         }
                     });
-
-
-
 
                     audioElement.addView(note_audio);
 
@@ -3056,7 +3053,20 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					View viewImage = inflator.inflate(R.layout.note_image, null, false);
 					RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
 					ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
+
 					String name = n.content;
+
+                    /*ImageView scribble_delete= (ImageView) note_image.findViewById(R.id.deleteImage);
+                    allDelete.add(scribble_delete);
+                    scribble_delete.setTag(n.getId());
+
+                    scribble_delete.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                        }
+                    });*/
+
 					File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
 					Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 					note_imageview.setImageBitmap(b);
@@ -3068,15 +3078,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                 } else if (n.type.equals("audio")) {
                     // add audio layout
-                    String name = null;
-                    String status;
+                    String name = n.getContent();
+                    String status = n.getContentA();
 
-                    name = n.content;
-                    status = n.contentA;
-
-                    Log.e("jay",name);
-                    Log.e("jay status", status);
-
+                    if (status.equals("false"))
+                        continue;
 
                     //addAudio(name);
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);
@@ -3145,8 +3151,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             }
                         }
                     });
-                    if (status.equals("true"))
-                        noteElements.addView(note_audio);
+
+                    noteElements.addView(note_audio);
 
                 } else if (n.type.equals("checkbox")) {
                     Boolean status = Boolean.valueOf(n.contentA);

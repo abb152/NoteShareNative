@@ -144,4 +144,13 @@ public class SettingActivity extends DrawerActivity {
 		dialog.setContentView(contentView);
 		dialog.show();
 	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Intent i = new Intent(getApplication(), MainActivity.class);
+		//i.putExtra("FolderId","-1");
+		startActivity(i);
+		finish();
+	}
 }

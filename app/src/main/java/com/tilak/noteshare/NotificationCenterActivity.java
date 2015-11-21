@@ -1,6 +1,7 @@
 package com.tilak.noteshare;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,5 +116,14 @@ public class NotificationCenterActivity extends DrawerActivity {
 			}
 		});
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Intent i = new Intent(getApplication(), MainActivity.class);
+		//i.putExtra("FolderId","-1");
+		startActivity(i);
+		finish();
 	}
 }

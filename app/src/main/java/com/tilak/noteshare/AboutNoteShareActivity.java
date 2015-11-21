@@ -79,6 +79,15 @@ public class AboutNoteShareActivity extends DrawerActivity {
 	
 		return str;
 	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Intent i = new Intent(getApplication(), MainActivity.class);
+		//i.putExtra("FolderId","-1");
+		startActivity(i);
+		finish();
+	}
 	
 	
 }

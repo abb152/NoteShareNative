@@ -184,6 +184,9 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 	protected void openinitilaActivity(int position1) {
 		System.out.println("initail launch");
 		startActivity(new Intent(this, MainActivity.class));
+		//Intent i = new Intent(getApplication(), MainActivity.class);
+		//i.putExtra("FolderId","-1");
+		//startActivity(i);
 		finish();
 	}
 
@@ -214,13 +217,13 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					// openinitilaActivity(0);
 					System.out.println("folder");
 					startActivity(new Intent(this, NewFolderMainActivity.class));
-					// finish();
+					//finish();
 				}
 				break;
 				case 3: {
 					System.out.println("notification center");
 					startActivity(new Intent(this, NotificationCenterActivity.class));
-					//finish();
+					finish();
 				}
 				break;
 				case 4: {
@@ -231,19 +234,19 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					share.putExtra(Intent.EXTRA_STREAM, uri);
 					share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
 					startActivity(Intent.createChooser(share, "Invite friends"));
-					//finish();
+					finish();
 				}
 				break;
 				case 5: {
 					System.out.println("about");
 					startActivity(new Intent(this, AboutNoteShareActivity.class));
-					//finish();
+					finish();
 				}
 				break;
 				case 6: {
 					System.out.println("setting");
 					startActivity(new Intent(this, SettingActivity.class));
-					//finish();
+					finish();
 				}
 				break;
 				case 7: {
