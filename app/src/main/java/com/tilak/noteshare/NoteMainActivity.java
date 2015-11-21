@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.view.MarginLayoutParamsCompat;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -2609,6 +2608,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                     NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails),1,"Yes","scribble", fileName,String.valueOf(top),"");
                     noteElement.save();
+                    modifyNoteTime();
                     drawView.destroyDrawingCache();
                     drawView.setUserDrawn(false);
                     onRestart();

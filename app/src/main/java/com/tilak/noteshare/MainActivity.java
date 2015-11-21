@@ -82,6 +82,7 @@ public class MainActivity extends DrawerActivity {
 	public LinearLayout Layout1;
 	public LinearLayout Layout2;
 
+
 	public NoteFolderAdapter adapter;
 	public NoteFolderGridAdapter gridAdapter;
 	public ArrayList<SideMenuitems> arrDataNote;
@@ -107,6 +108,8 @@ public class MainActivity extends DrawerActivity {
 
 	public SwipeListView listView;
 	final int[] lastItemOpened = {-1};
+	boolean searchLayoutOpen = false;
+	public LinearLayout SearchLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +133,7 @@ public class MainActivity extends DrawerActivity {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		SearchLayout = (LinearLayout) findViewById(R.id.SearchLayout);
 		editTextsearchNote = (EditText)findViewById(R.id.editTextsearchNote);
 		editTextsearchNote.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -1224,5 +1228,29 @@ public class MainActivity extends DrawerActivity {
 		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		noteFunctions.setPasscode(getApplicationContext(), id);
+	}
+
+	public void searchSlide(View view){
+		/*TranslateAnimation animate;
+		if(!searchLayoutOpen) {
+			animate = new TranslateAnimation(0,0,SearchLayout.getHeight(),0);
+		}
+		else{
+			animate = new TranslateAnimation(0,0,0,SearchLayout.getHeight());
+		}
+
+		animate.setDuration(500);
+		animate.setFillAfter(true);
+		SearchLayout.startAnimation(animate);*/
+
+		if(!searchLayoutOpen) {
+			SearchLayout.setVisibility(View.VISIBLE);
+			searchLayoutOpen = true;
+		}
+		else {
+			SearchLayout.setVisibility(View.GONE);
+			searchLayoutOpen = false;
+		}
+
 	}
 }

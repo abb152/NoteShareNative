@@ -16,7 +16,8 @@
         android:layout_height="40dp"
         android:layout_below="@+id/mainHeadermenue"
         android:background="@android:color/transparent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -37,13 +38,13 @@
                 <!--<requestFocus />-->
             </EditText>
 
-            <ImageButton
+            <!--<ImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:padding="7dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/search_icon" />
+                android:src="@drawable/search_icon"/>-->
         </LinearLayout>
 
         <View
