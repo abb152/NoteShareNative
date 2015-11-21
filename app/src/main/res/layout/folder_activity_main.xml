@@ -16,7 +16,8 @@
         android:layout_height="40dp"
         android:layout_below="@+id/mainHeadermenue"
         android:background="@android:color/transparent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -37,14 +38,14 @@
                 <requestFocus />
             </EditText>
 
-            <ImageButton
+            <!--<ImageButton
                 android:id="@+id/searchbuttonclick"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:padding="7dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/search_icon" />
+                android:src="@drawable/search_icon" />-->
         </LinearLayout>
 
         <View
@@ -147,16 +148,16 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/bottommenue"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
         android:weightSum="5" >
 
-        <!--<LinearLayout
+        &lt;!&ndash;<LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -189,15 +190,15 @@
                     android:textStyle="normal" >
                 </TextView>
             </LinearLayout>
-        </LinearLayout>-->
+        </LinearLayout>&ndash;&gt;
 
-        <View
+        &lt;!&ndash;<View
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:color/white" />
+            android:background="@android:color/white" />&ndash;&gt;
 
-        <!--<LinearLayout
+        &lt;!&ndash;<LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -231,16 +232,16 @@
                     android:textStyle="normal" >
                 </TextView>
             </LinearLayout>
-        </LinearLayout>-->
-    </LinearLayout>
+        </LinearLayout>&ndash;&gt;
+    </LinearLayout>-->
 
-    <View
+    <!--<View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="59dp"
         android:layout_marginTop="9dp"
-        android:background="@color/header_bg" />
+        android:background="@color/header_bg" />-->
 
     <ImageButton
         android:id="@+id/textViewAdd"

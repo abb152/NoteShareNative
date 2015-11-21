@@ -110,6 +110,7 @@ public class MainActivity extends DrawerActivity {
 	final int[] lastItemOpened = {-1};
 	boolean searchLayoutOpen = false;
 	public LinearLayout SearchLayout;
+	public ImageButton search;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +135,15 @@ public class MainActivity extends DrawerActivity {
 			e.printStackTrace();
 		}
 		SearchLayout = (LinearLayout) findViewById(R.id.SearchLayout);
+		search = (ImageButton) findViewById(R.id.search);
+
+		search.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				searchSlide();
+			}
+		});
+
 		editTextsearchNote = (EditText)findViewById(R.id.editTextsearchNote);
 		editTextsearchNote.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -712,7 +722,12 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     public void onBackPressed() {
-        showAlertWith(this);
+		if (folderIdforNotes == null || folderIdforNotes.equals("-1")) {
+			showAlertWith(this);
+		}else{
+			folderIdforNotes = null;
+			finish();
+		}
     }
 
     void showAlertWith(Context context) {
@@ -1230,7 +1245,7 @@ public class MainActivity extends DrawerActivity {
 		noteFunctions.setPasscode(getApplicationContext(), id);
 	}
 
-	public void searchSlide(View view){
+	public void searchSlide(){
 		/*TranslateAnimation animate;
 		if(!searchLayoutOpen) {
 			animate = new TranslateAnimation(0,0,SearchLayout.getHeight(),0);

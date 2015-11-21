@@ -74,8 +74,14 @@ public class NewFolderMainActivity extends DrawerActivity {
 	public List<Folder> allfolders;
 
 	public Dialog dialogColor;
-	public ImageButton searchbuttonclick;
+	//public ImageButton searchbuttonclick;
 	public EditText editTextsearchNote;
+	public boolean searchLayoutOpen = false;
+	public LinearLayout SearchLayout;
+	public ImageButton search;
+
+	final int[] lastItemOpened = {-1};
+	public SwipeListView listView;
 
 	public ArrayList<String> folderIdList = new ArrayList<String>();
 	@Override
@@ -95,6 +101,17 @@ public class NewFolderMainActivity extends DrawerActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+
+		SearchLayout = (LinearLayout) findViewById(R.id.SearchLayout);
+		search = (ImageButton) findViewById(R.id.search);
+
+		search.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				searchSlide();
+			}
+		});
 
 		editTextsearchNote = (EditText)findViewById(R.id.editTextsearchNote);
 		editTextsearchNote.addTextChangedListener(new TextWatcher() {
@@ -167,7 +184,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 //		notefoleserList.setLongClickable(true);
 		
 		//search
-		searchbuttonclick=(ImageButton) contentview.findViewById(R.id.searchbuttonclick);
+		//searchbuttonclick=(ImageButton) contentview.findViewById(R.id.searchbuttonclick);
 		editTextsearchNote=(EditText) contentview.findViewById(R.id.editTextsearchNote);
 		
 		
@@ -201,7 +218,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 		});*/
 
 		notefoleserGridList.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 									long arg3) {
@@ -227,7 +243,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		notefoleserGridList
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
-
 					public boolean onItemLongClick(AdapterView<?> arg0,
 												   View arg1, int pos, long id) {
 						// TODO Auto-generated method stub
@@ -427,7 +442,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		
 		
 		
-		searchbuttonclick.setOnClickListener(new OnClickListener() {
+		/*searchbuttonclick.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -462,7 +477,9 @@ public class NewFolderMainActivity extends DrawerActivity {
 				// TODO Auto-generated method stub
 
 			}
-		});
+		});*/
+
+
 		
 		
 	}
@@ -470,8 +487,10 @@ public class NewFolderMainActivity extends DrawerActivity {
 	@Override
 	public void onBackPressed() {
 
-		showAlertWith("Are you sure,Do you want to quit the app?",
-				NewFolderMainActivity.this);
+		//startActivity(new Intent(this, MainActivity.class));
+
+		finish();
+		//showAlertWith("Are you sure,Do you want to quit the app?", NewFolderMainActivity.this);
 
 	}
 
@@ -1148,13 +1167,12 @@ public class NewFolderMainActivity extends DrawerActivity {
 	}
 
 	void swipeListView(){
-		SwipeListView listView = (SwipeListView) findViewById(R.id.notefolderList);
+		listView = (SwipeListView) findViewById(R.id.notefolderList);
 
 		OurFolderListAdapter testAdapter = new OurFolderListAdapter(this,list);
 		listView.setOffsetLeft(450L);
 
 		listView.setSwipeListViewListener(new BaseSwipeListViewListener() {
-
 			@Override
 			public void onClickFrontView(int position) {
 
@@ -1171,11 +1189,20 @@ public class NewFolderMainActivity extends DrawerActivity {
 				}
 			}
 
+			@Override
+			public void onOpened(int position, boolean toRight) {
+				super.onOpened(position, toRight);
+				if (lastItemOpened[0] != -1 && lastItemOpened[0] != position)
+					listView.closeAnimate(lastItemOpened[0]);
+				lastItemOpened[0] = position;
+			}
+
 		});
 
 
 
 		listView.setAdapter(testAdapter);
+		listView.setAnimationTime(200);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -1212,4 +1239,28 @@ public class NewFolderMainActivity extends DrawerActivity {
 		showDeleteAlert("Are you sure you want to delete ?", NewFolderMainActivity.this, id);
 	}
 
+
+	public void searchSlide(){
+		/*TranslateAnimation animate;
+		if(!searchLayoutOpen) {
+			animate = new TranslateAnimation(0,0,SearchLayout.getHeight(),0);
+		}
+		else{
+			animate = new TranslateAnimation(0,0,0,SearchLayout.getHeight());
+		}
+
+		animate.setDuration(500);
+		animate.setFillAfter(true);
+		SearchLayout.startAnimation(animate);*/
+
+		if(!searchLayoutOpen) {
+			SearchLayout.setVisibility(View.VISIBLE);
+			searchLayoutOpen = true;
+		}
+		else {
+			SearchLayout.setVisibility(View.GONE);
+			searchLayoutOpen = false;
+		}
+
+	}
 }

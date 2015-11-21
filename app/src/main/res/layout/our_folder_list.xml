@@ -29,27 +29,27 @@
         <ImageButton
             android:id="@+id/btnfolderdelete"
             android:layout_width="15dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:padding="15dp"
             android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
             android:src="@drawable/image_option_delete2"
             android:onClick="deleteFolder"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/front"
-        android:tag="front"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:gravity="center_vertical"
-        android:descendantFocusability="blocksDescendants">
+    android:orientation="vertical"
+    android:id="@+id/front"
+    android:tag="front"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center_vertical"
+    android:descendantFocusability="blocksDescendants">
 
         <TextView
             android:layout_width="fill_parent"
