@@ -840,8 +840,11 @@ public class MainActivity extends DrawerActivity {
 		putInList();
 
 		String strCout = "(" + list.size() + ")";
-		textViewheaderTitle.setText("NOTE " + strCout);
+		try {
+			textViewheaderTitle.setText("NOTE " + strCout);
+		}catch (Exception e){
 
+		}
 	}
 
 	void putInList(){
@@ -1267,6 +1270,13 @@ public class MainActivity extends DrawerActivity {
 			searchLayoutOpen = false;
 		}
 
+	}
+
+	public void delete(String id){
+		Note n = Note.findById(Note.class, Long.parseLong(id));
+		n.setCreationtime("0");
+		n.save();
+		onRestart();
 	}
 
 }

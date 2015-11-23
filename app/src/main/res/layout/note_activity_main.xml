@@ -49,8 +49,13 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:paddingBottom="500dp">
-
             </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_below="@+id/noteElements"/>
+
         </RelativeLayout>
     </ScrollView>
 

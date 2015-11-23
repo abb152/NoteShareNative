@@ -996,6 +996,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 //drawView.startNew();
                 /*drawView.setVisibility(View.GONE);
                 drawingControls.setVisibility(View.GONE);*/
+                imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+                imageButtonAudioMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+                imageButtonbrushdraw.setBackgroundColor(getResources().getColor(R.color.header_bg));
+                imageButtonTextMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
                 imageButtonHamburg.setVisibility(View.VISIBLE);
                 imageButtoncalander.setVisibility(View.GONE);
                 imageButtonsquence.setVisibility(View.VISIBLE);
@@ -1035,6 +1039,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 final ImageButton checklistDelete = (ImageButton) viewChecklist.findViewById(R.id.deleteCheckbox);
 
                 allDelete.add(checklistDelete);
+
+                allCheckboxText.clear();
 
                 if (allCheckboxText.size() == 0)
                     allCheckboxText.add(checklist_text);
@@ -1443,6 +1449,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 isMoreShown = false;
                 layout_audio_notechooser.setVisibility(View.GONE);
                 imageButtoncalander.setVisibility(View.GONE);
+                imageButtonAudioMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
             }
         });
         imageButtonPaintMode.setOnClickListener(new OnClickListener() {
@@ -1517,8 +1524,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 final RelativeLayout textView = (RelativeLayout) viewText.findViewById(R.id.textView);
                 final RichEditor editor = (RichEditor) viewText.findViewById(R.id.editor);
                 final ImageButton deleteText = (ImageButton) viewText.findViewById(R.id.deleteText);
-                editor.setMinimumHeight(40);
-                editor.setEditorHeight(40);
+                editor.setMinimumHeight(20);
+                editor.setEditorHeight(20);
                 editor.setBackgroundColor(0);
                 noteElements.addView(textView);
 
@@ -1532,6 +1539,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 //editor.setHtml(s);
 
                 //editor.requestFocus();
+
+                textelementid.clear();
+
                 if (textelementid.size() == 0)
                     textelementid.add(editor);
 
@@ -3301,6 +3311,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
 
+        imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(contentView);

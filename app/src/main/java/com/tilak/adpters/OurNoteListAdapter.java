@@ -106,6 +106,11 @@ public class OurNoteListAdapter extends BaseAdapter {
                 holder.btnShare = (ImageButton) convertView.findViewById(R.id.btnshare);
                 holder.btnRemind = (ImageButton) convertView.findViewById(R.id.btnRemind);
             }
+
+            if(listview == "GRID"){
+                holder.btnDelete = (ImageButton) convertView.findViewById(R.id.deleteInGrid);
+                holder.btnShare = (ImageButton) convertView.findViewById(R.id.shareInGrid);
+            }
             convertView.setTag(holder);
         }else{
             holder= (ViewHolder) convertView.getTag();
@@ -136,6 +141,9 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.btnDelete.setTag(map.get("noteId"));
             holder.btnShare.setTag(map.get("noteId"));
             holder.btnRemind.setTag(map.get("noteId"));
+        }else{
+            holder.btnDelete.setTag(map.get("noteId"));
+            holder.btnShare.setTag(map.get("noteId"));
         }
 
         return convertView;
