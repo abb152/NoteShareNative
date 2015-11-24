@@ -20,7 +20,7 @@ public class PasscodeActivity extends DrawerActivity {
     boolean confirm =false;
     TextView t=null;
     int i=0, j = 0;
-    String check, fileId;
+    String check, fileId = null;
     int dbPass;
     TextView tv;
 
@@ -56,23 +56,7 @@ public class PasscodeActivity extends DrawerActivity {
         tv = (TextView) v;
         i++;
         if(check.equals("1")){
-            passcode += tv.getText().toString();
-            if(passcode.length() == 4) {
-                et4.setText("*");
-                if (Integer.parseInt(passcode) == dbPass) {
-                    Note n = Note.findById(Note.class, Long.parseLong(fileId));
-                    n.islocked = 1;
-                    n.save();
-                    finish();
-                } else {
-                    clearBox();
-                    t.setText("Enter Valid Passcode to Open file.");
-                    Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
-                }
-            }
-            else{
-                lessThanFour(i);
-            }
+            setNotePassTrue();
         }else if(check.equals("4")){
             if (i <= 4 && oldConfirm == false) {
                 passcode += tv.getText().toString();
@@ -133,7 +117,37 @@ public class PasscodeActivity extends DrawerActivity {
             else{
                 lessThanFour(i);
             }
-        } else {
+        } else if(check.equals("5")) {
+            passcode += tv.getText().toString();
+            if (passcode.length() == 4) {
+                et4.setText("*");
+                t.setText("Confirm New Passcode");
+                if (confirm == false) {
+                    confirm_passcode = passcode;
+                    clearBox();
+                    confirm = true;
+                } else {
+                    if (passcode.equals(confirm_passcode)) {
+                        Config c = Config.findById(Config.class, Long.valueOf(1));
+                        c.setPasscode(Integer.parseInt(confirm_passcode));
+                        c.save();
+                        Toast.makeText(PasscodeActivity.this, "New Passcode Saved", Toast.LENGTH_LONG).show();
+                        Note n = Note.findById(Note.class, Long.parseLong(fileId));
+                        n.islocked = 1;
+                        n.save();
+                        finish();
+                        //finish();
+                    } else {
+                        Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                        confirm = true;
+                        clearBox();
+                    }
+                }
+                //Check for passcode
+            } else {
+                lessThanFour(i);
+            }
+        }else {
             if (i <= 4) {
                 newPassCode();
             }
@@ -189,6 +203,26 @@ public class PasscodeActivity extends DrawerActivity {
             }
             //Check for passcode
         } else {
+            lessThanFour(i);
+        }
+    }
+
+    public void setNotePassTrue(){
+        passcode += tv.getText().toString();
+        if(passcode.length() == 4) {
+            et4.setText("*");
+            if (Integer.parseInt(passcode) == dbPass) {
+                Note n = Note.findById(Note.class, Long.parseLong(fileId));
+                n.islocked = 1;
+                n.save();
+                finish();
+            } else {
+                clearBox();
+                t.setText("Enter Valid Passcode to Open file.");
+                Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
             lessThanFour(i);
         }
     }

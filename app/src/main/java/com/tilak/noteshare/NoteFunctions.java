@@ -43,8 +43,14 @@ public class NoteFunctions {
         } else {
             Config con = Config.findById(Config.class, 1L);
             //Log.e("jay con.passcode", String.valueOf(con.getPasscode()));
-            if (con.getPasscode() == 0)
-                Toast.makeText(context, "Please set passcode in Setting page", Toast.LENGTH_LONG).show();
+            if (con.getPasscode() == 0){
+                Toast.makeText(context, "Please set passcode first.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, PasscodeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("FileId", id);
+                intent.putExtra("Check", "5");
+                context.startActivity(intent);
+            }
             else {
                 n.islocked = 1;
                 n.save();
