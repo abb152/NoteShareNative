@@ -86,7 +86,7 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="FacebookLoginButton">
+    <!--<style name="FacebookLoginButton">
         <item name="android:text">@string/facebook_login_text</item>
         <item name="android:textSize">@dimen/fb_text_size</item>
         <item name="android:textStyle">normal</item>
@@ -95,6 +95,14 @@
         <item name="android:paddingBottom">15dp</item>
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">20dp</item>
+    </style>-->
+
+    <style name="FacebookLoginButton">
+        <item name="android:textSize">20sp</item>
+        <!--<item name="android:background">@drawable/facebook_signin_btn</item>-->
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
     <style name="GoogleLoginButton">

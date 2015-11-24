@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -112,6 +113,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
         // Google Plus
         btnSignIn = (SignInButton) findViewById(R.id.btnGoogleSignIn);
+        setGooglePlusButtonText(btnSignIn,"Google+");
         // Button click listeners
         btnSignIn.setOnClickListener(this);
 
@@ -120,6 +122,20 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 .addOnConnectionFailedListener(this).addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setPadding(-1,0,0,0);
+                tv.setText(buttonText);
+                return;
+            }
+        }
     }
 
     // Facebook Callback
