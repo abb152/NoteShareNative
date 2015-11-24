@@ -108,8 +108,10 @@ public class CameraActivity extends Activity {
 
 
         // Sets initial aspect ratio to 10/10, for demonstration purposes
-        cropImageView.setAspectRatio(DEFAULT_ASPECT_RATIO_VALUES, DEFAULT_ASPECT_RATIO_VALUES);
-
+        //cropImageView.setAspectRatio(DEFAULT_ASPECT_RATIO_VALUES, DEFAULT_ASPECT_RATIO_VALUES);
+        //cropImageView.setAspectRatio(1, 1);
+        //cropImageView.setScaleType();
+        //cropImageView.setFixedAspectRatio(false);
         findViewById(R.id.Button_done).setOnClickListener(new View.OnClickListener() {
 
             @Override
