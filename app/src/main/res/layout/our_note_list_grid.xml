@@ -55,37 +55,37 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:gravity="right">
+            >
 
             <ImageButton
                 android:layout_width="13dp"
                 android:layout_height="18dp"
                 android:id="@+id/deleteInGrid"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="20dp"
                 android:baselineAlignBottom="false"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="4dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/image_option_delete2"
+                android:src="@drawable/image_option_delete_black"
                 android:background="@android:color/transparent"
-                android:onClick="deleteNote"/>
+                android:onClick="deleteNote"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"/>
 
             <ImageButton
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:id="@+id/shareInGrid"
-                android:layout_marginRight="12dp"
                 android:baselineAlignBottom="false"
                 android:scaleType="fitXY"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/image_option_share2"
-                android:background="@android:color/transparent"/>
+                android:src="@drawable/image_option_share_black"
+                android:background="@android:color/transparent"
+                android:layout_alignBottom="@+id/deleteInGrid"
+                android:layout_toEndOf="@+id/deleteInGrid"/>
 
             <ImageView
                 android:layout_width="30dp"
@@ -93,8 +93,10 @@
                 android:id="@+id/noteFold"
                 android:baselineAlignBottom="false"
                 android:src="@drawable/note_fold_shadow2"
-                android:background="@android:color/transparent"/>
-        </LinearLayout>
+                android:background="@android:color/transparent"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
 
     </LinearLayout>
 

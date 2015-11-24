@@ -25,6 +25,8 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
+import android.view.animation.AnimationUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1231,6 +1233,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             // started
                             Toast.makeText(NoteMainActivity.this, "Recording started", Toast.LENGTH_SHORT).show();
                             audio_play.setImageResource(R.drawable.pause_audio);
+                            audio_play.startAnimation(AnimationUtils.loadAnimation(NoteMainActivity.this, R.anim.animation_pulse));
                             recordingPlay = true;
                         }
 
@@ -1252,6 +1255,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         // paused
                                         Toast.makeText(NoteMainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
                                         audio_play.setImageResource(R.drawable.play_audio);
+                                        audio_play.clearAnimation();
                                         recordingPlay = false;
                                     }
 
@@ -1269,6 +1273,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         // started
                                         Toast.makeText(NoteMainActivity.this, "Play again", Toast.LENGTH_SHORT).show();
                                         audio_play.setImageResource(R.drawable.pause_audio);
+                                        audio_play.startAnimation(AnimationUtils.loadAnimation(NoteMainActivity.this, R.anim.animation_pulse));
                                         recordingPlay = true;
                                     }
 
@@ -1602,6 +1607,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         }
                     }
                 });
+
+
+
             }
         });
 

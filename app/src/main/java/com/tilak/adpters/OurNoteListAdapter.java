@@ -66,10 +66,13 @@ public class OurNoteListAdapter extends BaseAdapter {
         LayoutInflater inflater=activity.getLayoutInflater();
         if(convertView == null){
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.our_note_list,null); //change the name of the layout
-            if(listview == "GRID"){
-                convertView = inflater.inflate(R.layout.our_note_list_grid,null); //change the name of the layout
-            }
+            if(listview == "DETAIL")
+                convertView = inflater.inflate(R.layout.our_note_list_detail,null); //change the name of the layout
+            if(listview == "LIST")
+                convertView = inflater.inflate(R.layout.our_note_list_list,null); //change the name of the layout
+            if(listview == "GRID")
+                convertView = inflater.inflate(R.layout.our_note_list_grid,null); //change the name of the layout         }
+
 
             holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.front);
             holder.txtNoteName = (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
@@ -82,11 +85,11 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.main = (LinearLayout) convertView.findViewById(R.id.noteMain);
 
             if(listview == "LIST") {
-                holder.txtNoteName.setHeight(50);
-                holder.txtNoteName.setTextSize(18F);
-                holder.txtNoteDesc.setVisibility(View.GONE);
-                holder.txtNoteDate.setVisibility(View.GONE);
-                holder.linearLayout.setPadding(20, 30, 20, 20);
+                //holder.txtNoteName.setHeight(50);
+                //holder.txtNoteName.setTextSize(18F);
+                //holder.txtNoteDesc.setVisibility(View.GONE);
+                //holder.txtNoteDate.setVisibility(View.GONE);
+                //holder.linearLayout.setPadding(20, 30, 20, 20);
             }
             if(listview == "DETAIL"){
                 //holder.txtNoteName.setHeight(50);

@@ -232,7 +232,6 @@ public class MainActivity extends DrawerActivity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-
 		//editTextsearchNote.setText("");
 		try {
 			checkTimeClicked();
