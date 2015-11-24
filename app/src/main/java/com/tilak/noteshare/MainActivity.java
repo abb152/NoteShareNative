@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -838,12 +839,12 @@ public class MainActivity extends DrawerActivity {
 		sortallnotes = allnotes;
 		putInList();
 
-		String strCout = "(" + list.size() + ")";
+		/*String strCout = "(" + list.size() + ")";
 		try {
-			textViewheaderTitle.setText("NOTE " + strCout);
+			//textViewheaderTitle.setText("NOTE " + strCout);
 		}catch (Exception e){
 
-		}
+		}*/
 	}
 
 	void putInList(){
@@ -1078,6 +1079,9 @@ public class MainActivity extends DrawerActivity {
 							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
+							SearchLayout.setVisibility(View.GONE);
+							textViewheaderTitle.setText("NOTE");
+							searchLayoutOpen = false;
 							//editTextsearchNote.setText("");
 						} else {
 							Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
@@ -1121,6 +1125,9 @@ public class MainActivity extends DrawerActivity {
 							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
+							SearchLayout.setVisibility(View.GONE);
+							textViewheaderTitle.setText("NOTE");
+							searchLayoutOpen = false;
 						} catch (Exception e) {
 
 						}
@@ -1248,27 +1255,25 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void searchSlide(){
-		/*TranslateAnimation animate;
-		if(!searchLayoutOpen) {
-			animate = new TranslateAnimation(0,0,SearchLayout.getHeight(),0);
-		}
-		else{
-			animate = new TranslateAnimation(0,0,0,SearchLayout.getHeight());
-		}
-
-		animate.setDuration(500);
-		animate.setFillAfter(true);
-		SearchLayout.startAnimation(animate);*/
-
 		if(!searchLayoutOpen) {
 			SearchLayout.setVisibility(View.VISIBLE);
+			editTextsearchNote.requestFocus();
+			openKeyboard(editTextsearchNote);
 			searchLayoutOpen = true;
 		}
 		else {
 			SearchLayout.setVisibility(View.GONE);
+			textViewheaderTitle.setText("NOTE");
+			closeKeyBoard();
+			editTextsearchNote.clearFocus();
 			searchLayoutOpen = false;
+			onRestart();
 		}
+	}
 
+	private void closeKeyBoard() {
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 	}
 
 	public void delete(String id){
@@ -1276,6 +1281,11 @@ public class MainActivity extends DrawerActivity {
 		n.setCreationtime("0");
 		n.save();
 		onRestart();
+	}
+
+	public void openKeyboard(View v){
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
 	}
 
 }

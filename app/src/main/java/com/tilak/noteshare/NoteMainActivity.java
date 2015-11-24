@@ -328,8 +328,20 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         imageButtonDeleteMode = (ImageButton) contentview
                 .findViewById(R.id.imageButtonDeleteMode);
 
-        /*if(noteIdForDetails == null)
-            textViewheaderTitle.setText("NOTE");*/
+        final String[] updatedText = new String[1];
+        if(noteIdForDetails == null){
+            List<Note> notes = Note.findWithQuery(Note.class,"Select id from NOTE");
+            String num = null;
+            if(notes.size() > 0)
+                num = String.valueOf(((notes.get(notes.size() - 1).getId()) + 1L ));
+            else
+                num = "1";
+            textViewheaderTitle.setText("Note "+ num +"");
+            updatedText[0] = "Note "+num;
+            noteTitle[0] = "Note "+num;
+        }
+
+        final boolean[] initialNameSet = {false};
 
         textViewheaderTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -339,19 +351,22 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (noteIdForDetails == null) {
+                if (noteIdForDetails == null && initialNameSet[0]) {
                     makeNote();
                 }
 
-                String updatedText = s.toString();
-                if (!noteTitle[0].equals(updatedText)) {
+                updatedText[0] = s.toString();
+
+                if (!noteTitle[0].equals(updatedText[0]) && initialNameSet[0]) {
                     Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-                    note.title = updatedText;
+                    note.title = updatedText[0];
                     //note.modificationtime = currentDateStr;
                     note.save();
                     modifyNoteTime();
-                    noteTitle[0] = updatedText;
+                    noteTitle[0] = updatedText[0];
                 }
+
+                initialNameSet[0] = true;
             }
 
             @Override
@@ -523,14 +538,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 .findViewById(R.id.imageButtondrawnew);
         imageButtonbrushdraw = (ImageButton) drawingControls
                 .findViewById(R.id.imageButtonbrushdraw);
-        imageButtondrawcolors = (ImageButton) drawingControls
-                .findViewById(R.id.imageButtondrawcolors);
+        /*imageButtondrawcolors = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtondrawcolors);*/
         imageButtonhighlightdraw = (ImageButton) drawingControls
                 .findViewById(R.id.imageButtonhighlightdraw);
         imageButtondrawerase = (ImageButton) drawingControls
                 .findViewById(R.id.imageButtondrawerase);
-        imageButtondrawMore = (ImageButton) drawingControls
-                .findViewById(R.id.imageButtondrawMore);
+        /*imageButtondrawMore = (ImageButton) drawingControls
+                .findViewById(R.id.imageButtondrawMore);*/
 
     }
 
@@ -703,13 +718,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 updateScribbleButtonColor("brush");
             }
         });
-        imageButtondrawcolors.setOnClickListener(new OnClickListener() {
+        /*imageButtondrawcolors.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
                 //showColorAlert("", NoteMainActivity.this);
             }
-        });
+        });*/
         imageButtonhighlightdraw.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -733,13 +748,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 updateScribbleButtonColor("eraser");
             }
         });
-        imageButtondrawMore.setOnClickListener(new OnClickListener() {
+        /*imageButtondrawMore.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
 
             }
-        });
+        });*/
     }
 
     void updateTextNoteControlListners(int elementId) {
@@ -816,14 +831,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 R.color.header_bg));
         imageButtonbrushdraw.setBackgroundColor(getResources().getColor(
                 R.color.header_bg));
-        imageButtondrawcolors.setBackgroundColor(getResources().getColor(
-                R.color.header_bg));
+        /*imageButtondrawcolors.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));*/
         imageButtonhighlightdraw.setBackgroundColor(getResources().getColor(
                 R.color.header_bg));
         imageButtondrawerase.setBackgroundColor(getResources().getColor(
                 R.color.header_bg));
-        imageButtondrawMore.setBackgroundColor(getResources().getColor(
-                R.color.header_bg));
+        /*imageButtondrawMore.setBackgroundColor(getResources().getColor(
+                R.color.header_bg));*/
 
         switch (elementId) {
             case R.id.imageButtondrawback:
@@ -1608,7 +1623,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     }
                 });
 
-
+                deleteText.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                    }
+                });
 
             }
         });

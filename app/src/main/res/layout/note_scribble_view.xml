@@ -19,23 +19,21 @@
         android:visibility="gone"
         android:src="@drawable/scrbble_back" />
 
-    <ImageButton
+    <!--<ImageButton
         android:id="@+id/imageButtondrawcolors"
         android:layout_width="40dp"
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
-        android:src="@drawable/scrbble_undo" />
+        android:src="@drawable/scrbble_undo" />-->
 
     <ImageButton
-        android:id="@+id/imageButtonhighlightdraw"
         android:layout_width="40dp"
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:src="@drawable/scrbble_highlight" />
+        android:background="@android:color/transparent"/>
 
 
     <ImageButton
@@ -46,6 +44,15 @@
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/scrbble_draw" />
+
+    <ImageButton
+        android:id="@+id/imageButtonhighlightdraw"
+        android:layout_width="40dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/scrbble_highlight" />
 
     <ImageButton
         android:id="@+id/imageButtondrawerase"
@@ -66,12 +73,11 @@
         android:src="@drawable/scrbble_newdraw" />
 
     <ImageButton
-        android:id="@+id/imageButtondrawMore"
         android:layout_width="40dp"
         android:scaleType="fitCenter"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
-          android:layout_weight="1"
-        android:src="@drawable/scrbble_more" />
+        android:cropToPadding="false"
+        android:layout_weight="1"/>
 
 </LinearLayout>
