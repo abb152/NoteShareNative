@@ -1039,9 +1039,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 // openSlideMenu();
-                if(isRecordingAudio){
-                    Toast.makeText(getApplicationContext(),"Audio recording is going on!", Toast.LENGTH_LONG).show();
-                }else {
+                if (isRecordingAudio) {
+                    Toast.makeText(getApplicationContext(), "Audio recording is going on!", Toast.LENGTH_LONG).show();
+                } else {
                     isTextmodeSelected = false;
                     layout_note_more_Info.setVisibility(View.GONE);
                     imageButtonsquence.setVisibility(View.VISIBLE);
@@ -1285,7 +1285,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         @Override
                         public void onClick(View v) {
 
-                            if(recordingPlay){
+                            if (recordingPlay) {
                                 //already playing and now pause
                                 recorder.pause(new com.github.lassana.recorder.AudioRecorder.OnPauseListener() {
                                     @Override
@@ -1304,8 +1304,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         // error
                                     }
                                 });
-                            }
-                            else{
+                            } else {
                                 //pause and now start playing it again
                                 recorder.start(new com.github.lassana.recorder.AudioRecorder.OnStartListener() {
                                     @Override
@@ -1334,7 +1333,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         public void onClick(View v) {
 
                             //if user clicks on stop and recording is still playing
-                            if(recordingPlay){
+                            if (recordingPlay) {
                                 recorder.pause(new com.github.lassana.recorder.AudioRecorder.OnPauseListener() {
                                     @Override
                                     public void onPaused(String activeRecordFileName) {
@@ -1351,7 +1350,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                     }
                                 });
                             }
-                            if(!recordingPlay) {
+                            if (!recordingPlay) {
                                 isRecordingAudio = false;
                                 NoteElement noteElement = NoteElement.findById(NoteElement.class, noteElementId);
                                 noteElement.setContentA("true");
@@ -1586,6 +1585,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                 final boolean[] ne_added = {false};
                 final long[] thisnoteid = new long[1];
+                final int[] height = {editor.getHeight()};
                 //editor.setHtml(s);
 
                 //editor.requestFocus();
@@ -1649,6 +1649,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             ne.setContentA(plainText);
                             ne.save();
                             modifyNoteTime();
+                        }
+
+                        if (height[0] < editor.getHeight()) {
+                            height[0] = editor.getHeight();
+                            scrollView.setScrollY(scrollView.getScrollY() + 20);
+                        }
+                        if (height[0] > editor.getHeight()) {
+                            height[0] = editor.getHeight();
+                            scrollView.setScrollY(scrollView.getScrollY() - 25);
                         }
                     }
                 });
@@ -3004,6 +3013,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     editor.setTag(allRe.size() - 1);
                     editor.setHtml(s);
                     editor.setBackgroundColor(0);
+
+                    final int[] height = {editor.getHeight()};
+
                     editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View v, boolean hasFocus) {
@@ -3034,6 +3046,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             n.setContentA(getPlainText(s));
                             n.save();
                             modifyNoteTime();
+
+                            if (height[0] < editor.getHeight()) {
+                                height[0] = editor.getHeight();
+                                scrollView.setScrollY(scrollView.getScrollY() + 25);
+                            }
+                            if (height[0] > editor.getHeight()){
+                                height[0] = editor.getHeight();
+                                scrollView.setScrollY(scrollView.getScrollY() - 25);
+                            }
                         }
                     });
 

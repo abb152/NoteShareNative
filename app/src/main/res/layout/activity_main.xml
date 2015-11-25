@@ -64,8 +64,8 @@
         android:layout_gravity="start"
         android:background="@android:color/white"
         android:choiceMode="singleChoice"
-        android:divider="#ddd"
-        android:dividerHeight="1dp"
+        android:divider="#fff"
+        android:dividerHeight="3dp"
         android:scrollbars="none"
 
         swipe:swipeFrontView="@+id/front"
@@ -82,11 +82,11 @@
         android:id="@+id/notefoleserGridList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottommenue"
         android:layout_below="@+id/SearchLayout"
         android:layout_gravity="start"
-        android:layout_marginBottom="0dp"
-        android:padding="4dp"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:paddingRight="4dp"
         android:background="@android:color/white"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
@@ -94,7 +94,8 @@
         android:dividerHeight="0dp"
         android:numColumns="2"
         android:scrollbars="none"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_alignBottom="@+id/view2">
     </GridView>
 
     <ScrollView
@@ -156,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/textNoteSort"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="27dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
 
@@ -175,7 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="SORT"
-                android:textColor="@color/light_gray_666666"
+                android:textColor="@color/nsTextColor"
                 android:textSize="16sp"
                 android:textStyle="normal"
                 android:id="@+id/textView2"
@@ -205,7 +206,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="VIEW"
-                android:textColor="@color/light_gray_666666"
+                android:textColor="@color/nsTextColor"
                 android:textSize="16sp"
                 android:textStyle="normal"
                 android:id="@+id/textView21"

@@ -116,7 +116,7 @@
             android:textStyle="bold"
             android:textSize="17sp"
             android:text="BOTANY: THE PLANT"
-            android:textColor="#000" />
+            android:textColor="@color/nsTextColor" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -125,7 +125,7 @@
             android:layout_marginBottom="2dp"
             android:text="Lorem Ipsum is simply"
             android:textSize="14sp"
-            android:textColor="#000"
+            android:textColor="@color/nsTextColor"
             android:maxLines="2"/>
 
         <LinearLayout
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="14"
                 android:id="@+id/tvNoteDate"
-                android:textColor="#000"
+                android:textColor="@color/nsTextColor"
                 android:text="01.04.15"
                 android:textSize="10sp"/>
 

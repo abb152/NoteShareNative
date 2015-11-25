@@ -116,7 +116,7 @@
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:text="BOTANY: THE PLANT"
-                android:textColor="#000" />
+                android:textColor="@color/nsTextColor" />
 
             <TextView
                 android:layout_width="fill_parent"
