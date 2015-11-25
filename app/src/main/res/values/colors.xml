@@ -6,5 +6,6 @@
     <color name="black">#000000</color>
     <color name="titleFontColor">#444</color>
     <color name="descFontColor">#555</color>
+    <color name="nsTextColor">#636363</color>
 
 </resources>

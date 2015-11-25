@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -195,6 +196,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     private ImageView imageView53;
     private MediaRecorder myAudioRecorder;
     private String outputFile = null;
+
+
+    //audio stopwatch
+
+    private long startTime = 0L;
+    private Handler myHandler = new Handler();
+    long timeInMillies = 0L;
+    long timeSwap = 0L;
+    long finalTime = 0L;
+    public TextView audio_text;
 
     public static String getDurationBreakdown(long millis) {
         if (millis < 0) {
@@ -1057,6 +1068,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                 allDelete.add(checklistDelete);
 
+                checklistDelete.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
+                        //deleteElements(v.getTag().toString());
+                        showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                    }
+                });
+
                 allCheckboxText.clear();
 
                 if (allCheckboxText.size() == 0)
@@ -1101,6 +1121,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                 ne.save();
                                 thisnoteelementid[0] = ne.getId();
                                 cb_added[0] = true;
+                                checklistDelete.setTag(ne.getId());
                             }
                             if (cb_added[0]) {
                                 NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
@@ -1212,7 +1233,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     final View viewAudio = inflater.inflate(R.layout.note_audio_recording, null, false);
                     LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio_recording);
                     final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
-                    //final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+                    audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
                     audio_play.setImageResource(R.drawable.play_audio);
                     final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
 
@@ -1246,6 +1267,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         @Override
                         public void onStarted() {
                             // started
+                            startTime = SystemClock.uptimeMillis();
+                            myHandler.postDelayed(updateTimerMethod, 0);
                             Toast.makeText(NoteMainActivity.this, "Recording started", Toast.LENGTH_SHORT).show();
                             audio_play.setImageResource(R.drawable.pause_audio);
                             audio_play.startAnimation(AnimationUtils.loadAnimation(NoteMainActivity.this, R.anim.animation_pulse));
@@ -1268,6 +1291,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                     @Override
                                     public void onPaused(String activeRecordFileName) {
                                         // paused
+                                        timeSwap += timeInMillies;
+                                        myHandler.removeCallbacks(updateTimerMethod);
                                         Toast.makeText(NoteMainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
                                         audio_play.setImageResource(R.drawable.play_audio);
                                         audio_play.clearAnimation();
@@ -1286,6 +1311,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                     @Override
                                     public void onStarted() {
                                         // started
+                                        startTime = SystemClock.uptimeMillis();
+                                        myHandler.postDelayed(updateTimerMethod, 0);
                                         Toast.makeText(NoteMainActivity.this, "Play again", Toast.LENGTH_SHORT).show();
                                         audio_play.setImageResource(R.drawable.pause_audio);
                                         audio_play.startAnimation(AnimationUtils.loadAnimation(NoteMainActivity.this, R.anim.animation_pulse));
@@ -1312,6 +1339,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                     @Override
                                     public void onPaused(String activeRecordFileName) {
                                         // paused
+                                        timeSwap += timeInMillies;
+                                        myHandler.removeCallbacks(updateTimerMethod);
                                         //Toast.makeText(getApplicationContext(),"Paused and Stop",Toast.LENGTH_SHORT).show();
                                     }
 
@@ -3370,4 +3399,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     private String getNextFileName(String name) {
         return Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name;
     }
+
+    private Runnable updateTimerMethod = new Runnable() {
+
+        public void run() {
+            timeInMillies = SystemClock.uptimeMillis() - startTime;
+            finalTime = timeSwap + timeInMillies;
+
+            int seconds = (int) (finalTime / 1000);
+            int minutes = seconds / 60;
+            int hours = minutes / 60 ;
+            minutes = minutes - (hours * 60);
+            seconds = seconds % 60;
+            int milliseconds = (int) (finalTime % 1000);
+            audio_text.setText(String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds)); // + ":"
+            //+ String.format("%03d", milliseconds));
+            myHandler.postDelayed(this, 0);
+        }
+
+    };
 }
