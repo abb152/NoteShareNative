@@ -3,6 +3,7 @@ package com.tilak.noteshare;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -98,19 +99,42 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				case 2:
 					items.setResourceId(R.drawable.folder_icon);
 					break;
+				case 3:
+					items.setResourceId(R.drawable.notification_icon);
+					break;
+				case 4:
+					items.setResourceId(R.drawable.rate_us_icon);
+					break;
+				case 5:
+					items.setResourceId(R.drawable.likeus_on_icon);
+					break;
+				case 6:
+					items.setResourceId(R.drawable.send_feedback_icon);
+					break;
+				case 7:
+					items.setResourceId(R.drawable.invite_icon);
+					break;
+				case 8:
+					items.setResourceId(R.drawable.setting_icon);
+					break;
+				case 9:
+					items.setResourceId(R.drawable.logout_icon);
+					break;
+				default:
+					break;
 				/*case 3:
 					items.setResourceId(R.drawable.folder_icon);
-					break;*/
-				/*case 4:
+					break;
+				case 4:
 					items.setResourceId(R.drawable.about_us_icon);
 					break;
 				case 5:
 					items.setResourceId(R.drawable.termsandcondition_icon);
-					break;*/
+					break;
 				case 3:
 					items.setResourceId(R.drawable.notification_icon);
 					break;
-				/*case 7:
+				case 7:
 					items.setResourceId(R.drawable.rate_us_icon);
 					break;
 				case 8:
@@ -121,21 +145,10 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					break;
 				case 10:
 					items.setResourceId(R.drawable.invite_icon);
-					break;*/
-				case 4:
-					items.setResourceId(R.drawable.invite_icon);
 					break;
 				case 5:
 					items.setResourceId(R.drawable.about_us_icon);
-					break;
-				case 6:
-					items.setResourceId(R.drawable.setting_icon);
-					break;
-				case 7:
-					items.setResourceId(R.drawable.logout_icon);
-					break;
-				default:
-					break;
+					break;*/
 			}
 			arrMenu.add(items);
 
@@ -226,7 +239,30 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					finish();
 				}
 				break;
-				case 4: {
+				case 4:{
+					Uri uri = Uri.parse("market://details?id=" + "com.wohlig.stakes");
+					Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+					// To count with Play market backstack, After pressing back button,
+					// to taken back to our application, we need to add following flags to intent.
+					goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+					try {
+						startActivity(goToMarket);
+					} catch (ActivityNotFoundException e) {
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.wohlig.stakes")));
+					}
+				}
+				break;
+				case 5:{
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/wohlig/")));
+					//finish();
+				}
+				break;
+				case 6:{
+					startActivity(new Intent(this, SendFeedbackActivity.class));
+					finish();
+				}
+				break;
+				case 7:{
 					System.out.println("invite friends");
 					Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
 					Intent share = new Intent(Intent.ACTION_SEND);
@@ -234,22 +270,21 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					share.putExtra(Intent.EXTRA_STREAM, uri);
 					share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
 					startActivity(Intent.createChooser(share, "Invite friends"));
-					finish();
+					//finish();
 				}
 				break;
-				case 5: {
+				/*case 5: {
 					System.out.println("about");
 					startActivity(new Intent(this, AboutNoteShareActivity.class));
 					finish();
-				}
-				break;
-				case 6: {
+				}*/
+				case 8: {
 					System.out.println("setting");
 					startActivity(new Intent(this, SettingActivity.class));
 					finish();
 				}
 				break;
-				case 7: {
+				case 9: {
 					System.out.println("logout");
 					showAlertWith("ARE YOU SURE?", "Are you sure you want to Log Out?", DrawerActivity.this);
 				}

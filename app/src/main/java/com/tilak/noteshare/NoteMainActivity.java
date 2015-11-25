@@ -1341,6 +1341,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         // paused
                                         timeSwap += timeInMillies;
                                         myHandler.removeCallbacks(updateTimerMethod);
+                                        recordingPlay = false;
                                         //Toast.makeText(getApplicationContext(),"Paused and Stop",Toast.LENGTH_SHORT).show();
                                     }
 
@@ -1349,18 +1350,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         // error
                                     }
                                 });
-                                recordingPlay = false;
                             }
+                            if(!recordingPlay) {
+                                isRecordingAudio = false;
+                                NoteElement noteElement = NoteElement.findById(NoteElement.class, noteElementId);
+                                noteElement.setContentA("true");
+                                noteElement.save();
+                                modifyNoteTime();
+                                Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
 
-                            isRecordingAudio = false;
-                            NoteElement noteElement = NoteElement.findById(NoteElement.class,noteElementId);
-                            noteElement.setContentA("true");
-                            noteElement.save();
-                            modifyNoteTime();
-                            Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
-
-                            audioElement.removeAllViews();
-                            onResume();
+                                audioElement.removeAllViews();
+                                onResume();
+                            }
 
                         }
                     });

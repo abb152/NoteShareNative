@@ -1,11 +1,9 @@
 package com.tilak.noteshare;
 
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,7 @@ public class SettingActivity extends DrawerActivity {
 	public ImageButton btnheaderMenu,btnsequence,btncalander;
 	public TextView textheadertitle,textViewSubHeaderTitle;
 	public LinearLayout layoutTitleHeaderview;
-	public TextView tvLikeFacebook, tvFeedback, tvRateUs, tvSyncVia;
+	public TextView tvTerms, tvAbout, tvSyncVia;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,27 +38,9 @@ public class SettingActivity extends DrawerActivity {
 		//mainHeadermenue
 		layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
 		btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
-		tvLikeFacebook = (TextView) findViewById(R.id.tvLikeFacebook);
-		tvFeedback = (TextView) findViewById(R.id.tvFeedback);
-		tvRateUs = (TextView) findViewById(R.id.tvRateUs);
+		tvTerms = (TextView) findViewById(R.id.tvTerms);
+		tvAbout = (TextView) findViewById(R.id.tvAbout);
 		tvSyncVia = (TextView) findViewById(R.id.tvSyncVia);
-
-		/*btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
-		btncalander=(ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
-		btncalander.setVisibility(View.GONE);
-		btnsequence.setVisibility(View.GONE);*/
-
-		///textheadertitle=(TextView) layoutHeder.findViewById(R.id.textViewheaderTitle);
-		//textheadertitle.setText("");
-
-
-		/*layoutTitleHeaderview=(LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
-		textViewSubHeaderTitle=(TextView) layoutTitleHeaderview.findViewById(R.id.textViewHeaderTitle1);
-		textViewSubHeaderTitle.setText("Settings");*/
-
-		/*Button b = (Button) findViewById(R.id.syncButton);
-		b.setText(Html.fromHtml("Auto Sync<br><span style=\"color: #cccccc; font-size: 14px;\">Last Sync:<span>"));*/
-
 		addListners();
 	}
 
@@ -75,34 +55,16 @@ public class SettingActivity extends DrawerActivity {
 				openSlideMenu();
 			}
 		});
-
-		tvLikeFacebook.setOnClickListener(new OnClickListener() {
+		tvAbout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/wohlig/")));
+				startActivity(new Intent(SettingActivity.this, AboutNoteShareActivity.class));
 			}
 		});
-
-		tvFeedback.setOnClickListener(new OnClickListener() {
+		tvTerms.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(SettingActivity.this, SendFeedbackActivity.class));
-			}
-		});
-
-		tvRateUs.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Uri uri = Uri.parse("market://details?id=" + "com.wohlig.stakes");
-				Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-				// To count with Play market backstack, After pressing back button,
-				// to taken back to our application, we need to add following flags to intent.
-				goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-				try {
-					startActivity(goToMarket);
-				} catch (ActivityNotFoundException e) {
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.wohlig.stakes")));
-				}
+				startActivity(new Intent(SettingActivity.this, TermsAndConditionsActivity.class));
 			}
 		});
 

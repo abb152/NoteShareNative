@@ -118,19 +118,6 @@
                 android:layout_marginTop="5dp"
                 android:background="#DDD"/>
 
-            <TextView
-                android:id="@+id/tvTerms"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:text="Terms and Conditions"
-                style="@style/settingTextViewSubTitle"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#DDD"/>
-
         </LinearLayout>
 
     </ScrollView>

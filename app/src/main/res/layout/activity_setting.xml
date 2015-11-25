@@ -167,12 +167,14 @@
                         android:layout_height="0.5dp"
                         android:background="#DDD"/>
 
+
+
                     <TextView
-                        android:id="@+id/tvLikeFacebook"
+                        android:id="@+id/tvAbout"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
-                        android:text="Like Us On Facebook"
+                        android:text="About NoteShare"
                         style="@style/settingTextViewSubTitle"/>
 
                     <View
@@ -181,11 +183,11 @@
                         android:background="#DDD"/>
 
                     <TextView
-                        android:id="@+id/tvRateUs"
+                        android:id="@+id/tvTerms"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
-                        android:text="Rate Us"
+                        android:text="Terms &amp; Condition"
                         style="@style/settingTextViewSubTitle"/>
 
                     <View
@@ -193,13 +195,13 @@
                         android:layout_height="0.5dp"
                         android:background="#DDD"/>
 
-                    <TextView
+                    <!--<TextView
                         android:id="@+id/tvFeedback"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:text="Send Feedback"
-                        style="@style/settingTextViewSubTitle"/>
+                        style="@style/settingTextViewSubTitle"/>-->
 
                 </LinearLayout>
 

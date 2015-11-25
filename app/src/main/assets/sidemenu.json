@@ -13,20 +13,28 @@
       "menuid": "3"
     },
     {
-      "menuName": "Invite Friends",
+      "menuName": "Rate Us",
       "menuid": "4"
     },
     {
-      "menuName": "About",
+      "menuName": "Like us on Facebook",
       "menuid": "5"
     },
     {
-      "menuName": "Settings",
+      "menuName": "Send Feedback",
       "menuid": "6"
     },
     {
-      "menuName": "Logout",
+      "menuName": "Invite Friends",
       "menuid": "7"
+    },
+    {
+      "menuName": "Settings",
+      "menuid": "8"
+    },
+    {
+      "menuName": "Logout",
+      "menuid": "9"
     }
   ]
 }
