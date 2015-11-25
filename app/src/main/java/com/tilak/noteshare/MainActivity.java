@@ -88,7 +88,7 @@ public class MainActivity extends DrawerActivity {
 	public NoteFolderGridAdapter gridAdapter;
 	public ArrayList<SideMenuitems> arrDataNote;
 	final Context context = this;
-	public LinearLayout textNoteSort, textNoteView;
+	public RelativeLayout textNoteSort, textNoteView;
 	
 	public SORTTYPE sortType;
 	public VIEWTYPE viewType;
@@ -269,8 +269,8 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.imageButtonHamburg);
 
 
-		textNoteSort = (LinearLayout) findViewById(R.id.textNoteSort);
-		textNoteView = (LinearLayout) findViewById(R.id.textNoteView);
+		textNoteSort = (RelativeLayout) findViewById(R.id.textNoteSort);
+		textNoteView = (RelativeLayout) findViewById(R.id.textNoteView);
 
 		textViewAdd = (ImageButton) findViewById(R.id.textViewAdd);
 
