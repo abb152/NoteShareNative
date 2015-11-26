@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/textstyledialogmain"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="wrap_content"
     android:background="@color/eaeaea"
     android:orientation="vertical" >
 
@@ -16,6 +16,16 @@
         android:weightSum="3" >
 
         <ImageButton
+            android:id="@+id/buttonBrush"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:background="@color/header_bg"
+            android:src="@drawable/scrbble_draw"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
             android:id="@+id/buttonHighlight"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
@@ -25,16 +35,6 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:visibility="visible"/>
-
-        <ImageButton
-            android:id="@+id/buttonBrush"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_weight="1"
-            android:background="@color/header_bg"
-            android:src="@drawable/scrbble_draw"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
 
         <ImageButton
             android:id="@+id/buttonEraser"
@@ -54,10 +54,10 @@
         android:layout_below="@+id/toplayout"
         android:background="@color/light_gray_999999" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/highlightView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="44dp"
         android:background="@color/eaeaea"
@@ -71,7 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -141,30 +142,30 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <!--<TextView
+            android:id="@+id/tvHighSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="@string/size" />
+
+        <TextView
+            android:id="@+id/tvHighlightSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/zero"/>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/size" />
-
-            <TextView
-                android:id="@+id/tvHighlightSize"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/zero" />
 
             <SeekBar
                 android:id="@+id/hightlight_sizeSeekBar"
                 android:layout_width="180dp"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:maxWidth="10dp"
@@ -172,25 +173,75 @@
                 android:progressDrawable="@layout/progress_drawable"
                 android:thumb="@drawable/thumb" />
 
-            <LinearLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                <View
+                    android:id="@+id/aview"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_toEndOf="@+id/hightlight_sizeSeekBar"
+                    android:background="@drawable/color_circle"/>
+
+        </RelativeLayout>-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="@string/size"
+            android:id="@+id/tvHighSize"
+            android:layout_below="@+id/paint_highlight1"/>
+
+        <TextView
+            android:id="@+id/tvHighlightSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="@string/zero"
+            android:layout_below="@+id/paint_highlight1"
+            android:layout_toEndOf="@+id/tvHighSize"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="-5dp"
+            android:layout_below="@+id/tvHighSize">
+
+            <SeekBar
+                android:id="@+id/hightlight_sizeSeekBar"
+                android:layout_width="220dp"
+                android:layout_height="20dp"
+                android:minHeight="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp">
+                android:progressDrawable="@layout/progress_drawable"
+                android:thumb="@drawable/thumb" />
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp">
 
                 <View
                     android:id="@+id/aview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="@drawable/color_circle"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/brushView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -198,7 +249,6 @@
         android:gravity="center"
         android:layout_marginTop="44dp"
         android:paddingBottom="5dp"
-        android:orientation="vertical"
         android:visibility="gone">
 
         <LinearLayout
@@ -206,7 +256,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -272,7 +323,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageButton
@@ -331,107 +382,131 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="@string/size"
+            android:id="@+id/tvPaintSize"
+            android:layout_below="@+id/paint_brush1"/>
+
+        <TextView
+            android:id="@+id/tvBrushSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="@string/zero"
+            android:layout_below="@+id/paint_brush1"
+            android:layout_toEndOf="@+id/tvPaintSize"/>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/size" />
-
-            <TextView
-                android:id="@+id/tvBrushSize"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/zero" />
+            android:layout_gravity="center"
+            android:layout_marginTop="-5dp"
+            android:layout_below="@+id/tvPaintSize">
 
             <SeekBar
                 android:id="@+id/sizeSeekBar"
-                android:layout_width="180dp"
-                android:layout_height="match_parent"
+                android:layout_width="220dp"
+                android:layout_height="20dp"
+                android:minHeight="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:layout_weight="0"
                 android:progressDrawable="@layout/progress_drawable"
                 android:thumb="@drawable/thumb" />
 
             <LinearLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="5dp">
 
                 <View
                     android:id="@+id/view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="@drawable/color_circle"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/eraserView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="44dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:background="@color/eaeaea"
-        android:orientation="horizontal"
         android:visibility="gone">
 
+
         <TextView
+            android:id="@+id/tvSize"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:text="@string/size" />
+            android:text="@string/size"/>
 
         <TextView
             android:id="@+id/tvEraserSize"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/zero" />
-
-        <SeekBar
-            android:id="@+id/eraser_sizeSeekBar"
-            android:layout_width="180dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="0"
-            android:progressDrawable="@layout/progress_drawable"
-            android:thumb="@drawable/thumb" />
+            android:layout_toEndOf="@+id/tvSize"
+            android:text="@string/zero"
+            android:layout_marginLeft="5dp"/>
 
         <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp">
+            android:layout_marginTop="-5dp">
 
-            <View
-                android:id="@+id/eraser_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/color_circle"/>
+            <SeekBar
+                android:id="@+id/eraser_sizeSeekBar"
+                android:layout_width="220dp"
+                android:layout_height="20dp"
+                android:minHeight="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:progressDrawable="@layout/progress_drawable"
+                android:thumb="@drawable/thumb" />
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center">
+
+                <View
+                    android:id="@+id/eraser_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/color_circle"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
