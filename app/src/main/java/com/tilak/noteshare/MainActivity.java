@@ -569,7 +569,7 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutListImageView = (ImageView) layoutList
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutListImageView.setImageResource(R.drawable.alphabet_sort_view);
+		layoutListImageView.setImageResource(R.drawable.ic_sort_atoz);
 		
 		layoutListTextView.setText("A-Z alphabetical");
 

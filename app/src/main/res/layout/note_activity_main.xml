@@ -71,60 +71,53 @@
         android:weightSum="7" >
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <ImageButton
                 android:id="@+id/imageButtonTextMode"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/text_icon" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_action_note_font" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <ImageButton
                 android:id="@+id/imageButtonImageMode"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/gallary_icon" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_action_note_gallery" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <ImageButton
                 android:id="@+id/imageButtonPaintMode"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/brush_icon" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_action_note_brush" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
             android:orientation="vertical" >
 
             <ImageButton
@@ -133,44 +126,41 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:padding="0dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/audio_icon" />
+                android:src="@drawable/ic_action_note_audio" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
             android:orientation="vertical" >
 
             <ImageButton
                 android:id="@+id/imageButtonDeleteMode"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:background="@android:color/transparent"
-                android:padding="12dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/image_option_delete2" />
+                android:src="@drawable/ic_action_delete" />
         </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <ImageButton
                 android:id="@+id/imageButtonShareMode"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/share_icon_1"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:src="@drawable/ic_action_note_share"
                 android:visibility="gone"/>
         </LinearLayout>
 
@@ -181,22 +171,15 @@
             android:orientation="vertical" >
         </LinearLayout>-->
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:orientation="vertical" >
-
             <ImageButton
                 android:id="@+id/imageButtonMoreMode"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="70dp"
                 android:background="@android:color/transparent"
-                android:padding="0dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/more_icon_1" />
-        </LinearLayout>
+                android:src="@drawable/ic_action_note_option" />
     </LinearLayout>
 
     <!-- ALL BOTTOM MENU -->
@@ -217,7 +200,7 @@
         android:layout_width="fill_parent"
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
-        layout="@layout/note_audio_chooser_view" />
+        layout="@layout/note_audio_chooser_view"/>
 
     <LinearLayout
         android:id="@+id/layOutDrawingView"
