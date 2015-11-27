@@ -94,61 +94,34 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			int menuid = Integer.parseInt(items.getMenuid());
 			switch (menuid) {
 				case 1:
-					items.setResourceId(R.drawable.note_menu_icon);
+					items.setResourceId(R.drawable.ic_action_note);
 					break;
 				case 2:
-					items.setResourceId(R.drawable.folder_icon);
+					items.setResourceId(R.drawable.ic_action_folder);
 					break;
 				case 3:
-					items.setResourceId(R.drawable.notification_icon);
+					items.setResourceId(R.drawable.ic_action_notification);
 					break;
 				case 4:
-					items.setResourceId(R.drawable.rate_us_icon);
+					items.setResourceId(R.drawable.ic_action_rate);
 					break;
 				case 5:
-					items.setResourceId(R.drawable.likeus_on_icon);
+					items.setResourceId(R.drawable.ic_action_like);
 					break;
 				case 6:
-					items.setResourceId(R.drawable.send_feedback_icon);
+					items.setResourceId(R.drawable.ic_action_feedback);
 					break;
 				case 7:
-					items.setResourceId(R.drawable.invite_icon);
+				items.setResourceId(R.drawable.ic_action_invite);
 					break;
 				case 8:
-					items.setResourceId(R.drawable.setting_icon);
+					items.setResourceId(R.drawable.ic_action_setting);
 					break;
 				case 9:
-					items.setResourceId(R.drawable.logout_icon);
+					items.setResourceId(R.drawable.ic_action_logout);
 					break;
 				default:
 					break;
-				/*case 3:
-					items.setResourceId(R.drawable.folder_icon);
-					break;
-				case 4:
-					items.setResourceId(R.drawable.about_us_icon);
-					break;
-				case 5:
-					items.setResourceId(R.drawable.termsandcondition_icon);
-					break;
-				case 3:
-					items.setResourceId(R.drawable.notification_icon);
-					break;
-				case 7:
-					items.setResourceId(R.drawable.rate_us_icon);
-					break;
-				case 8:
-					items.setResourceId(R.drawable.likeus_on_icon);
-					break;
-				case 9:
-					items.setResourceId(R.drawable.send_feedback_icon);
-					break;
-				case 10:
-					items.setResourceId(R.drawable.invite_icon);
-					break;
-				case 5:
-					items.setResourceId(R.drawable.about_us_icon);
-					break;*/
 			}
 			arrMenu.add(items);
 

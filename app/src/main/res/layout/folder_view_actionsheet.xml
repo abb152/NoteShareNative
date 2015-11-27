@@ -37,14 +37,13 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    android:padding="5dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/view_pop_up" />
+                    android:src="@drawable/ic_footer_view_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:text="VIEW FOLDER"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"

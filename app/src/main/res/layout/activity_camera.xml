@@ -47,9 +47,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textColor="@color/white"
-        android:drawablePadding="-40sp"
         android:background="@null"
-        android:src="@drawable/abc_ic_clear_normal" />
+        android:src="@drawable/ic_action_close" />
 
     <View
         android:layout_width="1dp"
@@ -63,12 +62,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="centerInside"
-        android:padding="5dp"
         android:text="Pick Image"
         android:textColor="@color/white"
         android:background="@null"
-        android:src="@drawable/gallary_icon"/>
+        android:src="@drawable/ic_action_gallery"/>
 
     <View
         android:layout_width="1dp"

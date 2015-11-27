@@ -35,17 +35,16 @@
                 android:orientation="horizontal" >
 
                 <ImageView
-                    android:layout_width="40dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
-                    android:padding="5dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/view_pop_up" />
+                    android:src="@drawable/ic_footer_view_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="VIEW"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:typeface="normal" />

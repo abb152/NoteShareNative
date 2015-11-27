@@ -37,15 +37,14 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:padding="7dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/sort_pop_up" />
+                    android:src="@drawable/ic_footer_sort_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="SORT"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:typeface="normal" />
