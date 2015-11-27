@@ -10,11 +10,11 @@
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
         android:id="@+id/tvFolderName"
-        android:gravity="center_horizontal"
         android:text=""
         android:textSize="18sp"
-        android:textColor="#222"
+        android:textColor="#323232"
         android:layout_weight="1" />
 
     <TextView

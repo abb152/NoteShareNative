@@ -31,6 +31,7 @@
                 android:background="@android:color/transparent"
                 android:id="@+id/tvNoteDate"
                 android:text=""
+                android:textAllCaps="true"
                 android:textColor="@color/nsTextColor"
                 android:textSize="10sp" />
 
@@ -40,7 +41,9 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:text=""
+                android:maxLines="2"
                 android:textColor="@color/nsTextColor"
+                android:textAllCaps="true"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -58,6 +61,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:background="@android:color/transparent">
 
             <ImageButton

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/noteMain"
     android:descendantFocusability="blocksDescendants"
@@ -116,6 +116,7 @@
             android:textStyle="bold"
             android:textSize="17sp"
             android:text="BOTANY: THE PLANT"
+            android:textAllCaps="true"
             android:textColor="@color/nsTextColor" />
 
         <TextView
@@ -128,6 +129,15 @@
             android:textColor="@color/nsTextColor"
             android:maxLines="2"/>
 
+        <!--<TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvNoteDate"
+            android:textColor="@color/nsTextColor"
+            android:layout_marginTop="2dp"
+            android:text="01.04.15"
+            android:textSize="10sp"/>
+-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,6 +150,7 @@
                 android:layout_weight="14"
                 android:id="@+id/tvNoteDate"
                 android:textColor="@color/nsTextColor"
+                android:layout_marginTop="2dp"
                 android:text="01.04.15"
                 android:textSize="10sp"/>
 
@@ -148,7 +159,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="12dp"
                 android:src="@drawable/image_option_lock2_red"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"/>
 
         </LinearLayout>
 

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -122,7 +123,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				allfolders = Folder.findWithQuery(Folder.class, "Select * from FOlder where name LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				allfolders = Folder.findWithQuery(Folder.class, "Select * from FOLDER where name LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
 				String strCout = "(" + allfolders.size() + ")";
 				textViewheaderTitle.setText("FOLDER " + strCout);
 			}
@@ -372,7 +373,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		adapter.notifyDataSetChanged();
 		String strCout = "(" + arrDataNote.size() + ")";
-		textViewheaderTitle.setText("FOLDER " + strCout);
+		textViewheaderTitle.setText("FOLDER");
 		sortType = SORTTYPE_NEW.ALPHABET;
 		updateGridView();
 		updatePintrestView();
@@ -1144,7 +1145,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		//adapter.notifyDataSetChanged();
 		String strCout = "(" + list.size() + ")";
-		textViewheaderTitle.setText("FOLDER " + strCout);
+		textViewheaderTitle.setText("FOLDER");
 		//sortType=SORTTYPE.ALPHABET;
 		//updateGridView();
 		//updatePintrestView();
@@ -1231,7 +1232,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 	}
 
-	public void deleteFolder(View v){
+		public void deleteFolder(View v){
 		String id = v.getTag().toString();
 		tvIdHidden = (TextView) v.findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();
@@ -1255,12 +1256,27 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		if(!searchLayoutOpen) {
 			SearchLayout.setVisibility(View.VISIBLE);
+			editTextsearchNote.requestFocus();
+			openKeyboard(editTextsearchNote);
 			searchLayoutOpen = true;
 		}
 		else {
 			SearchLayout.setVisibility(View.GONE);
+			textViewheaderTitle.setText("FOLDER");
+			closeKeyBoard();
+			editTextsearchNote.clearFocus();
 			searchLayoutOpen = false;
 		}
 
+	}
+
+	private void closeKeyBoard() {
+		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+	}
+
+	public void openKeyboard(View v){
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
 	}
 }

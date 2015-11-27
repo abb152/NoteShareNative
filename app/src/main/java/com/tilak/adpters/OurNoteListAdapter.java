@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -78,7 +77,7 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.txtNoteName = (TextView) convertView.findViewById(R.id.tvNoteName); //find the different Views
             holder.txtNoteDesc = (TextView) convertView.findViewById(R.id.tvNoteDesc);
             holder.txtNoteDate = (TextView) convertView.findViewById(R.id.tvNoteDate);
-            holder.isLockedIcon = (ImageView) convertView.findViewById(R.id.isLockedIcon);
+            //holder.isLockedIcon = (ImageView) convertView.findViewById(R.id.isLockedIcon);
 
             //holder.btn3 = (Button) convertView.findViewById(R.id.btn3); // remove this
 
@@ -92,12 +91,13 @@ public class OurNoteListAdapter extends BaseAdapter {
                 //holder.linearLayout.setPadding(20, 30, 20, 20);
             }
             if(listview == "DETAIL"){
+                holder.isLockedIcon = (ImageView) convertView.findViewById(R.id.isLockedIcon);
                 //holder.txtNoteName.setHeight(50);
                 /*FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                         FrameLayout.LayoutParams.WRAP_CONTENT);*/
 
-                LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 160);
-                holder.main.setLayoutParams(params);
+                //LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 160);
+                //holder.main.setLayoutParams(params);
             }
 
             if(listview != "GRID") {
@@ -131,9 +131,9 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.linearLayout.setBackgroundColor(Color.parseColor(map.get("noteBgColor")));
 
 
-        if(map.get("noteLock").equalsIgnoreCase("1") && listview!="GRID"){
+        if(map.get("noteLock").equalsIgnoreCase("1") && listview=="DETAIL"){
             holder.btnLock.setImageResource(R.drawable.image_option_unlock);
-            //holder.isLockedIcon.setVisibility(View.VISIBLE);
+            holder.isLockedIcon.setVisibility(View.VISIBLE);
         }
 
         if(listview != "GRID") {

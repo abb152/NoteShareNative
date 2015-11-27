@@ -204,7 +204,7 @@ public class NoteFunctions {
 
         LinearLayout ll = (LinearLayout) contentView.findViewById(R.id.layoutAlertbox);
         TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("Move to");
+        textViewTitleAlert.setText("MOVE TO");
         textViewTitleAlert.setTextColor(Color.WHITE);
 
         ListView lvFolder = (ListView) contentView.findViewById(R.id.lvFolder);
@@ -265,7 +265,7 @@ public class NoteFunctions {
         textViewTitleAlert.setText("DELETE NOTE");
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView.findViewById(R.id.textViewTitleAlertMessage);
-        textViewTitleAlertMessage.setText("Are you sure you want to delete?");
+        textViewTitleAlertMessage.setText("Are you sure you want to Delete \n this Note?");
 
         Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
         Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);

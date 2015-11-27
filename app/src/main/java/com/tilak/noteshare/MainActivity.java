@@ -107,7 +107,7 @@ public class MainActivity extends DrawerActivity {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
-	public SwipeListView listView;
+	public SwipeListView detailView, listView;
 	final int[] lastItemOpened = {-1};
 	boolean searchLayoutOpen = false;
 	public LinearLayout SearchLayout;
@@ -277,6 +277,9 @@ public class MainActivity extends DrawerActivity {
 		arrDataNote = new ArrayList<SideMenuitems>();
 
 		notefoleserGridList = (GridView) findViewById(R.id.notefoleserGridList);
+		detailView = (SwipeListView) findViewById(R.id.noteDetail);
+		listView = (SwipeListView) findViewById(R.id.noteList);
+
 		notefoleserPintrestList = (ScrollView) findViewById(R.id.notefoleserPintrestList);
 		Layout1 = (LinearLayout) findViewById(R.id.Layout1);
 		Layout2 = (LinearLayout) findViewById(R.id.Layout2);
@@ -490,8 +493,8 @@ public class MainActivity extends DrawerActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
-				listView.setVisibility(View.GONE);
+				//SwipeListView listView = (SwipeListView) findViewById(R.id.noteDetail);
+				detailView.setVisibility(View.GONE);
 				notefoleserGridList.setVisibility(View.VISIBLE);
 				con.setView(VIEWTYPE.GRID.name());
 				con.save();
@@ -506,8 +509,8 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				notefoleserGridList.setVisibility(View.GONE);
-				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
-				listView.setVisibility(View.VISIBLE);
+				//SwipeListView listView = (SwipeListView) findViewById(R.id.noteDetail);
+				detailView.setVisibility(View.VISIBLE);
 				con.setView(VIEWTYPE.DETAIL.name());
 				con.save();
 				viewType = VIEWTYPE.DETAIL;
@@ -521,8 +524,8 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				notefoleserGridList.setVisibility(View.GONE);
-				SwipeListView listView = (SwipeListView) findViewById(R.id.notefoleserList);
-				listView.setVisibility(View.VISIBLE);
+				//SwipeListView listView = (SwipeListView) findViewById(R.id.noteDetail);
+				detailView.setVisibility(View.VISIBLE);
 				con.setView(VIEWTYPE.LIST.name());
 				con.save();
 				viewType = VIEWTYPE.LIST;
@@ -1040,15 +1043,17 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void swipeListView(){
-		listView = (SwipeListView) findViewById(R.id.notefoleserList);
-		GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
+		//detailView = (SwipeListView) findViewById(R.id.noteDetail);
+		//GridView listGridView = (GridView) findViewById(R.id.notefoleserGridList);
 
+		SwipeListView detailOrListView = detailView;
 		OurNoteListAdapter noteAdapter = new OurNoteListAdapter(this,list, viewType.name());
 
-		if(viewType != VIEWTYPE.GRID){
-			listView.setOffsetLeft(130L);
 
-			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+		if(viewType != VIEWTYPE.GRID){
+			detailOrListView.setOffsetLeft(130L);
+
+			detailOrListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 					//do your stuff here
 
@@ -1061,8 +1066,8 @@ public class MainActivity extends DrawerActivity {
 			});
 
 
-
-			listView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+			final SwipeListView finalDetailOrListView = detailOrListView;
+			detailOrListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
 				@Override
 				public void onClickFrontView(int position) {
 
@@ -1100,18 +1105,25 @@ public class MainActivity extends DrawerActivity {
 				public void onOpened(int position, boolean toRight) {
 					super.onOpened(position, toRight);
 					if (lastItemOpened[0] != -1 && lastItemOpened[0] != position)
-						listView.closeAnimate(lastItemOpened[0]);
+						finalDetailOrListView.closeAnimate(lastItemOpened[0]);
 					lastItemOpened[0] = position;
 				}
 
 			});
 
-			listView.setAdapter(noteAdapter);
+			if(viewType == VIEWTYPE.DETAIL) {
+				detailOrListView.setDividerHeight(6);
+			}
+			if(viewType == VIEWTYPE.LIST){
+				detailOrListView.setDividerHeight(0);
+			}
+
+			detailOrListView.setAdapter(noteAdapter);
 			notefoleserGridList.setVisibility(View.GONE);
-			listView.setAnimationTime(200);
+			detailOrListView.setAnimationTime(200);
 
 			}if(viewType == VIEWTYPE.GRID){
-				listGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				notefoleserGridList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 						int itemPosition = position;
@@ -1134,7 +1146,7 @@ public class MainActivity extends DrawerActivity {
 					}
 				});
 
-				listGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+				notefoleserGridList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 					public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 						//do your stuff here
 
@@ -1146,7 +1158,7 @@ public class MainActivity extends DrawerActivity {
 					}
 				});
 
-				listGridView.setAdapter(noteAdapter);
+				notefoleserGridList.setAdapter(noteAdapter);
 				notefoleserGridList.setVisibility(View.VISIBLE);
 			}
 
@@ -1224,32 +1236,32 @@ public class MainActivity extends DrawerActivity {
 	}
 
 	public void move(View v){
-		listView.closeAnimate(lastItemOpened[0]);
+		detailView.closeAnimate(lastItemOpened[0]);
 		String noteid = v.getTag().toString();
 		noteFunctions.showMoveAlert(this, noteid);
 	}
 
 	public void timeBomb(View v){
-		listView.closeAnimate(lastItemOpened[0]);
+		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		noteFunctions.showDate(this, id, "SET TIMEBOMB", "timebomb");
 	}
 
 	public void remind(View v) {
-		listView.closeAnimate(lastItemOpened[0]);
+		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		noteFunctions.showDate(this, id, "SET REMINDER", "reminder");
 	}
 
 	public void deleteNote(View v){
-		listView.closeAnimate(lastItemOpened[0]);
+		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		noteFunctions.showDeleteAlert(this, id, false);
 		//onRestart();
 	}
 
 	public void passCode(View v){
-		listView.closeAnimate(lastItemOpened[0]);
+		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		noteFunctions.setPasscode(getApplicationContext(), id);
 	}

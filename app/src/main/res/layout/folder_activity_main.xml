@@ -80,9 +80,10 @@
         android:layout_marginBottom="0dp"
         android:background="@android:color/white"
         android:choiceMode="singleChoice"
-        android:divider="#ddd"
-        android:dividerHeight="1dp"
+        android:divider="@android:color/white"
+        android:dividerHeight="0dp"
         android:scrollbars="none"
+
 
         swipe:swipeFrontView="@+id/front"
         swipe:swipeBackView="@+id/back"
