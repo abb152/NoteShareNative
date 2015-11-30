@@ -1259,10 +1259,17 @@ public class MainActivity extends DrawerActivity {
 		dialog.show();
 	}
 
-	public void passCode(View v){
+	public void passCode(View v) {
 		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		noteFunctions.setPasscode(getApplicationContext(), id);
+		Note n = Note.findById(Note.class, Long.parseLong(id));
+		if (n.getIslocked() == 0){
+			n.islocked = 1;
+			n.save();
+			onRestart();
+		}
+		else
+			noteFunctions.setPasscode(getApplicationContext(), id);
 	}
 
 	public void searchSlide(){
