@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:visibility="gone"
+        android:visibility="visible"
         android:src="@drawable/scrbble_back" />
 
     <!--<ImageButton
@@ -33,7 +33,8 @@
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        android:visibility="gone"/>
 
 
     <ImageButton

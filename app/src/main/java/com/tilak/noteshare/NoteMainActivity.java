@@ -89,7 +89,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public LinearLayout noteElements;
     public RelativeLayout noteScribbleElements;
     public ImageButton deleteCheckbox, deleteAudio;
-    public LinearLayout layOutDrawingView, textNoteControls,
+    public LinearLayout layOutDrawingView, textNoteControls,bottommenue,
             layout_note_more_Info, layout_audio_notechooser, audioElement;
     public TextView textViewAdd, textViewDuration;
     public ArrayList<NoteListDataModel> arrNoteListData;
@@ -281,6 +281,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         currentFontTypeface = NoteShareFonts.arial;
         currentFontColor = Color.BLACK;
 
+        bottommenue = (LinearLayout) findViewById(R.id.bottommenue);
+
         background_bg = (RelativeLayout) contentview
                 .findViewById(R.id.background_bg);
         layoutHeader = (RelativeLayout) contentview
@@ -297,7 +299,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         imageButtonsquence = (ImageButton) layoutHeader
                 .findViewById(R.id.imageButtonsquence);
 
-        imageButtonsquence.setImageResource(R.drawable.color_header_icon);
+        //imageButtonsquence.setImageResource(R.drawable.color_header_icon);
         imageButtonHamburg.setImageResource(R.drawable.back_icon_1);
         imageButtoncalander.setImageResource(R.drawable.done_icon);
 
@@ -354,6 +356,23 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
 
         final boolean[] initialNameSet = {false};
+
+        textViewheaderTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                drawingControls.setVisibility(View.GONE);
+                layout_note_more_Info.setVisibility(View.GONE);
+                //isMoreShown = false;
+                layout_audio_notechooser.setVisibility(View.GONE);
+                horizontal_scroll_editor.setVisibility(View.GONE);
+
+                bottommenue.setVisibility(View.GONE);
+                imageButtonHamburg.setVisibility(View.GONE);
+                imageButtoncalander.setVisibility(View.VISIBLE);
+                imageButtonsquence.setVisibility(View.GONE);
+                imageButtoncheckbox.setVisibility(View.GONE);
+            }
+        });
 
         textViewheaderTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -700,11 +719,24 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 updateScribbleControlListners(v.getId());
 
                 if (drawView.getUserDrawn() == true) {
-                    SaveDrawingDialog();
+                    //SaveDrawingDialog();
+                    isPaintMode = false;
+                    imageButtonHamburg.setVisibility(View.VISIBLE);
+                    imageButtoncalander.setVisibility(View.GONE);
+                    imageButtonsquence.setVisibility(View.VISIBLE);
+                    imageButtoncheckbox.setVisibility(View.VISIBLE);
+                    bottommenue.setVisibility(View.VISIBLE);
                 } else {
 
                     drawingControls.setVisibility(View.GONE);
                     layOutDrawingView.setVisibility(View.GONE);
+
+                    isPaintMode = false;
+                    imageButtonHamburg.setVisibility(View.VISIBLE);
+                    imageButtoncalander.setVisibility(View.GONE);
+                    imageButtonsquence.setVisibility(View.VISIBLE);
+                    imageButtoncheckbox.setVisibility(View.VISIBLE);
+                    bottommenue.setVisibility(View.VISIBLE);
                     updateButtonUI(-1);
                 }
 
@@ -1008,6 +1040,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 horizontal_scroll_editor.setVisibility(View.GONE);
                 isTextmodeSelected = false;
 
+                textViewheaderTitle.clearFocus();
+
                 try {
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -1015,7 +1049,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 }
 
                 if (isPaintMode) {
-                    SaveDrawingDialog();
+                    //SaveDrawingDialog();
+                    saveScribble();
                     isPaintMode = false;
                 } else {
                     drawView.setVisibility(View.GONE);
@@ -1033,6 +1068,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 imageButtoncalander.setVisibility(View.GONE);
                 imageButtonsquence.setVisibility(View.VISIBLE);
                 imageButtoncheckbox.setVisibility(View.VISIBLE);
+                bottommenue.setVisibility(View.VISIBLE);
             }
         });
 
@@ -1654,11 +1690,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                         if (height[0] < editor.getHeight()) {
                             height[0] = editor.getHeight();
-                            scrollView.setScrollY(scrollView.getScrollY() + 30);
+                            scrollView.setScrollY(scrollView.getScrollY() + 50);
                         }
                         if (height[0] > editor.getHeight()) {
                             height[0] = editor.getHeight();
-                            scrollView.setScrollY(scrollView.getScrollY() - 25);
+                            scrollView.setScrollY(scrollView.getScrollY() - 45);
                         }
                     }
                 });
@@ -3496,4 +3532,47 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
 
     };
+
+    public void saveScribble(){
+        drawingControls.setVisibility(View.GONE);
+        layOutDrawingView.setVisibility(View.GONE);
+        updateButtonUI(-1);
+
+        drawView.setDrawingCacheEnabled(true);
+
+        FileNameGenerator fileNameGenerator = new FileNameGenerator();
+        String fileName = fileNameGenerator.getFileName("SCRIBBLE");
+        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
+
+        try {
+            drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+
+                    /*ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
+                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (file != null) {
+            //Toast.makeText(getApplicationContext(), "Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
+            // savedToast.show();
+
+            int top = scrollView.getScrollY();
+
+            NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails),1,"Yes","scribble", fileName,String.valueOf(top),"");
+            noteElement.save();
+            modifyNoteTime();
+            drawView.destroyDrawingCache();
+            drawView.setUserDrawn(false);
+            onResume();
+
+        } else {
+            Toast.makeText(getApplicationContext(), "Oops! Image could not be saved.", Toast.LENGTH_SHORT).show();
+        }
+        isPaintMode = false;
+        //dialog.dismiss();
+        onResume();
+    }
 }

@@ -62,6 +62,13 @@ public class OurNoteListAdapter extends BaseAdapter {
 
         ViewHolder holder;
 
+        String fontBold = "agendabold.ttf";
+        String fontMedium = "agendamedium.ttf";
+
+        // Loading Font Face
+        //Typeface tfBold = Typeface.createFromAsset(getAssets(), fontBold);
+        //Typeface tfMedium = Typeface.createFromAsset(activity.getAssets(), fontMedium);
+
         LayoutInflater inflater=activity.getLayoutInflater();
         if(convertView == null){
             holder = new ViewHolder();
@@ -121,7 +128,10 @@ public class OurNoteListAdapter extends BaseAdapter {
 
         HashMap<String,String> map = list.get(position);
         holder.txtNoteName.setText(map.get("noteName")); //set the hash maps
+        //holder.txtNoteName.setTypeface(tfBold);
+
         holder.txtNoteDesc.setText(map.get("noteDesc"));
+        //holder.txtNoteDesc.setTypeface(tfMedium);
 
         holder.txtNoteDate.setText(dbToAdapterDate(map.get("noteDate")));
 
@@ -148,6 +158,9 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.btnDelete.setTag(map.get("noteId"));
             holder.btnShare.setTag(map.get("noteId"));
         }
+
+
+
 
         return convertView;
     }

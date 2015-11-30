@@ -451,7 +451,7 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutListImageView = (ImageView) layoutList
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutListImageView.setImageResource(R.drawable.list_view_logo);
+		layoutListImageView.setImageResource(R.drawable.ic_view_list);
 		layoutListTextView.setText("List");
 
 		LinearLayout layoutDetail = (LinearLayout) myDialog
@@ -460,7 +460,7 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutDetailImageView = (ImageView) layoutDetail
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutDetailImageView.setImageResource(R.drawable.detail_view_logo);
+		layoutDetailImageView.setImageResource(R.drawable.ic_view_detail);
 		layoutDetailTextView.setText("Details");
 
 		LinearLayout layoutPintrest = (LinearLayout) myDialog
@@ -479,7 +479,7 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutGridImageView = (ImageView) layoutGrid
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutGridImageView.setImageResource(R.drawable.grid_view_logo);
+		layoutGridImageView.setImageResource(R.drawable.ic_view_grid);
 		layoutGridTextView.setText("Tiles");
 
 		layoutPintrestTextView.setOnClickListener(new OnClickListener() {
@@ -558,6 +558,10 @@ public class MainActivity extends DrawerActivity {
 
 		// layoutReminderTime
 		// layouttimebomb
+		//String fontMedium = "dancingscript.ttf";
+
+		//Typeface myCustomFont = Typeface.createFromAsset(this.getAssets(), "Lato-Regular.ttf");
+		//Typeface tfMedium = Typeface.createFromAsset(this.getAssets(), fontMedium);
 
 		myDialog.setContentView(R.layout.actionsheet_sort);
 		Button buttonDissmiss = (Button) myDialog
@@ -571,7 +575,7 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.imageViewSlidemenu);
 		layoutListImageView.setImageResource(R.drawable.ic_sort_atoz);
 		
-		layoutListTextView.setText("A-Z alphabetical");
+		layoutListTextView.setText("A-Z Alphabetical");
 
 		LinearLayout layoutDetail = (LinearLayout) myDialog
 				.findViewById(R.id.layoutDetail);
@@ -579,8 +583,9 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutDetailImageView = (ImageView) layoutDetail
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutDetailImageView.setImageResource(R.drawable.color_sort_view);
-		layoutDetailTextView.setText("Colours");
+		layoutDetailImageView.setImageResource(R.drawable.ic_sort_color);
+		layoutDetailImageView.setPadding(7, 7, 7, 7);
+		layoutDetailTextView.setText("Colour");
 
 		LinearLayout layoutPintrest = (LinearLayout) myDialog
 				.findViewById(R.id.layoutPintrest);
@@ -588,8 +593,10 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutPintrestImageView = (ImageView) layoutPintrest
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutPintrestImageView.setImageResource(R.drawable.modifiedtime_sort_view);
+		layoutPintrestImageView.setImageResource(R.drawable.ic_sort_modification);
+		//layoutPintrestImageView.setPadding(2,2,2,2);
 		layoutPintrestTextView.setText("Modified Time");
+
 
 		LinearLayout layoutGrid = (LinearLayout) myDialog
 				.findViewById(R.id.layoutGrid);
@@ -597,8 +604,9 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutGridImageView = (ImageView) layoutGrid
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutGridImageView.setImageResource(R.drawable.createdtime_sort_view);
+		layoutGridImageView.setImageResource(R.drawable.ic_sort_creation);
 		layoutGridTextView.setText("Created Time");
+
 
 		LinearLayout layoutListReminderTime = (LinearLayout) myDialog
 				.findViewById(R.id.layoutReminderTime);
@@ -606,7 +614,8 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutListImageViewReminderTime = (ImageView) layoutListReminderTime
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutListImageViewReminderTime.setImageResource(R.drawable.reminder_sort_view);
+		layoutListImageViewReminderTime.setImageResource(R.drawable.ic_sort_reminder);
+		layoutListImageViewReminderTime.setPadding(5,5,5,5);
 		layoutListTextViewReminderTime.setText("Reminder Time");
 
 		LinearLayout layoutListTimeBomb = (LinearLayout) myDialog
@@ -617,7 +626,8 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.imageViewSlidemenu);
 		ImageView layoutListImageViewTimeBomb = (ImageView) layoutListTimeBomb
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutListImageViewTimeBomb.setImageResource(R.drawable.timebomb_sort_view);
+		layoutListImageViewTimeBomb.setImageResource(R.drawable.ic_sort_timebomb);
+		layoutListImageViewTimeBomb.setPadding(5,5,5,5);
 		layoutListTextViewTimeBomb.setText("Time Bomb");
 
 		layoutGridTextView.setOnClickListener(new OnClickListener() {

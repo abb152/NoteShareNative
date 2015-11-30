@@ -44,7 +44,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="SORT"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="3dp"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:typeface="normal" />

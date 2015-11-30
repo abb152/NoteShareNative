@@ -3,6 +3,7 @@ package com.tilak.noteshare;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -84,11 +85,15 @@ public class NewFolderMainActivity extends DrawerActivity {
 	final int[] lastItemOpened = {-1};
 	public SwipeListView listView;
 
+	int screenSize;
+
 	public ArrayList<String> folderIdList = new ArrayList<String>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_main);
+
+		screenSize = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
 
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1171,7 +1176,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		listView = (SwipeListView) findViewById(R.id.notefolderList);
 
 		OurFolderListAdapter testAdapter = new OurFolderListAdapter(this,list);
-		listView.setOffsetLeft(450L);
+
 
 		listView.setSwipeListViewListener(new BaseSwipeListViewListener() {
 			@Override
@@ -1204,6 +1209,9 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		listView.setAdapter(testAdapter);
 		listView.setAnimationTime(200);
+
+
+		listView.setOffsetLeft(650L);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override

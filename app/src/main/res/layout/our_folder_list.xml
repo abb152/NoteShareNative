@@ -34,7 +34,7 @@
             android:layout_gravity="center_vertical"
             android:padding="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/image_option_delete2"
+            android:src="@drawable/ic_action_delete"
             android:onClick="deleteFolder"/>
 
     </LinearLayout>
