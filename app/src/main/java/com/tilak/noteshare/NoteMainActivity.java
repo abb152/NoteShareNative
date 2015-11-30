@@ -2993,7 +2993,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         }
                     });*/
 
-					File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+					File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + name);
 					Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 					note_imageview.setImageBitmap(b);
 
@@ -3285,7 +3285,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         FileNameGenerator fileNameGenerator = new FileNameGenerator();
         String fileName = fileNameGenerator.getFileName("SCRIBBLE");
-        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
+        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + fileName);
 
         try {
             drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));

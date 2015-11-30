@@ -73,7 +73,7 @@ public class UserProfileActivity extends Activity {
 			userGreetingmesage.setText("Hi " + fname + ", Welcome to Note Share");
 
 		String name = "profile.jpg";
-		File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/" + name);
+		File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + name);
 		Bitmap profilepic = BitmapFactory.decodeFile(String.valueOf(f));
 		userprofilepicture = (ImageButton) findViewById(R.id.userprofilepicture);
 
@@ -202,7 +202,7 @@ public class UserProfileActivity extends Activity {
 					e.printStackTrace();
 				}*/
 
-				File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + "profile.jpg");
+				File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare" + "profile.jpg");
 				if (mediaStorageDir.exists())
 					mediaStorageDir.delete();
 				try {
@@ -252,7 +252,7 @@ public class UserProfileActivity extends Activity {
 				options.inSampleSize = scale;
 				options.inJustDecodeBounds = false;
 				bm = BitmapFactory.decodeFile(selectedImagePath, options);
-				File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + "profile.jpg");
+				File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + "profile.jpg");
 				if (mediaStorageDir.exists())
 					mediaStorageDir.delete();
 				try {
@@ -274,7 +274,7 @@ public class UserProfileActivity extends Activity {
 	}
 
 	public void getUserProfile() {
-		File file = new File(Environment.getExternalStoragePublicDirectory("NoteShare") + "/profile.jpg");
+		File file = new File(Environment.getExternalStoragePublicDirectory("NoteShare/.NoteShare/") + "/profile.jpg");
 		Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(file));
 		if(file.exists()) {
 			//userprofilepicture.setImageBitmap(bmp);

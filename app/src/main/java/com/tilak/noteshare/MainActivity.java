@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -39,7 +38,6 @@ import com.tilak.db.Config;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -225,8 +223,6 @@ public class MainActivity extends DrawerActivity {
 				}
 			}
 		});
-
-		createDirectory();
 
 	}
 
@@ -787,58 +783,6 @@ public class MainActivity extends DrawerActivity {
     }
 
     /******* onBackPressed end *******/
-
-
-
-    /******* create directory start *******/
-
-    // create directory NoteShare in internal memory
-    // and Images and Audio folder inside NoteShare folder for images, profile picture and audio notes
-
-	public void createDirectory() {
-		// To be safe, you should check that the SDCard is mounted
-		// using Environment.getExternalStorageState() before doing this.
-		if (isExternalStorageAvailable()) {
-			// get the URI
-
-			// 1. Get the external storage directory
-			String appName = MainActivity.this.getString(R.string.app_name);
-			String imgDir = "/NoteShare/NoteShare Images";
-			String audioDir = "/NoteShare/NoteShare Audio";
-			File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), appName);
-
-			// 2. Create our subdirectory
-			if (!mediaStorageDir.exists()) {
-				if (!mediaStorageDir.mkdirs()) { Log.e(TAG, "Failed to create NoteShare directory."); }
-			}
-
-			// 3. Creating Image Directory in NoteShare Directory
-			File imgDirectory = new File(Environment.getExternalStorageDirectory(), imgDir);
-			if (!imgDirectory.exists()) {
-				if (!imgDirectory.mkdirs()) { Log.e(TAG, "Failed to create Image directory."); }
-			}
-
-			// 4. Creating Audio Directory in NoteShare Directory
-			File audioDirectory = new File(Environment.getExternalStorageDirectory(), audioDir);
-			if (!audioDirectory.exists()) {
-				if (!audioDirectory.mkdirs()) { Log.e(TAG, "Failed to create Audio directory."); }
-			}
-		}
-	}
-
-	private boolean isExternalStorageAvailable() {
-		String state = Environment.getExternalStorageState();
-
-		if (state.equals(Environment.MEDIA_MOUNTED)) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-    /******* create directory end *******/
-
 
 
 	void populate() {

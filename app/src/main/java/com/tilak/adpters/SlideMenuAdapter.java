@@ -90,7 +90,7 @@ public class SlideMenuAdapter extends BaseAdapter {
 			//holder1.textViewusername.setText("Jay");
 
 			String name = "profile.jpg";
-			File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/" + name);
+			File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + name);
 			Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 			vi = inflater.inflate(R.layout.userprofile, null);
 			holder1 = new ViewHolder1();

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -216,6 +217,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     }
 
     public void goToMain(){
+        createDirectory();
+
         Intent i = new Intent(getApplication(), MainActivity.class);
         //i.putExtra("FolderId","-1");
         startActivity(i);
@@ -233,7 +236,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             try {
                 // Saving Image file
                 String profilePicture = String.valueOf("profile");
-                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + profilePicture + ".jpg");
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + profilePicture + ".jpg");
                 myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
 
                 // Refreshing Gallery to view Image in Gallery
@@ -408,6 +411,10 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         String responseEmail = responseJson.get("email").toString();
         String responseProfilePic = responseJson.get("profilepic").toString();
 
+
+        createDirectory();
+
+
         if (type.equals("fb"))
             responseFbId = responseJson.get("fbid").toString();
         else if (type.equals("gp"))
@@ -431,5 +438,63 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
     String responseFbId = "", responseGpId ="";
     static String responseServerId = "";
+
+    /******* create directory start *******/
+
+    // create directory NoteShare in internal memory
+    // and Images and Audio folder inside NoteShare folder for images, profile picture and audio notes
+
+    public void createDirectory() {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        if (isExternalStorageAvailable()) {
+            // get the URI
+
+            // 1. Get the external storage directory
+            String appName = LoginActivity.this.getString(R.string.app_name);
+            String imgDir = "/NoteShare/NoteShare Images";
+            String audioDir = "/NoteShare/NoteShare Audio";
+            String extraDir = "/NoteShare/.NoteShare";
+
+            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), appName);
+            // 2. Create our subdirectory
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) { Log.e(TAG, "Failed to create NoteShare directory."); }
+            }
+
+            // 3. Creating Image Directory in NoteShare Directory
+            File imgDirectory = new File(Environment.getExternalStorageDirectory(), imgDir);
+            if (!imgDirectory.exists()) {
+                if (!imgDirectory.mkdirs()) { Log.e(TAG, "Failed to create Image directory."); }
+            }
+
+            // 4. Creating Audio Directory in NoteShare Directory
+            File audioDirectory = new File(Environment.getExternalStorageDirectory(), audioDir);
+            if (!audioDirectory.exists()) {
+                if (!audioDirectory.mkdirs()) { Log.e(TAG, "Failed to create Audio directory."); }
+            }
+
+            // 4. Creating Audio Directory in NoteShare Directory
+            File extraDirectory = new File(Environment.getExternalStorageDirectory(), extraDir);
+            if (!extraDirectory.exists()) {
+                if (!extraDirectory.mkdirs()) { Log.e(TAG, "Failed to create Extra directory."); }
+            }
+        }
+    }
+
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /******* create directory end *******/
+
+
 
 }
