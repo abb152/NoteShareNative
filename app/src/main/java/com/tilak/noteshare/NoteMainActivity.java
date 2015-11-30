@@ -168,26 +168,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             eraserViewSize = (lastEraserSize * 4 + 20),
             lastBrushColor = 0, count = 0;
     int firstHighlightColor, lastHighlightColor = Color.parseColor("#77FF5B1E");
-    TextWatcher watch = new TextWatcher() {
 
-        @Override
-        public void afterTextChanged(Editable arg0) {
-        }
-
-        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                      int arg3) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int a, int b, int c) {
-
-            txtViewer.setText(s);
-
-            if (a == 9) {
-                Toast.makeText(getApplicationContext(), "Maximum Limit Reached", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
+    int orderNumber = 1;
 
     private float smallBrush, mediumBrush, largeBrush;
     private AudioRecorder mAudioRecorder;
@@ -1154,7 +1136,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             String updatedText = s.toString();
 
                             if (!cb_added[0]) {
-                                NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "checkbox", s.toString(), "false", "");
+                                NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), getNoteElementOrderNumber(), "yes", "checkbox", s.toString(), "false", "");
                                 ne.save();
                                 thisnoteelementid[0] = ne.getId();
                                 cb_added[0] = true;
@@ -1271,7 +1253,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio_recording);
                     final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
                     audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-                    audio_play.setImageResource(R.drawable.play_audio);
+                    audio_play.setImageResource(R.drawable.recording_status);
                     final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
 
                     final ImageView audio_stop = (ImageView) viewAudio.findViewById(R.id.audio_stop);
@@ -1295,7 +1277,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         makeNote();
                     }
                     if (noteIdForDetails != null) {
-                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
+                        ne = new NoteElement(Long.parseLong(noteIdForDetails), getNoteElementOrderNumber(), "yes", "audio", audioName, "false", "");
                         ne.save();
                         noteElementId = ne.getId();
                         modifyNoteTime();
@@ -1331,7 +1313,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         timeSwap += timeInMillies;
                                         myHandler.removeCallbacks(updateTimerMethod);
                                         Toast.makeText(NoteMainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
-                                        audio_play.setImageResource(R.drawable.play_audio);
+                                        audio_play.setImageResource(R.drawable.recording_status);
                                         audio_play.clearAnimation();
                                         recordingPlay = false;
                                     }
@@ -1675,7 +1657,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             makeNote();
 
                         if (!ne_added[0]) {
-                            NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "text", s, plainText, "");
+                            NoteElement ne = new NoteElement(Long.parseLong(noteIdForDetails), getNoteElementOrderNumber(), "yes", "text", s, plainText, "");
                             ne.save();
                             thisnoteid[0] = ne.getId();
                             ne_added[0] = true;
@@ -2623,7 +2605,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
-    void SaveDrawingDialog() {
+    /*void SaveDrawingDialog() {
 
         final Dialog dialog = new Dialog(NoteMainActivity.this);
 
@@ -2677,10 +2659,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 try {
                     drawView.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
 
-                    /*ContentValues values = new ContentValues();
+                    *//*ContentValues values = new ContentValues();
                     values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
                     values.put(MediaStore.Images.Media.MIME_TYPE, "image/png"); // setar isso
-                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
+                    getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*//*
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -2712,7 +2694,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         dialog.setContentView(contentView);
         dialog.show();
 
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -2827,6 +2809,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
             Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
 
+
             if (note.islocked == 1)
                 buttonLock.setText("Unlock");
             else
@@ -2845,6 +2828,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
 
             for (final NoteElement n : ne) {
+
+                orderNumber = n.getOrderNumber();
+
+                Log.e("jay oN", String.valueOf(orderNumber));
+
                 if (n.type.equals("text")) {
                     String s = n.content;
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);
@@ -3310,13 +3298,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             e.printStackTrace();
         }
 
+        if (noteIdForDetails == null) {
+            makeNote();
+        }
+
         if (file != null) {
             //Toast.makeText(getApplicationContext(), "Drawing saved to Gallery!", Toast.LENGTH_SHORT).show();
             // savedToast.show();
 
             int top = scrollView.getScrollY();
 
-            NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails),1,"Yes","scribble", fileName,String.valueOf(top),"");
+            NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails),getNoteElementOrderNumber(),"Yes","scribble", fileName,String.valueOf(top),"");
             noteElement.save();
             modifyNoteTime();
             drawView.destroyDrawingCache();
@@ -3334,5 +3326,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     @Override
     public void onClick(View v) {
 
+    }
+
+    public int getNoteElementOrderNumber(){
+        int lastNumber=0;
+        List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT ORDERNUMBER FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
+        if(ne.size() > 0)
+            return lastNumber = (ne.get(ne.size()-1).getOrderNumber()) + 1;
+        else
+            return 1;
     }
 }

@@ -173,7 +173,7 @@ public class CameraActivity extends Activity {
             if (isNoteIdNull) { makeNote(); }
 
             if (!isNoteIdNull) {
-                NoteElement noteElement = new NoteElement(Long.parseLong(noteid), 1, "yes", "image", filename ,"","");
+                NoteElement noteElement = new NoteElement(Long.parseLong(noteid), getNoteElementOrderNumber(), "yes", "image", filename ,"","");
                 noteElement.save();
                 modifyNoteTime();
             }
@@ -202,6 +202,15 @@ public class CameraActivity extends Activity {
     public void cancel(View v){
         finish();
         Toast.makeText(getApplication(), "Photo Discarded", Toast.LENGTH_LONG).show();
+    }
+
+    public int getNoteElementOrderNumber(){
+        int lastNumber=0;
+        List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT ORDERNUMBER FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteid));
+        if(ne.size() > 0)
+            return lastNumber = (ne.get(ne.size()-1).getOrderNumber()) + 1;
+        else
+            return 1;
     }
 
     @Override

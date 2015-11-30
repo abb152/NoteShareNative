@@ -4,7 +4,6 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:paddingTop="10dp"
               android:weightSum="1">
 
     <RelativeLayout
@@ -19,9 +18,10 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/play_audio"
-            android:layout_alignParentTop="true"
-            />
+            android:layout_alignTop="@+id/audio_stop"
+            android:layout_alignParentStart="true"/>
 
         <ImageView
             android:id="@+id/audio_stop"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:src="@drawable/stop_audio"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/audio_play"/>
 
 
@@ -55,23 +55,26 @@
             android:visibility="visible"
             android:src="@drawable/cross_audio" />-->
 
-        <SeekBar
+        <!--<SeekBar
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:id="@+id/seekBar"
-            android:layout_toEndOf="@+id/audio_stop"/>
+            android:layout_toEndOf="@+id/audio_stop"/>-->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="14sp"
-            android:textColor="@color/nsTextColor"
+            android:text="00:00:00 / 00:00:00"
+            android:textSize="18sp"
+            android:textColor="@color/header_bg"
             android:layout_marginRight="10dp"
-            android:id="@+id/audio_text"
-            android:layout_alignParentBottom="true"
-            android:layout_alignEnd="@+id/seekBar"/>
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_horizontal"
+            android:layout_toEndOf="@+id/audio_stop"
+            android:id="@+id/audio_text"/>
+            <!--android:layout_alignEnd="@+id/seekBar"/>-->
 
     </RelativeLayout>
 
