@@ -280,10 +280,15 @@ public class NoteFunctions {
             @Override
             public void onClick(View arg0) {
                 dialog.dismiss();
-                delete(id);
+                //delete(id);
                 if (insideNote) {
                     //delete(id);
-                    context.startActivity(new Intent(context, MainActivity.class));
+                    Intent intent = new Intent(context, PasscodeActivity.class);
+                    intent.putExtra("FileId", id);
+                    intent.putExtra("Check", "6");
+                    context.startActivity(intent);
+
+                    //context.startActivity(new Intent(context, MainActivity.class));
                 }
                 else {
                     MainActivity mainActivity = new MainActivity();

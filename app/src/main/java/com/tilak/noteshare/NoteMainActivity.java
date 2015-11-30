@@ -2831,8 +2831,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                 orderNumber = n.getOrderNumber();
 
-                Log.e("jay oN", String.valueOf(orderNumber));
-
                 if (n.type.equals("text")) {
                     String s = n.content;
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);

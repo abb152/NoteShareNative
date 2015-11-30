@@ -54,6 +54,9 @@ public class PasscodeActivity extends DrawerActivity {
         if (check.equals("4")) {
             t.setText("Old Passcode");
         }
+        if (check.equals("6")){
+            t.setText(("Enter Passcode to Delete the Note"));
+        }
 
     }
     public void keyPressed(View v){
@@ -61,7 +64,7 @@ public class PasscodeActivity extends DrawerActivity {
         i++;
         if(check.equals("1")){
             setNotePassTrue();
-        }else if(check.equals("4")){
+        }else if(check.equals("4")){ // set new passcode
             if (i <= 4 && oldConfirm == false) {
                 passcode += tv.getText().toString();
                 if(passcode.length() == 4) {
@@ -86,7 +89,7 @@ public class PasscodeActivity extends DrawerActivity {
                 }
             }
 
-        } else if(check.equals("2")) {
+        } else if(check.equals("2")) { // to open file with lock
             passcode += tv.getText().toString();
             if (passcode.length() == 4) {
                 et4.setText("*");
@@ -105,7 +108,7 @@ public class PasscodeActivity extends DrawerActivity {
             else{
                 lessThanFour(i);
             }
-        } else if(check.equals("3")){
+        } else if(check.equals("3")){ // to remove passcode from a note
             passcode += tv.getText().toString();
             if(passcode.length() == 4) {
                 et4.setText("*");
@@ -124,7 +127,7 @@ public class PasscodeActivity extends DrawerActivity {
             else{
                 lessThanFour(i);
             }
-        } else if(check.equals("5")) {
+        } else if(check.equals("5")) { //change passcode
             passcode += tv.getText().toString();
             if (passcode.length() == 4) {
                 et4.setText("*");
@@ -155,7 +158,28 @@ public class PasscodeActivity extends DrawerActivity {
             } else {
                 lessThanFour(i);
             }
-        }else {
+        }else if(check.equals("6")){ // delete note and note is locked
+            passcode += tv.getText().toString();
+            if(passcode.length() == 4) {
+                et4.setText("*");
+                if (Integer.parseInt(passcode) == dbPass) {
+                    Note n = Note.findById(Note.class, Long.parseLong(fileId));
+                    n.setCreationtime("0");
+                    n.save();
+                    //onRestart();
+                    startActivity(new Intent(PasscodeActivity.this, MainActivity.class));
+                    //finish();
+                } else {
+                    shake();
+                    clearBox();
+                    t.setText("Enter Valid Passcode to Delete the Note.");
+                    //Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                lessThanFour(i);
+            }
+        }else { // new passcode
             if (i <= 4) {
                 newPassCode();
             }

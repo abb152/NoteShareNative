@@ -1210,12 +1210,12 @@ public class MainActivity extends DrawerActivity {
 	public void deleteNote(View v){
 		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		showDeleteAlert(this,id,true);
+		showDeleteAlert(this,id);
 		//noteFunctions.showDeleteAlert(this, id, false);
-		onRestart();
+		//onRestart();
 	}
 
-	public void showDeleteAlert(final Context context, final String id, final boolean insideNote) {
+	public void showDeleteAlert(final Context context, final String id) {
 
 		final Dialog dialog = new Dialog(context);
 
@@ -1241,10 +1241,15 @@ public class MainActivity extends DrawerActivity {
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				Note n = Note.findById(Note.class, Long.parseLong(id));
-				n.setCreationtime("0");
-				n.save();
-				onRestart();
+				Note n =  Note.findById(Note.class, Long.parseLong(id));
+				if(n.getIslocked() == 1 ){
+					Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
+					intent.putExtra("FileId", id);
+					intent.putExtra("Check", "6");
+					startActivity(intent);
+				}
+				else
+					delete(id);
 			}
 		});
 
