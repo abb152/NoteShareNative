@@ -238,12 +238,9 @@ public class PasscodeActivity extends DrawerActivity {
     }
 
     public void shake(){
-
         Vibrator vb = (Vibrator)   getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(100);
-
         Animation shake = AnimationUtils.loadAnimation(PasscodeActivity.this, R.anim.shake);
-
         et1.startAnimation(shake);
         et2.startAnimation(shake);
         et3.startAnimation(shake);

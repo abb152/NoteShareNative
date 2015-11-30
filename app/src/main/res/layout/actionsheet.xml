@@ -60,7 +60,7 @@
             android:padding="5dp" /> -->
 
         <include
-            android:id="@+id/layoutList"
+            android:id="@+id/layoutDetail"
             android:layout_width="fill_parent"
             android:layout_height="44dp"
             layout="@layout/view_row_list" />
@@ -68,7 +68,7 @@
         <include
             android:layout_width="fill_parent"
             android:layout_height="44dp"
-             android:id="@+id/layoutDetail"
+             android:id="@+id/layoutList"
             layout="@layout/view_row_list" />
 
 <!--          <View
