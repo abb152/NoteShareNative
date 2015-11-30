@@ -718,7 +718,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
 
-                if (drawView.getUserDrawn() == true) {
+                /*if (drawView.getUserDrawn() == true) {
                     //SaveDrawingDialog();
                     isPaintMode = false;
                     imageButtonHamburg.setVisibility(View.VISIBLE);
@@ -726,7 +726,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     imageButtonsquence.setVisibility(View.VISIBLE);
                     imageButtoncheckbox.setVisibility(View.VISIBLE);
                     bottommenue.setVisibility(View.VISIBLE);
-                } else {
+                } else {*/
 
                     drawingControls.setVisibility(View.GONE);
                     layOutDrawingView.setVisibility(View.GONE);
@@ -738,7 +738,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     imageButtoncheckbox.setVisibility(View.VISIBLE);
                     bottommenue.setVisibility(View.VISIBLE);
                     updateButtonUI(-1);
-                }
+                //}
 
             }
         });
@@ -1840,225 +1840,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         return Uri.fromFile(mediaStorageDir);
     }
 
-    void showColorAlert(String message, Context context) {
-
-        dialogColor = new Dialog(context);
-        dialogColor.setCanceledOnTouchOutside(true);
-
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        // inflate your activity layout here!
-        View contentView = inflater.inflate(R.layout.paintcolor, null, false);
-        LinearLayout paintLayout = (LinearLayout) contentView
-                .findViewById(R.id.paint_colors);
-        LinearLayout paintLayout1 = (LinearLayout) contentView
-                .findViewById(R.id.paint_colors1);
-        // currPaint = (ImageButton) paintLayout.getChildAt(0);
-        // currPaint.setImageDrawable(getResources().getDrawable(
-        // R.drawable.paint_pressed));
-
-        ImageButton colorbutton1 = (ImageButton) paintLayout
-                .findViewById(R.id.colorbutton1);
-        ImageButton colorbutton2 = (ImageButton) paintLayout
-                .findViewById(R.id.colorbutton2);
-        ImageButton colorbutton3 = (ImageButton) paintLayout
-                .findViewById(R.id.colorbutton3);
-        ImageButton colorbutton4 = (ImageButton) paintLayout
-                .findViewById(R.id.colorbutton4);
-        ImageButton colorbutton5 = (ImageButton) paintLayout
-                .findViewById(R.id.colorbutton5);
-        ImageButton colorbutton6 = (ImageButton) paintLayout
-                .findViewById(R.id.colorbutton6);
-        ImageButton colorbutton7 = (ImageButton) paintLayout
-                .findViewById(R.id.colorbutton7);
-        ImageButton colorbutton8 = (ImageButton) paintLayout1
-                .findViewById(R.id.colorbutton8);
-        ImageButton colorbutton9 = (ImageButton) paintLayout1
-                .findViewById(R.id.colorbutton9);
-        ImageButton colorbutton10 = (ImageButton) paintLayout1
-                .findViewById(R.id.colorbutton10);
-
-        colorbutton1.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        colorbutton2.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        colorbutton3.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        colorbutton4.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        colorbutton5.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        colorbutton6.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        colorbutton7.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-
-        colorbutton8.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-
-        colorbutton9.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        colorbutton10.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-
-        TextView textViewTitleAlert = (TextView) contentView
-                .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("SELECT COLOR");
-        textViewTitleAlert.setTextColor(Color.WHITE);
-
-        dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogColor.setContentView(contentView);
-        dialogColor.show();
-    }
-
-    void showHighLightAlert(String message, Context context) {
-
-        dialogColor = new Dialog(context);
-        dialogColor.setCanceledOnTouchOutside(true);
-
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        // inflate your activity layout here!
-        View contentView = inflater.inflate(R.layout.highlightcolor, null, false);
-        LinearLayout paintHighlight1 = (LinearLayout) contentView.findViewById(R.id.paint_highlight1);
-        LinearLayout paintHighlight2 = (LinearLayout) contentView.findViewById(R.id.paint_highlight2);
-        // currPaint = (ImageButton) paintLayout.getChildAt(0);
-        // currPaint.setImageDrawable(getResources().getDrawable(
-        // R.drawable.paint_pressed));
-
-        ImageButton highlightbutton1 = (ImageButton) paintHighlight1
-                .findViewById(R.id.hightlightbutton1);
-        ImageButton highlightbutton2 = (ImageButton) paintHighlight1
-                .findViewById(R.id.hightlightbutton2);
-        ImageButton highlightbutton3 = (ImageButton) paintHighlight1
-                .findViewById(R.id.highlightbutton3);
-        ImageButton highlightbutton4 = (ImageButton) paintHighlight1
-                .findViewById(R.id.highlightbutton4);
-        ImageButton highlightbutton5 = (ImageButton) paintHighlight1
-                .findViewById(R.id.highlightbutton5);
-        ImageButton highlightbutton6 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton6);
-        ImageButton highlightbutton7 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton7);
-        ImageButton highlightbutton8 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton8);
-        ImageButton highlightbutton9 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton9);
-        ImageButton highlightbutton10 = (ImageButton) paintHighlight2
-                .findViewById(R.id.highlightbutton10);
-
-        highlightbutton1.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        highlightbutton2.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        highlightbutton3.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        highlightbutton4.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        highlightbutton5.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        highlightbutton6.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        highlightbutton7.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-
-        highlightbutton8.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-
-        highlightbutton9.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-        highlightbutton10.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paintClicked(v);
-            }
-        });
-
-        TextView textViewTitleAlert = (TextView) contentView
-                .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("SELECT COLOR");
-        textViewTitleAlert.setTextColor(Color.WHITE);
-
-        dialogColor.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogColor.setContentView(contentView);
-        dialogColor.show();
-    }
-
     /*************
      * text control Here
      ************/
@@ -2684,18 +2465,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     // TODO highlighter clicked
     public void highlightClicked(View view) {
-        if (view != currPaint) {
             String color = view.getTag().toString();
             lastHighlightColor = Color.parseColor(color);
+            drawView.setDrawColor(lastHighlightColor);
+            drawView.setBrushSize((int) (lastBrushSize * 6.299));
             brushshape.setColor(lastHighlightColor);
             highlightview.setBackground(brushshape);
-            drawView.setDrawColor(lastHighlightColor);
-        }
     }
 
     // TODO brush clicked
     public void brushClicked(View view) {
-        if (view != currPaint) {
             String color = view.getTag().toString();
             lastBrushColor = Color.parseColor(color);
             drawView.setDrawColor(lastBrushColor);
@@ -2703,18 +2482,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             brushshape.setColor(lastBrushColor);
             brushview.setBackground(brushshape);
             count++;
-        }
     }
 
     // TODO open highlight
     public void openHighlight() {
         drawView.onClickEraser(1);
+        drawView.setDrawColor(lastHighlightColor);
         if(lastHighlightColor == 0) {
             drawView.setBrushSize(3);
             highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
         }
         else {
-            drawView.setBrushSize((int) (lastHighlightColor * 6.299));
+            drawView.setBrushSize((int) (lastHighlightSize * 6.299));
             highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(lastHighlightSize * 6.299), getResources().getDisplayMetrics());
         }
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
@@ -2945,30 +2724,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
     }
 
-    public void paintClicked(View view) {
-        // use chosen color
-        if (view != currPaint) {
-            // update color
-            ImageButton imgView = (ImageButton) view;
-            String color = view.getTag().toString();
-
-            imgView.setImageDrawable(getResources().getDrawable(
-                    R.drawable.paint_pressed));
-            // currPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint));
-            // currPaint = (ImageButton) view;
-            System.out.println("selected color:" + color);
-
-            int colorCode = Color.parseColor(color);
-            dialogColor.dismiss();
-            drawView.setDrawColor(colorCode);
-        }
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        paintClicked(v);
-    }
 
     public void paperButtonSelected(View view) {
         paperBackground(view.getTag().toString());
@@ -3574,5 +3329,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         isPaintMode = false;
         //dialog.dismiss();
         onResume();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

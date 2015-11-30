@@ -249,7 +249,7 @@
         android:gravity="center"
         android:layout_marginTop="44dp"
         android:paddingBottom="5dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/paint_brush1"
@@ -265,54 +265,54 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#000000"
+                android:background="#3f7f5c"
                 android:contentDescription="@string/paint"
-                android:tag="#000000" />
+                android:tag="#3f7f5c" />
 
             <ImageButton
                 android:id="@+id/brushbutton2"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#808080"
+                android:background="#87bedd"
                 android:contentDescription="@string/paint"
-                android:tag="#808080" />
+                android:tag="#87bedd" />
 
             <ImageButton
                 android:id="@+id/brushbutton3"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#C0C0C0"
+                android:background="#4b548f"
                 android:contentDescription="@string/paint"
-                android:tag="#C0C0C0" />
+                android:tag="#4b548f" />
 
             <ImageButton
                 android:id="@+id/brushbutton4"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#FF00FF"
+                android:background="#7c5ba6"
                 android:contentDescription="@string/paint"
-                android:tag="#FF00FF" />
+                android:tag="#7c5ba6" />
 
             <ImageButton
                 android:id="@+id/brushbutton5"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#FF0000"
+                android:background="#825848"
                 android:contentDescription="@string/paint"
-                android:tag="#FF0000" />
+                android:tag="#825848" />
 
             <ImageButton
                 android:id="@+id/brushbutton6"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#808000"
+                android:background="#000000"
                 android:contentDescription="@string/paint"
-                android:tag="#808000" />
+                android:tag="#000000" />
 
             <!-- Bottom Row -->
 
@@ -331,54 +331,54 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#FFFF00"
+                android:background="#ffffff"
                 android:contentDescription="@string/paint"
-                android:tag="#FFFF00" />
+                android:tag="#ffffff" />
 
             <ImageButton
                 android:id="@+id/brushbutton8"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#008000"
+                android:background="#f95462"
                 android:contentDescription="@string/paint"
-                android:tag="#008000" />
+                android:tag="#f95462" />
 
             <ImageButton
                 android:id="@+id/brushbutton9"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#00FF00"
+                android:background="#ec794d"
                 android:contentDescription="@string/paint"
-                android:tag="#00FF00" />
+                android:tag="#ec794d" />
 
             <ImageButton
                 android:id="@+id/brushbutton10"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#008080"
+                android:background="#f6d32f"
                 android:contentDescription="@string/paint"
-                android:tag="#008080" />
+                android:tag="#f6d32f" />
 
             <ImageButton
                 android:id="@+id/brushbutton11"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#00FFFF"
+                android:background="#fe8dbb"
                 android:contentDescription="@string/paint"
-                android:tag="#00FFFF" />
+                android:tag="#fe8dbb" />
 
             <ImageButton
                 android:id="@+id/brushbutton12"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#0000FF"
+                android:background="#7cc569"
                 android:contentDescription="@string/paint"
-                android:tag="#0000FF" />
+                android:tag="#7cc569" />
 
         </LinearLayout>
 

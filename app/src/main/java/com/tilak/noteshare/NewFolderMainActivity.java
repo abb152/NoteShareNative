@@ -378,7 +378,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		adapter.notifyDataSetChanged();
 		String strCout = "(" + arrDataNote.size() + ")";
-		textViewheaderTitle.setText("FOLDER");
+		textViewheaderTitle.setText("");
 		sortType = SORTTYPE_NEW.ALPHABET;
 		updateGridView();
 		updatePintrestView();
@@ -1150,7 +1150,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		//adapter.notifyDataSetChanged();
 		String strCout = "(" + list.size() + ")";
-		textViewheaderTitle.setText("FOLDER");
+		textViewheaderTitle.setText("");
 		//sortType=SORTTYPE.ALPHABET;
 		//updateGridView();
 		//updatePintrestView();
@@ -1270,7 +1270,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		}
 		else {
 			SearchLayout.setVisibility(View.GONE);
-			textViewheaderTitle.setText("FOLDER");
+			textViewheaderTitle.setText("");
 			closeKeyBoard();
 			editTextsearchNote.clearFocus();
 			searchLayoutOpen = false;

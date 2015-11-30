@@ -1095,7 +1095,7 @@ public class MainActivity extends DrawerActivity {
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
 							SearchLayout.setVisibility(View.GONE);
-							textViewheaderTitle.setText("NOTE");
+							textViewheaderTitle.setText("");
 							searchLayoutOpen = false;
 							//editTextsearchNote.setText("");
 						} else {
@@ -1148,7 +1148,7 @@ public class MainActivity extends DrawerActivity {
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
 							SearchLayout.setVisibility(View.GONE);
-							textViewheaderTitle.setText("NOTE");
+							textViewheaderTitle.setText("");
 							searchLayoutOpen = false;
 						} catch (Exception e) {
 
@@ -1285,7 +1285,7 @@ public class MainActivity extends DrawerActivity {
 		}
 		else {
 			SearchLayout.setVisibility(View.GONE);
-			textViewheaderTitle.setText("NOTE");
+			textViewheaderTitle.setText("");
 			closeKeyBoard();
 			editTextsearchNote.clearFocus();
 			searchLayoutOpen = false;

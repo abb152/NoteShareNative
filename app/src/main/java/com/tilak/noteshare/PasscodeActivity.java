@@ -1,9 +1,13 @@
 package com.tilak.noteshare;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,8 +71,9 @@ public class PasscodeActivity extends DrawerActivity {
                         t.setText("Set New Passcode");
                         oldConfirm = true;
                     } else {
+                        shake();
                         clearBox();
-                        Toast.makeText(PasscodeActivity.this, "Invalid Old Passcode", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(PasscodeActivity.this, "Invalid Old Passcode", Toast.LENGTH_LONG).show();
                     }
                 }
                 else{
@@ -91,9 +96,10 @@ public class PasscodeActivity extends DrawerActivity {
                     i.putExtra("NoteId", fileId);
                     startActivity(i);
                 } else {
+                    shake();
                     clearBox();
                     t.setText("Enter Valid Passcode to Open file.");
-                    Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
                 }
             }
             else{
@@ -109,9 +115,10 @@ public class PasscodeActivity extends DrawerActivity {
                     n.save();
                     finish();
                 } else {
+                    shake();
                     clearBox();
                     t.setText("Enter Valid Passcode to remove passcode.");
-                    Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
                 }
             }
             else{
@@ -140,6 +147,7 @@ public class PasscodeActivity extends DrawerActivity {
                     } else {
                         Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
                         confirm = true;
+                        shake();
                         clearBox();
                     }
                 }
@@ -198,6 +206,7 @@ public class PasscodeActivity extends DrawerActivity {
                 } else {
                     Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
                     confirm = true;
+                    shake();
                     clearBox();
                 }
             }
@@ -217,6 +226,7 @@ public class PasscodeActivity extends DrawerActivity {
                 n.save();
                 finish();
             } else {
+                shake();
                 clearBox();
                 t.setText("Enter Valid Passcode to Open file.");
                 Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
@@ -225,5 +235,18 @@ public class PasscodeActivity extends DrawerActivity {
         else{
             lessThanFour(i);
         }
+    }
+
+    public void shake(){
+
+        Vibrator vb = (Vibrator)   getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(100);
+
+        Animation shake = AnimationUtils.loadAnimation(PasscodeActivity.this, R.anim.shake);
+
+        et1.startAnimation(shake);
+        et2.startAnimation(shake);
+        et3.startAnimation(shake);
+        et4.startAnimation(shake);
     }
 }
