@@ -36,6 +36,7 @@ import com.tilak.adpters.OurFolderListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Folder;
+import com.tilak.sync.FolderSync;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -92,6 +93,9 @@ public class NewFolderMainActivity extends DrawerActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_main);
+
+		FolderSync folderSync = new FolderSync();
+		folderSync.localToServer();
 
 		screenSize = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
 
@@ -631,9 +635,9 @@ public class NewFolderMainActivity extends DrawerActivity {
 				{
 //					updateFolder(textViewTitleAlertMessage.getText().toString());
 					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					String currentDateStr = formatter.format(new Date());
-
-					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "", currentDateStr, "");
+					Date date = new Date();
+					String currentDateStr = formatter.format(date);
+					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "0", currentDateStr, currentDateStr ,date.getTime(),date.getTime());
 					folder.save();
 					onRestart();
 					dialog.dismiss();
@@ -1145,7 +1149,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 	}
 	void populate() {
 		list=new ArrayList<HashMap<String, String>>();
-		allfolders = Folder.findWithQuery(Folder.class, "Select * from Folder");
+		allfolders = Folder.findWithQuery(Folder.class, "Select * from Folder where CREATIONTIME != ?","0");
 		putInList();
 
 		//adapter.notifyDataSetChanged();
@@ -1233,11 +1237,10 @@ public class NewFolderMainActivity extends DrawerActivity {
 	}
 
 	public void delete(String id){
-
 		Folder f = Folder.findById(Folder.class, Long.parseLong(id));
-		f.delete();
+		f.setCreationtime("0");
+		f.save();
 		onRestart();
-
 	}
 
 		public void deleteFolder(View v){

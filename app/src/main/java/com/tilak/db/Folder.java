@@ -12,17 +12,21 @@ public class Folder extends SugarRecord {
     public String serverid;
     public String creationtime;
     public String modifytime;
+    public long ctime;
+    public long mtime;
 
     public Folder() {
         super();
     }
 
-    public Folder(String name, int ordernumber, String serverid, String creationtime, String modifytime) {
+    public Folder(String name, int ordernumber, String serverid, String creationtime, String modifytime, long cTime, long mTime) {
         this.creationtime = creationtime;
         this.modifytime = modifytime;
         this.name = name;
         this.ordernumber = ordernumber;
         this.serverid = serverid;
+        this.ctime = cTime;
+        this.mtime = mTime;
     }
 
     public String getCreationtime() {
@@ -63,5 +67,21 @@ public class Folder extends SugarRecord {
 
     public void setServerid(String serverid) {
         this.serverid = serverid;
+    }
+
+    public long getcTime() {
+        return ctime;
+    }
+
+    public void setcTime(long cTime) {
+        this.ctime = cTime;
+    }
+
+    public long getmTime() {
+        return mtime;
+    }
+
+    public void setmTime(long mTime) {
+        this.mtime = mTime;
     }
 }
