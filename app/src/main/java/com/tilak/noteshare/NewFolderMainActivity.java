@@ -95,7 +95,8 @@ public class NewFolderMainActivity extends DrawerActivity {
 		// setContentView(R.layout.activity_main);
 
 		FolderSync folderSync = new FolderSync();
-		folderSync.localToServer();
+		//folderSync.serverToLocal();
+		//folderSync.localToServer();
 
 		screenSize = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
 
@@ -637,7 +638,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					Date date = new Date();
 					String currentDateStr = formatter.format(date);
-					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "0", currentDateStr, currentDateStr ,date.getTime(),date.getTime());
+					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "0", currentDateStr, currentDateStr ,date.getTime(), date.getTime());
 					folder.save();
 					onRestart();
 					dialog.dismiss();
