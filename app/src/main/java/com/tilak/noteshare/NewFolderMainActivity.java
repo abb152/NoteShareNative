@@ -37,6 +37,7 @@ import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Folder;
 import com.tilak.sync.FolderSync;
+import com.tilak.sync.NoteSync;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -97,6 +98,9 @@ public class NewFolderMainActivity extends DrawerActivity {
 		FolderSync folderSync = new FolderSync();
 		//folderSync.serverToLocal();
 		//folderSync.localToServer();
+
+		NoteSync noteSync = new NoteSync();
+		noteSync.localToServer();
 
 		screenSize = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
 

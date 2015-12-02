@@ -2786,7 +2786,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         String timestamp = currentDateStr;
         Note note = null;
         try{
-            note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", 0L , "", "#FFFFFF", timestamp, timestamp, "", 0, stringToDate(timestamp), stringToDate(timestamp));
+            note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "0", 0L , "0", "#FFFFFF", timestamp, timestamp, "0", 0, stringToDate(timestamp), stringToDate(timestamp));
             note.save();
         }catch(ParseException pe){
             pe.printStackTrace();
