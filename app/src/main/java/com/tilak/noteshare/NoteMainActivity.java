@@ -58,6 +58,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -2775,23 +2776,39 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         if (noteIdForDetails != null) {
             Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
             note.setColor(backgroundColor);
-            note.setModifytime(currentDateStr);
             note.save();
+            modifyNoteTime();
         }
 
     }
 
-    public void makeNote() {
-        Note note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", 0L , "", "#FFFFFF", currentDateStr, currentDateStr, "", 0);
-        note.save();
+    public void makeNote(){
+        String timestamp = currentDateStr;
+        Note note = null;
+        try{
+            note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "", 0L , "", "#FFFFFF", timestamp, timestamp, "", 0, stringToDate(timestamp), stringToDate(timestamp));
+            note.save();
+        }catch(ParseException pe){
+            pe.printStackTrace();
+        }
         noteIdForDetails = note.getId().toString();
         noteTitle[0] = note.getTitle();
     }
 
-    public void modifyNoteTime() {
-        Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
-        n.setModifytime(currentDateStr);
-        n.save();
+    public long stringToDate(String date) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date).getTime();
+    }
+
+    public void modifyNoteTime(){
+        String timestamp = currentDateStr;
+        try {
+            Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
+            n.setModifytime(timestamp);
+            n.setMtime(stringToDate(timestamp));
+            n.save();
+        }catch(ParseException pe){
+            pe.printStackTrace();
+        }
     }
 
     public void deleteElements(String tag) {

@@ -15,12 +15,14 @@ public class Note extends SugarRecord {
     public String modifytime;
     public String serverid;
     public int islocked;
+    public long ctime;
+    public long mtime;
 
     public Note() {
         super();
     }
 
-    public Note(String title, String tags, String color, String folder, Long remindertime, String timebomb, String background, String creationtime, String modifytime, String serverid, int islocked) {
+    public Note(String title, String tags, String color, String folder, Long remindertime, String timebomb, String background, String creationtime, String modifytime, String serverid, int islocked, long ctime, long mtime) {
         this.background = background;
         this.color = color;
         this.creationtime = creationtime;
@@ -32,6 +34,8 @@ public class Note extends SugarRecord {
         this.tags = tags;
         this.timebomb = timebomb;
         this.title = title;
+        this.ctime = ctime;
+        this.mtime = mtime;
     }
 
     public String getBackground() {
@@ -120,5 +124,21 @@ public class Note extends SugarRecord {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public long getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(long ctime) {
+        this.ctime = ctime;
+    }
+
+    public long getMtime() {
+        return mtime;
+    }
+
+    public void setMtime(long mtime) {
+        this.mtime = mtime;
     }
 }

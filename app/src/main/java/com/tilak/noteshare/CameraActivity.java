@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,19 +185,32 @@ public class CameraActivity extends Activity {
     public void makeNote() {
         SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateStr = formatter.format(new Date());
-        Note note = new Note("NOTE", "","#FFFFFF", "",0L, "", "#FFFFFF", currentDateStr, currentDateStr, "", 0);
-        note.save();
-        noteMainActivity.noteIdForDetails = note.getId().toString();
-        noteid = noteMainActivity.noteIdForDetails;
+        try {
+            Note note = new Note("NOTE", "", "#FFFFFF", "", 0L, "", "#FFFFFF", currentDateStr, currentDateStr, "", 0, stringToDate(currentDateStr), stringToDate(currentDateStr));
+            note.save();
+            noteMainActivity.noteIdForDetails = note.getId().toString();
+            noteid = noteMainActivity.noteIdForDetails;
+        }catch(ParseException pe){
+            pe.printStackTrace();
+        }
         isNoteIdNull = false;
     }
+
+    public long stringToDate(String date) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date).getTime();
+    }//
 
     public void modifyNoteTime() {
         SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateStr = formatter.format(new Date());
+        try{
         Note n = Note.findById(Note.class, Long.parseLong(noteid));
         n.setModifytime(currentDateStr);
+        n.setMtime(stringToDate(currentDateStr));
         n.save();
+        }catch(ParseException pe){
+            pe.printStackTrace();
+        }
     }
 
     public void cancel(View v){
