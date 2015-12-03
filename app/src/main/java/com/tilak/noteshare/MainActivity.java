@@ -753,11 +753,11 @@ public class MainActivity extends DrawerActivity {
 
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("QUIT THE APP");
+        textViewTitleAlert.setText("EXIT APP");
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlertMessage);
-        textViewTitleAlertMessage.setText("Are you sure, Do you want to quit the app?");
+        textViewTitleAlertMessage.setText("Are you sure?");
 
         Button buttonAlertCancel = (Button) contentView
                 .findViewById(R.id.buttonAlertCancel);
