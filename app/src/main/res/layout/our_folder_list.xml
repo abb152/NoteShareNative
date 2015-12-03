@@ -27,6 +27,17 @@
             android:visibility="invisible"/>
 
         <ImageButton
+            android:id="@+id/btnfolderedit"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:padding="15dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_action_delete"
+            android:onClick="deleteFolder"/>
+
+        <ImageButton
             android:id="@+id/btnfolderdelete"
             android:layout_width="15dp"
             android:layout_height="wrap_content"
@@ -35,6 +46,17 @@
             android:padding="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_action_delete"
+            android:onClick="deleteFolder"/>
+
+        <ImageButton
+            android:id="@+id/btnfoldershare"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:padding="15dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_action_share"
             android:onClick="deleteFolder"/>
 
     </LinearLayout>

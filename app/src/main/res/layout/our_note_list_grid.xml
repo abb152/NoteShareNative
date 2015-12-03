@@ -64,7 +64,7 @@
             android:layout_marginLeft="10dp"
             android:background="@android:color/transparent">
 
-            <ImageButton
+            <!--<ImageButton
                 android:layout_width="13dp"
                 android:layout_height="18dp"
                 android:id="@+id/deleteInGrid"
@@ -77,18 +77,34 @@
                 android:background="@android:color/transparent"
                 android:onClick="deleteNote"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"/>-->
 
             <ImageButton
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:id="@+id/optionInGrid"
+                android:layout_marginRight="20dp"
+                android:baselineAlignBottom="false"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/image_option_black"
+                android:background="@android:color/transparent"
+                android:onClick="optionNote"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="0dp"/>
+
+            <ImageButton
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:id="@+id/shareInGrid"
+                android:layout_marginBottom="5dp"
                 android:baselineAlignBottom="false"
                 android:scaleType="fitXY"
                 android:src="@drawable/image_option_share_black"
                 android:background="@android:color/transparent"
-                android:layout_alignBottom="@+id/deleteInGrid"
-                android:layout_toEndOf="@+id/deleteInGrid"/>
+                android:layout_alignBottom="@+id/optionInGrid"
+                android:layout_toEndOf="@+id/optionInGrid"/>
 
             <ImageView
                 android:layout_width="30dp"

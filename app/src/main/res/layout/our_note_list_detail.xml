@@ -58,7 +58,7 @@
             android:padding="3dp"
             android:background="@android:color/transparent"
 
-            android:src="@drawable/ic_action_reminder"
+            android:src="@drawable/ic_action_remind"
             android:onClick="remind"/>
 
         <ImageButton

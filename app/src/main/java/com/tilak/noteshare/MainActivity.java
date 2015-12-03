@@ -1237,9 +1237,15 @@ public class MainActivity extends DrawerActivity {
 	public void deleteNote(View v){
 		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		showDeleteAlert(this,id);
+		showDeleteAlert(this, id);
 		//noteFunctions.showDeleteAlert(this, id, false);
 		//onRestart();
+	}
+
+	public void optionNote(View v) {
+		String id = v.getTag().toString();
+		noteFunctions.showOptionAlert(this, id);
+
 	}
 
 	public void showDeleteAlert(final Context context, final String id) {

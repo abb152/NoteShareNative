@@ -50,7 +50,7 @@ public class OurNoteListAdapter extends BaseAdapter {
     private class ViewHolder{
         //all the fields in layout specified
         TextView txtNoteName,txtNoteDesc,txtNoteDate, tvIdHidden;
-        ImageButton btnLock, btnTimebomb, btnMove, btnDelete, btnShare, btnRemind;
+        ImageButton btnLock, btnTimebomb, btnMove, btnDelete, btnShare, btnRemind, btnOption;
         ImageView isLockedIcon;
         LinearLayout linearLayout;
         LinearLayout main;
@@ -118,7 +118,8 @@ public class OurNoteListAdapter extends BaseAdapter {
             }
 
             if(listview == "GRID"){
-                holder.btnDelete = (ImageButton) convertView.findViewById(R.id.deleteInGrid);
+                //holder.btnDelete = (ImageButton) convertView.findViewById(R.id.deleteInGrid);
+                holder.btnOption = (ImageButton) convertView.findViewById(R.id.optionInGrid);
                 holder.btnShare = (ImageButton) convertView.findViewById(R.id.shareInGrid);
             }
             convertView.setTag(holder);
@@ -155,7 +156,8 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.btnShare.setTag(map.get("noteId"));
             holder.btnRemind.setTag(map.get("noteId"));
         }else{
-            holder.btnDelete.setTag(map.get("noteId"));
+            //holder.btnDelete.setTag(map.get("noteId"));
+            holder.btnOption.setTag(map.get("noteId"));
             holder.btnShare.setTag(map.get("noteId"));
         }
 

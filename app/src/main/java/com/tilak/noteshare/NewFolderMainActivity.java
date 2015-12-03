@@ -1224,7 +1224,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		listView.setAnimationTime(200);
 
 
-		listView.setOffsetLeft(650L);
+		listView.setOffsetLeft(400L);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
