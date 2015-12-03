@@ -118,6 +118,7 @@ public class MainActivity extends DrawerActivity {
 
 		Intent intent = this.getIntent();
 		folderIdforNotes = intent.getStringExtra("FolderId");
+		//Log.e("jay ***", folderIdforNotes);
 		Log.v("select", "OnCreate" + folderIdforNotes);
 
 		LayoutInflater inflater = (LayoutInflater) this
@@ -128,11 +129,8 @@ public class MainActivity extends DrawerActivity {
 		mDrawerLayout.addView(contentView, 0);
 		//DataManager.sharedDataManager().setSelectedIndex(-1);
 
-		try {
-			initlizeUIElement(contentView);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		initlizeUIElement(contentView);
+
 		SearchLayout = (LinearLayout) findViewById(R.id.SearchLayout);
 		search = (ImageButton) findViewById(R.id.search);
 
@@ -155,7 +153,7 @@ public class MainActivity extends DrawerActivity {
 				Log.e("jay *****", "****");
 				List<Long> idList = new ArrayList<Long>();
 
-				if (folderIdforNotes == null || folderIdforNotes.equals("-1")) {
+				if (folderIdforNotes == null || folderIdforNotes.equals("-1") || folderIdforNotes == "") {
 
 					//find note
 					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where creationtime != 0 AND title LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
@@ -253,7 +251,7 @@ public class MainActivity extends DrawerActivity {
 		adapter.notifyDataSetChanged();
 	}
 
-	void initlizeUIElement(View contentview) throws ParseException{
+	void initlizeUIElement(View contentview){
 		//DataManager.sharedDataManager().setTypeofListView(false);
 
 		layoutHeader = (RelativeLayout) contentview
@@ -286,7 +284,12 @@ public class MainActivity extends DrawerActivity {
 		sortType = SORTTYPE.valueOf(con.getSort());
 		viewType = VIEWTYPE.valueOf(con.getView());
 
-		checkTimeClicked();
+		try {
+			checkTimeClicked();
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.e("jay exception", String.valueOf(e));
+		}
 		populate();
 		sortingArray();
 		swipeListView();
@@ -788,6 +791,7 @@ public class MainActivity extends DrawerActivity {
 	void populate() {
 		list = new ArrayList<HashMap<String, String>>();
 		List<Note> allnotes;
+		//Log.e("jay inside populate **", folderIdforNotes);
 		if(folderIdforNotes == null || folderIdforNotes == "-1")
 			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE creationtime != 0 ORDER BY ID DESC");
 		else
@@ -1087,13 +1091,36 @@ public class MainActivity extends DrawerActivity {
 
 						noteid = map.get("noteId");
 
-						try {
+						/*try {
 							Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
 							i.putExtra("NoteId", noteid);
 							startActivity(i);
 							SearchLayout.setVisibility(View.GONE);
 							textViewheaderTitle.setText("");
 							searchLayoutOpen = false;
+						} catch (Exception e) {
+
+						}*/
+
+						try {
+							// TODO if passcode == null
+							Note note = Note.findById(Note.class, Long.parseLong(noteid));
+							if (note.islocked == 0) {
+								Intent i = new Intent(MainActivity.this, NoteMainActivity.class);
+								i.putExtra("NoteId", noteid);
+								startActivity(i);
+								SearchLayout.setVisibility(View.GONE);
+								textViewheaderTitle.setText("");
+								searchLayoutOpen = false;
+								//editTextsearchNote.setText("");
+							} else {
+								Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
+								intent.putExtra("FileId", noteid);
+								intent.putExtra("Check", "2");
+								startActivity(intent);
+								//editTextsearchNote.setText("");
+							}
+							// TODO if passcode != null
 						} catch (Exception e) {
 
 						}

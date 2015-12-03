@@ -10,6 +10,7 @@ import com.squareup.okhttp.Response;
 import com.tilak.db.Config;
 import com.tilak.db.Note;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,11 +98,11 @@ public class NoteSync {
         }
     }
 
-    /*public void serverToLocal(){
-        String foldermodifytime = "1970-01-01 00:00:00";
+    public void serverToLocal(){
+        String notemodifytime = "1970-01-01 00:00:00";
 
         try {
-            String json = serverToLocalJson(getUserId(), foldermodifytime).toString();
+            String json = serverToLocalJson(getUserId(), notemodifytime).toString();
             String response = post(SERVER_URL + "note/servertolocal", json);
 
             JSONArray jsonArray = new JSONArray(response);
@@ -111,17 +112,23 @@ public class NoteSync {
             if(jsonArray.length() > 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
 
+                    String title = jsonArray.getJSONObject(i).getString("title");
+                    String color = jsonArray.getJSONObject(i).getString("color");
+                    String folder = jsonArray.getJSONObject(i).getString("folder");
+                    String background = jsonArray.getJSONObject(i).getString("background");
+                    String tags = jsonArray.getJSONObject(i).getString("tags");
                     String creationtime = jsonArray.getJSONObject(i).getString("creationtime");
-                    String id = jsonArray.getJSONObject(i).getString("_id");
-                    String name = jsonArray.getJSONObject(i).getString("name") ;
                     String modifytime = jsonArray.getJSONObject(i).getString("modifytime");
-                    String order = jsonArray.getJSONObject(i).getString("order");
+                    String islocked = jsonArray.getJSONObject(i).getString("islocked");
+                    String remindertime = jsonArray.getJSONObject(i).getString("remindertime");
+                    String timebomb = jsonArray.getJSONObject(i).getString("timebomb");
+                    String id = jsonArray.getJSONObject(i).getString("_id");
 
                     //funcType = null;
 
                     if(creationtime.equals(""))
                         funcType = NOTESYNCFUNCTION.DELETE;
-                    else if(!folderAlreadyExists(id))
+                    else if(!noteAlreadyExists(id))
                         funcType = NOTESYNCFUNCTION.CREATE;
                     else
                         funcType = NOTESYNCFUNCTION.EDIT;
@@ -130,31 +137,46 @@ public class NoteSync {
 
                     switch (funcType){
                         case CREATE:
-                            Folder createFolder = new Folder(name,Integer.parseInt(order), id, dateServerToLocal(creationtime), dateServerToLocal(modifytime) ,stringToDate(dateServerToLocal(creationtime)), stringToDate(dateServerToLocal(modifytime)));
-                            createFolder.save();
-                            Log.e("jay created ***", String.valueOf(createFolder.getId()));
+                            if(timebomb.equals("0"))
+                                timebomb = "";
+
+                            Note createNote = new Note(title,tags,color,folder,Long.parseLong(remindertime),timebomb,background, dateServerToLocal(creationtime), dateServerToLocal(modifytime) ,id,Integer.parseInt(islocked),stringToDate(dateServerToLocal(creationtime)), stringToDate(dateServerToLocal(modifytime)));
+                            createNote.save();
+                            Log.e("jay created ***", String.valueOf(createNote.getId()));
                             break;
 
                         case DELETE:
-                            List<Folder> deleteFolder = Folder.findWithQuery(Folder.class, "Select * from FOLDER where serverid LIKE ?", id);
-                            if(deleteFolder.size() == 0)
+                            List<Note> deleteNote = Note.findWithQuery(Note.class, "Select * from NOTE where serverid LIKE ?", id);
+                            if(deleteNote.size() == 0)
                                 Log.e("jay already not there","***");
                             else
-                                deleteFolder.get(0).delete();
+                                deleteNote.get(0).delete();
 
                             Log.e("jay deleted","***");
                             break;
                         case EDIT:
-                            List<Folder> editFolder = Folder.findWithQuery(Folder.class, "Select * from FOLDER where serverid LIKE ?", id);
-                            editFolder.get(0).setName(name);
-                            editFolder.get(0).setOrderNumber(Integer.parseInt(order));
-                            editFolder.get(0).setCreationtime(dateServerToLocal(creationtime));
-                            editFolder.get(0).setModifytime(dateServerToLocal(modifytime));
-                            editFolder.get(0).setcTime(stringToDate(dateServerToLocal(creationtime)));
-                            editFolder.get(0).setmTime(stringToDate(dateServerToLocal(modifytime)));
-                            editFolder.get(0).save();
+                            List<Note> editNote = Note.findWithQuery(Note.class, "Select * from NOTE where serverid LIKE ?", id);
+                            editNote.get(0).setTitle(title);
+                            editNote.get(0).setTags(tags);
+                            editNote.get(0).setColor(color);
+                            editNote.get(0).setFolder(folder);
+                            editNote.get(0).setRemindertime(Long.parseLong(remindertime));
 
-                            Log.e("jay edited", editFolder.get(0).getName());
+                            if(timebomb.equals("0"))
+                                editNote.get(0).setTimebomb("");
+                            else
+                                editNote.get(0).setTimebomb(timebomb);
+
+                            editNote.get(0).setBackground(background);
+                            editNote.get(0).setCreationtime(dateServerToLocal(creationtime));
+                            editNote.get(0).setModifytime(dateServerToLocal(modifytime));
+                            editNote.get(0).setServerid(id);
+                            editNote.get(0).setIslocked(Integer.parseInt(islocked));
+                            editNote.get(0).setCtime(stringToDate(dateServerToLocal(creationtime)));
+                            editNote.get(0).setMtime(stringToDate(dateServerToLocal(modifytime)));
+                            editNote.get(0).save();
+
+                            Log.e("jay edited", editNote.get(0).getTitle());
                             break;
                     }
 
@@ -173,17 +195,17 @@ public class NoteSync {
         }
     }
 
-    public boolean folderAlreadyExists(String id){
-        List<Folder> folders = Folder.findWithQuery(Folder.class, "Select * from FOLDER where serverid LIKE ?", id);
-        Log.e("jay size",String.valueOf(folders.size()));
+    public boolean noteAlreadyExists(String id){
+        List<Note> notes = Note.findWithQuery(Note.class, "Select * from NOTE where serverid LIKE ?", id);
+        Log.e("jay size",String.valueOf(notes.size()));
         boolean exists;
-        if( folders.size() > 0 ){
+        if( notes.size() > 0 ){
             exists = true;
         }else{
             exists = false;
         }
         return exists;
-    }*/
+    }
 
     public String dateToString(Date date){
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
@@ -245,7 +267,11 @@ public class NoteSync {
         note.put("modifytime", modifytime);
         note.put("islocked", String.valueOf(islocked));
         note.put("remindertime", remindertime);
-        note.put("timebomb", timebomb);
+
+        if(timebomb.equals(""))
+            note.put("timebomb", "0");
+        else
+            note.put("timebomb", timebomb);
 
         if(function != NOTESYNCFUNCTION.CREATE){
             note.put("_id", id);

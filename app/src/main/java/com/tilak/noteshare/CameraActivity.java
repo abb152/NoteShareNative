@@ -186,7 +186,7 @@ public class CameraActivity extends Activity {
         SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateStr = formatter.format(new Date());
         try {
-            Note note = new Note("NOTE", "", "#FFFFFF", "", 0L, "", "#FFFFFF", currentDateStr, currentDateStr, "", 0, stringToDate(currentDateStr), stringToDate(currentDateStr));
+            Note note = new Note("NOTE", "", "#FFFFFF", "", 0L, "", "#FFFFFF", currentDateStr, currentDateStr, "0", 0, stringToDate(currentDateStr), stringToDate(currentDateStr));
             note.save();
             noteMainActivity.noteIdForDetails = note.getId().toString();
             noteid = noteMainActivity.noteIdForDetails;
