@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1224,7 +1225,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		listView.setAnimationTime(200);
 
 
-		listView.setOffsetLeft(400L);
+		listView.setOffsetLeft(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 190, getResources().getDisplayMetrics()));
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override

@@ -1010,7 +1010,7 @@ public class MainActivity extends DrawerActivity {
 
 
 		if(viewType != VIEWTYPE.GRID){
-			detailOrListView.setOffsetLeft((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics()));
+			detailOrListView.setOffsetLeft(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics()));
 
 			detailOrListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
