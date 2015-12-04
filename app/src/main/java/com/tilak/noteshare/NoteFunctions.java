@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -312,31 +313,50 @@ public class NoteFunctions {
         final Dialog dialog = new Dialog(context);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.alert_view, null, false);
+        View contentView = inflater.inflate(R.layout.alert_option_view, null, false);
 
-        TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("NOTE OPTIONS");
-        textViewTitleAlert.setTextColor(Color.WHITE);
+        TextView tvOptionTitleAlert = (TextView) contentView.findViewById(R.id.tvOptionTitleAlert);
+        tvOptionTitleAlert.setText("NOTE OPTIONS");
+        tvOptionTitleAlert.setTextColor(Color.WHITE);
 
-        Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
-        Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+        LinearLayout optionLock = (LinearLayout) dialog.findViewById(R.id.optionLock);
+        TextView tvOptionLock = (TextView) optionLock.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivOptionLock = (ImageView) optionLock.findViewById(R.id.imageViewSlidemenu);
+        ivOptionLock.setImageResource(R.drawable.image_option_lock2_red);
+        tvOptionLock.setText("Lock");
 
-        buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                dialog.dismiss();
-            }
-        });
-        buttonAlertOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                dialog.dismiss();
-                //context.startActivity(new Intent(context, MainActivity.class));
-            }
-        });
+        LinearLayout optionTimebomb = (LinearLayout) dialog.findViewById(R.id.optionTimebomb);
+        TextView tvOptionTimebomb = (TextView) optionTimebomb.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivOptionTimebomb = (ImageView) optionTimebomb.findViewById(R.id.imageViewSlidemenu);
+        ivOptionTimebomb.setImageResource(R.drawable.image_option_lock2_red);
+        tvOptionTimebomb.setText("Timebomb");
+
+        LinearLayout optionReminder = (LinearLayout) dialog.findViewById(R.id.optionReminder);
+        TextView tvOptionReminder = (TextView) optionReminder.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivOptionReminder = (ImageView) optionReminder.findViewById(R.id.imageViewSlidemenu);
+        ivOptionReminder.setImageResource(R.drawable.image_option_lock2_red);
+        tvOptionReminder.setText("Reminder");
+
+        LinearLayout optionMove = (LinearLayout) dialog.findViewById(R.id.optionMove);
+        TextView tvOptionMove = (TextView) optionMove.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivOptionMove = (ImageView) optionMove.findViewById(R.id.imageViewSlidemenu);
+        ivOptionMove.setImageResource(R.drawable.image_option_lock2_red);
+        tvOptionMove.setText("Move");
+
+        LinearLayout optionDelete = (LinearLayout) dialog.findViewById(R.id.optionDelete);
+        TextView tvOptionDelete = (TextView) optionDelete.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivOptionDelete = (ImageView) optionDelete.findViewById(R.id.imageViewSlidemenu);
+        ivOptionDelete.setImageResource(R.drawable.image_option_lock2_red);
+        tvOptionDelete.setText("Delete");
+
+        LinearLayout optionShare = (LinearLayout) dialog.findViewById(R.id.optionShare);
+        TextView tvOptionShare = (TextView) optionShare.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivOptionShare = (ImageView) optionShare.findViewById(R.id.imageViewSlidemenu);
+        ivOptionShare.setImageResource(R.drawable.image_option_lock2_red);
+        tvOptionShare.setText("Share");
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.setContentView(contentView);
         dialog.show();
     }

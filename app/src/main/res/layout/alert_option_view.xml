@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutAlertOptionbox"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvOptionTitleAlert"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_height="40dp"
+        android:background="@color/header_bg"
+        android:gravity="center"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <include
+        android:id="@+id/optionLock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_row_list"/>
+
+    <include
+        android:id="@+id/optionTimebomb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_row_list"/>
+
+    <include
+        android:id="@+id/optionReminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_row_list"/>
+
+    <include
+        android:id="@+id/optionMove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_row_list"/>
+
+    <include
+        android:id="@+id/optionDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_row_list"/>
+
+    <include
+        android:id="@+id/optionShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/view_row_list"/>
+
+</LinearLayout>
