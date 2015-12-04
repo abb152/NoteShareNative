@@ -312,10 +312,12 @@ public class NoteFunctions {
     public void showOptionAlert(final Context context, final String id) {
         final Dialog dialog = new Dialog(context);
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.alert_option_view, null, false);
+        //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //View contentView = inflater.inflate(R.layout.alert_option_view, null, false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alert_option_view);
 
-        TextView tvOptionTitleAlert = (TextView) contentView.findViewById(R.id.tvOptionTitleAlert);
+        TextView tvOptionTitleAlert = (TextView) dialog.findViewById(R.id.tvOptionTitleAlert);
         tvOptionTitleAlert.setText("NOTE OPTIONS");
         tvOptionTitleAlert.setTextColor(Color.WHITE);
 
@@ -355,9 +357,9 @@ public class NoteFunctions {
         ivOptionShare.setImageResource(R.drawable.image_option_lock2_red);
         tvOptionShare.setText("Share");
 
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
-        dialog.setContentView(contentView);
+        //dialog.setContentView(contentView);
         dialog.show();
     }
 
