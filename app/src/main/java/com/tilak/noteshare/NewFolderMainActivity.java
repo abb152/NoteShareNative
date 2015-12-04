@@ -97,13 +97,13 @@ public class NewFolderMainActivity extends DrawerActivity {
 		// setContentView(R.layout.activity_main);
 
 		FolderSync folderSync = new FolderSync();
-		folderSync.localToServer();
-		folderSync.serverToLocal();
+		//folderSync.localToServer();
+		//folderSync.serverToLocal();
 		//folderSync.localToServer();
 
 		NoteSync noteSync = new NoteSync();
-		noteSync.localToServer();
-		noteSync.serverToLocal();
+		//noteSync.localToServer();
+		//noteSync.serverToLocal();
 		//noteSync.localToServer();
 
 

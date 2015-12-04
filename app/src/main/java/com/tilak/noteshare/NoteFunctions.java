@@ -36,6 +36,8 @@ import java.util.List;
 
 public class NoteFunctions {
 
+    //MainActivity mainActivity = new MainActivity();
+
     // LOCK / PASS CODE
     public void setPasscode(Context context, String id) {
         Note n = Note.findById(Note.class, Long.parseLong(id));
@@ -283,16 +285,38 @@ public class NoteFunctions {
                 dialog.dismiss();
                 //delete(id);
                 if (insideNote) {
-                    //delete(id);
-                    Intent intent = new Intent(context, PasscodeActivity.class);
-                    intent.putExtra("FileId", id);
-                    intent.putExtra("Check", "6");
-                    context.startActivity(intent);
+
+                    dialog.dismiss();
+                    Note n =  Note.findById(Note.class, Long.parseLong(id));
+                    if(n.getIslocked() == 1 ){
+                        Intent intent = new Intent(context, PasscodeActivity.class);
+                        intent.putExtra("FileId", id);
+                        intent.putExtra("Check", "6");
+                        context.startActivity(intent);
+                    }
+                    else
+                        delete(id);
 
                     //context.startActivity(new Intent(context, MainActivity.class));
                 } else {
-                    MainActivity mainActivity = new MainActivity();
-                    mainActivity.onRestart();
+
+                    //MainActivity mainActivity = new MainActivity();
+                    //mainActivity.delete(id);
+
+                    dialog.dismiss();
+                    Note n =  Note.findById(Note.class, Long.parseLong(id));
+                    if(n.getIslocked() == 1 ){
+                        Intent intent = new Intent(context, PasscodeActivity.class);
+                        intent.putExtra("FileId", id);
+                        intent.putExtra("Check", "6");
+                        context.startActivity(intent);
+                    }
+                    else {
+                        delete(id);
+                        context.startActivity(new Intent(context, MainActivity.class));
+                        //MainActivity mainActivity = new MainActivity();
+                        //mainActivity.delete(id);
+                    }
                 }
             }
         });
@@ -327,11 +351,33 @@ public class NoteFunctions {
         ivOptionLock.setImageResource(R.drawable.image_option_lock2_red);
         tvOptionLock.setText("Lock");
 
+        optionLock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Note n = Note.findById(Note.class, Long.parseLong(id));
+                if (n.getIslocked() == 0){
+                    n.islocked = 1;
+                    n.save();
+                }
+                else
+                    setPasscode(context, id);
+                dialog.dismiss();
+            }
+        });
+
         LinearLayout optionTimebomb = (LinearLayout) dialog.findViewById(R.id.optionTimebomb);
         TextView tvOptionTimebomb = (TextView) optionTimebomb.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionTimebomb = (ImageView) optionTimebomb.findViewById(R.id.imageViewSlidemenu);
         ivOptionTimebomb.setImageResource(R.drawable.image_option_lock2_red);
         tvOptionTimebomb.setText("Timebomb");
+
+        optionTimebomb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDate(context, id, "SET TIMEBOMB", "timebomb");
+                dialog.dismiss();
+            }
+        });
 
         LinearLayout optionReminder = (LinearLayout) dialog.findViewById(R.id.optionReminder);
         TextView tvOptionReminder = (TextView) optionReminder.findViewById(R.id.textViewSlideMenuName);
@@ -339,11 +385,27 @@ public class NoteFunctions {
         ivOptionReminder.setImageResource(R.drawable.image_option_lock2_red);
         tvOptionReminder.setText("Reminder");
 
+        optionReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDate(context, id, "SET REMAINDER", "reminder");
+                dialog.dismiss();
+            }
+        });
+
         LinearLayout optionMove = (LinearLayout) dialog.findViewById(R.id.optionMove);
         TextView tvOptionMove = (TextView) optionMove.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionMove = (ImageView) optionMove.findViewById(R.id.imageViewSlidemenu);
         ivOptionMove.setImageResource(R.drawable.image_option_lock2_red);
         tvOptionMove.setText("Move");
+
+        optionMove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMoveAlert(context, id);
+                dialog.dismiss();
+            }
+        });
 
         LinearLayout optionDelete = (LinearLayout) dialog.findViewById(R.id.optionDelete);
         TextView tvOptionDelete = (TextView) optionDelete.findViewById(R.id.textViewSlideMenuName);
@@ -351,11 +413,29 @@ public class NoteFunctions {
         ivOptionDelete.setImageResource(R.drawable.image_option_lock2_red);
         tvOptionDelete.setText("Delete");
 
+        optionDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeleteAlert(context, id, false);
+                dialog.dismiss();
+            }
+        });
+
         LinearLayout optionShare = (LinearLayout) dialog.findViewById(R.id.optionShare);
         TextView tvOptionShare = (TextView) optionShare.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionShare = (ImageView) optionShare.findViewById(R.id.imageViewSlidemenu);
         ivOptionShare.setImageResource(R.drawable.image_option_lock2_red);
         tvOptionShare.setText("Share");
+        View layoutsepreter = optionShare.findViewById(R.id.layoutsepreter);
+        layoutsepreter.setVisibility(View.GONE);
+
+        optionShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Share
+                dialog.dismiss();
+            }
+        });
 
         //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
