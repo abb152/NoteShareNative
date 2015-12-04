@@ -103,7 +103,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		NoteSync noteSync = new NoteSync();
 		//noteSync.localToServer();
-		//noteSync.serverToLocal();
+		noteSync.serverToLocal();
 		//noteSync.localToServer();
 
 
