@@ -1829,29 +1829,25 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     void showTextNoteDialog() {
 
         final Dialog dialog = new Dialog(NoteMainActivity.this);
-
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(R.layout.note_text_style_chooser);
 
-        final LinearLayout layoutPapers = (LinearLayout) dialog
-                .findViewById(R.id.layoutPapers);
-        final LinearLayout layoutColors1 = (LinearLayout) dialog
-                .findViewById(R.id.layoutColors1);
+        final LinearLayout layoutPapers = (LinearLayout) dialog.findViewById(R.id.layoutPapers);
+        //final LinearLayout layoutColors1 = (LinearLayout) dialog.findViewById(R.id.layoutColors1);
         //final ListView ListViewItems = (ListView) dialog
         //.findViewById(R.id.ListViewItems);
 
         //final Button buttonFont = (Button) dialog.findViewById(R.id.buttonFont);
         //final Button buttonSize = (Button) dialog.findViewById(R.id.buttonSize);
-        final Button buttonColors = (Button) dialog.findViewById(R.id.buttonColors);
-        final Button buttonPaper = (Button) dialog.findViewById(R.id.buttonPaper);
+        //final Button buttonColors = (Button) dialog.findViewById(R.id.buttonColors);
+        //final Button buttonPaper = (Button) dialog.findViewById(R.id.buttonPaper);
 
-        layoutPapers.setVisibility(View.GONE);
-        layoutColors1.setVisibility(View.VISIBLE);
+        layoutPapers.setVisibility(View.VISIBLE);
+        //layoutColors1.setVisibility(View.VISIBLE);
 
-        buttonColors.setBackgroundColor(getResources().getColor(
+        /*buttonColors.setBackgroundColor(getResources().getColor(
                 R.color.eaeaea));
         buttonColors.setTextColor(getResources().getColor(
                 R.color.header_bg));
@@ -1874,9 +1870,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 buttonPaper.setTextColor(getResources()
                         .getColor(R.color.ffffff));
             }
-        });
+        });*/
 
-        buttonPaper.setOnClickListener(new OnClickListener() {
+        /*buttonPaper.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
@@ -1895,7 +1891,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         R.color.header_bg));
 
             }
-        });
+        });*/
 
         ImageButton paper_bg_6 = (ImageButton) dialog
                 .findViewById(R.id.paper_bg_6);
@@ -2573,12 +2569,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("NEW DRAWING");
+        textViewTitleAlert.setText("REFRESH PAINTING");
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlertMessage);
         textViewTitleAlertMessage
-                .setText("Clear all?");
+                .setText("Are you sure?");
 
         Button buttonAlertCancel = (Button) contentView
                 .findViewById(R.id.buttonAlertCancel);
