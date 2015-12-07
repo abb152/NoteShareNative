@@ -35,7 +35,7 @@
             android:padding="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_action_delete"
-            android:onClick="deleteFolder"/>
+            android:onClick="editFolder"/>
 
         <ImageButton
             android:id="@+id/btnfolderdelete"
@@ -57,7 +57,7 @@
             android:padding="15dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_action_share"
-            android:onClick="deleteFolder"/>
+            android:onClick="shareFolder"/>
 
     </LinearLayout>
 

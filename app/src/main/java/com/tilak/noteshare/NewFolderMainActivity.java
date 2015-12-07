@@ -103,7 +103,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		NoteSync noteSync = new NoteSync();
 		//noteSync.localToServer();
-		noteSync.serverToLocal();
+		//noteSync.serverToLocal();
 		//noteSync.localToServer();
 
 
@@ -1253,12 +1253,72 @@ public class NewFolderMainActivity extends DrawerActivity {
 		onRestart();
 	}
 
-		public void deleteFolder(View v){
+	public void deleteFolder(View v){
 		String id = v.getTag().toString();
 		tvIdHidden = (TextView) v.findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();
 		//String id = tvIdHidden.getText().toString();
 		showDeleteAlert("Are you sure you want to delete ?", NewFolderMainActivity.this, id);
+	}
+
+	public void editFolder(View v) {
+		String id = v.getTag().toString();
+		showEditAlert(this, id);
+	}
+
+	public void showEditAlert(Context context, final String id) {
+		final Dialog dialog = new Dialog(context);
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		View contentView = inflater.inflate(R.layout.edit_alert_view, null, false);
+		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText("EDIT FOLDER");
+		textViewTitleAlert.setTextColor(Color.WHITE);
+		final EditText textViewTitleAlertMessage = (EditText) contentView.findViewById(R.id.textViewTitleAlertMessage);
+		// textViewTitleAlertMessage.setText(message);
+
+		Folder folder = Folder.findById(Folder.class, Long.parseLong(id));
+		String folderName = folder.getName();
+		textViewTitleAlertMessage.setText(folderName);
+
+		Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
+		Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+		buttonAlertCancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if (textViewTitleAlertMessage.getText().toString().length() > 0) {
+					//updateFolder(textViewTitleAlertMessage.getText().toString());
+					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date date = new Date();
+					String currentDateStr = formatter.format(date);
+					//Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "0", currentDateStr, currentDateStr ,date.getTime(), date.getTime());
+					Folder folder = Folder.findById(Folder.class, Long.parseLong(id));
+					String folderName = textViewTitleAlertMessage.getText().toString();
+					folder.setName(folderName);
+					folder.setModifytime(currentDateStr);
+					folder.save();
+					onRestart();
+					dialog.dismiss();
+				}
+			}
+		});
+		buttonAlertOk.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+				// System.exit(0);
+			}
+		});
+
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(true);
+
+		dialog.setContentView(contentView);
+		dialog.show();
+
 	}
 
 
