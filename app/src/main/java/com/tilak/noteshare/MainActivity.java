@@ -54,6 +54,7 @@ enum SORTTYPE {
 	ALPHABET,
 	COLOURS,
 	CREATED_TIME,
+	CREATED_TIME_DESC,
 	MODIFIED_TIME,
 	REMINDER_TIME,
 	TIME_BOMB
@@ -158,51 +159,50 @@ public class MainActivity extends DrawerActivity {
 
 					//find note
 					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where creationtime != 0 AND title LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
-				}
-				else {
+				} else {
 					sortallnotes = Note.findWithQuery(Note.class, "Select * from Note where creationtime != 0 AND title LIKE ? AND folder = " + folderIdforNotes, "%" + editTextsearchNote.getText().toString() + "%");
 
 				}
-					//Log.e("jay sortall size", String.valueOf(sortallnotes.size()));
+				//Log.e("jay sortall size", String.valueOf(sortallnotes.size()));
 
-					for(int i=0; i < sortallnotes.size(); i++){
-						idList.add(sortallnotes.get(i).getId());
-						//Log.e("jay sortall id", String.valueOf(sortallnotes.get(i).getId()));
+				for (int i = 0; i < sortallnotes.size(); i++) {
+					idList.add(sortallnotes.get(i).getId());
+					//Log.e("jay sortall id", String.valueOf(sortallnotes.get(i).getId()));
+				}
+
+				// find elements
+				List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "Select DISTINCT NOTEID from NOTE_ELEMENT where content_A LIKE ?", "%" + editTextsearchNote.getText().toString() + "%");
+				//Log.e("jay ne size", String.valueOf(ne.size()));
+				for (int i = 0; i < ne.size(); i++) {
+					idList.add(ne.get(i).getNoteid());
+					//Log.e("jay ne id", String.valueOf(ne.get(i).getNoteid()));
+				}
+
+				//get only unique ids using set
+				Set<Long> set = new HashSet<Long>(idList);
+				//Log.e("jay set size", String.valueOf(set.size()));
+				sortallnotes.clear();
+
+				//convert set to list and add notes into sortallnotes
+				List<Long> list;// = new ArrayList<Long>();
+
+				if (folderIdforNotes == null || folderIdforNotes.equals("-1")) {
+					list = new ArrayList<Long>(set);
+				} else {
+					List<Note> notes = Note.findWithQuery(Note.class, "Select * from Note where creationtime != 0 AND folder = " + folderIdforNotes);
+					List<Long> folderId = new ArrayList<Long>();
+					for (int i = 0; i < notes.size(); i++) {
+						folderId.add(notes.get(i).getId());
 					}
-
-					// find elements
-					List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "Select DISTINCT NOTEID from NOTE_ELEMENT where content_A LIKE ?", "%" + editTextsearchNote.getText().toString() + "%" );
-					//Log.e("jay ne size", String.valueOf(ne.size()));
-					for(int i=0; i < ne.size(); i++){
-						idList.add(ne.get(i).getNoteid());
-						//Log.e("jay ne id", String.valueOf(ne.get(i).getNoteid()));
-					}
-
-					//get only unique ids using set
-					Set<Long> set = new HashSet<Long>(idList);
-					//Log.e("jay set size", String.valueOf(set.size()));
-					sortallnotes.clear();
-
-					//convert set to list and add notes into sortallnotes
-					List<Long> list;// = new ArrayList<Long>();
-
-					if(folderIdforNotes == null || folderIdforNotes.equals("-1")){
-						list = new ArrayList<Long>(set);
-					}else{
-						List<Note> notes = Note.findWithQuery(Note.class,"Select * from Note where creationtime != 0 AND folder = " + folderIdforNotes);
-						List<Long> folderId = new ArrayList<Long>();
-						for(int i =0; i < notes.size(); i++){
-							folderId.add(notes.get(i).getId());
-						}
-						Set<Long> folderSet = new HashSet<Long>();
-						folderSet.addAll(folderId);
-						set.retainAll(folderSet);
-						list = new ArrayList<Long>(set);
-					}
+					Set<Long> folderSet = new HashSet<Long>();
+					folderSet.addAll(folderId);
+					set.retainAll(folderSet);
+					list = new ArrayList<Long>(set);
+				}
 
 				//List<Long> list = new ArrayList<Long>(set);
 
-				for(int i=0; i < list.size(); i++){
+				for (int i = 0; i < list.size(); i++) {
 					sortallnotes.add(Note.findById(Note.class, list.get(i).longValue()));
 					Log.e("jay list id", String.valueOf(list.get(i).longValue()));
 				}
@@ -360,6 +360,13 @@ public class MainActivity extends DrawerActivity {
 		case CREATED_TIME:
 		{
 			Collections.sort(sortallnotes, new creationTimeComparator());
+			putInList();
+			swipeListView();
+		}
+			break;
+		case CREATED_TIME_DESC:
+		{
+			Collections.sort(sortallnotes, new creationTimeComparatorDesc());
 			putInList();
 			swipeListView();
 		}
@@ -551,6 +558,8 @@ public class MainActivity extends DrawerActivity {
 
     /******* bottom sorting menu start *******/
 
+	String creationSort = "1";
+
 	public void showActionSheet_sort(View v) {
 
 		final Dialog myDialog = new Dialog(MainActivity.this,
@@ -600,12 +609,13 @@ public class MainActivity extends DrawerActivity {
 
 		LinearLayout layoutGrid = (LinearLayout) myDialog
 				.findViewById(R.id.layoutGrid);
-		TextView layoutGridTextView = (TextView) layoutGrid
+		final TextView layoutGridTextView = (TextView) layoutGrid
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutGridImageView = (ImageView) layoutGrid
 				.findViewById(R.id.imageViewSlidemenu);
 		layoutGridImageView.setImageResource(R.drawable.ic_sort_creation);
 		layoutGridTextView.setText("Created Time");
+		layoutGridTextView.setTag(creationSort);
 
 
 		LinearLayout layoutListReminderTime = (LinearLayout) myDialog
@@ -631,13 +641,19 @@ public class MainActivity extends DrawerActivity {
 		layoutListTextViewTimeBomb.setText("Time Bomb");
 
 		layoutGridTextView.setOnClickListener(new OnClickListener() {
-
 			@Override
-			public void onClick(View arg0) {
-				Toast.makeText(getApplicationContext(), "Created Time",
-						Toast.LENGTH_SHORT).show();
-				sortType = SORTTYPE.CREATED_TIME;
-				con.setSort(SORTTYPE.CREATED_TIME.name());
+			public void onClick(View v) {
+				if (creationSort.equals("1")) {
+					sortType = SORTTYPE.CREATED_TIME;
+					con.setSort(SORTTYPE.CREATED_TIME.name());
+					Toast.makeText(getApplicationContext(), "Created Time Ascending", Toast.LENGTH_SHORT).show();
+					creationSort = "0";
+				} else {
+					sortType = SORTTYPE.CREATED_TIME_DESC;
+					con.setSort(SORTTYPE.CREATED_TIME_DESC.name());
+					Toast.makeText(getApplicationContext(), "Created Time Descending", Toast.LENGTH_SHORT).show();
+					creationSort = "1";
+				}
 				con.save();
 				sortingArray();
 				myDialog.dismiss();
@@ -645,11 +661,9 @@ public class MainActivity extends DrawerActivity {
 		});
 
 		layoutPintrestTextView.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-				Toast.makeText(getApplicationContext(), "Modified Time",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Modified Time", Toast.LENGTH_SHORT).show();
 				sortType=SORTTYPE.MODIFIED_TIME;
 				con.setSort(SORTTYPE.MODIFIED_TIME.name());
 				con.save();
@@ -659,12 +673,10 @@ public class MainActivity extends DrawerActivity {
 		});
 
 		layoutDetailTextView.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 
-				Toast.makeText(getApplicationContext(), "Colours",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Colours", Toast.LENGTH_SHORT).show();
 				sortType=SORTTYPE.COLOURS;
 				con.setSort(SORTTYPE.COLOURS.name());
 				con.save();
@@ -674,7 +686,6 @@ public class MainActivity extends DrawerActivity {
 		});
 
 		layoutListTextView.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 //
@@ -682,36 +693,30 @@ public class MainActivity extends DrawerActivity {
 				con.setSort(SORTTYPE.ALPHABET.name());
 				con.save();
 				sortingArray();
-				Toast.makeText(getApplicationContext(), "Alphabetical",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Alphabetical", Toast.LENGTH_SHORT).show();
 				myDialog.dismiss();
 			}
 		});
 
 		layoutListTextViewTimeBomb.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				sortType=SORTTYPE.TIME_BOMB;
 				con.setSort(SORTTYPE.TIME_BOMB.name());
 				con.save();
 				sortingArray();
-				Toast.makeText(getApplicationContext(), "Time Bomb",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Time Bomb", Toast.LENGTH_SHORT).show();
 				myDialog.dismiss();
 			}
 		});
 
-		layoutListTextViewReminderTime
-				.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						Toast.makeText(getApplicationContext(),
-								"Reminder Time", Toast.LENGTH_SHORT).show();
-						myDialog.dismiss();
-					}
-				});
+		layoutListTextViewReminderTime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "Reminder Time", Toast.LENGTH_SHORT).show();
+				myDialog.dismiss();
+			}
+		});
 
 		buttonDissmiss.setOnClickListener(new OnClickListener() {
 			@Override
@@ -1177,6 +1182,23 @@ public class MainActivity extends DrawerActivity {
 			}
 			finally {
 				return c1.getCreationtime().compareTo(c2.getCreationtime());
+			}
+		}
+	}
+	class creationTimeComparatorDesc implements Comparator<Note> {
+
+		public int compare(Note c1, Note c2) {
+			try{
+				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String creationtime1 = c1.getCreationtime();
+				Date creation1 = formatter.parse(creationtime1);
+				String creationtime2 = c2.getCreationtime();
+				Date creation2 = formatter.parse(creationtime2);
+				return creationtime1.compareTo(creationtime2);
+			}catch (Exception e) {
+			}
+			finally {
+				return c2.getCreationtime().compareTo(c1.getCreationtime());
 			}
 		}
 	}
