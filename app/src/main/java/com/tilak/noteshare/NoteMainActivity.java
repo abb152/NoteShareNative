@@ -1189,15 +1189,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteelementid[0]);
 
                         if (tag.equals("1")) {
-                            checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+                            checklist_icon.setImageResource(R.drawable.ic_checkbox_uncheck);
                             ne.setContentA("false");
                             checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                             v.setTag("0");
                         } else {
-                            checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+                            checklist_icon.setImageResource(R.drawable.ic_checkbox_check);
                             ne.setContentA("true");
                             checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
                             v.setTag("1");
                         }
                         ne.save();
@@ -1254,7 +1253,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio_recording);
                     final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
                     audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
-                    audio_play.setImageResource(R.drawable.recording_status);
+                    audio_play.setImageResource(R.drawable.ic_audio_record);
                     final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
 
                     final ImageView audio_stop = (ImageView) viewAudio.findViewById(R.id.audio_stop);
@@ -1290,7 +1289,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             startTime = SystemClock.uptimeMillis();
                             myHandler.postDelayed(updateTimerMethod, 0);
                             Toast.makeText(NoteMainActivity.this, "Recording started", Toast.LENGTH_SHORT).show();
-                            audio_play.setImageResource(R.drawable.pause_audio);
+                            audio_play.setImageResource(R.drawable.ic_audio_pause);
                             audio_play.startAnimation(AnimationUtils.loadAnimation(NoteMainActivity.this, R.anim.animation_pulse));
                             recordingPlay = true;
                         }
@@ -1314,7 +1313,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         timeSwap += timeInMillies;
                                         myHandler.removeCallbacks(updateTimerMethod);
                                         Toast.makeText(NoteMainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
-                                        audio_play.setImageResource(R.drawable.recording_status);
+                                        audio_play.setImageResource(R.drawable.ic_audio_record);
                                         audio_play.clearAnimation();
                                         recordingPlay = false;
                                     }
@@ -1333,7 +1332,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         startTime = SystemClock.uptimeMillis();
                                         myHandler.postDelayed(updateTimerMethod, 0);
                                         Toast.makeText(NoteMainActivity.this, "Play again", Toast.LENGTH_SHORT).show();
-                                        audio_play.setImageResource(R.drawable.pause_audio);
+                                        audio_play.setImageResource(R.drawable.ic_audio_pause);
                                         audio_play.startAnimation(AnimationUtils.loadAnimation(NoteMainActivity.this, R.anim.animation_pulse));
                                         recordingPlay = true;
                                     }
@@ -3055,9 +3054,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         public void onClick(View v) {
                             if (mp.isPlaying()) {
                                 mp.pause();
-                                audio_play.setImageResource(R.drawable.play_audio);
+                                audio_play.setImageResource(R.drawable.ic_audio_play);
                             } else {
-                                audio_play.setImageResource(R.drawable.pause_audio);
+                                audio_play.setImageResource(R.drawable.ic_audio_pause);
                                 mp.start();
                                 audio_seek.setMax(mp.getDuration() / 1000);
                                 final Handler mHandler = new Handler();
@@ -3082,7 +3081,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                 mp.setOnCompletionListener(new OnCompletionListener() {
                                     @Override
                                     public void onCompletion(MediaPlayer mp) {
-                                        audio_play.setImageResource(R.drawable.play_audio);
+                                        audio_play.setImageResource(R.drawable.ic_audio_play);
                                     }
                                 });
                             }
@@ -3115,11 +3114,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     noteElements.addView(checkbox);
 
                     if (status) {
-                        checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+                        checklist_icon.setImageResource(R.drawable.ic_checkbox_check);
                         checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     }
                     else {
-                        checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+                        checklist_icon.setImageResource(R.drawable.ic_checkbox_uncheck);
                         checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     }
 
@@ -3156,12 +3155,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         public void onClick(View v) {
                             String tag = v.getTag().toString();
                             if (tag.equals("1")) {
-                                checklist_icon.setImageResource(R.drawable.checkbox_uncheck_sq);
+                                checklist_icon.setImageResource(R.drawable.ic_checkbox_uncheck);
                                 n.setContentA("false");
                                 checklist_text.setPaintFlags(checklist_text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                                 v.setTag("0");
                             } else {
-                                checklist_icon.setImageResource(R.drawable.checkbox_check_sq);
+                                checklist_icon.setImageResource(R.drawable.ic_checkbox_check);
                                 n.setContentA("true");
                                 checklist_text.setPaintFlags(checklist_text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                                 v.setTag("1");

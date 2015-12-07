@@ -21,13 +21,16 @@
 
         <ImageButton
             android:id="@+id/imageButtonHamburg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@android:color/transparent"
-            android:padding="5dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
             android:layout_marginRight="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/menu_hamburg" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_hamburg" />
 
         <ImageView
             android:layout_width="80dp"
@@ -60,11 +63,11 @@
                 android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:padding="10dp"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
+                android:scaleType="fitEnd"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/search_icon_white"
-                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_search"
                 android:onClick="searchSlide"/>
         </LinearLayout>
     </LinearLayout>

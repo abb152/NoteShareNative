@@ -15,9 +15,9 @@
             android:id="@+id/audio_play"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:padding="5dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/play_audio" />
+            android:src="@drawable/ic_audio_play" />
 
         <SeekBar
             android:id="@+id/audio_seek"

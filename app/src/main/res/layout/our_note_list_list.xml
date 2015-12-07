@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_action_reminder"
+                android:src="@drawable/ic_action_remind"
                 android:onClick="remind"/>
 
             <ImageButton
@@ -94,6 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
+            android:visibility="gone"
             android:gravity="center_vertical">
 
             <TextView
