@@ -32,9 +32,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:padding="15dp"
+            android:padding="5dp"
+            android:scaleType="centerInside"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_action_delete"
+            android:src="@drawable/ic_action_edit"
             android:onClick="editFolder"/>
 
         <ImageButton
