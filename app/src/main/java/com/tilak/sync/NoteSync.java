@@ -1,8 +1,11 @@
 package com.tilak.sync;
 
+import android.os.Environment;
 import android.util.Log;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -15,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -156,7 +160,7 @@ public class NoteSync {
 
                     switch (funcType) {
                         case CREATE:
-                            if(timebomb.equals("0"))
+                            if (timebomb.equals("0"))
                                 timebomb = "";
 
                             try {
@@ -164,7 +168,7 @@ public class NoteSync {
                                 createNote.save();
                                 serverToLocalNoteElementsNew(noteElement, createNote.getId());
                                 Log.e("jay created ***", String.valueOf(createNote.getId()));
-                            }catch(ParseException pe){
+                            } catch (ParseException pe) {
                                 Log.e("jay parseexception", Log.getStackTraceString(pe));
                             }
 
@@ -173,14 +177,14 @@ public class NoteSync {
                         case DELETE:
                             List<Note> deleteNote = Note.findWithQuery(Note.class, "Select * from NOTE where serverid LIKE ?", id);
 
-                            if(deleteNote.size() == 0)
-                                Log.e("jay already not there","***");
+                            if (deleteNote.size() == 0)
+                                Log.e("jay already not there", "***");
                             else {
                                 deleteNoteElements(deleteNote.get(0).getId());
                                 deleteNote.get(0).delete();
                             }
 
-                            Log.e("jay deleted","***");
+                            Log.e("jay deleted", "***");
                             break;
                         case EDIT:
                             List<Note> editNote = Note.findWithQuery(Note.class, "Select * from NOTE where serverid LIKE ?", id);
@@ -382,32 +386,6 @@ public class NoteSync {
         }
     }
 
-    /*public void serverToLocalNoteElementsEdit(JSONArray noteElements, long noteid){
-        String content, contentA, contentB, type, isSync = "yes";
-        int ordernumber;
-
-        if (noteElements.length() > 0) {
-
-            for (int j = 0; j < noteElements.length(); j++) {
-                try {
-                    JSONObject jsonObject = noteElements.getJSONObject(j);
-
-                    content = jsonObject.get("content").toString();
-                    contentA = jsonObject.get("contentA").toString();
-                    contentB = jsonObject.get("contentB").toString();
-                    type = jsonObject.get("type").toString();
-                    ordernumber = Integer.parseInt(jsonObject.get("order").toString());
-
-                    NoteElement noteElement = new NoteElement(noteid, ordernumber, isSync, type, content, contentA, contentB);
-                    noteElement.save();
-
-                } catch (JSONException je) {
-                    je.printStackTrace();
-                }
-            }
-        }
-    }*/
-
     public void deleteNoteElements(long noteId) {
         List<NoteElement> noteElements = NoteElement.findWithQuery(NoteElement.class, "Select * from NOTE_ELEMENT where noteid = ?", String.valueOf(noteId));
         if (noteElements.size() > 0) {
@@ -416,6 +394,75 @@ public class NoteSync {
                 Log.e("jay deleted noteelement", "");
             }
         }
+    }
+
+    public void upload() throws IOException {
+
+        /*//MediaType ANY_IMAGE_TYPE = MediaType.
+        MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpg");
+
+        OkHttpClient client = new OkHttpClient();
+
+        client.setConnectTimeout(15, TimeUnit.SECONDS);
+        client.setReadTimeout(15, TimeUnit.SECONDS);
+        client.setWriteTimeout(15, TimeUnit.SECONDS);
+
+        //File file = new File("README.md");
+        String name = "IMG_565fdeeef4855bb94d302da4_1449147126212_7060.jpg";
+        File file = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+
+        Request request = new Request.Builder()
+                .url(SERVER_URL + "user/mediaupload")
+                .post(RequestBody.create(MediaType.parse("image/jpeg"), file))
+                .build();
+
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        System.out.println(response.body().string());
+        if (response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        Log.e("jay successful", "");*/
+
+        try {
+            String name = "AUD_565fdeeef4855bb94d302da4_1449147133388_3161.m4a";
+            File file = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+
+            RequestBody requestBody = new MultipartBuilder()
+                    .type(MultipartBuilder.FORM)
+                    .addFormDataPart("file", file.getName(),
+                            RequestBody.create(MediaType.parse("audio/m4a"), file))
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(SERVER_URL +"user/mediaupload")
+                    .post(requestBody)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    // Handle the error
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        // Handle the error
+                        Log.e("jay not successful","");
+                    }
+                    else{
+                        Log.e("jay successful","");
+                    }
+                    // Upload successful
+                }
+            });
+
+        } catch (Exception ex) {
+            // Handle the error
+
+            Log.e("jay exception", Log.getStackTraceString(ex));
+        }
+
     }
 
 }
