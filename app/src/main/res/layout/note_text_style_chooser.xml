@@ -205,6 +205,16 @@
                     android:layout_weight="1"
                     android:background="#d0d0d0"
                     android:tag="#d0d0d0" />
+
+                <ImageButton
+                    android:id="@+id/color_bg_11"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:tag="#FFFFFF" />
             </LinearLayout>
         </LinearLayout>
 

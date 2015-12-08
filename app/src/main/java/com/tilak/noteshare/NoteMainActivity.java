@@ -1948,6 +1948,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
 
+        ImageButton color_bg_11 = (ImageButton) dialog
+                .findViewById(R.id.color_bg_11);
         ImageButton color_bg_10 = (ImageButton) dialog
                 .findViewById(R.id.color_bg_10);
         ImageButton color_bg_9 = (ImageButton) dialog
@@ -1969,6 +1971,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         ImageButton color_bg_1 = (ImageButton) dialog
                 .findViewById(R.id.color_bg_1);
 
+        color_bg_11.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorButtonSelected(v);
+                dialog.dismiss();
+            }
+        });
         color_bg_10.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
