@@ -1101,6 +1101,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
                 final ImageButton checklistDelete = (ImageButton) viewChecklist.findViewById(R.id.deleteCheckbox);
 
+                checklist_icon.setImageResource(R.drawable.ic_checkbox_uncheck);
+
                 allDelete.add(checklistDelete);
 
                 checklistDelete.setOnClickListener(new OnClickListener() {
@@ -1631,8 +1633,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 
                 editor.focusEditor();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT);
+                //editor.clearFocus();
+                //editor.focusEditor();
+
+
+                //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                //imm.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT);
+
+                //editor.focusEditor();
 
                 // TODO editor up
                 editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
