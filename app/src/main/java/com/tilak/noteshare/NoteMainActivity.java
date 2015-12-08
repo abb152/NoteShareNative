@@ -28,6 +28,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -711,16 +712,31 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     bottommenue.setVisibility(View.VISIBLE);
                 } else {*/
 
-                    drawingControls.setVisibility(View.GONE);
-                    layOutDrawingView.setVisibility(View.GONE);
+                drawingControls.setVisibility(View.GONE);
+                layOutDrawingView.setVisibility(View.GONE);
 
-                    isPaintMode = false;
-                    imageButtonHamburg.setVisibility(View.VISIBLE);
-                    imageButtoncalander.setVisibility(View.GONE);
-                    imageButtonsquence.setVisibility(View.VISIBLE);
-                    imageButtoncheckbox.setVisibility(View.VISIBLE);
-                    bottommenue.setVisibility(View.VISIBLE);
-                    updateButtonUI(-1);
+                isPaintMode = false;
+                imageButtonHamburg.setVisibility(View.VISIBLE);
+                imageButtoncalander.setVisibility(View.GONE);
+                imageButtonsquence.setVisibility(View.VISIBLE);
+                imageButtoncheckbox.setVisibility(View.VISIBLE);
+                bottommenue.setVisibility(View.VISIBLE);
+                updateButtonUI(-1);
+
+                drawView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        int x = (int) event.getX();
+                        int y = (int) event.getX();
+
+
+                        Log.e("jay x", String.valueOf(x));
+                        Log.e("jay y", String.valueOf(y));
+
+                        return false;
+                    }
+                });
+
                 //}
 
             }
@@ -1013,7 +1029,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                 if (textelementid.size() > 0) {
                     textelementid.get(0).clearFocus();
-
                 }
                 if (allCheckboxText.size() > 0) {
                     allCheckboxText.get(0).clearFocus();
@@ -1262,6 +1277,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     NoteElement ne = null;
                     //long noteElementId = 0;
                     isRecordingAudio = true;
+                    startTime = 0L;
+                    timeSwap = 0L;
+                    finalTime = 0L;
 
                     final TextView record_text = (TextView) viewAudio.findViewById(R.id.record_text);
 
@@ -1359,7 +1377,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         // paused
                                         timeSwap += timeInMillies;
                                         myHandler.removeCallbacks(updateTimerMethod);
+                                        audio_play.setImageResource(R.drawable.ic_audio_record);
+                                        audio_play.clearAnimation();
                                         recordingPlay = false;
+
+                                        saveRecording();
                                         //Toast.makeText(getApplicationContext(),"Paused and Stop",Toast.LENGTH_SHORT).show();
                                     }
 
@@ -1369,16 +1391,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                     }
                                 });
                             }
-                            if (!recordingPlay) {
-                                isRecordingAudio = false;
-                                NoteElement noteElement = NoteElement.findById(NoteElement.class, noteElementId);
-                                noteElement.setContentA("true");
-                                noteElement.save();
-                                modifyNoteTime();
-                                Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
 
-                                audioElement.removeAllViews();
-                                onResume();
+                            if (!recordingPlay) {
+                                saveRecording();
                             }
 
                         }
@@ -2085,6 +2100,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         layoutHighlight.setVisibility(View.GONE);
         layoutBrush.setVisibility(View.GONE);
         layoutEraser.setVisibility(View.GONE);
+
 
         if (name.equals("highlight"))
             layoutHighlight.setVisibility(View.VISIBLE);
@@ -2903,11 +2919,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                             if (height[0] < editor.getHeight()) {
                                 height[0] = editor.getHeight();
-                                scrollView.setScrollY(scrollView.getScrollY() + 30);
+                                scrollView.setScrollY(scrollView.getScrollY() + 50);
                             }
                             if (height[0] > editor.getHeight()){
                                 height[0] = editor.getHeight();
-                                scrollView.setScrollY(scrollView.getScrollY() - 25);
+                                scrollView.setScrollY(scrollView.getScrollY() - 45);
                             }
                         }
                     });
@@ -3205,6 +3221,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                 }
             }
+
+            noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
+            int px = pxFromDp(this,1500);
+            noteScribbleElements.setPadding(0,0,0,px);
+            //LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
+            //View viewImage = inflator.inflate(R.layout.note_image, null, false);
         }
     }
 
@@ -3327,11 +3349,17 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
             int top = scrollView.getScrollY();
 
+            if(isRecordingAudio){
+                int px = pxFromDp(this,80); //70 dp for recording and rest 10 for blank space
+                top = top - px;
+            }
+
             NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails),getNoteElementOrderNumber(),"Yes","scribble", fileName,String.valueOf(top),"");
             noteElement.save();
             modifyNoteTime();
             drawView.destroyDrawingCache();
             drawView.setUserDrawn(false);
+            drawView.startNew();
             onResume();
 
         } else {
@@ -3346,6 +3374,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void onClick(View v) {
 
     }
+    public int pxFromDp(final Context context, final float dp) {
+        return (int) (dp * context.getResources().getDisplayMetrics().density);
+    }
+
+    public int dpFromPx(final Context context, final float px) {
+        return (int) (px / context.getResources().getDisplayMetrics().density);
+    }
 
     public int getNoteElementOrderNumber(){
         int lastNumber=0;
@@ -3354,5 +3389,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             return lastNumber = (ne.get(ne.size()-1).getOrderNumber()) + 1;
         else
             return 1;
+    }
+
+    public void saveRecording(){
+        isRecordingAudio = false;
+        NoteElement noteElement = NoteElement.findById(NoteElement.class, noteElementId);
+        noteElement.setContentA("true");
+        noteElement.save();
+        modifyNoteTime();
+        Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
+
+        startTime = 0L;
+        audioElement.removeAllViews();
+        onResume();
     }
 }

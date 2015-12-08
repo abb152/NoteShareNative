@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +28,9 @@ public class DrawingView extends View {
 	private Canvas drawCanvas;
 	// canvas bitmap
 	private Bitmap canvasBitmap;
+
+	private float minY, maxY;
+	private boolean initial = true;
 
 	public DrawingView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -96,6 +100,11 @@ public class DrawingView extends View {
 		
 		float touchX = event.getX();
 		float touchY = event.getY();
+		//Log.e("jay x", String.valueOf(touchX));
+		//Log.e("jay y", String.valueOf(touchY));
+
+		setXY(touchX,touchY);
+
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 		    drawPath.moveTo(touchX, touchY);
@@ -177,5 +186,35 @@ public class DrawingView extends View {
 	public void setUserDrawn(boolean isDraw)
 	{
 		 isDrawn=isDraw;
+	}
+
+	public void setXY(float x, float y){
+		if(!initial){
+			if(y < minY)
+				minY = y;
+			if(y > maxY)
+				maxY = y;
+
+		}else{
+			minY = y;
+			maxY = y;
+			initial = false;
+		}
+
+		Log.e("jay min Y", String.valueOf(minY));
+		Log.e("jay max Y", String.valueOf(maxY));
+	}
+
+	public float getMinY(){
+		return minY;
+	}
+	public float getMaxY(){
+		return maxY;
+	}
+
+	public void resetXY(){
+		minY = 0;
+		maxY = 0;
+		initial = true;
 	}
 }

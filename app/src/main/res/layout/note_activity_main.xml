@@ -50,10 +50,10 @@
                 android:padding="10dp">
             </LinearLayout>
 
-            <Space
+            <!--<Space
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:layout_below="@+id/noteElements"/>
+                android:layout_below="@+id/noteElements"/>-->
 
         </RelativeLayout>
     </ScrollView>
