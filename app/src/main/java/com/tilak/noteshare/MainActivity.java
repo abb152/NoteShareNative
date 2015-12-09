@@ -54,7 +54,6 @@ enum SORTTYPE {
 	ALPHABET,
 	COLOURS,
 	CREATED_TIME,
-	CREATED_TIME_DESC,
 	MODIFIED_TIME,
 	REMINDER_TIME,
 	TIME_BOMB
@@ -364,13 +363,6 @@ public class MainActivity extends DrawerActivity {
 			swipeListView();
 		}
 			break;
-		case CREATED_TIME_DESC:
-		{
-			Collections.sort(sortallnotes, new creationTimeComparatorDesc());
-			putInList();
-			swipeListView();
-		}
-			break;
 		case MODIFIED_TIME:
 		{
 			Collections.sort(sortallnotes, new modifiedTimeComparator());
@@ -558,8 +550,6 @@ public class MainActivity extends DrawerActivity {
 
     /******* bottom sorting menu start *******/
 
-	String creationSort = "1";
-
 	public void showActionSheet_sort(View v) {
 
 		final Dialog myDialog = new Dialog(MainActivity.this,
@@ -609,14 +599,12 @@ public class MainActivity extends DrawerActivity {
 
 		LinearLayout layoutGrid = (LinearLayout) myDialog
 				.findViewById(R.id.layoutGrid);
-		final TextView layoutGridTextView = (TextView) layoutGrid
+		TextView layoutGridTextView = (TextView) layoutGrid
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutGridImageView = (ImageView) layoutGrid
 				.findViewById(R.id.imageViewSlidemenu);
 		layoutGridImageView.setImageResource(R.drawable.ic_sort_creation);
 		layoutGridTextView.setText("Created Time");
-		layoutGridTextView.setTag(creationSort);
-
 
 		LinearLayout layoutListReminderTime = (LinearLayout) myDialog
 				.findViewById(R.id.layoutReminderTime);
@@ -643,18 +631,10 @@ public class MainActivity extends DrawerActivity {
 		layoutGridTextView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (creationSort.equals("1")) {
-					sortType = SORTTYPE.CREATED_TIME;
-					con.setSort(SORTTYPE.CREATED_TIME.name());
-					Toast.makeText(getApplicationContext(), "Created Time Ascending", Toast.LENGTH_SHORT).show();
-					creationSort = "0";
-				} else {
-					sortType = SORTTYPE.CREATED_TIME_DESC;
-					con.setSort(SORTTYPE.CREATED_TIME_DESC.name());
-					Toast.makeText(getApplicationContext(), "Created Time Descending", Toast.LENGTH_SHORT).show();
-					creationSort = "1";
-				}
+				sortType = SORTTYPE.CREATED_TIME;
+				con.setSort(SORTTYPE.CREATED_TIME.name());
 				con.save();
+				Toast.makeText(getApplicationContext(), "Created Time", Toast.LENGTH_SHORT).show();
 				sortingArray();
 				myDialog.dismiss();
 			}
@@ -1190,23 +1170,6 @@ public class MainActivity extends DrawerActivity {
 			}
 			finally {
 				return c1.getCreationtime().compareTo(c2.getCreationtime());
-			}
-		}
-	}
-	class creationTimeComparatorDesc implements Comparator<Note> {
-
-		public int compare(Note c1, Note c2) {
-			try{
-				SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String creationtime1 = c1.getCreationtime();
-				Date creation1 = formatter.parse(creationtime1);
-				String creationtime2 = c2.getCreationtime();
-				Date creation2 = formatter.parse(creationtime2);
-				return creationtime1.compareTo(creationtime2);
-			}catch (Exception e) {
-			}
-			finally {
-				return c2.getCreationtime().compareTo(c1.getCreationtime());
 			}
 		}
 	}
