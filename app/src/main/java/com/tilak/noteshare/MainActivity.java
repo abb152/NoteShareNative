@@ -881,8 +881,6 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.colorbutton9);
 		ImageButton colorbutton10 = (ImageButton) paintLayout1
 				.findViewById(R.id.colorbutton10);
-		ImageButton colorbutton11 = (ImageButton) paintLayout1
-				.findViewById(R.id.colorbutton11);
 
 		colorbutton1.setOnClickListener(new OnClickListener() {
 
@@ -954,12 +952,6 @@ public class MainActivity extends DrawerActivity {
 		});
 		colorbutton10.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				paintClicked(v, nid);
-			}
-		});
-		colorbutton11.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				paintClicked(v, nid);
@@ -1290,12 +1282,12 @@ public class MainActivity extends DrawerActivity {
 		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		Note n = Note.findById(Note.class, Long.parseLong(id));
-		if (n.getIslocked() == 0){
+		/*if (n.getIslocked() == 0){
 			n.islocked = 1;
 			n.save();
 			onRestart();
 		}
-		else
+		else*/
 			noteFunctions.setPasscode(getApplicationContext(), id);
 	}
 

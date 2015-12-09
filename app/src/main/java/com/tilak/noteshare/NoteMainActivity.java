@@ -1057,6 +1057,19 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     drawingControls.setVisibility(View.GONE);
                 }
 
+                if(isDeleteModeSelected){
+
+                    imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+                    for (int i = 0; i < allDelete.size(); i++) {
+                        try {
+                            allDelete.get(i).setVisibility(View.GONE);
+                        }catch(NullPointerException npe){
+                            Log.e("jay ", Log.getStackTraceString(npe));
+                        }
+                    }
+                    isDeleteModeSelected = false;
+                }
+
                 //drawView.startNew();
                 /*drawView.setVisibility(View.GONE);
                 drawingControls.setVisibility(View.GONE);*/
@@ -1253,6 +1266,20 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 deleteButton();
+
+                drawingControls.setVisibility(View.GONE);
+                layout_note_more_Info.setVisibility(View.GONE);
+                //isMoreShown = false;
+                layout_audio_notechooser.setVisibility(View.GONE);
+                horizontal_scroll_editor.setVisibility(View.GONE);
+
+                bottommenue.setVisibility(View.GONE);
+                imageButtonHamburg.setVisibility(View.GONE);
+                imageButtoncalander.setVisibility(View.VISIBLE);
+                imageButtonsquence.setVisibility(View.GONE);
+                imageButtoncheckbox.setVisibility(View.GONE);
+
+
             }
         });
 
@@ -1277,7 +1304,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                     final ImageView audio_stop = (ImageView) viewAudio.findViewById(R.id.audio_stop);
 
-                    allDelete.add(audioDelete);
+                    //allDelete.add(audioDelete);
                     NoteElement ne = null;
                     //long noteElementId = 0;
                     isRecordingAudio = true;
@@ -1973,8 +2000,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
 
-        ImageButton color_bg_11 = (ImageButton) dialog
-                .findViewById(R.id.color_bg_11);
         ImageButton color_bg_10 = (ImageButton) dialog
                 .findViewById(R.id.color_bg_10);
         ImageButton color_bg_9 = (ImageButton) dialog
@@ -1996,13 +2021,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         ImageButton color_bg_1 = (ImageButton) dialog
                 .findViewById(R.id.color_bg_1);
 
-        color_bg_11.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorButtonSelected(v);
-                dialog.dismiss();
-            }
-        });
         color_bg_10.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2019,20 +2037,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         color_bg_8.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorButtonSelected(v);
-                dialog.dismiss();
-            }
-        });
-        color_bg_7.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorButtonSelected(v);
-                dialog.dismiss();
-            }
-        });
-        color_bg_6.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 colorButtonSelected(v);
@@ -3022,21 +3026,21 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 					noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
 					LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
 					View viewImage = inflator.inflate(R.layout.note_image, null, false);
-					RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
+					final RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
 					ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
 
 					String name = n.content;
 
-                    /*ImageView scribble_delete= (ImageView) note_image.findViewById(R.id.deleteImage);
+                    ImageView scribble_delete= (ImageView) note_image.findViewById(R.id.deleteScribbleImage);
                     allDelete.add(scribble_delete);
                     scribble_delete.setTag(n.getId());
 
                     scribble_delete.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this, note_image);
                         }
-                    });*/
+                    });
 
 					File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + name);
 					Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
@@ -3083,6 +3087,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+                    String totalAudioDuration = getDurationBreakdown(mp.getDuration());
+                    audio_text.setText("00:00:00/"+totalAudioDuration);
+
                     // Audio Play
                     audio_play.setOnClickListener(new OnClickListener() {
                         @Override
@@ -3286,19 +3294,32 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 
     public void deleteButton() {
-        if (!isDeleteModeSelected) {
-            imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-            for (int i = 0; i < allDelete.size(); i++) {
-                allDelete.get(i).setVisibility(View.VISIBLE);
+        /*if(isRecordingAudio){
+            Toast.makeText(getApplication(),"Oops can't delete while recording is on.", Toast.LENGTH_LONG).show();
+        }else{*/
+            if (!isDeleteModeSelected) {
+                imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+                for (int i = 0; i < allDelete.size(); i++) {
+                    Log.e("jay i", String.valueOf(i));
+                    try {
+                        allDelete.get(i).setVisibility(View.VISIBLE);
+                    }catch(NullPointerException npe){
+                        Log.e("jay ", Log.getStackTraceString(npe));
+                    }
+                }
+                isDeleteModeSelected = true;
+            } else {
+                imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+                for (int i = 0; i < allDelete.size(); i++) {
+                    try {
+                        allDelete.get(i).setVisibility(View.GONE);
+                    }catch(NullPointerException npe){
+                        Log.e("jay ", Log.getStackTraceString(npe));
+                    }
+                }
+                isDeleteModeSelected = false;
             }
-            isDeleteModeSelected = true;
-        } else {
-            imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
-            for (int i = 0; i < allDelete.size(); i++) {
-                allDelete.get(i).setVisibility(View.GONE);
-            }
-            isDeleteModeSelected = false;
-        }
+        //}
     }
 
     public String getPlainText(String htmlText){

@@ -101,7 +101,7 @@ public class PasscodeActivity extends DrawerActivity {
                 } else {
                     shake();
                     clearBox();
-                    t.setText("Enter Valid Passcode to Open file.");
+                    t.setText("Invalid Passcode");
                     //Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
                 }
             }
@@ -120,7 +120,7 @@ public class PasscodeActivity extends DrawerActivity {
                 } else {
                     shake();
                     clearBox();
-                    t.setText("Enter Valid Passcode to remove passcode.");
+                    t.setText("Invalid Passcode");
                     //Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
                 }
             }
@@ -172,7 +172,7 @@ public class PasscodeActivity extends DrawerActivity {
                 } else {
                     shake();
                     clearBox();
-                    t.setText("Enter Valid Passcode to Delete the Note.");
+                    t.setText("Invalid Passcode");
                     //Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
                 }
             }
@@ -252,7 +252,7 @@ public class PasscodeActivity extends DrawerActivity {
             } else {
                 shake();
                 clearBox();
-                t.setText("Enter Valid Passcode to Open file.");
+                t.setText("Invalid Passcode");
                 Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
             }
         }

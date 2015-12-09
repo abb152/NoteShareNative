@@ -103,14 +103,14 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         loginButton.setReadPermissions("public_profile, email");
         loginButton.registerCallback(callbackManager, facebookCallback);
 
-        mProfileTracker = new ProfileTracker() {
+        /*mProfileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile profile, Profile profile1) {
                 mProfileTracker.stopTracking();
                 Profile.setCurrentProfile(profile1);
             }
         };
-        mProfileTracker.startTracking();
+        mProfileTracker.startTracking();*/
 
         // Google Plus
         btnSignIn = (SignInButton) findViewById(R.id.btnGoogleSignIn);
@@ -139,13 +139,41 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         }
     }
 
+
     // Facebook Callback
     FacebookCallback<LoginResult> facebookCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
+
+            /*ProfileTracker profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                    this.stopTracking();
+                    Profile.setCurrentProfile(currentProfile);
+
+                }
+            };
+            profileTracker.startTracking();*/
+
+
+            if(Profile.getCurrentProfile() == null) {
+                mProfileTracker = new ProfileTracker() {
+                    @Override
+                    protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                        Log.v("facebook - profile", profile2.getFirstName());
+                        mProfileTracker.stopTracking();
+                    }
+                };
+                mProfileTracker.startTracking();
+            }
+            else {
+                Profile profile = Profile.getCurrentProfile();
+                Log.v("facebook - profile", profile.getFirstName());
+            }
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
+
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
 
@@ -170,7 +198,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                     }
                                     facebookLogout();
                                 } else {
-                                    //facebookLogout();
+                                    facebookLogout();
                                     Toast.makeText(getApplication(), "Something went wrong, please try again later", Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -188,6 +216,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
         @Override
         public void onError(FacebookException e) {
+            Toast.makeText(getApplication(), "Something went wrong, please try again later", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -198,7 +227,10 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        //callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (callbackManager.onActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
 
         if (requestCode == RC_SIGN_IN) {
             if (resultCode != RESULT_OK)

@@ -25,4 +25,16 @@
         android:visibility="gone"
         android:layout_marginTop="5dp"/>
 
+    <ImageButton
+        android:id="@+id/deleteScribbleImage"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentLeft="true"
+        android:padding="5dp"
+        android:scaleType="centerInside"
+        android:background="@color/header_bg"
+        android:src="@drawable/image_option_delete2"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"/>
+
 </RelativeLayout>
