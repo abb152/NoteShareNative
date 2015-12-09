@@ -161,9 +161,6 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.btnShare.setTag(map.get("noteId"));
         }
 
-
-
-
         return convertView;
     }
 
