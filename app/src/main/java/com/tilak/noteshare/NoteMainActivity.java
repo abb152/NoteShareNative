@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.view.ViewGroupCompat;
+import android.support.v4.view.ViewParentCompat;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -115,7 +117,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public ImageButton audioButtondrawback, audioButtondrawnew;
     public boolean isMoreShown = false;
     public boolean isTextmodeSelected = false;
-    public boolean isDeleteModeSelected = true;
+    public boolean isDeleteModeSelected = false;
     public TextFont_Size_ChooseAdapter TextFont_sizeAdapter;
     public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
     public String[] fontSizes;
@@ -1110,7 +1112,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     public void onClick(View v) {
                         //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
                         //deleteElements(v.getTag().toString());
-                        showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                        showDeleteAlert(v.getTag().toString(), NoteMainActivity.this, checkbox);
                     }
                 });
 
@@ -1707,7 +1709,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 deleteText.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                        showDeleteAlert(v.getTag().toString(), NoteMainActivity.this, textView);
                     }
                 });
 
@@ -2842,7 +2844,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void deleteElements(String tag) {
         NoteElement ne = NoteElement.findById(NoteElement.class, Long.parseLong(tag));
         ne.delete();
-        onResume();
+        //onResume();
     }
 
     public void fetchNoteElementsFromDb() throws FileNotFoundException {
@@ -2939,7 +2941,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     deleteText.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this, textView);
                         }
                     });
 
@@ -2949,7 +2951,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);
                     LayoutInflater inflator = LayoutInflater.from(getApplicationContext());
                     View viewImage = inflator.inflate(R.layout.note_image, null, false);
-                    RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
+                    final RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
                     ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
                     final ImageButton imageDelete = (ImageButton) viewImage.findViewById(R.id.deleteImage);
                     allDelete.add(imageDelete);
@@ -2960,7 +2962,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         public void onClick(View v) {
                             //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
                             //deleteElements(v.getTag().toString());
-                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this, note_image);
                         }
                     });
                     String name = n.content;
@@ -3057,7 +3059,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     noteElements = (LinearLayout) findViewById(R.id.noteElements);
                     LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
                     View viewAudio = inflater.inflate(R.layout.note_audio, null, false);
-                    LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
+                    final LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio);
 
                     final MediaPlayer mp = new MediaPlayer();
                     final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
@@ -3070,7 +3072,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     audioDelete.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this, note_audio);
                         }
                     });
 
@@ -3160,7 +3162,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         public void onClick(View v) {
                             //Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_LONG).show();
                             //deleteElements(v.getTag().toString());
-                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this);
+                            showDeleteAlert(v.getTag().toString(), NoteMainActivity.this, checkbox);
                         }
                     });
 
@@ -3238,7 +3240,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
     }
 
-    void showDeleteAlert(final String tag, Context context) {
+    void showDeleteAlert(final String tag, Context context,final View v) {
 
         final Dialog dialog = new Dialog(context);
 
@@ -3270,6 +3272,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             public void onClick(View arg0) {
                 //dialog.dismiss();
                 deleteElements(tag);
+                v.setVisibility(View.GONE);
                 dialog.dismiss();
             }
         });
@@ -3280,6 +3283,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         dialog.setContentView(contentView);
         dialog.show();
     }
+
 
     public void deleteButton() {
         if (!isDeleteModeSelected) {
