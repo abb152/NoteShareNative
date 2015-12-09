@@ -55,7 +55,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:textColor="@color/nsTextColor"
-            android:text="SUBMIT" />
+            android:text="CANCEL" />
 
         <View
             android:layout_width="1dp"
@@ -71,7 +71,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:textColor="@color/nsTextColor"
-            android:text="CANCEL" />
+            android:text="OK" />
     </LinearLayout>
 
 </LinearLayout>

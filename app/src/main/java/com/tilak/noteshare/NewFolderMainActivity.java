@@ -637,35 +637,25 @@ public class NewFolderMainActivity extends DrawerActivity {
 		Button buttonAlertOk = (Button) contentView
 				.findViewById(R.id.buttonAlertOk);
 		buttonAlertCancel.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				if (textViewTitleAlertMessage.getText().toString().length()>0)
-				{
+				dialog.dismiss();
+			}
+		});
+		buttonAlertOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (textViewTitleAlertMessage.getText().toString().length() > 0) {
 //					updateFolder(textViewTitleAlertMessage.getText().toString());
-					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					Date date = new Date();
 					String currentDateStr = formatter.format(date);
-					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "0", currentDateStr, currentDateStr ,date.getTime(), date.getTime());
+					Folder folder = new Folder(textViewTitleAlertMessage.getText().toString(), 1, "0", currentDateStr, currentDateStr, date.getTime(), date.getTime());
 					folder.save();
 					onRestart();
 					dialog.dismiss();
 				}
-			
-			}
-		});
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
-				
-				dialog.dismiss();
-
 				// System.exit(0);
-
 			}
 		});
 

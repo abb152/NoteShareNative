@@ -259,7 +259,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				break;
 				case 9: {
 					System.out.println("logout");
-					showAlertWith("ARE YOU SURE?", "Are you sure you want to Log Out?", DrawerActivity.this);
+					showAlertWith("LOGOUT", "Are you sure you want to Log Out?", DrawerActivity.this);
 				}
 				break;
 				default: {}
