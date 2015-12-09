@@ -430,8 +430,6 @@ public class MainActivity extends DrawerActivity {
 		});
 	}
 
-
-
 	// showActionSheet
 	// ---------------------------------------------------------------------------------------
 
