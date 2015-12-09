@@ -20,8 +20,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.view.ViewGroupCompat;
-import android.support.v4.view.ViewParentCompat;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;

@@ -79,9 +79,9 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#F6B2B3"
+                android:background="#B794F6"
                 android:contentDescription="@string/paint"
-                android:tag="#F6B2B3" />
+                android:tag="#B794F6" />
 
         <!-- Bottom Row -->
 
@@ -101,21 +101,12 @@
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
-                android:background="#B794F6"
-                android:contentDescription="@string/paint"
-                android:tag="#B794F6" />
-
-            <ImageButton
-                android:id="@+id/colorbutton7"
-                android:layout_width="@dimen/large_brush"
-                android:layout_height="@dimen/large_brush"
-                android:layout_margin="2dp"
                 android:background="#ACDE95"
                 android:contentDescription="@string/paint"
                 android:tag="#ACDE95" />
 
             <ImageButton
-                android:id="@+id/colorbutton8"
+                android:id="@+id/colorbutton7"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
@@ -124,7 +115,7 @@
                 android:tag="#D69FA0" />
 
             <ImageButton
-                android:id="@+id/colorbutton9"
+                android:id="@+id/colorbutton8"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
@@ -133,7 +124,7 @@
                 android:tag="#EF9BEE" />
 
             <ImageButton
-                android:id="@+id/colorbutton10"
+                android:id="@+id/colorbutton9"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"
@@ -142,7 +133,7 @@
                 android:tag="#CACACA" />
 
             <ImageButton
-                android:id="@+id/colorbutton11"
+                android:id="@+id/colorbutton10"
                 android:layout_width="@dimen/large_brush"
                 android:layout_height="@dimen/large_brush"
                 android:layout_margin="2dp"

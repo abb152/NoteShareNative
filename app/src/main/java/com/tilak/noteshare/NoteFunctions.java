@@ -342,7 +342,7 @@ public class NoteFunctions {
         dialog.setContentView(R.layout.alert_option_view);
 
         TextView tvOptionTitleAlert = (TextView) dialog.findViewById(R.id.tvOptionTitleAlert);
-        tvOptionTitleAlert.setText("NOTE OPTIONS");
+        tvOptionTitleAlert.setText("OPTIONS");
         tvOptionTitleAlert.setTextColor(Color.WHITE);
 
         LinearLayout optionLock = (LinearLayout) dialog.findViewById(R.id.optionLock);

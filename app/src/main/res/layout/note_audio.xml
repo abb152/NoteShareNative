@@ -13,9 +13,8 @@
 
         <ImageView
             android:id="@+id/audio_play"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:padding="5dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/ic_audio_play" />
 
@@ -28,20 +27,19 @@
             android:layout_toStartOf="@+id/audio_text"
             android:layout_alignParentEnd="true"
             android:minHeight="60dp"
-            android:maxHeight="60dp"/>
+            android:maxHeight="60dp"
+            android:progressTint="@color/header_bg"
+            android:thumb="@drawable/thumb"/>
 
         <TextView
             android:id="@+id/audio_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="15dp"
-            android:layout_gravity="bottom"
-            android:visibility="gone"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
             android:textColor="@color/light_gray_666666"
-            android:layout_marginEnd="53dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentBottom="true"/>
 
         <TextView
             android:id="@+id/record_text"
