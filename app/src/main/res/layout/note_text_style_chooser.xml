@@ -144,8 +144,8 @@
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="#9fdb86"
-                    android:tag="#9fdb86" />
+                    android:background="#be9ff6"
+                    android:tag="#be9ff6" />
             </LinearLayout>
 
             <LinearLayout
@@ -163,21 +163,11 @@
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="#be9ff6"
-                    android:tag="#be9ff6" />
-
-                <ImageButton
-                    android:id="@+id/color_bg_7"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
                     android:background="#b6e29e"
                     android:tag="#b6e29e" />
 
                 <ImageButton
-                    android:id="@+id/color_bg_8"
+                    android:id="@+id/color_bg_7"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -187,7 +177,7 @@
                     android:tag="#dca9aa" />
 
                 <ImageButton
-                    android:id="@+id/color_bg_9"
+                    android:id="@+id/color_bg_8"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -197,7 +187,7 @@
                     android:tag="#f0a6ef" />
 
                 <ImageButton
-                    android:id="@+id/color_bg_10"
+                    android:id="@+id/color_bg_9"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -207,7 +197,7 @@
                     android:tag="#d0d0d0" />
 
                 <ImageButton
-                    android:id="@+id/color_bg_11"
+                    android:id="@+id/color_bg_10"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"

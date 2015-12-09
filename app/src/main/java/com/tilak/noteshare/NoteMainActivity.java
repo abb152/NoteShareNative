@@ -20,8 +20,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.view.ViewGroupCompat;
-import android.support.v4.view.ViewParentCompat;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -1973,8 +1971,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
 
-        ImageButton color_bg_11 = (ImageButton) dialog
-                .findViewById(R.id.color_bg_11);
         ImageButton color_bg_10 = (ImageButton) dialog
                 .findViewById(R.id.color_bg_10);
         ImageButton color_bg_9 = (ImageButton) dialog
@@ -1996,13 +1992,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         ImageButton color_bg_1 = (ImageButton) dialog
                 .findViewById(R.id.color_bg_1);
 
-        color_bg_11.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorButtonSelected(v);
-                dialog.dismiss();
-            }
-        });
         color_bg_10.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2019,20 +2008,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         color_bg_8.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorButtonSelected(v);
-                dialog.dismiss();
-            }
-        });
-        color_bg_7.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorButtonSelected(v);
-                dialog.dismiss();
-            }
-        });
-        color_bg_6.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 colorButtonSelected(v);
