@@ -147,6 +147,10 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.isLockedIcon.setVisibility(View.VISIBLE);
         }
 
+        if(map.get("noteLock").equalsIgnoreCase("1") && listview=="LIST"){
+            holder.btnLock.setImageResource(R.drawable.image_option_unlock);
+        }
+
         if(listview != "GRID") {
             holder.tvIdHidden.setText(map.get("noteId"));
             holder.btnLock.setTag(map.get("noteId"));
