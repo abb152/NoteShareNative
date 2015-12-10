@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -201,8 +200,6 @@ public class DrawingView extends View {
 			initial = false;
 		}
 
-		Log.e("jay min Y", String.valueOf(minY));
-		Log.e("jay max Y", String.valueOf(maxY));
 	}
 
 	public float getMinY(){

@@ -33,23 +33,21 @@
         android:layout_gravity="center_vertical"
         android:background="@null"
         android:textColor="@android:color/black"
-        android:inputType="textMultiLine"
+        android:inputType="textImeMultiLine"
         android:minLines="1"
         android:maxLines="10"
-        android:textCursorDrawable="@null" >
+        android:textCursorDrawable="@null"
+        android:imeOptions="actionDone">
     </EditText>
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/deleteCheckbox"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentRight="true"
-        android:padding="5dp"
-        android:scaleType="centerInside"
-        android:background="@color/header_bg"
-        android:src="@drawable/image_option_delete2"
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbDelete"
+        android:layout_alignParentEnd="true"
+        android:background="#636363"
         android:visibility="gone"/>
 
 </RelativeLayout>

@@ -12,15 +12,14 @@
         android:layout_height="wrap_content"
         android:background="@null" />
 
-    <ImageButton
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/deleteText"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentRight="true"
-        android:padding="5dp"
-        android:scaleType="centerInside"
-        android:background="@color/header_bg"
-        android:src="@drawable/image_option_delete2"
+        android:layout_alignTop="@+id/editor"
+        android:layout_alignParentEnd="true"
+        android:background="#636363"
         android:visibility="gone"/>
 
 </RelativeLayout>

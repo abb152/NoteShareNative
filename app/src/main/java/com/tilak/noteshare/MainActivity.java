@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -995,7 +994,7 @@ public class MainActivity extends DrawerActivity {
 
 
 		if(viewType != VIEWTYPE.GRID){
-			detailOrListView.setOffsetLeft(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics()));
+			//detailOrListView.setOffsetLeft(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics()));
 
 			detailOrListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
