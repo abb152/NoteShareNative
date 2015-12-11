@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/deleteScribbleImage"
         android:layout_alignParentStart="true"
-        android:background="#636363"
+        android:background="#dddddd"
         android:visibility="gone"/>
 
     <CheckBox
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/cbDelete"
         android:visibility="gone"
-        android:background="#636363"
+        android:background="#dddddd"
         android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

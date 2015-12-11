@@ -19,7 +19,7 @@
         android:id="@+id/deleteText"
         android:layout_alignTop="@+id/editor"
         android:layout_alignParentEnd="true"
-        android:background="#636363"
+        android:background="#dddddd"
         android:visibility="gone"/>
 
 </RelativeLayout>

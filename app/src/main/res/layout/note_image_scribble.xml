@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/deleteScribbleImage"
         android:layout_alignParentStart="true"
-        android:background="#636363"
+        android:background="#dddddd"
         android:visibility="gone"/>
 
 </RelativeLayout>

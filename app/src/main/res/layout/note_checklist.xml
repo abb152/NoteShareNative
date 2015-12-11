@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/cbDelete"
         android:layout_alignParentEnd="true"
-        android:background="#636363"
+        android:background="#dddddd"
         android:visibility="gone"/>
 
 </RelativeLayout>
