@@ -48,6 +48,7 @@
         android:id="@+id/cbDelete"
         android:layout_alignParentEnd="true"
         android:background="#dddddd"
+        android:theme="@style/AppTheme"
         android:visibility="gone"/>
 
 </RelativeLayout>

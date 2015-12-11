@@ -20,6 +20,7 @@
         android:id="@+id/deleteScribbleImage"
         android:layout_alignParentStart="true"
         android:background="#dddddd"
+        android:theme="@style/AppTheme"
         android:visibility="gone"/>
 
     <CheckBox
@@ -28,6 +29,7 @@
         android:id="@+id/cbDelete"
         android:visibility="gone"
         android:background="#dddddd"
+        android:theme="@style/AppTheme"
         android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

@@ -68,6 +68,7 @@
             android:layout_above="@+id/audio_text"
             android:layout_alignEnd="@+id/audio_seek"
             android:background="#dddddd"
+            android:theme="@style/AppTheme"
             android:visibility="gone"/>
 
     </RelativeLayout>
