@@ -62,7 +62,7 @@
         android:layout_marginTop="44dp"
         android:background="@color/eaeaea"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <!-- Top Row -->
 
@@ -211,7 +211,7 @@
 
             <SeekBar
                 android:id="@+id/hightlight_sizeSeekBar"
-                android:layout_width="220dp"
+                android:layout_width="205dp"
                 android:layout_height="20dp"
                 android:minHeight="30dp"
                 android:layout_marginLeft="5dp"
@@ -219,7 +219,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:theme="@style/android:Theme.Holo.Light.NoActionBar"
                 android:progressDrawable="@layout/progress_drawable"
                 android:thumb="@drawable/thumb" />
 
@@ -412,7 +411,7 @@
 
             <SeekBar
                 android:id="@+id/sizeSeekBar"
-                android:layout_width="220dp"
+                android:layout_width="205dp"
                 android:layout_height="20dp"
                 android:minHeight="30dp"
                 android:layout_marginLeft="5dp"
@@ -479,7 +478,7 @@
 
             <SeekBar
                 android:id="@+id/eraser_sizeSeekBar"
-                android:layout_width="220dp"
+                android:layout_width="205dp"
                 android:layout_height="20dp"
                 android:minHeight="30dp"
                 android:layout_marginLeft="5dp"
