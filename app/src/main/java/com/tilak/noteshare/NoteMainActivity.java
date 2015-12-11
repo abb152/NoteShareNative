@@ -976,23 +976,31 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Button buttonShare = (Button) layout_note_more_Info.findViewById(R.id.buttonShare);
     }
 
+    public void footerMenuGone(){
+        isMoreShown = false;
+        layout_note_more_Info.setVisibility(View.GONE);
+        imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+    }
 
     public void move (View v) {
         if (noteIdForDetails == null)
             makeNote();
         noteFunctions.showMoveAlert(this, noteIdForDetails);
+        footerMenuGone();
     }
 
     public void timebomb (View v) {
         if (noteIdForDetails == null)
             makeNote();
         noteFunctions.showDate(this, noteIdForDetails, "SET TIMEBOMB", "timebomb");
+        footerMenuGone();
     }
 
     public void remindClick(View v) {
         if (noteIdForDetails == null)
             makeNote();
         noteFunctions.showDate(this, noteIdForDetails, "SET REMAINDER", "reminder");
+        footerMenuGone();
     }
 
     public void passcode(View v) {
@@ -1000,13 +1008,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             makeNote();
         noteFunctions.setPasscode(this, noteIdForDetails);
         updateButtonUI(R.id.imageButtonMoreMode);
-        if (isMoreShown == false) {
+        /*if (isMoreShown == false) {
             isMoreShown = true;
             layout_note_more_Info.setVisibility(View.VISIBLE);
         } else {
             isMoreShown = false;
             layout_note_more_Info.setVisibility(View.GONE);
-        }
+        }*/
+        footerMenuGone();
     }
 
     public void delete(View v) {
@@ -1014,6 +1023,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             makeNote();
 
         noteFunctions.showDeleteAlert(this, noteIdForDetails, true);
+        footerMenuGone();
         //context.startActivity(new Intent(context, MainActivity.class));
 
     }
@@ -1082,6 +1092,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     //multipleDeleteFinal();
                     multipleDeleteArray.clear();
                     isDeleteModeSelected = false;
+                    onResume();
                 }
 
                 //drawView.startNew();
@@ -2815,10 +2826,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                             if (height[0] < editor.getHeight()) {
                                 height[0] = editor.getHeight();
+
+                                Log.e("jay editor height", String.valueOf(editor.getHeight()));
+                                Log.e("jay dp from px", String.valueOf(dpFromPx(getApplicationContext(), editor.getHeight())));
                                 scrollView.setScrollY(scrollView.getScrollY() + 50);
                             }
                             if (height[0] > editor.getHeight()) {
                                 height[0] = editor.getHeight();
+
+                                Log.e("jay editor height", String.valueOf(editor.getHeight()));
                                 scrollView.setScrollY(scrollView.getScrollY() - 45);
                             }
                         }
