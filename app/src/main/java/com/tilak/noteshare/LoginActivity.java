@@ -88,7 +88,9 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
         Config configCheck = Config.findById(Config.class,1l);
         if(!configCheck.fbid.isEmpty() || !configCheck.googleid.isEmpty()){
-            goToMain();
+            //goToMain();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         }
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -250,9 +252,12 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
     public void goToMain(){
         createDirectory();
-
-        Intent i = new Intent(getApplication(), MainActivity.class);
+        Config c = Config.findById(Config.class, 1l);
+        String fname = c.firstname;
+        Intent i = new Intent(getApplication(), UserProfileActivity.class);
         //i.putExtra("FolderId","-1");
+        i.putExtra("fname", fname);
+        i.putExtra("hide", "hide");
         startActivity(i);
         finish();
     }
