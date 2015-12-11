@@ -3,6 +3,7 @@ package com.tilak.noteshare;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -68,7 +69,7 @@ public class PasscodeActivity extends DrawerActivity {
             if (i <= 4 && oldConfirm == false) {
                 passcode += tv.getText().toString();
                 if(passcode.length() == 4) {
-                    et4.setText("*");
+                    et4.setBackgroundColor(Color.WHITE);
                     if (Integer.parseInt(passcode) == dbPass) {
                         clearBox();
                         t.setText("Set New Passcode");
@@ -92,7 +93,7 @@ public class PasscodeActivity extends DrawerActivity {
         } else if(check.equals("2")) { // to open file with lock
             passcode += tv.getText().toString();
             if (passcode.length() == 4) {
-                et4.setText("*");
+                et4.setBackgroundColor(Color.WHITE);
                 if (Integer.parseInt(passcode) == dbPass) {
                     finish();
                     Intent i = new Intent(PasscodeActivity.this, NoteMainActivity.class);
@@ -111,7 +112,7 @@ public class PasscodeActivity extends DrawerActivity {
         } else if(check.equals("3")){ // to remove passcode from a note
             passcode += tv.getText().toString();
             if(passcode.length() == 4) {
-                et4.setText("*");
+                et4.setBackgroundColor(Color.WHITE);
                 if (Integer.parseInt(passcode) == dbPass) {
                     Note n = Note.findById(Note.class, Long.parseLong(fileId));
                     n.islocked = 0;
@@ -130,7 +131,7 @@ public class PasscodeActivity extends DrawerActivity {
         } else if(check.equals("5")) { //change passcode
             passcode += tv.getText().toString();
             if (passcode.length() == 4) {
-                et4.setText("*");
+                et4.setBackgroundColor(Color.WHITE);
                 t.setText("Confirm New Passcode");
                 if (confirm == false) {
                     confirm_passcode = passcode;
@@ -161,7 +162,7 @@ public class PasscodeActivity extends DrawerActivity {
         }else if(check.equals("6")){ // delete note and note is locked
             passcode += tv.getText().toString();
             if(passcode.length() == 4) {
-                et4.setText("*");
+                et4.setBackgroundColor(Color.WHITE);
                 if (Integer.parseInt(passcode) == dbPass) {
                     Note n = Note.findById(Note.class, Long.parseLong(fileId));
                     n.setCreationtime("0");
@@ -194,27 +195,27 @@ public class PasscodeActivity extends DrawerActivity {
 
     public void lessThanFour(int i){
         if (i == 1) {
-            et1.setText("*");
+            et1.setBackgroundColor(Color.WHITE);
         } else if (i == 2) {
-            et2.setText("*");
+            et2.setBackgroundColor(Color.WHITE);
         } else if (i == 3) {
-            et3.setText("*");
+            et3.setBackgroundColor(Color.WHITE);
         }
     }
 
     public void clearBox(){
         passcode="";
         i=0;
-        et1.setText("");
-        et2.setText("");
-        et3.setText("");
-        et4.setText("");
+        et1.setBackgroundResource(R.drawable.passborder);
+        et2.setBackgroundResource(R.drawable.passborder);
+        et3.setBackgroundResource(R.drawable.passborder);
+        et4.setBackgroundResource(R.drawable.passborder);
     }
 
     public void newPassCode(){
         passcode += tv.getText().toString();
         if (passcode.length() == 4) {
-            et4.setText("*");
+            et4.setBackgroundColor(Color.WHITE);
             t.setText("Confirm New Passcode");
             if (confirm == false) {
                 confirm_passcode = passcode;
@@ -243,7 +244,7 @@ public class PasscodeActivity extends DrawerActivity {
     public void setNotePassTrue(){
         passcode += tv.getText().toString();
         if(passcode.length() == 4) {
-            et4.setText("*");
+            et4.setBackgroundColor(Color.WHITE);
             if (Integer.parseInt(passcode) == dbPass) {
                 Note n = Note.findById(Note.class, Long.parseLong(fileId));
                 n.islocked = 1;

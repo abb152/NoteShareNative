@@ -42,20 +42,20 @@
         android:layout_width="40dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:padding="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_action_note_brush" />
+        android:src="@drawable/ic_action_note_highlight" />
 
     <ImageButton
         android:id="@+id/imageButtonhighlightdraw"
         android:layout_width="40dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_action_note_highlight" />
+        android:src="@drawable/scrbble_highlight" />
 
     <ImageButton
         android:id="@+id/imageButtondrawerase"
@@ -71,9 +71,11 @@
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="fitCenter"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:scaleType="centerInside"
         android:background="@android:color/transparent"
-        android:src="@drawable/scrbble_newdraw" />
+        android:src="@drawable/ic_action_note_brush" />
 
     <ImageButton
         android:layout_width="40dp"

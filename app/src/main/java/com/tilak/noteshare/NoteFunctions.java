@@ -445,7 +445,66 @@ public class NoteFunctions {
     }
 
     // SHARE
-    public void share() {}
+    public void share(Context context) {
+        final Dialog shareDialog = new Dialog(context);
+        shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        shareDialog.setCancelable(false);
+        shareDialog.setContentView(R.layout.alert_share_view);
+        shareDialog.setCanceledOnTouchOutside(true);
+
+        TextView tvShareTitleAlert = (TextView) shareDialog.findViewById(R.id.tvShareTitleAlert);
+        tvShareTitleAlert.setText("SHARE NOTE VIA");
+        tvShareTitleAlert.setTextColor(Color.WHITE);
+
+        LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareWhatsapp);
+        TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivWhatsapp = (ImageView) shareWhatsapp.findViewById(R.id.imageViewSlidemenu);
+        ivWhatsapp.setImageResource(R.drawable.ic_option_delete);
+        tvWhatsapp.setText("Whatsapp");
+
+        LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
+        TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
+        ivEmail.setImageResource(R.drawable.ic_option_delete);
+        tvEmail.setText("Email");
+
+        LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareMessage);
+        TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivMessage = (ImageView) shareMessage.findViewById(R.id.imageViewSlidemenu);
+        ivMessage.setImageResource(R.drawable.ic_option_delete);
+        tvMessage.setText("Message");
+
+        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
+        TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivFacebook = (ImageView) shareFacebook.findViewById(R.id.imageViewSlidemenu);
+        ivFacebook.setImageResource(R.drawable.ic_option_delete);
+        tvFacebook.setText("Facebook");
+
+        LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
+        TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
+        ivTwitter.setImageResource(R.drawable.ic_option_delete);
+        tvTwitter.setText("Twitter");
+
+        Button buttonShareCancel = (Button) shareDialog.findViewById(R.id.buttonShareCancel);
+        Button buttonShareOk = (Button) shareDialog.findViewById(R.id.buttonShareOk);
+
+        buttonShareCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareDialog.dismiss();
+            }
+        });
+
+        buttonShareOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareDialog.dismiss();
+            }
+        });
+
+        shareDialog.show();
+    }
 
 
 }
