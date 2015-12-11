@@ -30,6 +30,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="-10dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/header_bg"
                 android:orientation="horizontal" >

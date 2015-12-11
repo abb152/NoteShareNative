@@ -172,15 +172,20 @@
             android:orientation="vertical" >
         </LinearLayout>-->
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end">
+
             <ImageButton
                 android:id="@+id/imageButtonMoreMode"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="70dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_action_note_option" />
+        </RelativeLayout>
     </LinearLayout>
 
     <!-- ALL BOTTOM MENU -->
