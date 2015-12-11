@@ -1634,11 +1634,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                         if (height[0] < editor.getHeight()) {
                             height[0] = editor.getHeight();
-                            scrollView.setScrollY(scrollView.getScrollY() + 50);
+                            scrollView.setScrollY(scrollView.getScrollY() + pxFromDp(NoteMainActivity.this,20));
                         }
                         if (height[0] > editor.getHeight()) {
                             height[0] = editor.getHeight();
-                            scrollView.setScrollY(scrollView.getScrollY() - 45);
+                            scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this,20));
                         }
                     }
                 });
@@ -2748,13 +2748,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                                 Log.e("jay editor height", String.valueOf(editor.getHeight()));
                                 Log.e("jay dp from px", String.valueOf(dpFromPx(getApplicationContext(), editor.getHeight())));
-                                scrollView.setScrollY(scrollView.getScrollY() + 50);
+                                scrollView.setScrollY(scrollView.getScrollY() + pxFromDp(NoteMainActivity.this,20));
                             }
                             if (height[0] > editor.getHeight()) {
                                 height[0] = editor.getHeight();
 
                                 Log.e("jay editor height", String.valueOf(editor.getHeight()));
-                                scrollView.setScrollY(scrollView.getScrollY() - 45);
+                                scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this,20));
                             }
                         }
                     });
