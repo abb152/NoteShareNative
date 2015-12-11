@@ -113,14 +113,16 @@ public class NoteFunctions {
 
         dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
 
-        dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                date[0] = dayOfMonth;
-                date[1] = month + 1;
-                date[2] = year;
-            }
-        });
+        if(android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                    date[0] = dayOfMonth;
+                    date[1] = month + 1;
+                    date[2] = year;
+                }
+            });
+        }
 
         buttonAlertOk.setOnClickListener(new View.OnClickListener() {
             @Override

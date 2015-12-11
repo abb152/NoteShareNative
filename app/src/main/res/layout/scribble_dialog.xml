@@ -219,6 +219,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center"
+                android:theme="@style/android:Theme.Holo.Light.NoActionBar"
                 android:progressDrawable="@layout/progress_drawable"
                 android:thumb="@drawable/thumb" />
 

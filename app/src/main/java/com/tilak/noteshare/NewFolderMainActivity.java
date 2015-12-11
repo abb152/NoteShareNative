@@ -1276,7 +1276,13 @@ public class NewFolderMainActivity extends DrawerActivity {
 		buttonAlertCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		buttonAlertOk.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
 				if (textViewTitleAlertMessage.getText().toString().length() > 0) {
 					//updateFolder(textViewTitleAlertMessage.getText().toString());
 					SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1291,14 +1297,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 					onRestart();
 					dialog.dismiss();
 				}
-			}
-		});
-		buttonAlertOk.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
 				// System.exit(0);
 			}
 		});

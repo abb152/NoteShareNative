@@ -46,7 +46,7 @@
             android:layout_gravity="center_vertical"
             android:padding="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_action_delete"
+            android:src="@drawable/ic_action_delete2"
             android:onClick="deleteFolder"/>
 
         <ImageButton

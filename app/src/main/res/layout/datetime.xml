@@ -22,13 +22,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dp"
-        android:calendarViewShown="false" />
+        android:calendarViewShown="false"
+        android:theme="@style/android:Theme.Holo.Light.NoActionBar" />
 
     <TimePicker
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-40dp"
-        android:id="@+id/tp"/>
+        android:id="@+id/tp"
+        android:theme="@style/android:Theme.Holo.Light.NoActionBar"/>
 
 
     <View
