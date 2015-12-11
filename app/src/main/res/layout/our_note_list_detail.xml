@@ -19,8 +19,8 @@
             android:layout_height="match_parent"
             android:background="@color/header_bg"
             android:orientation="horizontal"
-            android:weightSum="7"
-            android:gravity="right">
+            android:weightSum="8"
+            android:gravity="center">
 
         <TextView
             android:id="@+id/tvIdHidden"
@@ -28,11 +28,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/btnlock"
-            android:layout_width="15dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
@@ -42,7 +42,7 @@
 
         <ImageButton
             android:id="@+id/btntimebomb"
-            android:layout_width="15dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
@@ -52,7 +52,7 @@
 
         <ImageButton
             android:id="@+id/btnRemind"
-            android:layout_width="15dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="3dp"
@@ -63,7 +63,7 @@
 
         <ImageButton
             android:id="@+id/btnmove"
-            android:layout_width="15dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="3dp"
@@ -74,17 +74,17 @@
 
         <ImageButton
             android:id="@+id/btndelete"
-            android:layout_width="15dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
 
-            android:src="@drawable/ic_action_delete"
+            android:src="@drawable/ic_action_delete2"
             android:onClick="deleteNote" />
 
         <ImageButton
             android:id="@+id/btnshare"
-            android:layout_width="15dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"

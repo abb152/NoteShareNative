@@ -96,9 +96,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_action_note_gallery" />
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_note_camera" />
         </LinearLayout>
 
         <LinearLayout
@@ -111,8 +112,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_action_note_brush" />
         </LinearLayout>
 
@@ -127,9 +129,9 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:scaleType="fitCenter"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_action_note_audio" />
         </LinearLayout>
 
@@ -142,8 +144,9 @@
                 android:id="@+id/imageButtonDeleteMode"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scaleType="centerInside"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_action_delete" />
         </LinearLayout>
