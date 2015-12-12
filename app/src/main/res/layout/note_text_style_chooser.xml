@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/textstyledialogmain"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
+    android:layout_height="230dp"
     android:background="@color/eaeaea"
     android:orientation="vertical">
 
@@ -85,7 +85,6 @@
             android:background="@android:color/transparent"
             android:orientation="vertical"
             android:layout_marginTop="18dp"
-            android:layout_marginBottom="15dp"
             android:visibility="visible"
             android:weightSum="2">
 
@@ -215,7 +214,6 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginBottom="15dp"
             android:visibility="visible"
             android:weightSum="2">
 
@@ -224,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
-                android:weightSum="6">
+                android:weightSum="5">
 
                 <ImageButton
                     android:id="@+id/paper_bg_1"
@@ -249,18 +247,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/paper_bg_12"
                     android:tag="paper_bg_2" />
-
-                <ImageButton
-                    android:id="@+id/paper_bg_3"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#d0d0d0"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/paper_bg_13"
-                    android:tag="paper_bg_3" />
 
                 <ImageButton
                     android:id="@+id/paper_bg_4"

@@ -1853,8 +1853,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 .findViewById(R.id.paper_bg_5);
         ImageButton paper_bg_4 = (ImageButton) dialog
                 .findViewById(R.id.paper_bg_4);
-        ImageButton paper_bg_3 = (ImageButton) dialog
-                .findViewById(R.id.paper_bg_3);
         ImageButton paper_bg_2 = (ImageButton) dialog
                 .findViewById(R.id.paper_bg_2);
         ImageButton paper_bg_1 = (ImageButton) dialog
@@ -1875,13 +1873,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
         paper_bg_4.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                paperButtonSelected(arg0);
-                dialog.dismiss();
-            }
-        });
-        paper_bg_3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 paperButtonSelected(arg0);
