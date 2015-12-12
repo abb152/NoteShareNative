@@ -102,6 +102,14 @@ public class NewFolderMainActivity extends DrawerActivity {
 		//folderSync.localToServer();
 
 		NoteSync noteSync = new NoteSync();
+		/*try {
+			noteSync.upload("audio", "AUD_565fdeeef4855bb94d302da4_1449554156144_4357.m4a");
+			noteSync.upload("scribble", "SCR_56600300f4855bb94d302dae_1449206057.9826_3205.png");
+			noteSync.upload("image", "IMG_565fdeeef4855bb94d302da4_1449656405435_4175.jpg");
+		}catch(IOException io){
+		}*/
+
+		// /noteSync.downloadMedia("http://104.197.122.116/user/getmedia?file=","test","SCR_56600300f4855bb94d302dae_1449206057.9826_3105.png",NewFolderMainActivity.this);
 		//noteSync.localToServer();
 		//noteSync.serverToLocal();
 		//noteSync.localToServer();

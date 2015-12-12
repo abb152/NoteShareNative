@@ -1,6 +1,10 @@
 package com.tilak.sync;
 
+import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.squareup.okhttp.Callback;
@@ -13,12 +17,15 @@ import com.squareup.okhttp.Response;
 import com.tilak.db.Config;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
+import com.tilak.noteshare.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,7 +43,7 @@ enum NOTESYNCFUNCTION {
 
 public class NoteSync {
     public static String SERVER_URL = "http://104.197.122.116/";
-    //http://104.197.122.116/folder/localtoserver
+
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private OkHttpClient client = new OkHttpClient();
     private int type = 0; //1 create //2 delete //0 edit
@@ -69,6 +76,9 @@ public class NoteSync {
                             String folderServerId = jsonObject.get("id").toString();
                             notes.get(i).setServerid(folderServerId);
                             notes.get(i).save();
+
+                            //send note element media
+                            sendNoteElementMedia(notes.get(i).getId());
 
                             Date createDate = new Date();
                             notes.get(i).setModifytime(dateToString(createDate));
@@ -278,11 +288,136 @@ public class NoteSync {
                 .build();
 
         Response response = client.newCall(request).execute();
-        //if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-        //Log.e("jay response",String.valueOf(response.isSuccessful()));
-        //Log.e("jay response body",response.body().string());
         return response.body().string();
     }
+
+    public void sendNoteElementMedia(long noteId){
+
+        List<NoteElement> noteElements = getNoteElementList(noteId);
+
+        for(int i=0; i < noteElements.size(); i++){
+            String content = noteElements.get(i).getContent();
+            String type = noteElements.get(i).getType().trim();
+            if(type.equals("image") || type.equals("scribble") || type.equals("audio")) {
+                if (!checkIfUploaded(content)) {
+                    try {
+                        upload(type, content);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    }
+
+    public boolean checkIfUploaded(String filename){
+        boolean alreadyUploaded = false;
+        try {
+            String response = checkMediaAlreadyUploadedResponse(SERVER_URL+"/searchmedia?file="+filename);
+            JSONObject jsonObject = new JSONObject(response);
+            String value = jsonObject.getString("value");
+
+            if(value.equals("true"))
+                alreadyUploaded = true;
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }catch (JSONException je){
+            je.printStackTrace();
+        }
+
+        return alreadyUploaded;
+    }
+
+    String checkMediaAlreadyUploadedResponse(String url) throws IOException{
+
+        Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            return response.body().string();
+    }
+
+
+    public void downloadMedia(String url, String type, String name){
+        byte[] media= null;
+        try {
+            media = getMedia(url+name);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        if(type.equals("image")){
+            try {
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + name);
+                if(!mediaStorageDir.exists()) {
+                    Bitmap b = BitmapFactory.decodeByteArray(media, 0, media.length);
+                    b.compress(Bitmap.CompressFormat.JPEG, 87, new FileOutputStream(mediaStorageDir));
+
+                    // Refreshing Gallery to view Image in Gallery
+                    MainActivity mainActivity = new MainActivity();
+
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.DATA, mediaStorageDir.getAbsolutePath());
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                    mainActivity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                }
+            }catch(FileNotFoundException fe){
+
+            }catch(NullPointerException npe){
+
+            }
+        }
+
+        else if(type.equals("scribble")){
+            try {
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + name);
+                if(!mediaStorageDir.exists()) {
+                    Bitmap b = BitmapFactory.decodeByteArray(media, 0, media.length);
+                    b.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(mediaStorageDir));
+                }
+            }catch(FileNotFoundException fe){
+
+            }catch(NullPointerException npe){
+
+            }
+        }
+
+        else if(type.equals("audio")){
+            try {
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Audio/" + name);
+                if(!mediaStorageDir.exists()) {
+                    FileOutputStream fos = new FileOutputStream(mediaStorageDir);
+                    fos.write(media);
+                    fos.flush();
+                    fos.close();
+                }
+            }catch(FileNotFoundException fe){
+
+            }catch (IOException io){
+
+            }catch(NullPointerException npe){
+
+            }
+        }
+    }
+
+    byte[] getMedia(String url) throws IOException {
+        //RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        return response.body().bytes();
+    }
+
+
 
     public List<Note> getNoteList(Long time) {
         //Long time = 1448954670000L;
@@ -379,6 +514,8 @@ public class NoteSync {
                     NoteElement noteElement = new NoteElement(noteid, ordernumber, isSync, type, content, contentA, contentB);
                     noteElement.save();
 
+                    downloadMedia( SERVER_URL +"user/getmedia?file=", type, content);
+
                 } catch (JSONException je) {
                     je.printStackTrace();
                 }
@@ -396,44 +533,42 @@ public class NoteSync {
         }
     }
 
-    public void upload() throws IOException {
+    public void upload(String type, String name) throws IOException {
 
-        /*//MediaType ANY_IMAGE_TYPE = MediaType.
-        MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpg");
+        Log.e("jay type", type);
 
-        OkHttpClient client = new OkHttpClient();
-
-        client.setConnectTimeout(15, TimeUnit.SECONDS);
-        client.setReadTimeout(15, TimeUnit.SECONDS);
-        client.setWriteTimeout(15, TimeUnit.SECONDS);
-
-        //File file = new File("README.md");
-        String name = "IMG_565fdeeef4855bb94d302da4_1449147126212_7060.jpg";
-        File file = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-
-        Request request = new Request.Builder()
-                .url(SERVER_URL + "user/mediaupload")
-                .post(RequestBody.create(MediaType.parse("image/jpeg"), file))
-                .build();
-
-        Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-        System.out.println(response.body().string());
-        if (response.isSuccessful()) throw new IOException("Unexpected code " + response);
-        Log.e("jay successful", "");*/
-
+        File file;
+        RequestBody requestBody = null;
         try {
-            String name = "AUD_565fdeeef4855bb94d302da4_1449147133388_3161.m4a";
-            File file = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+            if(type.equals("audio")){
+                file = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Audio/" + name);
+                requestBody = new MultipartBuilder()
+                        .type(MultipartBuilder.FORM)
+                        .addFormDataPart("file", file.getName(),
+                                RequestBody.create(MediaType.parse("audio/m4a"), file))
+                        .build();
 
-            RequestBody requestBody = new MultipartBuilder()
-                    .type(MultipartBuilder.FORM)
-                    .addFormDataPart("file", file.getName(),
-                            RequestBody.create(MediaType.parse("audio/m4a"), file))
-                    .build();
+            }else if(type.equals("image")){
+                file = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+                requestBody = new MultipartBuilder()
+                        .type(MultipartBuilder.FORM)
+                        .addFormDataPart("file", file.getName(),
+                                RequestBody.create(MediaType.parse("image/jpg"), file))
+                        .build();
+
+            }else if(type.equals("scribble")){
+                Log.e("jay inside", "scribble");
+                file = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + name);
+                requestBody = new MultipartBuilder()
+                        .type(MultipartBuilder.FORM)
+                        .addFormDataPart("file", file.getName(),
+                                RequestBody.create(MediaType.parse("image/png"), file))
+                        .build();
+
+            }
 
             Request request = new Request.Builder()
-                    .url(SERVER_URL +"user/mediaupload")
+                    .url(SERVER_URL+"user/mediaupload")
                     .post(requestBody)
                     .build();
 
