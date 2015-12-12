@@ -80,8 +80,9 @@
                 android:background="@android:color/transparent"
                 android:visibility="visible"
                 android:scaleType="centerInside"
-                android:padding="10dp"
-                android:src="@drawable/ic_sort_color" />
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:src="@drawable/ic_action_color" />
 
             <ImageButton
                 android:id="@+id/imageButtoncalander"

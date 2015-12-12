@@ -38,7 +38,9 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_footer_sort_white" />
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/ic_sort" />
 
                 <TextView
                     android:layout_width="wrap_content"
