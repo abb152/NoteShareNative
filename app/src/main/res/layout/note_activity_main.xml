@@ -79,11 +79,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_action_note_font" />
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_note_text" />
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +98,7 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_action_note_camera" />
+                android:src="@drawable/ic_action_gallery" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,9 +111,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:src="@drawable/ic_note_brush" />
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_brush" />
         </LinearLayout>
 
         <LinearLayout

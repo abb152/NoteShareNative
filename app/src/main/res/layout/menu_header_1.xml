@@ -91,7 +91,7 @@
                 android:padding="5dp"
                 android:scaleType="fitCenter"
                 android:visibility="gone"
-                android:src="@drawable/done_icon" />
+                android:src="@drawable/ic_action_ok" />
         </LinearLayout>
     </LinearLayout>
 

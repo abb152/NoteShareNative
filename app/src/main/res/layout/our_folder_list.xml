@@ -35,7 +35,7 @@
             android:padding="5dp"
             android:scaleType="centerInside"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_action_edit"
+            android:src="@drawable/ic_folder_edit"
             android:onClick="editFolder"/>
 
         <ImageButton
@@ -57,7 +57,7 @@
             android:layout_gravity="center_vertical"
             android:padding="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_action_share"
+            android:src="@drawable/ic_note_share"
             android:onClick="shareFolder"/>
 
     </LinearLayout>

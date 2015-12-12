@@ -36,7 +36,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_action_lock"
+                android:src="@drawable/ic_note_lock"
                 android:onClick="passCode"/>
 
             <ImageButton
@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_action_timebomb"
+                android:src="@drawable/ic_note_timebomb"
                 android:onClick="timeBomb"/>
 
             <ImageButton
@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_action_remind"
+                android:src="@drawable/ic_note_remainder"
                 android:onClick="remind"/>
 
             <ImageButton
@@ -63,7 +63,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_action_move"
+                android:src="@drawable/ic_note_move"
                 android:onClick="move"/>
 
             <ImageButton
@@ -81,7 +81,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_action_share" />
+                android:src="@drawable/ic_note_share" />
 
         </LinearLayout>
 

@@ -30,7 +30,7 @@
             android:paddingLeft="15dp"
             android:layout_marginRight="5dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_hamburg" />
+            android:src="@drawable/ic_menu" />
 
         <ImageView
             android:layout_width="80dp"
@@ -63,7 +63,8 @@
                 android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="10dp"
+                android:padding="8dp"
+                android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitEnd"
                 android:layout_alignParentRight="true"

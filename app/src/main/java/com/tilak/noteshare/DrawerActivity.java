@@ -94,22 +94,22 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			int menuid = Integer.parseInt(items.getMenuid());
 			switch (menuid) {
 				case 1:
-					items.setResourceId(R.drawable.ic_action_note);
+					items.setResourceId(R.drawable.ic_note);
 					break;
 				case 2:
-					items.setResourceId(R.drawable.ic_action_folder);
+					items.setResourceId(R.drawable.ic_folder);
 					break;
 				case 3:
 					items.setResourceId(R.drawable.ic_action_notification);
 					break;
 				case 4:
-					items.setResourceId(R.drawable.ic_action_rate);
+					items.setResourceId(R.drawable.ic_rate);
 					break;
 				case 5:
-					items.setResourceId(R.drawable.ic_action_like);
+					items.setResourceId(R.drawable.ic_like);
 					break;
 				case 6:
-					items.setResourceId(R.drawable.ic_action_feedback);
+					items.setResourceId(R.drawable.ic_feedback);
 					break;
 				case 7:
 				items.setResourceId(R.drawable.ic_action_invite);
@@ -118,7 +118,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					items.setResourceId(R.drawable.ic_action_setting);
 					break;
 				case 9:
-					items.setResourceId(R.drawable.ic_action_logout);
+					items.setResourceId(R.drawable.ic_logout);
 					break;
 				default:
 					break;

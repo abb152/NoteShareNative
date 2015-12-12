@@ -580,7 +580,7 @@ public class MainActivity extends DrawerActivity {
 		ImageView layoutDetailImageView = (ImageView) layoutDetail
 				.findViewById(R.id.imageViewSlidemenu);
 		layoutDetailImageView.setImageResource(R.drawable.ic_sort_color);
-		layoutDetailImageView.setPadding(7, 7, 7, 7);
+		layoutDetailImageView.setPadding(0, 0, 0, 0);
 		layoutDetailTextView.setText("Colour");
 
 		LinearLayout layoutPintrest = (LinearLayout) myDialog
@@ -609,8 +609,8 @@ public class MainActivity extends DrawerActivity {
 				.findViewById(R.id.textViewSlideMenuName);
 		ImageView layoutListImageViewReminderTime = (ImageView) layoutListReminderTime
 				.findViewById(R.id.imageViewSlidemenu);
-		layoutListImageViewReminderTime.setImageResource(R.drawable.ic_sort_reminder);
-		layoutListImageViewReminderTime.setPadding(5,5,5,5);
+		layoutListImageViewReminderTime.setImageResource(R.drawable.ic_action_remainder);
+		layoutListImageViewReminderTime.setPadding(2,2,2,2);
 		layoutListTextViewReminderTime.setText("Reminder Time");
 
 		LinearLayout layoutListTimeBomb = (LinearLayout) myDialog
@@ -622,7 +622,7 @@ public class MainActivity extends DrawerActivity {
 		ImageView layoutListImageViewTimeBomb = (ImageView) layoutListTimeBomb
 				.findViewById(R.id.imageViewSlidemenu);
 		layoutListImageViewTimeBomb.setImageResource(R.drawable.ic_sort_timebomb);
-		layoutListImageViewTimeBomb.setPadding(5,5,5,5);
+		layoutListImageViewTimeBomb.setPadding(2,2,2,2);
 		layoutListTextViewTimeBomb.setText("Time Bomb");
 
 		layoutGridTextView.setOnClickListener(new OnClickListener() {

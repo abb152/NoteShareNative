@@ -143,12 +143,12 @@ public class OurNoteListAdapter extends BaseAdapter {
 
 
         if(map.get("noteLock").equalsIgnoreCase("1") && listview=="DETAIL"){
-            holder.btnLock.setImageResource(R.drawable.image_option_unlock);
+            holder.btnLock.setImageResource(R.drawable.ic_note_unlock);
             holder.isLockedIcon.setVisibility(View.VISIBLE);
         }
 
         if(map.get("noteLock").equalsIgnoreCase("1") && listview=="LIST"){
-            holder.btnLock.setImageResource(R.drawable.image_option_unlock);
+            holder.btnLock.setImageResource(R.drawable.ic_note_unlock);
         }
 
         if(listview != "GRID") {
