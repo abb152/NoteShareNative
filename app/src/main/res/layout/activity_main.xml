@@ -89,6 +89,7 @@
         android:divider="#fff"
         android:dividerHeight="3dp"
         android:scrollbars="none"
+        android:layout_marginTop="3dp"
 
         swipe:swipeFrontView="@+id/front"
         swipe:swipeBackView="@+id/back"

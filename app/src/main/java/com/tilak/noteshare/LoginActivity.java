@@ -1,7 +1,6 @@
 package com.tilak.noteshare;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -23,7 +21,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.LoggingBehavior;
-import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -105,15 +102,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         loginButton.setReadPermissions("public_profile, email");
         loginButton.registerCallback(callbackManager, facebookCallback);
 
-        /*mProfileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile profile, Profile profile1) {
-                mProfileTracker.stopTracking();
-                Profile.setCurrentProfile(profile1);
-            }
-        };
-        mProfileTracker.startTracking();*/
-
         // Google Plus
         btnSignIn = (SignInButton) findViewById(R.id.btnGoogleSignIn);
         setGooglePlusButtonText(btnSignIn,"Google+");
@@ -144,38 +132,14 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
     // Facebook Callback
     FacebookCallback<LoginResult> facebookCallback = new FacebookCallback<LoginResult>() {
+
         @Override
-        public void onSuccess(LoginResult loginResult) {
-
-            /*ProfileTracker profileTracker = new ProfileTracker() {
-                @Override
-                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                    this.stopTracking();
-                    Profile.setCurrentProfile(currentProfile);
-
-                }
-            };
-            profileTracker.startTracking();*/
+        public void onSuccess(final LoginResult loginResult) {
 
 
-            if(Profile.getCurrentProfile() == null) {
-                mProfileTracker = new ProfileTracker() {
-                    @Override
-                    protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
-                        Log.v("facebook - profile", profile2.getFirstName());
-                        mProfileTracker.stopTracking();
-                    }
-                };
-                mProfileTracker.startTracking();
-            }
-            else {
-                Profile profile = Profile.getCurrentProfile();
-                Log.v("facebook - profile", profile.getFirstName());
-            }
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
-
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
 
@@ -183,32 +147,36 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                 FacebookSdk.setIsDebugEnabled(true);
                                 FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
-                                Profile profile = Profile.getCurrentProfile();
-                                if (profile != null) {
-                                    //String firstName = profile.getFirstName();
-                                    //String lastName = profile.getLastName();
-                                    String name = profile.getName();
-                                    Uri pictureUri = profile.getProfilePictureUri(200, 200);
-                                    String email = object.optString("email");
-                                    String uid = object.optString("id");
-                                    try {
-                                        sendLogin(uid, name, email, pictureUri.toString(), "fb");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    facebookLogout();
-                                } else {
-                                    facebookLogout();
-                                    Toast.makeText(getApplication(), "Something went wrong, please try again later", Toast.LENGTH_LONG).show();
+
+                                String uid = object.optString("id");
+                                String email = object.optString("email");
+                                String name = object.optString("name");
+
+                                Uri.Builder builder = new Uri.Builder();
+                                builder.scheme("https")
+                                        .authority("graph.facebook.com")
+                                        .appendPath(uid)
+                                        .appendPath("picture")
+                                        .appendQueryParameter("width", "1000")
+                                        .appendQueryParameter("height", "1000");
+
+                                Uri pictureUri = builder.build();
+
+                                try {
+                                    sendLogin(uid, name, email, pictureUri.toString(), "fb");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
+                                facebookLogout();
+
                             }
                         }
                     });
             Bundle parameters = new Bundle();
-            parameters.putString("fields", "email");
-            request.setParameters(parameters);
+            parameters.putString("fields", "id, name, email");
+                    request.setParameters(parameters);
             request.executeAsync();
         }
 
@@ -276,11 +244,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + profilePicture + ".jpg");
                 myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
 
-                // Refreshing Gallery to view Image in Gallery
+                /*// Refreshing Gallery to view Image in Gallery
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Images.Media.DATA, mediaStorageDir.getAbsolutePath());
                 values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
 
 
             } catch (FileNotFoundException e) {}
