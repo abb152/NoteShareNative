@@ -1,8 +1,10 @@
 package com.tilak.noteshare;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,22 +13,28 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.tilak.adpters.NotificationListAdapter;
-import com.tilak.datamodels.SideMenuitems;
+import com.tilak.adpters.OurNotificationListAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NotificationCenterActivity extends DrawerActivity {
 	public LinearLayout layoutHeder;
-	public ImageButton btnheaderMenu,btnsequence,btncalander;
-	public TextView textheadertitle,textViewSubHeaderTitle;
-	public LinearLayout layoutTitleHeaderview;
+	public ImageButton btnheaderMenu;
 	public ListView listviewNotification;
-	public NotificationListAdapter adapter;
+	private ArrayList<HashMap<String,String>> list;
+	public static String SERVER_URL = "http://104.197.122.116/";
+	//public static String SERVER_URL = "http://192.168.0.125:1337/";
+	View contentView;
 
-	public ArrayList<SideMenuitems> arrnotificationItems;
+	private ProgressDialog progressDialog;
 
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +42,9 @@ public class NotificationCenterActivity extends DrawerActivity {
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		// inflate your activity layout here!
-		View contentView = inflater
-				.inflate(R.layout.notificationlist_activity, null, false);
+		contentView = inflater.inflate(R.layout.notificationlist_activity, null, false);
 		mDrawerLayout.addView(contentView, 0);
+
 		initlizeUIElement(contentView);
 	}
 	void  initlizeUIElement(View contentView)
@@ -45,52 +53,127 @@ public class NotificationCenterActivity extends DrawerActivity {
 		layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
 		btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
 
-		/*btnsequence=(ImageButton) layoutHeder.findViewById(R.id.imageButtonsquence);
-		btncalander=(ImageButton) layoutHeder.findViewById(R.id.imageButtoncalander);
-		btncalander.setVisibility(View.GONE);
-		btnsequence.setVisibility(View.GONE);
-
-		///textheadertitle=(TextView) layoutHeder.findViewById(R.id.textViewheaderTitle);
-		//textheadertitle.setText("");
-
-
-		layoutTitleHeaderview=(LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
-		textViewSubHeaderTitle=(TextView) layoutTitleHeaderview.findViewById(R.id.textViewHeaderTitle1);
-		textViewSubHeaderTitle.setText("Notification Center");*/
-
-		arrnotificationItems=new ArrayList<SideMenuitems>();
-
-		SideMenuitems item1=new SideMenuitems();
-		item1.setMenuName("New Brushes added");
-		item1.setMenuNameDetail("Wed at 4:15 PM");
-		item1.setResourceId(R.drawable.scrbble_newdraw_1);
-		arrnotificationItems.add(item1);
-
-		SideMenuitems item2=new SideMenuitems();
-		item2.setMenuName("New Fonts added");
-		item2.setMenuNameDetail("Sun at 5:53 PM");
-		item2.setResourceId(R.drawable.text_icon_2);
-		arrnotificationItems.add(item2);
-
-		SideMenuitems item3=new SideMenuitems();
-		item3.setMenuName("New Textures added");
-		item3.setMenuNameDetail("Tue at 8:53 AM");
-		item3.setResourceId(R.drawable.paper_deafult);
-		arrnotificationItems.add(item3);
-		SideMenuitems item4=new SideMenuitems();
-		item4.setMenuName("New Colours added");
-		item4.setMenuNameDetail("Fri at 2:15 PM");
-		item4.setResourceId(R.drawable.color_header_icon);
-		arrnotificationItems.add(item4);
-
-
-
 		listviewNotification=(ListView) contentView.findViewById(R.id.listviewNotification);
-		adapter=new NotificationListAdapter(NotificationCenterActivity.this, arrnotificationItems);
-		listviewNotification.setAdapter(adapter);
+		//adapter=new NotificationListAdapter(NotificationCenterActivity.this, arrnotificationItems);
+		getNotifications();
 
-
+		Log.e("jay list size", String.valueOf(list.size()));
+		if(list.size() >0){
+			OurNotificationListAdapter adapter = new OurNotificationListAdapter(this, list);
+			listviewNotification.setAdapter(adapter);
+		}
 		addListners();
+	}
+
+	public void test(){
+		initlizeUIElement(contentView);
+	}
+
+	public void getNotifications(){
+
+		list = new ArrayList<HashMap<String, String>>();
+		try {
+			String notificationJson = getNotificationsJson().toString();
+			Log.e("jay sharejson", notificationJson);
+
+			String response = RegularFunctions.post(SERVER_URL + "notification/find", notificationJson);
+			Log.e("jay response", response);
+
+			JSONArray jsonArray = new JSONArray(response);
+
+			Log.e("jay json size", String.valueOf(jsonArray.length()));
+
+			//String value = jsonObject.get("value").toString();
+			if(jsonArray.length() > 0) {
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+					String noteId = jsonObject.opt("note").toString();
+					String noteName = jsonObject.opt("notename").toString();
+					String username = jsonObject.opt("username").toString();
+
+					HashMap<String,String> map = new HashMap<String,String>();
+					map.put("note", noteId);
+					map.put("notename", noteName);
+					map.put("username", username);
+
+					list.add(map);
+				}
+			} else {
+				Log.e("jay ", "no notifications");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (IOException io) {
+			io.printStackTrace();
+		}
+
+	}
+
+	public void acceptAndSync(View v){
+		progressDialog = new ProgressDialog(NotificationCenterActivity.this);
+		progressDialog.setMessage("Sync...");
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressDialog.setCancelable(false);
+		progressDialog.setCanceledOnTouchOutside(true);
+		progressDialog.show();
+
+		String serverNoteId = v.getTag().toString();
+
+		String json = getAcceptNotificationsJson(serverNoteId).toString();
+
+		try{
+			String response = RegularFunctions.post(SERVER_URL + "notification/noteStatus",json);
+
+			JSONObject jsonObject = new JSONObject(response);
+
+			String value = jsonObject.optString("value");
+			Log.e("jay value", value);
+
+			if(value.equals("true")){
+				//Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
+
+				RegularFunctions.syncNow();
+
+				progressDialog.dismiss();
+				ImageButton ib = (ImageButton) v;
+				ib.setImageResource(R.drawable.abc_ic_cab_done_holo_light);
+				ib.setClickable(false);
+
+				Toast.makeText(this,"Received",Toast.LENGTH_LONG).show();
+			}else{
+				progressDialog.dismiss();
+				Toast.makeText(this,"Oops something went wrong",Toast.LENGTH_LONG).show();
+			}
+
+		}catch(JSONException je){
+
+		}catch (IOException io){
+
+		}
+	}
+
+	public JSONObject getAcceptNotificationsJson(String serverNoteId) {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("user", RegularFunctions.getUserId());
+			jsonObject.put("status", "true");
+			jsonObject.put("note", serverNoteId);
+
+		} catch (JSONException je) {
+
+		}
+		return jsonObject;
+	}
+
+	public JSONObject getNotificationsJson(){
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("user", RegularFunctions.getUserId().trim());
+		}catch (JSONException je){
+
+		}
+		return jsonObject;
 	}
 
 	@Override
@@ -98,7 +181,6 @@ public class NotificationCenterActivity extends DrawerActivity {
 		// TODO Auto-generated method stub
 		super.addListners();
 		btnheaderMenu.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -107,15 +189,13 @@ public class NotificationCenterActivity extends DrawerActivity {
 		});
 
 		listviewNotification.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+									long arg3) {
 				// TODO Auto-generated method stub
 				//Toast.makeText(NotificationCenterActivity.this, "pos"+arg2, Toast.LENGTH_SHORT).show();
 			}
 		});
-
 	}
 
 	@Override

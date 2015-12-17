@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"
+              android:layout_marginBottom="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Note Shared"
+        android:id="@+id/tvNotiHeader"
+        android:textSize="18sp"
+        android:textColor="#636363"
+        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:layout_toStartOf="@+id/ibAccept"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvDesc"
+        android:layout_below="@+id/tvNotiHeader"
+        android:layout_alignParentStart="true"
+        android:textSize="16sp"
+        android:textColor="#636363"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toStartOf="@+id/ibAccept"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ibAccept"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_alignBottom="@+id/tvDesc"
+        android:src="@drawable/save_canvas"
+        android:background="@android:color/transparent"
+        android:layout_alignParentEnd="true"
+        android:onClick="acceptAndSync"/>
+</RelativeLayout>

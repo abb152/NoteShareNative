@@ -9,6 +9,8 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.tilak.db.Config;
 import com.tilak.db.Folder;
+import com.tilak.db.Sync;
+import com.tilak.noteshare.RegularFunctions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +34,7 @@ enum FUNCTION{
 public class FolderSync {
 
     public static String SERVER_URL = "http://104.197.122.116/";
-    //http://104.197.122.116/folder/localtoserver
+    //public static String SERVER_URL = "http://192.168.0.125:1337/";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private OkHttpClient client = new OkHttpClient();
@@ -40,7 +42,9 @@ public class FolderSync {
     FUNCTION funcType;
 
     public void localToServer(){
-        Long time = 1448954670000L;
+        Sync sync = RegularFunctions.getSyncTime();
+        Long time = sync.getFolderLocalToServer() - 10000;
+
         List<Folder> folders = getFolderList(time);
         if(folders.size() > 0) {
 
@@ -70,11 +74,19 @@ public class FolderSync {
                             Date createDate = new Date();
                             folders.get(i).setModifytime(dateToString(createDate));
                             folders.get(i).setmTime(createDate.getTime());
+
+                            //folder localToServer time change and also lastSyncTime
+                            RegularFunctions.changeFolderLocalToServerTime();
+
                             Log.e("jay create", "");
                             break;
 
                         case DELETE:
                             folders.get(i).delete();
+
+                            //folder localToServer time change and also lastSyncTime
+                            RegularFunctions.changeFolderLocalToServerTime();
+
                             Log.e("jay delete","");
                             break;
 
@@ -82,6 +94,11 @@ public class FolderSync {
                             Date editDate = new Date();
                             folders.get(i).setModifytime(dateToString(editDate));
                             folders.get(i).setmTime(editDate.getTime());
+
+                            //folder localToServer time change and also lastSyncTime
+
+                            RegularFunctions.changeFolderLocalToServerTime();
+
                             Log.e("jay edit", "");
                             break;
 
@@ -100,7 +117,12 @@ public class FolderSync {
     }
 
     public void serverToLocal(){
-        String foldermodifytime = "1970-01-01 00:00:00";
+        //String foldermodifytime = "1970-01-01 00:00:00";
+
+        Sync sync = RegularFunctions.getSyncTime();
+        //Long time = sync.getFolderLocalToServer();
+
+        String foldermodifytime = RegularFunctions.longToString(sync.getFolderLocalToServer() - 10000);
 
         try {
             String json = serverToLocalJson(getUserId(), foldermodifytime).toString();
@@ -134,6 +156,9 @@ public class FolderSync {
                         case CREATE:
                             Folder createFolder = new Folder(name,Integer.parseInt(order), id, dateServerToLocal(creationtime), dateServerToLocal(modifytime) ,stringToDate(dateServerToLocal(creationtime)), stringToDate(dateServerToLocal(modifytime)));
                             createFolder.save();
+
+                            RegularFunctions.changeFolderServerToLocalTime();
+
                             Log.e("jay created ***", String.valueOf(createFolder.getId()));
                             break;
 
@@ -143,6 +168,8 @@ public class FolderSync {
                                 Log.e("jay already not there","***");
                             else
                                 deleteFolder.get(0).delete();
+
+                            RegularFunctions.changeFolderServerToLocalTime();
 
                             Log.e("jay deleted","***");
                             break;
@@ -155,6 +182,8 @@ public class FolderSync {
                             editFolder.get(0).setcTime(stringToDate(dateServerToLocal(creationtime)));
                             editFolder.get(0).setmTime(stringToDate(dateServerToLocal(modifytime)));
                             editFolder.get(0).save();
+
+                            RegularFunctions.changeFolderServerToLocalTime();
 
                             Log.e("jay edited", editFolder.get(0).getName());
                             break;
@@ -198,7 +227,7 @@ public class FolderSync {
 
     public String dateServerToLocal(String date) throws ParseException{
 
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(serverToLocalDateFormat(date)).toString();
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(serverToLocalDateFormat(date));
     }//
 
     public static long serverToLocalDateFormat(String date) throws ParseException {

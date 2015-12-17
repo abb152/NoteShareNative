@@ -46,7 +46,8 @@
         android:text="NOTIFICATION CENTER"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/header_bg" />
+        android:textColor="@color/header_bg"
+        android:visibility="gone"/>
 
     <include
         android:id="@+id/titleHeaderview1"
@@ -58,8 +59,8 @@
     <ListView
         android:id="@+id/listviewNotification"
         android:layout_width="match_parent"
-        android:divider="@color/eaeaea"
-        android:dividerHeight="0.5dp"
+        android:divider="#d3d3d3"
+        android:dividerHeight="1dp"
         android:layout_height="wrap_content" >
     </ListView>
 

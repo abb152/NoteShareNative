@@ -27,6 +27,7 @@ import com.tilak.db.Config;
 import com.tilak.db.Folder;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
+import com.tilak.db.Sync;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -379,6 +380,16 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 	}
 
 	public void flushDatabase(){
+
+		//flush sync values
+		Sync s = Sync.findById(Sync.class, 1l);
+		s.setFolderLocalToServer(0l);
+		s.setFolderServerToLocal(0l);
+		s.setNoteLocalToServer(0l);
+		s.setNoteServerToLocal(0l);
+		s.setLastSyncTime(0l);
+		s.setSyncType(1);
+		s.save();
 
 		//flush config values
 		Config c = Config.findById(Config.class, 1l);

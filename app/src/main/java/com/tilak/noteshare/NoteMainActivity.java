@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -31,11 +32,9 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
@@ -242,6 +241,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         contentView = inflater
                 .inflate(R.layout.note_activity_main, null, false);
         mDrawerLayout.addView(contentView, 0);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         initlizeUIElement(contentView);
         try {
             fetchNoteElementsFromDb();
@@ -990,7 +990,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
     }
     public void share (View v) {
-        noteFunctions.share(NoteMainActivity.this);
+        //noteFunctions.share(NoteMainActivity.this);
+        noteFunctions.noteshareShare(this,noteIdForDetails);
+        footerMenuGone();
     }
 
     public void move (View v) {
@@ -1573,12 +1575,52 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         multipleDelete(buttonView, textView);
                     }
                 });
-                //editor.clearFocus();
-                editor.requestFocus();
-                editor.focusEditor();
+
+                editor.setPlaceholder("Tap and start typing...");
+                //editor.focusEditor();
+                //editor.requestFocus();
                 //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 //imm.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT);
 
+                /*int[] coords = new int[2];
+                editor.getLocationOnScreen(coords);
+
+                //int xa = coords[0];
+                //int ya = coords[1];
+
+                //int xa = editor.getScrollY();
+                int ya = editor.getScrollY();
+                Log.e("jay scrollY", String.valueOf(ya));
+
+                // Obtain MotionEvent object
+                long downTime = SystemClock.uptimeMillis();
+                long eventTime = SystemClock.uptimeMillis() + 100;
+                //float x = xa + 5;
+                //float y = ya + 10;
+                //Log.e("jay x", String.valueOf(x));
+                //Log.e("jay y", String.valueOf(y));
+                // List of meta states found here:     developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
+                int metaState = 0;
+                MotionEvent motionEvent = MotionEvent.obtain(
+                        downTime,
+                        eventTime,
+                        MotionEvent.ACTION_DOWN,
+                        14.944548F,
+                        20.838715F,
+                        metaState
+                );
+
+                    // Dispatch touch event to view
+                editor.dispatchTouchEvent(motionEvent);*/
+
+                /*editor.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+
+                        Log.e("jay touch", String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
+                        return false;
+                    }
+                });*/
 
                 // TODO editor up
                 editor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -1610,8 +1652,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
                     @Override
                     public void onTextChange(String s) {
-                        //editortext[0] = s;
-                        //String tag = (String) editor.getTag();
+
                         String plainText = getPlainText(s);
 
                         if (noteIdForDetails == null)
@@ -1624,21 +1665,20 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                             thisnoteid[0] = ne.getId();
                             ne_added[0] = true;
                         }
+                        if (height[0] < editor.getHeight()) {
+                            height[0] = editor.getHeight();
+                            scrollView.setScrollY(scrollView.getScrollY() + pxFromDp(NoteMainActivity.this, 20));
+                        }
+                        if (height[0] > editor.getHeight()) {
+                            height[0] = editor.getHeight();
+                            scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this,20));
+                        }
                         if (ne_added[0]) {
                             NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
                             ne.setContent(s);
                             ne.setContentA(plainText);
                             ne.save();
                             modifyNoteTime();
-                        }
-
-                        if (height[0] < editor.getHeight()) {
-                            height[0] = editor.getHeight();
-                            scrollView.setScrollY(scrollView.getScrollY() + pxFromDp(NoteMainActivity.this,20));
-                        }
-                        if (height[0] > editor.getHeight()) {
-                            height[0] = editor.getHeight();
-                            scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this,20));
                         }
                     }
                 });
@@ -2762,6 +2802,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     noteElements.addView(textView);
 
                     editor.setOnInitialLoadListener(new RichEditor.AfterInitialLoadListener() {
+
                         @Override
                         public void onAfterInitialLoad(boolean isReady) {
 
@@ -2773,8 +2814,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                     @Override
                                     public void onGlobalLayout() {
                                         //now we can retrieve the width and height
-                                        int width = textView.getWidth();
-                                        int height = textView.getHeight();
+                                        int width = editor.getWidth();
+                                        int height = editor.getHeight();
                                         Log.e("jay text height", String.valueOf(height));
                                         //...
                                         //do whatever you want with them
@@ -2784,9 +2825,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         //I use the function to remove it based on the api level!
 
                                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
-                                            textView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                            editor.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                                         else
-                                            textView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                            editor.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                                     }
                                 });
                             }
@@ -3533,4 +3574,5 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
     }
+
 }

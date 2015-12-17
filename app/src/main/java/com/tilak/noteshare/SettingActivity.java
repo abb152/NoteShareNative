@@ -1,6 +1,7 @@
 package com.tilak.noteshare;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,10 +19,9 @@ import com.tilak.db.Config;
 public class SettingActivity extends DrawerActivity {
 
 	public LinearLayout layoutHeder;
-	public ImageButton btnheaderMenu,btnsequence,btncalander;
-	public TextView textheadertitle,textViewSubHeaderTitle;
-	public LinearLayout layoutTitleHeaderview;
-	public TextView tvTerms, tvAbout, tvSyncVia;
+	public ImageButton btnheaderMenu;
+	public LinearLayout lastSyncLayout;
+	public TextView tvTerms, tvAbout, tvSyncVia, tvLastSync;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,12 +37,22 @@ public class SettingActivity extends DrawerActivity {
 	{
 		//mainHeadermenue
 		layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
+		lastSyncLayout=(LinearLayout) contentView.findViewById(R.id.lastSyncLayout);
 		btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
 		tvTerms = (TextView) findViewById(R.id.tvTerms);
 		tvAbout = (TextView) findViewById(R.id.tvAbout);
 		tvSyncVia = (TextView) findViewById(R.id.tvSyncVia);
+
+		tvLastSync = (TextView) findViewById(R.id.tvLastSync);
+
+		String time = RegularFunctions.lastSyncTime();
+
+		tvLastSync.setText(time);
+
 		addListners();
 	}
+
+
 
 	@Override
 	public void addListners() {
@@ -72,6 +82,25 @@ public class SettingActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				syncDialog(SettingActivity.this);
+			}
+		});
+
+		lastSyncLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				tvLastSync.setText("Please wait.. Syncing..");
+				final ProgressDialog progressDialog = new ProgressDialog(SettingActivity.this);
+				progressDialog.setCancelable(false);
+				progressDialog.setMessage("Sync...");
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.show();
+
+				RegularFunctions.syncNow();
+				String time = RegularFunctions.lastSyncTime();
+
+				tvLastSync.setText(time);
+
+				progressDialog.dismiss();
 			}
 		});
 

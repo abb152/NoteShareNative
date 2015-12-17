@@ -17,7 +17,9 @@ import com.squareup.okhttp.Response;
 import com.tilak.db.Config;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
+import com.tilak.db.Sync;
 import com.tilak.noteshare.MainActivity;
+import com.tilak.noteshare.RegularFunctions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,6 +46,7 @@ enum NOTESYNCFUNCTION {
 
 public class NoteSync {
     public static String SERVER_URL = "http://104.197.122.116/";
+    //public static String SERVER_URL = "http://192.168.0.125:1337/";
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private OkHttpClient client = new OkHttpClient();
@@ -50,7 +54,9 @@ public class NoteSync {
     NOTESYNCFUNCTION funcType;
 
     public void localToServer() {
-        Long time = 1448954670000L;
+
+        Sync sync = RegularFunctions.getSyncTime();
+        Long time = sync.getNoteLocalToServer() - 10000;
         List<Note> notes = getNoteList(time);
         if (notes.size() > 0) {
 
@@ -83,11 +89,16 @@ public class NoteSync {
                             Date createDate = new Date();
                             notes.get(i).setModifytime(dateToString(createDate));
                             notes.get(i).setMtime(createDate.getTime());
+
+                            RegularFunctions.changeNoteLocalToServerTime();
+
                             Log.e("jay create", "");
                             break;
 
                         case DELETE:
                             notes.get(i).delete();
+
+                            RegularFunctions.changeNoteLocalToServerTime();
                             Log.e("jay delete", "");
                             break;
 
@@ -95,6 +106,8 @@ public class NoteSync {
                             Date editDate = new Date();
                             notes.get(i).setModifytime(dateToString(editDate));
                             notes.get(i).setMtime(editDate.getTime());
+
+                            RegularFunctions.changeNoteLocalToServerTime();
                             Log.e("jay edit", "");
                             break;
 
@@ -109,10 +122,17 @@ public class NoteSync {
             }
 
         }
+
+        RegularFunctions.changeLastSyncTime();
     }
 
     public void serverToLocal() {
-        String notemodifytime = "1970-01-01 00:00:00";
+        //String notemodifytime = "1970-01-01 00:00:00";
+
+        Sync sync = RegularFunctions.getSyncTime();
+        //Long time = sync.getFolderLocalToServer();
+
+        String notemodifytime = RegularFunctions.longToString(sync.getNoteLocalToServer() - 10000);
 
         try {
             String json = serverToLocalJson(getUserId(), notemodifytime).toString();
@@ -149,8 +169,9 @@ public class NoteSync {
 
                     JSONArray noteElement = null;
                     try {
-                        noteElement = jsonArray.getJSONObject(i).getJSONArray("noteelements");
-                        Log.e("jay ne size", String.valueOf(noteElement.length()));
+                        //noteElement = jsonArray.getJSONObject(i).getJSONArray("noteelements");
+                        noteElement = jsonArray.getJSONObject(i).optJSONArray("noteelements");
+                        //Log.e("jay ne size", String.valueOf(noteElement.length()));
                     } catch (JSONException je) {
                         Log.e("jay Some tag", Log.getStackTraceString(je));
                     }
@@ -177,6 +198,9 @@ public class NoteSync {
                                 Note createNote = new Note(title, tags, color, folder, Long.parseLong(remindertime), timebomb, background, dateServerToLocal(creationtime), dateServerToLocal(modifytime), id, Integer.parseInt(islocked), stringToDate(dateServerToLocal(creationtime)), stringToDate(dateServerToLocal(modifytime)));
                                 createNote.save();
                                 serverToLocalNoteElementsNew(noteElement, createNote.getId());
+
+                                RegularFunctions.changeNoteServerToLocalTime();
+
                                 Log.e("jay created ***", String.valueOf(createNote.getId()));
                             } catch (ParseException pe) {
                                 Log.e("jay parseexception", Log.getStackTraceString(pe));
@@ -194,6 +218,7 @@ public class NoteSync {
                                 deleteNote.get(0).delete();
                             }
 
+                            RegularFunctions.changeNoteServerToLocalTime();
                             Log.e("jay deleted", "***");
                             break;
                         case EDIT:
@@ -226,6 +251,8 @@ public class NoteSync {
                             //changes in note elements
                             serverToLocalNoteElementsNew(noteElement, editNote.get(0).getId());
 
+                            RegularFunctions.changeNoteServerToLocalTime();
+
                             Log.e("jay edited", editNote.get(0).getTitle());
                             break;
                     }
@@ -243,6 +270,8 @@ public class NoteSync {
             Log.e("jay exception io", String.valueOf(io));
             io.printStackTrace();
         }*/
+
+        RegularFunctions.changeLastSyncTime();
     }
 
     public boolean noteAlreadyExists(String id) {
@@ -286,8 +315,12 @@ public class NoteSync {
                 .url(url)
                 .post(body)
                 .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        }catch (SocketTimeoutException se){
 
-        Response response = client.newCall(request).execute();
+        }
         return response.body().string();
     }
 

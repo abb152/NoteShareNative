@@ -89,7 +89,8 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
 
-            android:src="@drawable/ic_note_share" />
+            android:src="@drawable/ic_note_share"
+            android:onClick="share"/>
 
     </LinearLayout>
 

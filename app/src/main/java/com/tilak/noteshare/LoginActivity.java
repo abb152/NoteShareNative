@@ -32,6 +32,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.tilak.db.Config;
+import com.tilak.db.Sync;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -81,6 +82,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         if(config.size() == 0) {
             Config c = new Config("", "", "", "", "", "", 0, "", "", "", "", "MODIFIED_TIME", "DETAIL");
             c.save();
+
+            long currentTime = RegularFunctions.getCurrentTimeLong();
+
+            Sync sync = new Sync( currentTime, currentTime, currentTime, currentTime, 0l, 1);
+            sync.save();
         }
 
         Config configCheck = Config.findById(Config.class,1l);
@@ -396,6 +402,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         DefaultHttpClient httpClient = new DefaultHttpClient();
         ResponseHandler<String> resonseHandler = new BasicResponseHandler();
         HttpPost postMethod = new HttpPost("http://104.197.122.116/user/sociallogin");
+        //HttpPost postMethod = new HttpPost("http://192.168.0.125:1337/user/sociallogin");
 
         JSONObject json = new JSONObject();
         if (type.equals("fb")) {
@@ -436,6 +443,19 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             c.setProfilepic(responseProfilePic);
             c.setServerid(responseServerId);
             c.save();
+
+            Long currentTimeLong = RegularFunctions.getCurrentTimeLong();
+            Long initialTimeLong = 1420113600000l;
+
+            Sync s = Sync.findById(Sync.class, 1l);
+            s.setFolderLocalToServer(initialTimeLong);
+            s.setFolderServerToLocal(initialTimeLong);
+            s.setNoteLocalToServer(initialTimeLong);
+            s.setNoteServerToLocal(initialTimeLong);
+            s.setLastSyncTime(0l);
+            s.setSyncType(1);
+            s.save();
+
             getBitmapFromURL(c.profilepic);
             goToMain();
         }

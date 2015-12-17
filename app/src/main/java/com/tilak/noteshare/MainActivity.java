@@ -1225,6 +1225,12 @@ public class MainActivity extends DrawerActivity {
 		//onRestart();
 	}
 
+	public void share(View v){
+		detailView.closeAnimate(lastItemOpened[0]);
+		String id = v.getTag().toString();
+		noteFunctions.noteshareShare(this,id);
+	}
+
 	public void optionNote(View v) {
 		String id = v.getTag().toString();
 		noteFunctions.showOptionAlert(this, id);

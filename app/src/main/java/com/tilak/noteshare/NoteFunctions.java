@@ -2,12 +2,14 @@ package com.tilak.noteshare;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,6 +30,10 @@ import com.tilak.db.Config;
 import com.tilak.db.Folder;
 import com.tilak.db.Note;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,10 +41,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class NoteFunctions {
 
     //MainActivity mainActivity = new MainActivity();
-
+    public static String SERVER_URL = "http://104.197.122.116/";
+    //public static String SERVER_URL = "http://192.168.0.125:1337/";
     // LOCK / PASS CODE
     public void setPasscode(Context context, String id) {
         Note n = Note.findById(Note.class, Long.parseLong(id));
@@ -77,6 +86,7 @@ public class NoteFunctions {
     // TIME BOMB & REMINDER
     Dialog move;
     public void showDate(final Context context, final String noteid, String title, final String type){
+
         move = new Dialog(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // inflate your activity layout here!
@@ -289,14 +299,13 @@ public class NoteFunctions {
                 if (insideNote) {
 
                     dialog.dismiss();
-                    Note n =  Note.findById(Note.class, Long.parseLong(id));
-                    if(n.getIslocked() == 1 ){
+                    Note n = Note.findById(Note.class, Long.parseLong(id));
+                    if (n.getIslocked() == 1) {
                         Intent intent = new Intent(context, PasscodeActivity.class);
                         intent.putExtra("FileId", id);
                         intent.putExtra("Check", "6");
                         context.startActivity(intent);
-                    }
-                    else
+                    } else
                         delete(id);
 
                     //context.startActivity(new Intent(context, MainActivity.class));
@@ -306,14 +315,13 @@ public class NoteFunctions {
                     //mainActivity.delete(id);
 
                     dialog.dismiss();
-                    Note n =  Note.findById(Note.class, Long.parseLong(id));
-                    if(n.getIslocked() == 1 ){
+                    Note n = Note.findById(Note.class, Long.parseLong(id));
+                    if (n.getIslocked() == 1) {
                         Intent intent = new Intent(context, PasscodeActivity.class);
                         intent.putExtra("FileId", id);
                         intent.putExtra("Check", "6");
                         context.startActivity(intent);
-                    }
-                    else {
+                    } else {
                         delete(id);
                         context.startActivity(new Intent(context, MainActivity.class));
                         //MainActivity mainActivity = new MainActivity();
@@ -436,6 +444,7 @@ public class NoteFunctions {
             @Override
             public void onClick(View v) {
                 // Share
+                noteshareShare(context,id);
                 dialog.dismiss();
             }
         });
@@ -508,5 +517,88 @@ public class NoteFunctions {
         shareDialog.show();
     }
 
+    //noteshare to noteshare share
+    public void noteshareShare(final Context context, final String id) {
+        final Dialog shareDialog = new Dialog(context);
 
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.share_noteshare_email, null, false);
+        TextView tvShareTitleAlert = (TextView) contentView.findViewById(R.id.tvEmailShareTitle);
+        tvShareTitleAlert.setText("SHARE NOTE");
+        tvShareTitleAlert.setTextColor(Color.WHITE);
+
+        final EditText emailTo = (EditText) contentView.findViewById(R.id.textViewTitleAlertMessage);
+
+        Button buttonShareCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
+        Button buttonShareOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+
+        buttonShareCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareDialog.dismiss();
+            }
+        });
+
+        buttonShareOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"Please wait!",Toast.LENGTH_LONG).show();
+                Log.e("jay text", emailTo.getText().toString());
+                Log.e("jay id", id);
+                ProgressDialog progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("sync...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(true);
+                progressDialog.show();
+
+                RegularFunctions.syncNow();
+
+                try {
+                    String shareEmailJson = shareJson(id, emailTo.getText().toString()).toString();
+                    Log.e("jay sharejson", shareEmailJson);
+
+                    String response = RegularFunctions.post(SERVER_URL + "share/save", shareEmailJson);
+                    Log.e("jay response", response);
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String value = jsonObject.optString("value");
+                    if(value.equals("true")){
+                        shareDialog.dismiss();
+                        progressDialog.dismiss();
+                        Toast.makeText(context,"Note shared successfully!",Toast.LENGTH_LONG).show();
+                    }else{
+                        shareDialog.dismiss();
+                        progressDialog.dismiss();
+                        Toast.makeText(context,"Oops, Something went wrong!",Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException io) {
+                    io.printStackTrace();
+                }
+
+            }
+        });
+
+        shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        shareDialog.setCancelable(false);
+        shareDialog.setContentView(contentView);
+        shareDialog.setCanceledOnTouchOutside(true);
+
+        shareDialog.show();
+    }
+
+    public JSONObject shareJson(String id, String email){
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("userfrom",RegularFunctions.getUserId());
+            jsonObject.put("email",email);
+            jsonObject.put("note", RegularFunctions.getServerNoteId(id).trim());
+        }catch(JSONException je){
+
+        }
+        return jsonObject;
+    }
 }
