@@ -22,7 +22,13 @@ public class RegularFunctions {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
-    public static String SERVER_URL = "http://104.197.122.116/";
+    //public static String SERVER_URL = "http://104.197.122.116/";
+    public static String SERVER_URL = "http://192.168.0.125:1337/";
+
+    public static String getDeviceId(){
+        Config config = Config.findById(Config.class,1L);
+        return config.getDeviceid();
+    }
 
     public static String getServerNoteId(String localNoteid){
         Note note = Note.findById(Note.class, Long.parseLong(localNoteid));

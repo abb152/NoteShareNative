@@ -3,6 +3,7 @@ package com.tilak.noteshare;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,8 +31,8 @@ public class NotificationCenterActivity extends DrawerActivity {
 	public ImageButton btnheaderMenu;
 	public ListView listviewNotification;
 	private ArrayList<HashMap<String,String>> list;
-	public static String SERVER_URL = "http://104.197.122.116/";
-	//public static String SERVER_URL = "http://192.168.0.125:1337/";
+	//public static String SERVER_URL = "http://104.197.122.116/";
+	public static String SERVER_URL = "http://192.168.0.125:1337/";
 	View contentView;
 
 	private ProgressDialog progressDialog;
@@ -57,11 +58,11 @@ public class NotificationCenterActivity extends DrawerActivity {
 		//adapter=new NotificationListAdapter(NotificationCenterActivity.this, arrnotificationItems);
 		getNotifications();
 
-		Log.e("jay list size", String.valueOf(list.size()));
-		if(list.size() >0){
+		//Log.e("jay list size", String.valueOf(list.size()));
+		/*if(list.size() >0){
 			OurNotificationListAdapter adapter = new OurNotificationListAdapter(this, list);
 			listviewNotification.setAdapter(adapter);
-		}
+		}*/
 		addListners();
 	}
 
@@ -71,46 +72,88 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 	public void getNotifications(){
 
-		list = new ArrayList<HashMap<String, String>>();
-		try {
-			String notificationJson = getNotificationsJson().toString();
-			Log.e("jay sharejson", notificationJson);
+		/*final ProgressDialog progressDialog = new ProgressDialog(this);
+		progressDialog.setMessage("Loading...");
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.setCancelable(true);
+		progressDialog.show();*/
 
-			String response = RegularFunctions.post(SERVER_URL + "notification/find", notificationJson);
-			Log.e("jay response", response);
+		new AsyncTask<Void, Void, String>(){
 
-			JSONArray jsonArray = new JSONArray(response);
+			boolean received = false;
 
-			Log.e("jay json size", String.valueOf(jsonArray.length()));
+			@Override
+			protected String doInBackground(Void... params) {
 
-			//String value = jsonObject.get("value").toString();
-			if(jsonArray.length() > 0) {
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsonObject = jsonArray.getJSONObject(i);
+				list = new ArrayList<HashMap<String, String>>();
+				try {
+					String notificationJson = getNotificationsJson().toString();
+					Log.e("jay sharejson", notificationJson);
 
-					String noteId = jsonObject.opt("note").toString();
-					String noteName = jsonObject.opt("notename").toString();
-					String username = jsonObject.opt("username").toString();
+					String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/find", notificationJson);
+					Log.e("jay response", response);
 
-					HashMap<String,String> map = new HashMap<String,String>();
-					map.put("note", noteId);
-					map.put("notename", noteName);
-					map.put("username", username);
+					JSONArray jsonArray = new JSONArray(response);
 
-					list.add(map);
+					Log.e("jay json size", String.valueOf(jsonArray.length()));
+
+					//String value = jsonObject.get("value").toString();
+
+
+					if(jsonArray.length() > 0) {
+						for (int i = 0; i < jsonArray.length(); i++) {
+							JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+							String noteId = jsonObject.opt("note").toString();
+							String noteName = jsonObject.opt("notename").toString();
+							String username = jsonObject.opt("username").toString();
+
+							HashMap<String,String> map = new HashMap<String,String>();
+							map.put("note", noteId);
+							map.put("notename", noteName);
+							map.put("username", username);
+
+							list.add(map);
+
+							received= true;
+							//progressDialog.dismiss();
+						}
+					} else {
+						received = false;
+
+						//progressDialog.dismiss();
+						Log.e("jay ", "no notifications");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (IOException io) {
+					io.printStackTrace();
 				}
-			} else {
-				Log.e("jay ", "no notifications");
+
+				return null;
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (IOException io) {
-			io.printStackTrace();
-		}
+
+			@Override
+			protected void onPostExecute(String s) {
+				if(received){
+					if(list.size() >0){
+						OurNotificationListAdapter adapter = new OurNotificationListAdapter(NotificationCenterActivity.this, list);
+						listviewNotification.setAdapter(adapter);
+					}
+				}else{
+
+				}
+			}
+		}.execute(null, null, null);
 
 	}
 
-	public void acceptAndSync(View v){
+	public void acceptAndSync(final View v){
+
+
+		final ImageButton imageButton = (ImageButton) v;
+		imageButton.setClickable(false);
+
 		progressDialog = new ProgressDialog(NotificationCenterActivity.this);
 		progressDialog.setMessage("Sync...");
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -118,39 +161,66 @@ public class NotificationCenterActivity extends DrawerActivity {
 		progressDialog.setCanceledOnTouchOutside(true);
 		progressDialog.show();
 
-		String serverNoteId = v.getTag().toString();
+		final String serverNoteId = imageButton.getTag().toString();
 
-		String json = getAcceptNotificationsJson(serverNoteId).toString();
+		new AsyncTask<Void,Void,String>(){
 
-		try{
-			String response = RegularFunctions.post(SERVER_URL + "notification/noteStatus",json);
+			boolean received = false;
+			@Override
+			protected String doInBackground(Void... params) {
 
-			JSONObject jsonObject = new JSONObject(response);
+				try{
 
-			String value = jsonObject.optString("value");
-			Log.e("jay value", value);
+					String json = getAcceptNotificationsJson(serverNoteId).toString();
+					String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/noteStatus", json);
 
-			if(value.equals("true")){
-				//Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
+					JSONObject jsonObject = new JSONObject(response);
 
-				RegularFunctions.syncNow();
+					String value = jsonObject.optString("value");
+					Log.e("jay value", value);
 
-				progressDialog.dismiss();
-				ImageButton ib = (ImageButton) v;
-				ib.setImageResource(R.drawable.abc_ic_cab_done_holo_light);
-				ib.setClickable(false);
+					if(value.equals("true")){
+						//Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
 
-				Toast.makeText(this,"Received",Toast.LENGTH_LONG).show();
-			}else{
-				progressDialog.dismiss();
-				Toast.makeText(this,"Oops something went wrong",Toast.LENGTH_LONG).show();
+						RegularFunctions.syncNow();
+
+						received = true;
+
+						progressDialog.dismiss();
+
+					}else{
+						progressDialog.dismiss();
+						received = false;
+
+						//Toast.makeText(NotificationCenterActivity.this,"Oops something went wrong",Toast.LENGTH_LONG).show();
+					}
+
+				}catch(JSONException je){
+
+				}catch (IOException io){
+
+				}
+
+				return null;
 			}
 
-		}catch(JSONException je){
+			@Override
+			protected void onPostExecute(String s) {
 
-		}catch (IOException io){
+				if(received){
+					//ImageButton ib = (ImageButton) v;
+					imageButton.setImageResource(R.drawable.ic_like);
+					imageButton.setClickable(false);
 
-		}
+					Toast.makeText(NotificationCenterActivity.this, "Note Received", Toast.LENGTH_LONG).show();
+				}else {
+					imageButton.setClickable(false);
+					Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_LONG).show();
+				}
+			}
+		}.execute(null,null,null);
+
+
 	}
 
 	public JSONObject getAcceptNotificationsJson(String serverNoteId) {

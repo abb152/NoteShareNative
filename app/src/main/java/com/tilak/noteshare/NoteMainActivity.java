@@ -2,10 +2,12 @@ package com.tilak.noteshare;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
@@ -21,6 +23,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -205,6 +208,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     //note element order and spacing
     boolean scribbleAdded = false;
+    public static String background;
 
     public static String getDurationBreakdown(long millis) {
         if (millis < 0) {
@@ -224,6 +228,48 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         System.out.println("time is:" + sb.toString());
 
         return sb.toString();
+
+    }
+
+    public void loadBitmapFromView(View v) {
+
+        ScrollView scroll = (ScrollView) v;
+
+        int width = scroll.getChildAt(0).getWidth();
+        int height = scroll.getChildAt(0).getHeight();
+
+        int blankSpace = pxFromDp(this, 1500);
+
+        Log.e("jay sw",String.valueOf(width));
+        Log.e("jay sh",String.valueOf(height - blankSpace));
+
+        int screenShotHeight = height - blankSpace;
+
+        double j = ((double)screenShotHeight)/200;
+        int timesLoopShouldRun = (int) Math.ceil(j);
+
+
+        Canvas bitmapCanvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(width, screenShotHeight, Bitmap.Config.ARGB_8888);
+
+        bitmapCanvas.setBitmap(bitmap);
+        bitmapCanvas.drawColor(Color.parseColor(background));
+        //bitmapCanvas.scale(1.0f, 3.0f);
+        scroll.draw(bitmapCanvas);
+
+
+        String fileName = "ss.png";
+        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
+        try {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
     }
 
@@ -1055,6 +1101,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 // Save click
                 updateHeaderControls(v.getId());
 
+                //loadBitmapFromView(scrollView);
 
                 if (textelementid.size() > 0) {
                     textelementid.get(0).clearFocus();
@@ -2713,7 +2760,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
             textViewheaderTitle.setText(note.getTitle());
 
-            String background = note.getColor();
+            background = note.getColor();
 
             if (background.contains("#")){
                 background_bg.setBackgroundColor(Color.parseColor(background));
@@ -2843,6 +2890,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         View viewImage = inflator.inflate(R.layout.note_image, null, false);
                         final RelativeLayout note_image = (RelativeLayout) viewImage.findViewById(R.id.note_image);
                         ImageView note_imageview = (ImageView) note_image.findViewById(R.id.note_imageview);
+                        //SubsamplingScaleImageView note_imageview = (SubsamplingScaleImageView)findViewById(R.id.note_imageview);
                         final CheckBox cbDelete = (CheckBox) viewImage.findViewById(R.id.cbDelete);
 
 
@@ -2859,6 +2907,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                         String name = n.content;
                         File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+                        String filePath = f.toString();
                         //int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
                         //int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
                         Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
@@ -2910,6 +2959,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                         note_imageview.setImageBitmap(b);
                         note_imageview.setMaxHeight((int) (height / 1.5));
+
+                        //note_imageview.setImage(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
+                        //note_imageview.setImage(ImageSource.uri(f.getPath()));
+
                         noteElements.addView(note_image);
 
                         note_image.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
@@ -2920,7 +2973,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                 //now we can retrieve the width and height
                                 int width = note_image.getWidth();
                                 int height = note_image.getHeight();
-                                Log.e("jay image height", String.valueOf(height));
+                                //Log.e("jay image height", String.valueOf(height));
                                 //...
                                 //do whatever you want with them
                                 //...

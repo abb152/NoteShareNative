@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -367,6 +368,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 			@Override
 			public void onClick(View arg0) {
 				flushDatabase();
+
 				finish();
 				startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
 			}
@@ -380,6 +382,17 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 	}
 
 	public void flushDatabase(){
+
+		//remove gcmId of this device from server
+		try {
+			String logoutUrl = RegularFunctions.SERVER_URL+"user/logout";
+			String logoutJson = getLogoutJson().toString();
+			Log.e("jay logoutJSON", logoutJson);
+			String removeGcm = RegularFunctions.post(logoutUrl,logoutJson);
+			Log.e("jay removeGcm", removeGcm);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		//flush sync values
 		Sync s = Sync.findById(Sync.class, 1l);
@@ -404,9 +417,8 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		c.setUsername("");
 		c.setDeviceid("");
 		c.setServerid("");
+		c.setAppversion(0);
 		c.save();
-
-		//Config.deleteAll(Config.class);
 
 		//delete all folders
 		Folder.deleteAll(Folder.class);
@@ -417,6 +429,17 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 		//delete all noteElements
 		NoteElement.deleteAll(NoteElement.class);
 
+	}
+
+	public JSONObject getLogoutJson(){
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("user", RegularFunctions.getUserId().trim());
+			jsonObject.put("deviceid", RegularFunctions.getDeviceId().trim());
+		}catch (JSONException je){
+
+		}
+		return jsonObject;
 	}
 
 }

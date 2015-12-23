@@ -45,8 +45,7 @@ enum NOTESYNCFUNCTION {
 }
 
 public class NoteSync {
-    public static String SERVER_URL = "http://104.197.122.116/";
-    //public static String SERVER_URL = "http://192.168.0.125:1337/";
+    //public static String SERVER_URL = "http://104.197.122.116/";
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private OkHttpClient client = new OkHttpClient();
@@ -73,7 +72,7 @@ public class NoteSync {
 
                 try {
                     String json = localToServerNoteJson(notes.get(i).getTitle(), notes.get(i).getTags(), notes.get(i).getColor(), notes.get(i).getFolder(), String.valueOf(notes.get(i).getRemindertime()), notes.get(i).getTimebomb(), notes.get(i).getBackground(), notes.get(i).getCreationtime(), notes.get(i).getModifytime(), String.valueOf(notes.get(i).getIslocked()), notes.get(i).getCtime(), notes.get(i).getMtime(), getUserId(), funcType, notes.get(i).getServerid(), notes.get(i).getId()).toString();
-                    String response = post(SERVER_URL + "note/localtoserver", json);
+                    String response = post(RegularFunctions.SERVER_URL + "note/localtoserver", json);
 
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -107,6 +106,9 @@ public class NoteSync {
                             notes.get(i).setModifytime(dateToString(editDate));
                             notes.get(i).setMtime(editDate.getTime());
 
+                            //send note element media
+                            sendNoteElementMedia(notes.get(i).getId());
+
                             RegularFunctions.changeNoteLocalToServerTime();
                             Log.e("jay edit", "");
                             break;
@@ -138,7 +140,7 @@ public class NoteSync {
             String json = serverToLocalJson(getUserId(), notemodifytime).toString();
             String response = null;
             try {
-                response = post(SERVER_URL + "note/servertolocal", json);
+                response = post(RegularFunctions.SERVER_URL + "note/servertolocal", json);
             } catch (IOException io) {
                 Log.e("jay exception io", Log.getStackTraceString(io));
             }
@@ -347,7 +349,7 @@ public class NoteSync {
     public boolean checkIfUploaded(String filename){
         boolean alreadyUploaded = false;
         try {
-            String response = checkMediaAlreadyUploadedResponse(SERVER_URL+"/searchmedia?file="+filename);
+            String response = checkMediaAlreadyUploadedResponse(RegularFunctions.SERVER_URL+"/searchmedia?file="+filename);
             JSONObject jsonObject = new JSONObject(response);
             String value = jsonObject.getString("value");
 
@@ -547,7 +549,7 @@ public class NoteSync {
                     NoteElement noteElement = new NoteElement(noteid, ordernumber, isSync, type, content, contentA, contentB);
                     noteElement.save();
 
-                    downloadMedia( SERVER_URL +"user/getmedia?file=", type, content);
+                    downloadMedia( RegularFunctions.SERVER_URL +"user/getmedia?file=", type, content);
 
                 } catch (JSONException je) {
                     je.printStackTrace();
@@ -601,7 +603,7 @@ public class NoteSync {
             }
 
             Request request = new Request.Builder()
-                    .url(SERVER_URL+"user/mediaupload")
+                    .url(RegularFunctions.SERVER_URL+"user/mediaupload")
                     .post(requestBody)
                     .build();
 

@@ -1,11 +1,16 @@
 package com.tilak.noteshare;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -29,6 +34,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.tilak.db.Config;
@@ -71,6 +77,13 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
     private SignInButton btnSignIn;
 
+    public final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public final static String SENDER_ID = "1766986306";
+    GoogleCloudMessaging gcm;
+    String msg;
+    String regid;
+    public String socialid, fullname, useremail, profilePicture, loginType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +93,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
         List<Config> config = Config.listAll(Config.class);
         if(config.size() == 0) {
-            Config c = new Config("", "", "", "", "", "", 0, "", "", "", "", "MODIFIED_TIME", "DETAIL");
+            Config c = new Config("", "", "", "", "", "", 0, "", "", "", "", "MODIFIED_TIME", "DETAIL",0);
             c.save();
 
             long currentTime = RegularFunctions.getCurrentTimeLong();
@@ -91,7 +104,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
         Config configCheck = Config.findById(Config.class,1l);
         if(!configCheck.fbid.isEmpty() || !configCheck.googleid.isEmpty()){
-            //goToMain();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
@@ -119,6 +131,63 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 .addOnConnectionFailedListener(this).addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private void registerInBackground() {
+
+        new AsyncTask<Void, Void, String> (){
+
+            boolean gcmIdReceived = false;
+
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(LoginActivity.this);
+                    }
+                    regid = gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + regid;
+                    gcmIdReceived = true;
+                    Log.e("jay regid", regid);
+
+                } catch (IOException ex) {
+                    gcmIdReceived = false;
+                    msg = "Error :" + ex.getMessage();
+
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if(gcmIdReceived){
+                    try {
+                        sendLogin();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(LoginActivity.this,"Oops! Something went wrong!",Toast.LENGTH_LONG).show();
+                }
+            }
+        }.execute(null,null,null);
     }
 
     protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
@@ -154,27 +223,24 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                 FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
 
-                                String uid = object.optString("id");
-                                String email = object.optString("email");
-                                String name = object.optString("name");
+                                socialid = object.optString("id");
+                                useremail = object.optString("email");
+                                fullname = object.optString("name");
+                                loginType = "fb";
 
                                 Uri.Builder builder = new Uri.Builder();
                                 builder.scheme("https")
                                         .authority("graph.facebook.com")
-                                        .appendPath(uid)
+                                        .appendPath(socialid)
                                         .appendPath("picture")
                                         .appendQueryParameter("width", "1000")
                                         .appendQueryParameter("height", "1000");
 
                                 Uri pictureUri = builder.build();
 
-                                try {
-                                    sendLogin(uid, name, email, pictureUri.toString(), "fb");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                profilePicture = pictureUri.toString();
+
+                                getGcmId();
                                 facebookLogout();
 
                             }
@@ -249,14 +315,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 String profilePicture = String.valueOf("profile");
                 File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + profilePicture + ".jpg");
                 myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
-
-                /*// Refreshing Gallery to view Image in Gallery
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, mediaStorageDir.getAbsolutePath());
-                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
-
-
             } catch (FileNotFoundException e) {}
 
         } catch (IOException e) {
@@ -345,23 +403,13 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-                String personName = currentPerson.getDisplayName();
-                //String firstName = currentPerson.getName().getGivenName();
-                //String lastName = currentPerson.getName().getFamilyName();
+                fullname = currentPerson.getDisplayName();
                 String personPhotoUrl = currentPerson.getImage().getUrl();
-                String personGooglePlusProfile = currentPerson.getUrl();
-                String personGooglePlusId = currentPerson.getId();
-                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-
-                personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + 200;
-
-                try {
-                    sendLogin(personGooglePlusId, personName, email, personPhotoUrl, "gp");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                socialid = currentPerson.getId();
+                useremail = Plus.AccountApi.getAccountName(mGoogleApiClient);
+                loginType = "gp";
+                profilePicture = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + 200;
+                getGcmId();
 
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -395,27 +443,67 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         }
     }
 
-    public void sendLogin(String id, String name, String email, String profilePic, String type) throws JSONException, ClientProtocolException, IOException {
+    private static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+
+    public void getGcmId(){
+        if (checkPlayServices()) {
+            gcm = GoogleCloudMessaging.getInstance(this);
+            /*regid = getRegistrationId(context);
+
+            if (regid.isEmpty()) {
+                registerInBackground();
+            }*/
+            Log.e("jay in", "gcmId");
+
+            registerInBackground();
+
+        } else {
+            Log.e("Jay", "No valid Google Play Services APK found.");
+        }
+    }
+
+    public void sendLogin() throws JSONException, ClientProtocolException, IOException {
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
 
         ArrayList<String> stringData = new ArrayList<String>();
         DefaultHttpClient httpClient = new DefaultHttpClient();
         ResponseHandler<String> resonseHandler = new BasicResponseHandler();
-        HttpPost postMethod = new HttpPost("http://104.197.122.116/user/sociallogin");
-        //HttpPost postMethod = new HttpPost("http://192.168.0.125:1337/user/sociallogin");
+        HttpPost postMethod = new HttpPost(RegularFunctions.SERVER_URL+"user/sociallogin1");
 
         JSONObject json = new JSONObject();
-        if (type.equals("fb")) {
-            json.put("fbid", id);
-        } else if (type.equals("gp")) {
-            json.put("googleid", id);
+        if (loginType.equals("fb")) {
+            json.put("fbid", socialid);
+        } else if (loginType.equals("gp")) {
+            json.put("googleid", socialid);
         }
-        json.put("name", name);
-        json.put("email", email);
-        json.put("profilepic", profilePic);
+        json.put("name", fullname);
+        json.put("email", useremail);
+        json.put("profilepic", profilePicture);
+        json.put("deviceid", regid);
         //postMethod.setHeader("Content-Type", "application/json" );
+
+        Log.e("jay login json", json.toString());
+
         postMethod.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
         String response = httpClient.execute(postMethod,resonseHandler);
+
+        Log.e("jay response",response);
+
         JSONObject responseJson = new JSONObject(response);
 
         responseServerId = responseJson.get("_id").toString();
@@ -427,13 +515,14 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         createDirectory();
 
 
-        if (type.equals("fb"))
+        if (loginType.equals("fb"))
             responseFbId = responseJson.get("fbid").toString();
-        else if (type.equals("gp"))
+        else if (loginType.equals("gp"))
             responseGpId = responseJson.get("googleid").toString();
 
         if (responseServerId.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "No response from Server", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Something went wrong! Please try again.", Toast.LENGTH_LONG).show();
         } else {
             Config c = Config.findById(Config.class, 1l);
             c.setFirstname(responseName);
@@ -442,6 +531,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             c.setGoogleid(responseGpId);
             c.setProfilepic(responseProfilePic);
             c.setServerid(responseServerId);
+            c.setAppversion(getAppVersion(this));
+            c.setDeviceid(regid);
             c.save();
 
             Long currentTimeLong = RegularFunctions.getCurrentTimeLong();
@@ -457,6 +548,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             s.save();
 
             getBitmapFromURL(c.profilepic);
+            progressDialog.dismiss();
             goToMain();
         }
     }
@@ -519,7 +611,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     }
 
     /******* create directory end *******/
+    @Override
+    public void onBackPressed() {
 
-
-
+    }
 }

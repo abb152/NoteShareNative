@@ -33,7 +33,7 @@ enum FUNCTION{
 }
 public class FolderSync {
 
-    public static String SERVER_URL = "http://104.197.122.116/";
+    //public static String SERVER_URL = "http://104.197.122.116/";
     //public static String SERVER_URL = "http://192.168.0.125:1337/";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -61,7 +61,7 @@ public class FolderSync {
 
                 try {
                     String json = localToServerFolderJson(folders.get(i).getName(), folders.get(i).creationtime, folders.get(i).getModifytime(), folders.get(i).getOrderNumber(), getUserId(), funcType, folders.get(i).getServerid()).toString();
-                    String response = post(SERVER_URL + "folder/localtoserver", json);
+                    String response = post(RegularFunctions.SERVER_URL + "folder/localtoserver", json);
 
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -126,7 +126,7 @@ public class FolderSync {
 
         try {
             String json = serverToLocalJson(getUserId(), foldermodifytime).toString();
-            String response = post(SERVER_URL + "folder/servertolocal", json);
+            String response = post(RegularFunctions.SERVER_URL + "folder/servertolocal", json);
 
             JSONArray jsonArray = new JSONArray(response);
             //Log.e("jay length", String.valueOf(jsonArray.length()));

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +46,7 @@ import java.util.List;
 public class NoteFunctions {
 
     //MainActivity mainActivity = new MainActivity();
-    public static String SERVER_URL = "http://104.197.122.116/";
+    //public static String SERVER_URL = "http://104.197.122.116/";
     //public static String SERVER_URL = "http://192.168.0.125:1337/";
     // LOCK / PASS CODE
     public void setPasscode(Context context, String id) {
@@ -364,13 +365,7 @@ public class NoteFunctions {
         optionLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Note n = Note.findById(Note.class, Long.parseLong(id));
-                if (n.getIslocked() == 0){
-                    n.islocked = 1;
-                    n.save();
-                }
-                else
-                    setPasscode(context, id);
+                setPasscode(context,id);
                 dialog.dismiss();
             }
         });
@@ -542,42 +537,72 @@ public class NoteFunctions {
         buttonShareOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"Please wait!",Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,"Please wait!",Toast.LENGTH_LONG).show();
                 Log.e("jay text", emailTo.getText().toString());
                 Log.e("jay id", id);
-                ProgressDialog progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage("sync...");
+                final ProgressDialog progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("Loading...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(true);
                 progressDialog.show();
 
-                RegularFunctions.syncNow();
+                final String email = emailTo.getText().toString();
 
-                try {
-                    String shareEmailJson = shareJson(id, emailTo.getText().toString()).toString();
-                    Log.e("jay sharejson", shareEmailJson);
+                new AsyncTask<Void, Void, String>() {
 
-                    String response = RegularFunctions.post(SERVER_URL + "share/save", shareEmailJson);
-                    Log.e("jay response", response);
+                    boolean shared = false;
 
-                    JSONObject jsonObject = new JSONObject(response);
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        RegularFunctions.syncNow();
+                        try
+                        {
+                            String shareEmailJson = shareJson(id, email).toString();
+                            Log.e("jay sharejson", shareEmailJson);
 
-                    String value = jsonObject.optString("value");
-                    if(value.equals("true")){
-                        shareDialog.dismiss();
-                        progressDialog.dismiss();
-                        Toast.makeText(context,"Note shared successfully!",Toast.LENGTH_LONG).show();
-                    }else{
-                        shareDialog.dismiss();
-                        progressDialog.dismiss();
-                        Toast.makeText(context,"Oops, Something went wrong!",Toast.LENGTH_LONG).show();
+                            String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "share/save", shareEmailJson);
+                            Log.e("jay response", response);
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            String value = jsonObject.optString("value");
+                            if (value.equals("true")) {
+                                shareDialog.dismiss();
+                                progressDialog.dismiss();
+
+                                shared = true;
+                                //Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
+                            } else {
+                                shareDialog.dismiss();
+                                progressDialog.dismiss();
+
+                                shared = false;
+                                //Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        catch(JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        catch(IOException io)
+                        {
+                            io.printStackTrace();
+                        }
+                        return null;
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException io) {
-                    io.printStackTrace();
-                }
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if(shared)
+                            Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
+
+                        if(progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                }.execute(null,null,null);
 
             }
         });

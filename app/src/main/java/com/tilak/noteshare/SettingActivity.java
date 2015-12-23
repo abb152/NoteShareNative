@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -95,12 +97,31 @@ public class SettingActivity extends DrawerActivity {
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.show();
 
-				RegularFunctions.syncNow();
+				new AsyncTask<Void, Void, String>(){
+					@Override
+					protected String doInBackground(Void... params) {
+
+						//Looper.loop();
+						Looper.prepare();
+						RegularFunctions.syncNow();
+						//Looper.myLooper().quit();
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(String s) {
+						String time = RegularFunctions.lastSyncTime();
+						tvLastSync.setText(time);
+						progressDialog.dismiss();
+					}
+				}.execute(null,null,null);
+
+				/*RegularFunctions.syncNow();
 				String time = RegularFunctions.lastSyncTime();
 
 				tvLastSync.setText(time);
 
-				progressDialog.dismiss();
+				progressDialog.dismiss();*/
 			}
 		});
 
