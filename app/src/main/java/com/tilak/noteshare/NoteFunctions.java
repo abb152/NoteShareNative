@@ -538,72 +538,81 @@ public class NoteFunctions {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context,"Please wait!",Toast.LENGTH_LONG).show();
-                Log.e("jay text", emailTo.getText().toString());
-                Log.e("jay id", id);
-                final ProgressDialog progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage("Loading...");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.setCancelable(true);
-                progressDialog.show();
-
                 final String email = emailTo.getText().toString();
 
-                new AsyncTask<Void, Void, String>() {
+                if (email.equals("")) {
+                    //Toast.makeText(context, "Please enter Email id.", Toast.LENGTH_LONG).show();
+                    emailTo.setError("Enter Email id.");
+                } else if (!RegularFunctions.isValidEmail(email)) {
+                    //Toast.makeText(context, "Please enter valid Email id.", Toast.LENGTH_LONG).show();
+                    emailTo.setError("Invalid Email");
+                } else {
+                    Log.e("jay text", emailTo.getText().toString());
+                    Log.e("jay id", id);
+                    final ProgressDialog progressDialog = new ProgressDialog(context);
+                    progressDialog.setMessage("Loading...");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.setCancelable(true);
+                    progressDialog.show();
 
-                    boolean shared = false;
+                    //final String email = emailTo.getText().toString();
 
-                    @Override
-                    protected String doInBackground(Void... params) {
-                        RegularFunctions.syncNow();
-                        try
-                        {
-                            String shareEmailJson = shareJson(id, email).toString();
-                            Log.e("jay sharejson", shareEmailJson);
+                    new AsyncTask<Void, Void, String>() {
 
-                            String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "share/save", shareEmailJson);
-                            Log.e("jay response", response);
+                        boolean shared = false;
 
-                            JSONObject jsonObject = new JSONObject(response);
+                        @Override
+                        protected String doInBackground(Void... params) {
+                            RegularFunctions.syncNow();
+                            try
+                            {
+                                String shareEmailJson = shareJson(id, email).toString();
+                                Log.e("jay sharejson", shareEmailJson);
 
-                            String value = jsonObject.optString("value");
-                            if (value.equals("true")) {
-                                shareDialog.dismiss();
+                                String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "share/save", shareEmailJson);
+                                Log.e("jay response", response);
+
+                                JSONObject jsonObject = new JSONObject(response);
+
+                                String value = jsonObject.optString("value");
+                                if (value.equals("true")) {
+                                    shareDialog.dismiss();
+                                    progressDialog.dismiss();
+
+                                    shared = true;
+                                    //Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    shareDialog.dismiss();
+                                    progressDialog.dismiss();
+
+                                    shared = false;
+                                    //Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            catch(JSONException e)
+                            {
+                                e.printStackTrace();
+                            }
+                            catch(IOException io)
+                            {
+                                io.printStackTrace();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            if(shared)
+                                Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
+                            else
+                                Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
+
+                            if(progressDialog.isShowing()) {
                                 progressDialog.dismiss();
-
-                                shared = true;
-                                //Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
-                            } else {
-                                shareDialog.dismiss();
-                                progressDialog.dismiss();
-
-                                shared = false;
-                                //Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
                             }
                         }
-                        catch(JSONException e)
-                        {
-                            e.printStackTrace();
-                        }
-                        catch(IOException io)
-                        {
-                            io.printStackTrace();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(String s) {
-                        if(shared)
-                            Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
-
-                        if(progressDialog.isShowing()) {
-                            progressDialog.dismiss();
-                        }
-                    }
-                }.execute(null,null,null);
-
+                    }.execute(null,null,null);
+                }
             }
         });
 

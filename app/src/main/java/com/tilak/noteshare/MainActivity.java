@@ -776,7 +776,7 @@ public class MainActivity extends DrawerActivity {
 		List<Note> allnotes;
 		//Log.e("jay inside populate **", folderIdforNotes);
 		if(folderIdforNotes == null || folderIdforNotes == "-1")
-			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE creationtime != 0 ORDER BY ID DESC");
+			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE creationtime != 0 AND folder ='0' ORDER BY ID DESC");
 		else
 			allnotes = Note.findWithQuery(Note.class, "Select * from Note WHERE creationtime != 0 AND folder = " + folderIdforNotes + " ORDER BY ID DESC");
 

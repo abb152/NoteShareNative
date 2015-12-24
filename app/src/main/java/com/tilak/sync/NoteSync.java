@@ -15,6 +15,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.tilak.db.Config;
+import com.tilak.db.Folder;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 import com.tilak.db.Sync;
@@ -134,7 +135,7 @@ public class NoteSync {
         Sync sync = RegularFunctions.getSyncTime();
         //Long time = sync.getFolderLocalToServer();
 
-        String notemodifytime = RegularFunctions.longToString(sync.getNoteLocalToServer() - 10000);
+        String notemodifytime = RegularFunctions.longToString(sync.getNoteLocalToServer() - 3600000);
 
         try {
             String json = serverToLocalJson(getUserId(), notemodifytime).toString();
@@ -197,7 +198,7 @@ public class NoteSync {
                                 timebomb = "";
 
                             try {
-                                Note createNote = new Note(title, tags, color, folder, Long.parseLong(remindertime), timebomb, background, dateServerToLocal(creationtime), dateServerToLocal(modifytime), id, Integer.parseInt(islocked), stringToDate(dateServerToLocal(creationtime)), stringToDate(dateServerToLocal(modifytime)));
+                                Note createNote = new Note(title, tags, color, getFolderLocalId(folder), Long.parseLong(remindertime), timebomb, background, dateServerToLocal(creationtime), dateServerToLocal(modifytime), id, Integer.parseInt(islocked), stringToDate(dateServerToLocal(creationtime)), stringToDate(dateServerToLocal(modifytime)));
                                 createNote.save();
                                 serverToLocalNoteElementsNew(noteElement, createNote.getId());
 
@@ -228,7 +229,7 @@ public class NoteSync {
                             editNote.get(0).setTitle(title);
                             editNote.get(0).setTags(tags);
                             editNote.get(0).setColor(color);
-                            editNote.get(0).setFolder(folder);
+                            editNote.get(0).setFolder(getFolderLocalId(folder));
                             editNote.get(0).setRemindertime(Long.parseLong(remindertime));
 
                             if (timebomb.equals("0"))
@@ -343,7 +344,6 @@ public class NoteSync {
                 }
             }
         }
-
     }
 
     public boolean checkIfUploaded(String filename){
@@ -468,7 +468,8 @@ public class NoteSync {
         note.put("user", user);
         note.put("title", title);
         note.put("color", color);
-        note.put("folder", folder);
+
+        note.put("folder", getFolderServerId(folder));
         note.put("background", background);
         note.put("tags", tags);
 
@@ -633,6 +634,24 @@ public class NoteSync {
             Log.e("jay exception", Log.getStackTraceString(ex));
         }
 
+    }
+
+    public String getFolderServerId(String folderLocalId){
+        if(folderLocalId.equals("0")){
+            return "0";
+        }else{
+            Folder folder = Folder.findById(Folder.class, Long.parseLong(folderLocalId));
+            return folder.getServerid();
+        }
+    }
+
+    public String getFolderLocalId(String folderServerId){
+        if(folderServerId.equals("0")){
+            return "0";
+        }else{
+            List<Folder> folders = Folder.findWithQuery(Folder.class, "Select * from FOLDER where SERVERID = ?",folderServerId);
+            return folders.get(0).getId().toString();
+        }
     }
 
 }

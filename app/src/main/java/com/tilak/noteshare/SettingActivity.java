@@ -102,7 +102,11 @@ public class SettingActivity extends DrawerActivity {
 					protected String doInBackground(Void... params) {
 
 						//Looper.loop();
-						Looper.prepare();
+						if (Looper.myLooper() == null)
+						{
+							Looper.prepare();
+						}
+						//Looper.prepare();
 						RegularFunctions.syncNow();
 						//Looper.myLooper().quit();
 						return null;

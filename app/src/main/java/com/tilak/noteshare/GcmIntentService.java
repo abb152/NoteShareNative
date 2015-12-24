@@ -1,7 +1,6 @@
 package com.tilak.noteshare;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,6 +13,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.util.Random;
+
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
@@ -22,8 +23,6 @@ public class GcmIntentService extends IntentService {
     public GcmIntentService() {
         super("GcmIntentService");
     }
-
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -88,34 +87,67 @@ public class GcmIntentService extends IntentService {
     // a GCM message.
     private void sendNotification(String title, String body) {
 
+        /*Random random = new Random();
+        int mid = random.nextInt(9999 - 1000) + 1000;
+
+        Intent notificationIntent = new Intent(this, NotificationCenterActivity.class);
+        PendingIntent intent = PendingIntent.getActivity(this, mid, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        Notification.Builder notification = new Notification.Builder(this)
+                .setColor(16734816)
+                .setContentTitle(title)
+                .setStyle(new Notification.BigTextStyle()
+                        .bigText(body))
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                        //.setDefaults(Notification.DEFAULT_SOUND)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.ic_launcher);
+                //.setTicker(message);.setSmallIcon(R.drawable.ic_launcher)
+
+
+        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notification.setContentIntent(intent);
+
+        mNotificationManager.notify(mid, notification.build());*/
+
+
+        /*NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        Intent intent = new Intent(this, NotificationCenterActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        builder.setContentIntent(pendingIntent);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+        builder.setContentTitle(title);
+        builder.setContentText(body);
+        //builder.setSubText("Tap on notification for more details.");
+        builder.setAutoCancel(true);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(10, builder.build());*/
+
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        Intent resultIntent = new Intent(GcmIntentService.this, NotificationCenterActivity.class);
 
-        //PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this,SettingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        //Intent intent = new Intent(currentActivity.this, NotificationActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, NotificationCenterActivity.class);
-
-// The stack builder object will contain an artificial back stack for the
-// started Activity.
-// This ensures that navigating backward from the Activity leads out of
-// your application to the Home screen.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-// Adds the back stack for the Intent (but not the Intent itself)
+
         stackBuilder.addParentStack(NotificationCenterActivity.class);
-// Adds the Intent that starts the Activity to the top of the stack
+
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
-        //mBuilder.setContentIntent(resultPendingIntent);
 
-
-
-
+        Random randomGenerator = new Random();
+        int randomNumber = randomGenerator.nextInt(10000);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -124,12 +156,13 @@ public class GcmIntentService extends IntentService {
                         .setContentTitle(title)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(body))
-                        .setDefaults(Notification.DEFAULT_SOUND)
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)
+                        //.setDefaults(Notification.DEFAULT_SOUND)
                         .setContentText(body);
 
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(resultPendingIntent);
-        //mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(randomNumber, mBuilder.build());
+
     }
 }
