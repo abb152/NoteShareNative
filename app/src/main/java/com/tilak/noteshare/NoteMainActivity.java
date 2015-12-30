@@ -74,10 +74,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import jp.wasabeef.richeditor.RichEditor;
 
-//import android.support.annotation.Keep;
+/*import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;*/
+
+//import android.support.annotation.Keep;*/
 
 public class NoteMainActivity extends DrawerActivity implements OnClickListener {
 
@@ -210,10 +216,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     boolean scribbleAdded = false;
     public static String background;
 
+    boolean outsideNote = false;
+    boolean out = false;
+
     public static String getDurationBreakdown(long millis) {
         if (millis < 0) {
-            throw new IllegalArgumentException(
-                    "Duration must be greater than zero!");
+            throw new IllegalArgumentException("Duration must be greater than zero!");
         }
         StringBuffer sb = new StringBuffer();
 
@@ -258,7 +266,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         scroll.draw(bitmapCanvas);
 
 
-        String fileName = "ss.png";
+        String fileName = noteIdForDetails +".png";
         File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
         try {
             bitmap.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(file));
@@ -271,7 +279,152 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
+        Toast.makeText(context, "Screenshot taken", Toast.LENGTH_SHORT).show();
+        /*try
+        {
+            String fileName1 = "Note.pdf";
+            File file1 = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + fileName);
+
+            Document document = new Document();
+
+            PdfWriter.getInstance(document, new FileOutputStream(file));
+            document.open();
+
+            addImage(document,bitmap);
+            document.close();
+        }
+
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }*/
+
+
     }
+
+
+
+
+
+
+
+    /*public void imgToPdf(){
+		*//*try {
+			Document  document = new Document();
+
+			PdfWriter.getInstance(document, new FileOutputStream(file));
+			document.open();
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			screen.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			byte[] byteArray = stream.toByteArray();
+			addImage(document,byteArray);
+			document.close();
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}*//*
+
+        try
+        {
+            String fileName = "Note.pdf";
+            File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + fileName);
+
+            Document document = new Document();
+
+            PdfWriter.getInstance(document, new FileOutputStream(file));
+            document.open();
+
+            addImage(document);
+            document.close();
+        }
+
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }*/
+
+    /*thisss private static void addImage(Document document, Bitmap bitmap)
+    {
+        int bytes = bitmap.getByteCount();
+        //or we can calculate bytes this way. Use a different value than 4 if you don't use 32bit images.
+        //int bytes = b.getWidth()*b.getHeight()*4;
+
+        ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
+        bitmap.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
+
+        byte[] bArray = buffer.array();
+
+        com.itextpdf.text.Image image = null;
+        try
+        {
+            image = com.itextpdf.text.Image.getInstance(bArray);  ///Here i set byte array..you can do bitmap to byte array and set in image...
+        }
+        catch (BadElementException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // image.scaleAbsolute(150f, 150f);
+        try
+        {
+            document.add(image);
+        } catch (DocumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }*/
+
+    /*private static void addImage(Document document,byte[] byteArray)
+    {
+        Image image = null;
+        try
+        {
+            image = Image.getInstance(byteArray);
+        }
+        catch (BadElementException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // image.scaleAbsolute(150f, 150f);
+        try
+        {
+            document.add(image);
+        } catch (DocumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }*/
+
+
+
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +432,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         // setContentView(R.layout.activity_main);
         Intent intent = this.getIntent();
         noteIdForDetails = intent.getStringExtra("NoteId");
+        out = intent.getBooleanExtra("Outside",false);
+
         Log.v("select", "onCreate Note Id" + noteIdForDetails);
 
         LayoutInflater inflater = (LayoutInflater) this
@@ -293,6 +448,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             fetchNoteElementsFromDb();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+
+        if(out){
+            //noteFunctions.screenshot(scrollView,this,background);
+            screenshot();
         }
 
 	/*List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT con from NoteElement where  NOTEID= '1' AND TYPE ='image'");
@@ -1036,8 +1196,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
     }
     public void share (View v) {
-        //noteFunctions.share(NoteMainActivity.this);
-        noteFunctions.noteshareShare(this,noteIdForDetails);
+        //noteFunctions.share(this, noteIdForDetails, outsideNote);
+        //noteFunctions.noteshareShare(this,noteIdForDetails);
+        share(this,noteIdForDetails,outsideNote);
         footerMenuGone();
     }
 
@@ -1100,8 +1261,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 isMoreShown = false;
                 // Save click
                 updateHeaderControls(v.getId());
-
-                //loadBitmapFromView(scrollView);
 
                 if (textelementid.size() > 0) {
                     textelementid.get(0).clearFocus();
@@ -3626,6 +3785,148 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
             }
         });
+    }
+
+    public void screenshot(){
+        //screenshot(scrollView, background, noteIdForDetails);
+        loadBitmapFromView(scrollView);
+    }
+
+    public void screenshot(View v, final String background, final String noteId) {
+
+        //ScrollView scroll = (ScrollView) scrollView;
+        ScrollView scroll = scrollView;
+
+        int width = scroll.getChildAt(0).getWidth();
+        int height = scroll.getChildAt(0).getHeight();
+
+        int blankSpace = RegularFunctions.pxFromDp(context, 1500);
+
+        Log.e("jay sw", String.valueOf(width));
+        Log.e("jay sh", String.valueOf(height - blankSpace));
+
+        int screenShotHeight = height - blankSpace;
+
+        double j = ((double) screenShotHeight) / 200;
+        int timesLoopShouldRun = (int) Math.ceil(j);
+
+
+        Canvas bitmapCanvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(width, screenShotHeight, Bitmap.Config.ARGB_8888);
+
+        bitmapCanvas.setBitmap(bitmap);
+        bitmapCanvas.drawColor(Color.parseColor(background));
+        //bitmapCanvas.scale(1.0f, 3.0f);
+        scroll.draw(bitmapCanvas);
+
+        Random randomGenerator = new Random();
+        String randomNumber = String.valueOf(randomGenerator.nextInt(10000));
+
+        String fileName = noteId + ".png";
+        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
+        try {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Toast.makeText(context, "Screenshot taken", Toast.LENGTH_SHORT).show();
+        Log.e("jay ss", "generated");
+
+    }
+
+
+
+    // SHARE
+    public void share(final Context context, final String id , final boolean outsideNote) {
+        final Dialog shareDialog = new Dialog(context);
+        shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        shareDialog.setCancelable(false);
+        shareDialog.setContentView(R.layout.alert_share_view);
+        shareDialog.setCanceledOnTouchOutside(true);
+
+        TextView tvShareTitleAlert = (TextView) shareDialog.findViewById(R.id.tvShareTitleAlert);
+        tvShareTitleAlert.setText("SHARE NOTE VIA");
+        tvShareTitleAlert.setTextColor(Color.WHITE);
+
+        LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareWhatsapp);
+        TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivWhatsapp = (ImageView) shareWhatsapp.findViewById(R.id.imageViewSlidemenu);
+        ivWhatsapp.setImageResource(R.drawable.ic_option_delete);
+        ivWhatsapp.setTag(id);
+        tvWhatsapp.setText("Whatsapp");
+        shareWhatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noteFunctions.linkShare(context, id);
+                shareDialog.dismiss();
+            }
+        });
+
+        LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
+        TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
+        ivEmail.setImageResource(R.drawable.ic_option_delete);
+        ivEmail.setTag(id);
+        tvEmail.setText("Email");
+        shareEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noteFunctions.noteshareShare(context, id);
+                shareDialog.dismiss();
+            }
+        });
+
+        LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareMessage);
+        TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivMessage = (ImageView) shareMessage.findViewById(R.id.imageViewSlidemenu);
+        ivMessage.setImageResource(R.drawable.ic_option_delete);
+        ivMessage.setTag(id);
+        tvMessage.setText("Message");
+        shareMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //textShare(context, id);
+                shareDialog.dismiss();
+            }
+        });
+
+        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
+        TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivFacebook = (ImageView) shareFacebook.findViewById(R.id.imageViewSlidemenu);
+        ivFacebook.setImageResource(R.drawable.ic_option_delete);
+        ivFacebook.setTag(id);
+        tvFacebook.setText("Facebook");
+        shareFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //textShare(context, id);
+                /*if(outsideNote) {
+                    MainActivity mainActivity = new MainActivity();
+                    mainActivity.screenshot(v.getTag().toString());
+                }
+                else{
+                    NoteMainActivity noteMainActivity = new NoteMainActivity();
+                    noteMainActivity.screenshot();
+                }*/
+                shareDialog.dismiss();
+                screenshot();
+            }
+        });
+
+        LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
+        TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
+        ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
+        ivTwitter.setImageResource(R.drawable.ic_option_delete);
+        ivTwitter.setTag(id);
+        tvTwitter.setText("Twitter");
+
+        shareDialog.show();
     }
 
 }

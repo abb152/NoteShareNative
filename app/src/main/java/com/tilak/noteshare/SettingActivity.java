@@ -14,9 +14,12 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.tilak.db.Config;
+import com.tilak.db.Sync;
 
 public class SettingActivity extends DrawerActivity {
 
@@ -24,6 +27,8 @@ public class SettingActivity extends DrawerActivity {
 	public ImageButton btnheaderMenu;
 	public LinearLayout lastSyncLayout;
 	public TextView tvTerms, tvAbout, tvSyncVia, tvLastSync;
+	public RadioGroup syncGroup;
+	public RadioButton syncRadio;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -97,13 +102,12 @@ public class SettingActivity extends DrawerActivity {
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.show();
 
-				new AsyncTask<Void, Void, String>(){
+				new AsyncTask<Void, Void, String>() {
 					@Override
 					protected String doInBackground(Void... params) {
 
 						//Looper.loop();
-						if (Looper.myLooper() == null)
-						{
+						if (Looper.myLooper() == null) {
 							Looper.prepare();
 						}
 						//Looper.prepare();
@@ -118,7 +122,7 @@ public class SettingActivity extends DrawerActivity {
 						tvLastSync.setText(time);
 						progressDialog.dismiss();
 					}
-				}.execute(null,null,null);
+				}.execute(null, null, null);
 
 				/*RegularFunctions.syncNow();
 				String time = RegularFunctions.lastSyncTime();
@@ -149,11 +153,45 @@ public class SettingActivity extends DrawerActivity {
 		final Dialog dialog = new Dialog(context);
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View contentView = inflater.inflate(R.layout.sync_dialog, null, false);
+		final View contentView = inflater.inflate(R.layout.sync_dialog, null, false);
 
 		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
 		textViewTitleAlert.setText("Sync Via");
 		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		Sync sync = Sync.findById(Sync.class, 1l);
+		int syncType = sync.getSyncType();
+
+		switch (syncType){
+			case 1:
+				syncRadio = (RadioButton) contentView.findViewById(R.id.sync1);
+				syncRadio.setChecked(true);
+				break;
+			case 2:
+				syncRadio = (RadioButton) contentView.findViewById(R.id.sync2);
+				syncRadio.setChecked(true);
+				break;
+			case 3:
+				syncRadio = (RadioButton) contentView.findViewById(R.id.sync3);
+				syncRadio.setChecked(true);
+				break;
+		}
+
+
+		syncGroup = (RadioGroup) contentView.findViewById(R.id.syncGroup);
+
+		syncGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				syncRadio = (RadioButton) contentView.findViewById(checkedId);
+				int syncType = Integer.parseInt(syncRadio.getTag().toString());
+
+				Sync syncSet = Sync.findById(Sync.class,1l);
+				syncSet.setSyncType(syncType);
+				syncSet.save();
+			}
+		});
+
 
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setCancelable(true);

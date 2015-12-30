@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.Looper;
 import android.provider.CalendarContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -30,10 +37,14 @@ import com.tilak.adpters.OurMoveMenuAdapter;
 import com.tilak.db.Config;
 import com.tilak.db.Folder;
 import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Random;
 
 public class NoteFunctions {
 
@@ -229,7 +240,7 @@ public class NoteFunctions {
 
         ArrayList<HashMap<String,String>> folderList = new ArrayList<HashMap<String, String>>();
 
-        List<Folder> folder = Folder.findWithQuery(Folder.class, "Select * from Folder ORDER BY ID DESC");
+        List<Folder> folder = Folder.findWithQuery(Folder.class, "Select * from Folder where CREATIONTIME != '0' ORDER BY ID DESC");
         for(Folder folderloop : folder){
             HashMap<String,String> map = new HashMap<String,String>();
             map.put("folderName", folderloop.getName());
@@ -255,11 +266,19 @@ public class NoteFunctions {
                 foldername = map.get("folderName");
                 noteid = Long.parseLong(map.get("noteId"));
 
-                Note n = Note.findById(Note.class, noteid);
-                n.folder = folderid;
-                n.save();
-                move.dismiss();
-                Toast.makeText(context, "Note " + n.getTitle() + " moved to " + foldername + " folder.", Toast.LENGTH_SHORT).show();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentDateStr = formatter.format(new Date());
+                try{
+                    Note n = Note.findById(Note.class, noteid);
+                    n.folder = folderid;
+                    n.setModifytime(currentDateStr);
+                    n.setMtime(RegularFunctions.stringToDate(currentDateStr));
+                    n.save();
+                    move.dismiss();
+                    Toast.makeText(context, "Note " + n.getTitle() + " moved to " + foldername + " folder.", Toast.LENGTH_SHORT).show();
+                }catch (ParseException pe){
+
+                }
             }
         });
 
@@ -341,6 +360,7 @@ public class NoteFunctions {
     public void delete(String id){
         Note n = Note.findById(Note.class, Long.parseLong(id));
         n.setCreationtime("0");
+        n.setCtime(0l);
         n.save();
     }
 
@@ -365,7 +385,7 @@ public class NoteFunctions {
         optionLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setPasscode(context,id);
+                setPasscode(context, id);
                 dialog.dismiss();
             }
         });
@@ -439,7 +459,7 @@ public class NoteFunctions {
             @Override
             public void onClick(View v) {
                 // Share
-                noteshareShare(context,id);
+                noteshareShare(context, id);
                 dialog.dismiss();
             }
         });
@@ -451,7 +471,7 @@ public class NoteFunctions {
     }
 
     // SHARE
-    public void share(Context context) {
+    public void share(final Context context, final String id , final boolean outsideNote) {
         final Dialog shareDialog = new Dialog(context);
         shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         shareDialog.setCancelable(false);
@@ -466,53 +486,201 @@ public class NoteFunctions {
         TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
         ImageView ivWhatsapp = (ImageView) shareWhatsapp.findViewById(R.id.imageViewSlidemenu);
         ivWhatsapp.setImageResource(R.drawable.ic_option_delete);
+        ivWhatsapp.setTag(id);
         tvWhatsapp.setText("Whatsapp");
+        shareWhatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linkShare(context, id);
+                shareDialog.dismiss();
+            }
+        });
 
         LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
         TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
         ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
         ivEmail.setImageResource(R.drawable.ic_option_delete);
+        ivEmail.setTag(id);
         tvEmail.setText("Email");
+        shareEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noteshareShare(context, id);
+                shareDialog.dismiss();
+            }
+        });
 
         LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareMessage);
         TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
         ImageView ivMessage = (ImageView) shareMessage.findViewById(R.id.imageViewSlidemenu);
         ivMessage.setImageResource(R.drawable.ic_option_delete);
+        ivMessage.setTag(id);
         tvMessage.setText("Message");
+        shareMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textShare(context, id);
+                shareDialog.dismiss();
+            }
+        });
 
         LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
         TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
         ImageView ivFacebook = (ImageView) shareFacebook.findViewById(R.id.imageViewSlidemenu);
         ivFacebook.setImageResource(R.drawable.ic_option_delete);
+        ivFacebook.setTag(id);
         tvFacebook.setText("Facebook");
+        shareFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //textShare(context, id);
+                if(outsideNote) {
+                    MainActivity mainActivity = new MainActivity();
+                    mainActivity.screenshot(v.getTag().toString());
+                }
+                else{
+                    NoteMainActivity noteMainActivity = new NoteMainActivity();
+                    noteMainActivity.screenshot();
+                }
+
+                shareDialog.dismiss();
+            }
+        });
 
         LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
         TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
         ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
         ivTwitter.setImageResource(R.drawable.ic_option_delete);
+        ivTwitter.setTag(id);
         tvTwitter.setText("Twitter");
-
-        Button buttonShareCancel = (Button) shareDialog.findViewById(R.id.buttonShareCancel);
-        Button buttonShareOk = (Button) shareDialog.findViewById(R.id.buttonShareOk);
-
-        buttonShareCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareDialog.dismiss();
-            }
-        });
-
-        buttonShareOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareDialog.dismiss();
-            }
-        });
 
         shareDialog.show();
     }
 
-    //noteshare to noteshare share
+    //text sharing
+    public void textShare(final Context context, final String id){
+
+        String noteDesc;
+
+        List<NoteElement> noteElements = NoteElement.find(NoteElement.class,"type = ? and noteid = ?", "text", id);
+
+        if(noteElements.size() != 0 && noteElements.get(0).getContentA() != null){
+            noteDesc = noteElements.get(0).getContent();
+            Log.e("jay og", noteDesc);
+            /*Source source=new Source(noteDesc);
+            String renderedText=source.getRenderer().toString();
+            System.out.println("\nSimple rendering of the HTML document: jay\n");
+            System.out.println("jay" +renderedText);
+            Log.e("jay", renderedText);*/
+        }else{
+            noteDesc = "";
+        }
+
+    }
+
+    public void screenshot(View v, final Context context, final String background, final String noteId) {
+
+        ScrollView scroll = (ScrollView) v;
+
+        int width = scroll.getChildAt(0).getWidth();
+        int height = scroll.getChildAt(0).getHeight();
+
+        int blankSpace = RegularFunctions.pxFromDp(context, 1500);
+
+        Log.e("jay sw", String.valueOf(width));
+        Log.e("jay sh", String.valueOf(height - blankSpace));
+
+        int screenShotHeight = height - blankSpace;
+
+        double j = ((double) screenShotHeight) / 200;
+        int timesLoopShouldRun = (int) Math.ceil(j);
+
+
+        Canvas bitmapCanvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(width, screenShotHeight, Bitmap.Config.ARGB_8888);
+
+        bitmapCanvas.setBitmap(bitmap);
+        bitmapCanvas.drawColor(Color.parseColor(background));
+        //bitmapCanvas.scale(1.0f, 3.0f);
+        scroll.draw(bitmapCanvas);
+
+        Random randomGenerator = new Random();
+        String randomNumber = String.valueOf(randomGenerator.nextInt(10000));
+
+        String fileName = noteId + ".png";
+        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
+        try {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Toast.makeText(context, "Screenshot taken", Toast.LENGTH_SHORT).show();
+        Log.e("jay ss", "generated");
+
+    }
+
+    //link sharing
+    public void linkShare(final Context context, final String id){
+
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(true);
+        //progressDialog.show();
+
+        //final String email = emailTo.getText().toString();
+
+        new AsyncTask<Void, Void, String>() {
+
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                if (Looper.myLooper() == null)
+                {
+                    Looper.prepare();
+                }
+
+                RegularFunctions.syncNow();
+
+                String shareMessage = RegularFunctions.getUserName() + " has shared "+ RegularFunctions.getNoteName(id) + " note with you.\n"
+                        +"http://www.noteshare.com/"+RegularFunctions.getUserId() +"/"+RegularFunctions.getServerNoteId(id)+".html"
+                        +"\n-via NoteShare";
+                Log.e("jay", shareMessage);
+                Toast.makeText(context, shareMessage, Toast.LENGTH_SHORT).show();
+                //progressDialog.dismiss();
+
+                //Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                //share.putExtra(Intent.EXTRA_STREAM, uri);
+                share.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                context.startActivity(Intent.createChooser(share, "Share note"));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        }.execute(null,null,null);
+
+
+
+        /*Jay Visariya has shared "History" note with you
+                http://www.noteshare.com/1234abcd.html
+                -via NoteShare app.*/
+    }
+
+    //noteshare to noteshare share // email
     public void noteshareShare(final Context context, final String id) {
         final Dialog shareDialog = new Dialog(context);
 

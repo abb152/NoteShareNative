@@ -111,6 +111,8 @@ public class MainActivity extends DrawerActivity {
 	public LinearLayout SearchLayout;
 	public ImageButton search;
 
+	boolean outsideNote = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -249,6 +251,7 @@ public class MainActivity extends DrawerActivity {
 
 		adapter.notifyDataSetChanged();
 	}
+
 
 	void initlizeUIElement(View contentview){
 		//DataManager.sharedDataManager().setTypeofListView(false);
@@ -1228,7 +1231,8 @@ public class MainActivity extends DrawerActivity {
 	public void share(View v){
 		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		noteFunctions.noteshareShare(this,id);
+		//noteFunctions.noteshareShare(this, id);
+		noteFunctions.share(this,id, outsideNote);
 	}
 
 	public void optionNote(View v) {
@@ -1248,7 +1252,7 @@ public class MainActivity extends DrawerActivity {
 		textViewTitleAlert.setText("DELETE NOTE");
 		textViewTitleAlert.setTextColor(Color.WHITE);
 		TextView textViewTitleAlertMessage = (TextView) contentView.findViewById(R.id.textViewTitleAlertMessage);
-		textViewTitleAlertMessage.setText("Are you sure you want to Delete \n this Note?");
+		textViewTitleAlertMessage.setText("Are you sure you want to Delete this Note?");
 
 		Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
 		Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
@@ -1328,4 +1332,23 @@ public class MainActivity extends DrawerActivity {
 		imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
 	}
 
+	public void screenshot(String noteid){
+		Note note = Note.findById(Note.class, Long.parseLong(noteid));
+		if (note.islocked == 0) {
+			Intent i = new Intent(this, NoteMainActivity.class);
+			i.putExtra("NoteId", noteid);
+			i.putExtra("Outside", outsideNote);
+			startActivity(i);
+			SearchLayout.setVisibility(View.GONE);
+			textViewheaderTitle.setText("");
+			searchLayoutOpen = false;
+			//editTextsearchNote.setText("");
+		} else {
+			Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
+			intent.putExtra("FileId", noteid);
+			intent.putExtra("Check", "4");
+			startActivity(intent);
+			//editTextsearchNote.setText("");
+		}
+	}
 }

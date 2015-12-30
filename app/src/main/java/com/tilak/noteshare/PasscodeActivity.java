@@ -128,6 +128,26 @@ public class PasscodeActivity extends DrawerActivity {
             else{
                 lessThanFour(i);
             }
+        } else if(check.equals("4")) { // to open file with lock for screenshot
+            passcode += tv.getText().toString();
+            if (passcode.length() == 4) {
+                et4.setBackgroundColor(Color.WHITE);
+                if (Integer.parseInt(passcode) == dbPass) {
+                    finish();
+                    Intent i = new Intent(PasscodeActivity.this, NoteMainActivity.class);
+                    i.putExtra("NoteId", fileId);
+                    i.putExtra("Outside", true);
+                    startActivity(i);
+                } else {
+                    shake();
+                    clearBox();
+                    t.setText("Invalid Passcode");
+                    //Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                lessThanFour(i);
+            }
         } else if(check.equals("5")) { //change passcode
             passcode += tv.getText().toString();
             if (passcode.length() == 4) {

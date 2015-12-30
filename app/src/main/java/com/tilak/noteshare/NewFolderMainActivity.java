@@ -37,6 +37,7 @@ import com.tilak.adpters.OurFolderListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.db.Folder;
+import com.tilak.db.Note;
 import com.tilak.sync.FolderSync;
 import com.tilak.sync.NoteSync;
 
@@ -1245,6 +1246,16 @@ public class NewFolderMainActivity extends DrawerActivity {
 	}
 
 	public void delete(String id){
+
+		List<Note> notes = Note.findWithQuery(Note.class, "Select * from NOTE WHERE creationtime != 0 AND folder = ?",id);
+		for(Note n : notes){
+			Note note = Note.findById(Note.class, n.getId());
+			note.setFolder("0");
+			note.setCreationtime("0");
+			note.setCtime(0l);
+			note.save();
+		}
+
 		Folder f = Folder.findById(Folder.class, Long.parseLong(id));
 		f.setCreationtime("0");
 		f.save();

@@ -18,6 +18,10 @@ public class InteroductionActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.interoduction_activity);
+
+		Bundle b = getIntent().getExtras();
+		final String fname = b.getString("fname");
+		String hide = b.getString("hide");
         
         final ViewFlipper page = (ViewFlipper)findViewById(R.id.flipper);
         final Button btnNext = (Button)findViewById(R.id.next);
@@ -35,8 +39,8 @@ public class InteroductionActivity extends Activity {
 			{
 				if (finish<4)
 				{
-					page.setInAnimation(animFlipInForeward);
-					page.setOutAnimation(animFlipOutForeward);
+					//page.setInAnimation(animFlipInForeward);
+					//page.setOutAnimation(animFlipOutForeward);
 					page.showNext();
 					if (finish==3)
 					{
@@ -47,7 +51,9 @@ public class InteroductionActivity extends Activity {
 				else
 				{
 					System.out.println("finish");
-					Intent i = new Intent(InteroductionActivity.this, LoginActivity.class);
+					Intent i = new Intent(InteroductionActivity.this, UserProfileActivity.class);
+					i.putExtra("fname", fname);
+					i.putExtra("hide", "hide");
 	                startActivity(i);
 	                // close this activity
 	                finish();
@@ -75,4 +81,9 @@ public class InteroductionActivity extends Activity {
 				
 			}});
     }
+
+	@Override
+	public void onBackPressed() {
+		//super.onBackPressed();
+	}
 }

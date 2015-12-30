@@ -103,7 +103,8 @@
                 android:src="@drawable/ic_note_option_share"
                 android:background="@android:color/transparent"
                 android:layout_alignBottom="@+id/optionInGrid"
-                android:layout_toEndOf="@+id/optionInGrid"/>
+                android:layout_toEndOf="@+id/optionInGrid"
+                android:onClick="share"/>
 
             <ImageView
                 android:layout_width="30dp"

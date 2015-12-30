@@ -43,7 +43,7 @@ public class FolderSync {
 
     public void localToServer(){
         Sync sync = RegularFunctions.getSyncTime();
-        Long time = sync.getFolderLocalToServer() - 10000;
+        Long time = sync.getFolderLocalToServer() - 3600000;
 
         List<Folder> folders = getFolderList(time);
         if(folders.size() > 0) {

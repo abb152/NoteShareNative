@@ -241,8 +241,9 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					System.out.println("invite friends");
 					Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
 					Intent share = new Intent(Intent.ACTION_SEND);
-					share.setType("image/*");
-					share.putExtra(Intent.EXTRA_STREAM, uri);
+					//share.setType("image/*");
+					share.setType("text/plain");
+					//share.putExtra(Intent.EXTRA_STREAM, uri);
 					share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
 					startActivity(Intent.createChooser(share, "Invite friends"));
 					//finish();
@@ -255,7 +256,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				}*/
 				case 8: {
 					System.out.println("setting");
-					startActivity(new Intent(this, SettingActivity.class));
+					startActivity(new Intent(this, InteroductionActivity.class));
 					finish();
 				}
 				break;

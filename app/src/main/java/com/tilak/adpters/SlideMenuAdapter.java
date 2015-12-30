@@ -19,8 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tilak.datamodels.SideMenuitems;
-import com.tilak.db.Config;
 import com.tilak.noteshare.R;
+import com.tilak.noteshare.RegularFunctions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class SlideMenuAdapter extends BaseAdapter {
 				holder1 = (ViewHolder1) vi.getTag();
 			}
 
-			Config config = Config.findById(Config.class,1l);
+			//Config config = Config.findById(Config.class,1l);
 			//holder1.textViewusername.setText("Jay");
 
 			String name = "profile.jpg";
@@ -98,7 +98,7 @@ public class SlideMenuAdapter extends BaseAdapter {
 					.findViewById(R.id.imageViewUserProfile);
 			holder1.imageViewUserImage.setImageBitmap(getRoundedCornerImage(getSquareImage(b)));
 			holder1.textViewusername = (TextView) vi.findViewById(R.id.textViewUsername);
-			holder1.textViewusername.setText(config.firstname/* +" "+config.lastname*/);
+			holder1.textViewusername.setText(RegularFunctions.getUserName());
 			//holder1.textViewUserbalance.setText("");
 			
 			/*Bitmap bm =DataManager.sharedDataManager().getUserImageBitMap();

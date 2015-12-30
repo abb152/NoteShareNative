@@ -19,27 +19,33 @@
         android:textColor="@android:color/black"
         android:textSize="16sp" />
 
-    <CheckBox
+    <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Wifi"
-        android:id="@+id/checkBox"
         android:layout_marginLeft="10dp"
-        android:checked="true" />
+        android:id="@+id/syncGroup">
 
-    <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mobile Network"
-        android:id="@+id/checkBox2"
-        android:layout_marginLeft="10dp" />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wifi"
+            android:id="@+id/sync1"
+            android:tag="1"/>
 
-    <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Both"
-        android:id="@+id/checkBox3"
-        android:layout_marginLeft="10dp"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mobile Network"
+            android:id="@+id/sync2"
+            android:tag="2"/>
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Both"
+            android:id="@+id/sync3"
+            android:tag="3"/>
+    </RadioGroup>
 
     <View
         android:layout_width="match_parent"

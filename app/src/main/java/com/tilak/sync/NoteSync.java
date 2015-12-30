@@ -79,8 +79,8 @@ public class NoteSync {
 
                     switch (funcType) {
                         case CREATE:
-                            String folderServerId = jsonObject.get("id").toString();
-                            notes.get(i).setServerid(folderServerId);
+                            String noteServerId = jsonObject.get("id").toString();
+                            notes.get(i).setServerid(noteServerId);
                             notes.get(i).save();
 
                             //send note element media
@@ -230,6 +230,10 @@ public class NoteSync {
                             editNote.get(0).setTags(tags);
                             editNote.get(0).setColor(color);
                             editNote.get(0).setFolder(getFolderLocalId(folder));
+
+                            Log.e("jay note fl", folder);
+                            Log.e("jay note folder local", getFolderLocalId(folder));
+
                             editNote.get(0).setRemindertime(Long.parseLong(remindertime));
 
                             if (timebomb.equals("0"))
@@ -470,6 +474,10 @@ public class NoteSync {
         note.put("color", color);
 
         note.put("folder", getFolderServerId(folder));
+
+        Log.e("note fs", folder);
+        Log.e("note folder ServerId", getFolderServerId(folder));
+
         note.put("background", background);
         note.put("tags", tags);
 

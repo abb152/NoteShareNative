@@ -294,7 +294,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         createDirectory();
         Config c = Config.findById(Config.class, 1l);
         String fname = c.firstname;
-        Intent i = new Intent(getApplication(), UserProfileActivity.class);
+        Intent i = new Intent(getApplication(), InteroductionActivity.class);
         //i.putExtra("FolderId","-1");
         i.putExtra("fname", fname);
         i.putExtra("hide", "hide");
