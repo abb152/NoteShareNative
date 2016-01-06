@@ -2,21 +2,14 @@ package com.tilak.noteshare;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,10 +18,6 @@ import com.tilak.adpters.SlideMenuAdapter;
 import com.tilak.datamodels.SideMenuitems;
 import com.tilak.datamodels.SlideMenu;
 import com.tilak.db.Config;
-import com.tilak.db.Folder;
-import com.tilak.db.Note;
-import com.tilak.db.NoteElement;
-import com.tilak.db.Sync;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -256,15 +245,15 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				}*/
 				case 8: {
 					System.out.println("setting");
-					startActivity(new Intent(this, InteroductionActivity.class));
+					startActivity(new Intent(this, SettingActivity.class));
 					finish();
 				}
 				break;
-				case 9: {
+				/*case 9: {
 					System.out.println("logout");
 					showAlertWith("LOGOUT", "Are you sure you want to Log Out?", DrawerActivity.this);
 				}
-				break;
+				break;*/
 				default: {}
 				break;
 			}
@@ -338,7 +327,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 	 * mActionBar.setDisplayShowCustomEnabled(true);
 	 */
 
-	void showAlertWith(String title, String message, Context context) {
+	/*void showAlertWith(String title, String message, Context context) {
 
 		final Dialog dialog = new Dialog(context);
 
@@ -441,6 +430,6 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 
 		}
 		return jsonObject;
-	}
+	}*/
 
 }

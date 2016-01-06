@@ -31,10 +31,10 @@
     {
       "menuName": "Settings",
       "menuid": "8"
-    },
+    }/*,
     {
       "menuName": "Logout",
       "menuid": "9"
-    }
+    }*/
   ]
 }

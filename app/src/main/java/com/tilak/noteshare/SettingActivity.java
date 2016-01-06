@@ -8,10 +8,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -19,14 +21,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.tilak.db.Config;
+import com.tilak.db.Folder;
+import com.tilak.db.Note;
+import com.tilak.db.NoteElement;
 import com.tilak.db.Sync;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class SettingActivity extends DrawerActivity {
 
 	public LinearLayout layoutHeder;
 	public ImageButton btnheaderMenu;
 	public LinearLayout lastSyncLayout;
-	public TextView tvTerms, tvAbout, tvSyncVia, tvLastSync;
+	public TextView tvTerms, tvAbout, tvSyncVia, tvLastSync, tvLogout;
 	public RadioGroup syncGroup;
 	public RadioButton syncRadio;
 
@@ -49,6 +59,7 @@ public class SettingActivity extends DrawerActivity {
 		tvTerms = (TextView) findViewById(R.id.tvTerms);
 		tvAbout = (TextView) findViewById(R.id.tvAbout);
 		tvSyncVia = (TextView) findViewById(R.id.tvSyncVia);
+		tvLogout = (TextView) findViewById(R.id.tvLogout);
 
 		tvLastSync = (TextView) findViewById(R.id.tvLastSync);
 
@@ -89,6 +100,13 @@ public class SettingActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				syncDialog(SettingActivity.this);
+			}
+		});
+
+		tvLogout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showAlertWith("LOGOUT", "Are you sure you want to Log Out?", SettingActivity.this);
 			}
 		});
 
@@ -199,6 +217,11 @@ public class SettingActivity extends DrawerActivity {
 		dialog.show();
 	}
 
+	public void logout(){
+		showAlertWith("LOGOUT", "Are you sure you want to Log Out?", SettingActivity.this);
+	}
+
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
@@ -207,4 +230,111 @@ public class SettingActivity extends DrawerActivity {
 		startActivity(i);
 		finish();
 	}
+
+
+	void showAlertWith(String title, String message, Context context) {
+
+		final Dialog dialog = new Dialog(context);
+
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflate your activity layout here!
+		View contentView = inflater.inflate(R.layout.alert_view, null, false);
+
+		TextView textViewTitleAlert = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlert);
+		textViewTitleAlert.setText(title);
+		textViewTitleAlert.setTextColor(Color.WHITE);
+		TextView textViewTitleAlertMessage = (TextView) contentView
+				.findViewById(R.id.textViewTitleAlertMessage);
+		textViewTitleAlertMessage.setText(message);
+
+		Button buttonAlertCancel = (Button) contentView
+				.findViewById(R.id.buttonAlertCancel);
+		Button buttonAlertOk = (Button) contentView
+				.findViewById(R.id.buttonAlertOk);
+		buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				flushDatabase();
+
+				finish();
+				startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+			}
+		});
+
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(false);
+		dialog.setContentView(contentView);
+		dialog.show();
+
+	}
+
+	public void flushDatabase(){
+
+		//remove gcmId of this device from server
+		try {
+			String logoutUrl = RegularFunctions.SERVER_URL+"user/logout";
+			String logoutJson = getLogoutJson().toString();
+			Log.e("jay logoutJSON", logoutJson);
+			String removeGcm = RegularFunctions.post(logoutUrl,logoutJson);
+			Log.e("jay removeGcm", removeGcm);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		//flush sync values
+		Sync s = Sync.findById(Sync.class, 1l);
+		s.setFolderLocalToServer(0l);
+		s.setFolderServerToLocal(0l);
+		s.setNoteLocalToServer(0l);
+		s.setNoteServerToLocal(0l);
+		s.setLastSyncTime(0l);
+		s.setSyncType(1);
+		s.save();
+
+		//flush config values
+		Config c = Config.findById(Config.class, 1l);
+		c.setFirstname("");
+		c.setLastname("");
+		c.setEmail("");
+		c.setPassword("");
+		c.setFbid("");
+		c.setGoogleid("");
+		c.setPasscode(0);
+		c.setProfilepic("");
+		c.setUsername("");
+		c.setDeviceid("");
+		c.setServerid("");
+		c.setAppversion(0);
+		c.save();
+
+		//delete all folders
+		Folder.deleteAll(Folder.class);
+
+		//delete all notes
+		Note.deleteAll(Note.class);
+
+		//delete all noteElements
+		NoteElement.deleteAll(NoteElement.class);
+
+	}
+
+	public JSONObject getLogoutJson(){
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("user", RegularFunctions.getUserId().trim());
+			jsonObject.put("deviceid", RegularFunctions.getDeviceId().trim());
+		}catch (JSONException je){
+
+		}
+		return jsonObject;
+	}
+
 }

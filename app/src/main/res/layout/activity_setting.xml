@@ -167,7 +167,8 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:background="#DDD"/>
+                        android:background="#DDD"
+                        android:visibility="gone"/>
 
 
 
@@ -177,7 +178,8 @@
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:text="About NoteShare"
-                        style="@style/settingTextViewSubTitle"/>
+                        style="@style/settingTextViewSubTitle"
+                        android:visibility="gone"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -190,6 +192,19 @@
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:text="Terms &amp; Condition"
+                        style="@style/settingTextViewSubTitle"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="#DDD"/>
+
+                    <TextView
+                        android:id="@+id/tvLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:text="Logout"
                         style="@style/settingTextViewSubTitle"/>
 
                     <View

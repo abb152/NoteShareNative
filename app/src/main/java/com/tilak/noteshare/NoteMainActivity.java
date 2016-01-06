@@ -1150,7 +1150,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         switch (itemId) {
             case R.id.imageButtonHamburg:
                 imageButtonHamburg.setBackgroundColor(getResources().getColor(
-                        R.color.A8b241b));
+                        R.color.header_bg));
                 break;
             case R.id.imageButtoncalander:
                 imageButtoncalander.setBackgroundColor(getResources().getColor(
@@ -1900,10 +1900,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 drawingControls.setVisibility(View.GONE);
                 System.out.println("more mode");
                 layOutDrawingView.setVisibility(View.GONE);
-                updateButtonUI(R.id.imageButtonMoreMode);
+                //updateButtonUI(R.id.imageButtonMoreMode);
                 layout_audio_notechooser.setVisibility(View.GONE);
 
-                if (isMoreShown == false) {
+                showShareActionSheet(v);
+
+                /*if (isMoreShown == false) {
                     isMoreShown = true;
                     layout_note_more_Info.setVisibility(View.VISIBLE);
                     imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
@@ -1911,7 +1913,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     isMoreShown = false;
                     layout_note_more_Info.setVisibility(View.GONE);
                     imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
-                }
+                }*/
                 imageButtoncalander.setVisibility(View.GONE);
             }
         });
@@ -2985,13 +2987,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                                 Log.e("jay editor height", String.valueOf(editor.getHeight()));
                                 Log.e("jay dp from px", String.valueOf(dpFromPx(getApplicationContext(), editor.getHeight())));
-                                scrollView.setScrollY(scrollView.getScrollY() + pxFromDp(NoteMainActivity.this,20));
+                                scrollView.setScrollY(scrollView.getScrollY() + pxFromDp(NoteMainActivity.this, 20));
                             }
                             if (height[0] > editor.getHeight()) {
                                 height[0] = editor.getHeight();
 
                                 Log.e("jay editor height", String.valueOf(editor.getHeight()));
-                                scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this,20));
+                                scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this, 20));
                             }
                         }
                     });
@@ -3006,6 +3008,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     });
 
                     noteElements.addView(textView);
+
+                    editor.getContentHeight();
 
                     editor.setOnInitialLoadListener(new RichEditor.AfterInitialLoadListener() {
 
@@ -3022,7 +3026,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                         //now we can retrieve the width and height
                                         int width = editor.getWidth();
                                         int height = editor.getHeight();
+
+                                        int conheight = editor.getContentHeight();
                                         Log.e("jay text height", String.valueOf(height));
+                                        Log.e("jay con height", String.valueOf(conheight));
                                         //...
                                         //do whatever you want with them
                                         //...
@@ -3859,7 +3866,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         ImageView ivWhatsapp = (ImageView) shareWhatsapp.findViewById(R.id.imageViewSlidemenu);
         ivWhatsapp.setImageResource(R.drawable.ic_option_delete);
         ivWhatsapp.setTag(id);
-        tvWhatsapp.setText("Whatsapp");
+        tvWhatsapp.setText("Link");
         shareWhatsapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3873,7 +3880,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
         ivEmail.setImageResource(R.drawable.ic_option_delete);
         ivEmail.setTag(id);
-        tvEmail.setText("Email");
+        tvEmail.setText("NoteShare");
         shareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3887,12 +3894,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         ImageView ivMessage = (ImageView) shareMessage.findViewById(R.id.imageViewSlidemenu);
         ivMessage.setImageResource(R.drawable.ic_option_delete);
         ivMessage.setTag(id);
-        tvMessage.setText("Message");
+        tvMessage.setText("Screenshot");
         shareMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //textShare(context, id);
                 shareDialog.dismiss();
+                screenshot();
             }
         });
 
@@ -3901,7 +3909,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         ImageView ivFacebook = (ImageView) shareFacebook.findViewById(R.id.imageViewSlidemenu);
         ivFacebook.setImageResource(R.drawable.ic_option_delete);
         ivFacebook.setTag(id);
-        tvFacebook.setText("Facebook");
+        tvFacebook.setText("Text");
         shareFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3915,18 +3923,155 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     noteMainActivity.screenshot();
                 }*/
                 shareDialog.dismiss();
-                screenshot();
+                //screenshot();
             }
         });
 
-        LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
+        /*LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
         TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
         ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
         ivTwitter.setImageResource(R.drawable.ic_option_delete);
         ivTwitter.setTag(id);
-        tvTwitter.setText("Twitter");
+        tvTwitter.setText("Twitter");*/
 
         shareDialog.show();
     }
+
+
+
+
+    public void showShareActionSheet(View v) {
+
+        final Dialog myDialog = new Dialog(NoteMainActivity.this, R.style.CustomTheme);
+
+        myDialog.setContentView(R.layout.actionsheet_share);
+        Button buttonDissmiss = (Button) myDialog
+                .findViewById(R.id.buttonDissmiss);
+
+        LinearLayout layoutShare = (LinearLayout) myDialog
+                .findViewById(R.id.optionLayoutShare);
+        TextView layoutShareTextView = (TextView) layoutShare
+                .findViewById(R.id.textViewSlideMenuName);
+        layoutShareTextView.setText("Share");
+        ImageView layoutShareImageView = (ImageView) layoutShare
+                .findViewById(R.id.imageViewSlidemenu);
+        layoutShareImageView.setImageResource(R.drawable.ic_note_share_dark);
+
+
+        LinearLayout layoutDelete = (LinearLayout) myDialog
+                .findViewById(R.id.optionLayoutDelete);
+        TextView layoutDeleteTextView = (TextView) layoutDelete
+                .findViewById(R.id.textViewSlideMenuName);
+        layoutDeleteTextView.setText("Delete");
+        ImageView layoutDeleteImageView = (ImageView) layoutDelete
+                .findViewById(R.id.imageViewSlidemenu);
+        layoutDeleteImageView.setImageResource(R.drawable.ic_note_delete_dark);
+
+
+        LinearLayout layoutMove = (LinearLayout) myDialog
+                .findViewById(R.id.optionLayoutMove);
+        TextView layoutMoveTextView = (TextView) layoutMove
+                .findViewById(R.id.textViewSlideMenuName);
+        layoutMoveTextView.setText("Move");
+        ImageView layoutMoveImageView = (ImageView) layoutMove
+                .findViewById(R.id.imageViewSlidemenu);
+        layoutMoveImageView.setImageResource(R.drawable.ic_note_move_dark);
+
+
+        LinearLayout  layoutRemind = (LinearLayout) myDialog
+                .findViewById(R.id.optionLayoutRemind);
+        TextView layoutRemindTextView = (TextView)layoutRemind
+                .findViewById(R.id.textViewSlideMenuName);
+        layoutRemindTextView.setText("Remind");
+        ImageView layoutRemindImageView = (ImageView) layoutRemind
+                .findViewById(R.id.imageViewSlidemenu);
+        layoutRemindImageView.setImageResource(R.drawable.ic_note_remainder_dark);
+
+
+        LinearLayout layoutTimeBomb = (LinearLayout) myDialog
+                .findViewById(R.id.optionLayoutTimeBomb);
+        TextView layoutTimeBombTextView = (TextView) layoutTimeBomb
+                .findViewById(R.id.textViewSlideMenuName);
+        layoutTimeBombTextView.setText("Timebomb");
+        ImageView layoutTimeBombImageView = (ImageView) layoutTimeBomb
+                .findViewById(R.id.imageViewSlidemenu);
+        layoutTimeBombImageView.setImageResource(R.drawable.ic_note_timebomb_dark);
+
+
+        LinearLayout layoutLock = (LinearLayout) myDialog
+                .findViewById(R.id.optionLayoutLock);
+        TextView layoutLockTextView = (TextView) layoutLock
+                .findViewById(R.id.textViewSlideMenuName);
+        layoutLockTextView.setText("Lock");
+        ImageView layoutLockImageView = (ImageView) layoutLock
+                .findViewById(R.id.imageViewSlidemenu);
+        layoutLockImageView.setImageResource(R.drawable.ic_note_lock_dark);
+
+
+        layoutShare.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+                share(v);
+            }
+        });
+
+        layoutDelete.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+                delete(v);
+            }
+        });
+
+        layoutMove.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+                move(v);
+            }
+        });
+
+        layoutRemind.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+                remindClick(v);
+            }
+        });
+
+        layoutTimeBomb.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+                timebomb(v);
+            }
+        });
+
+        layoutLock.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+                passcode(v);
+            }
+        });
+
+
+        buttonDissmiss.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+
+        myDialog.getWindow().getAttributes().windowAnimations = R.anim.slide_up_1;
+        myDialog.show();
+
+        myDialog.getWindow().setGravity(Gravity.BOTTOM);
+
+    }
+
 
 }

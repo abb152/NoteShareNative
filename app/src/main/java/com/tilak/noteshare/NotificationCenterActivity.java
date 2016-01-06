@@ -24,7 +24,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class NotificationCenterActivity extends DrawerActivity {
 	public LinearLayout layoutHeder;
@@ -84,6 +86,13 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 			@Override
 			protected String doInBackground(Void... params) {
+				String sample = "jay,visariya";
+
+				List<String> sampleList = Arrays.asList(sample.split(","));
+
+				Log.e("sample1", sampleList.get(0));
+				Log.e("sample2", sampleList.get(1));
+
 
 				list = new ArrayList<HashMap<String, String>>();
 				try {
@@ -149,7 +158,6 @@ public class NotificationCenterActivity extends DrawerActivity {
 	}
 
 	public void acceptAndSync(final View v){
-
 
 		final ImageButton imageButton = (ImageButton) v;
 		imageButton.setClickable(false);

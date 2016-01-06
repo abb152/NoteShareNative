@@ -39,8 +39,8 @@ public class InteroductionActivity extends Activity {
 			{
 				if (finish<4)
 				{
-					//page.setInAnimation(animFlipInForeward);
-					//page.setOutAnimation(animFlipOutForeward);
+					page.setInAnimation(animFlipInForeward);
+					page.setOutAnimation(animFlipOutForeward);
 					page.showNext();
 					if (finish==3)
 					{

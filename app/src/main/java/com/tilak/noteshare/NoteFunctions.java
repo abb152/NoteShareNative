@@ -379,7 +379,7 @@ public class NoteFunctions {
         LinearLayout optionLock = (LinearLayout) dialog.findViewById(R.id.optionLock);
         TextView tvOptionLock = (TextView) optionLock.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionLock = (ImageView) optionLock.findViewById(R.id.imageViewSlidemenu);
-        ivOptionLock.setImageResource(R.drawable.ic_option_lock);
+        ivOptionLock.setImageResource(R.drawable.ic_note_lock_dark);
         tvOptionLock.setText("Lock");
 
         optionLock.setOnClickListener(new View.OnClickListener() {
@@ -393,7 +393,7 @@ public class NoteFunctions {
         LinearLayout optionTimebomb = (LinearLayout) dialog.findViewById(R.id.optionTimebomb);
         TextView tvOptionTimebomb = (TextView) optionTimebomb.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionTimebomb = (ImageView) optionTimebomb.findViewById(R.id.imageViewSlidemenu);
-        ivOptionTimebomb.setImageResource(R.drawable.ic_option_timebomb);
+        ivOptionTimebomb.setImageResource(R.drawable.ic_note_timebomb_dark);
         tvOptionTimebomb.setText("Timebomb");
 
         optionTimebomb.setOnClickListener(new View.OnClickListener() {
@@ -407,7 +407,7 @@ public class NoteFunctions {
         LinearLayout optionReminder = (LinearLayout) dialog.findViewById(R.id.optionReminder);
         TextView tvOptionReminder = (TextView) optionReminder.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionReminder = (ImageView) optionReminder.findViewById(R.id.imageViewSlidemenu);
-        ivOptionReminder.setImageResource(R.drawable.ic_option_reminder);
+        ivOptionReminder.setImageResource(R.drawable.ic_note_remainder_dark);
         tvOptionReminder.setText("Reminder");
 
         optionReminder.setOnClickListener(new View.OnClickListener() {
@@ -421,7 +421,7 @@ public class NoteFunctions {
         LinearLayout optionMove = (LinearLayout) dialog.findViewById(R.id.optionMove);
         TextView tvOptionMove = (TextView) optionMove.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionMove = (ImageView) optionMove.findViewById(R.id.imageViewSlidemenu);
-        ivOptionMove.setImageResource(R.drawable.ic_option_move);
+        ivOptionMove.setImageResource(R.drawable.ic_note_move_dark);
         tvOptionMove.setText("Move");
 
         optionMove.setOnClickListener(new View.OnClickListener() {
@@ -435,7 +435,7 @@ public class NoteFunctions {
         LinearLayout optionDelete = (LinearLayout) dialog.findViewById(R.id.optionDelete);
         TextView tvOptionDelete = (TextView) optionDelete.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionDelete = (ImageView) optionDelete.findViewById(R.id.imageViewSlidemenu);
-        ivOptionDelete.setImageResource(R.drawable.ic_option_delete);
+        ivOptionDelete.setImageResource(R.drawable.ic_note_delete_dark);
         tvOptionDelete.setText("Delete");
 
         optionDelete.setOnClickListener(new View.OnClickListener() {
@@ -449,7 +449,7 @@ public class NoteFunctions {
         LinearLayout optionShare = (LinearLayout) dialog.findViewById(R.id.optionShare);
         TextView tvOptionShare = (TextView) optionShare.findViewById(R.id.textViewSlideMenuName);
         ImageView ivOptionShare = (ImageView) optionShare.findViewById(R.id.imageViewSlidemenu);
-        ivOptionShare.setImageResource(R.drawable.ic_option_share);
+        ivOptionShare.setImageResource(R.drawable.ic_note_share_dark);
         ivOptionShare.setPadding(2, 2, 2, 2);
         tvOptionShare.setText("Share");
         View layoutsepreter = optionShare.findViewById(R.id.layoutsepreter);
@@ -487,7 +487,7 @@ public class NoteFunctions {
         ImageView ivWhatsapp = (ImageView) shareWhatsapp.findViewById(R.id.imageViewSlidemenu);
         ivWhatsapp.setImageResource(R.drawable.ic_option_delete);
         ivWhatsapp.setTag(id);
-        tvWhatsapp.setText("Whatsapp");
+        tvWhatsapp.setText("Link");
         shareWhatsapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -501,7 +501,7 @@ public class NoteFunctions {
         ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
         ivEmail.setImageResource(R.drawable.ic_option_delete);
         ivEmail.setTag(id);
-        tvEmail.setText("Email");
+        tvEmail.setText("NoteShare");
         shareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -515,7 +515,7 @@ public class NoteFunctions {
         ImageView ivMessage = (ImageView) shareMessage.findViewById(R.id.imageViewSlidemenu);
         ivMessage.setImageResource(R.drawable.ic_option_delete);
         ivMessage.setTag(id);
-        tvMessage.setText("Message");
+        tvMessage.setText("Screenshot");
         shareMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -524,7 +524,7 @@ public class NoteFunctions {
             }
         });
 
-        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
+        /*LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
         TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
         ImageView ivFacebook = (ImageView) shareFacebook.findViewById(R.id.imageViewSlidemenu);
         ivFacebook.setImageResource(R.drawable.ic_option_delete);
@@ -552,7 +552,7 @@ public class NoteFunctions {
         ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
         ivTwitter.setImageResource(R.drawable.ic_option_delete);
         ivTwitter.setTag(id);
-        tvTwitter.setText("Twitter");
+        tvTwitter.setText("Twitter");*/
 
         shareDialog.show();
     }
@@ -647,7 +647,7 @@ public class NoteFunctions {
                     Looper.prepare();
                 }
 
-                RegularFunctions.syncNow();
+                //RegularFunctions.syncNow();
 
                 String shareMessage = RegularFunctions.getUserName() + " has shared "+ RegularFunctions.getNoteName(id) + " note with you.\n"
                         +"http://www.noteshare.com/"+RegularFunctions.getUserId() +"/"+RegularFunctions.getServerNoteId(id)+".html"
@@ -706,7 +706,7 @@ public class NoteFunctions {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context,"Please wait!",Toast.LENGTH_LONG).show();
-                final String email = emailTo.getText().toString();
+                final String email = emailTo.getText().toString().toLowerCase();
 
                 if (email.equals("")) {
                     //Toast.makeText(context, "Please enter Email id.", Toast.LENGTH_LONG).show();
@@ -715,7 +715,7 @@ public class NoteFunctions {
                     //Toast.makeText(context, "Please enter valid Email id.", Toast.LENGTH_LONG).show();
                     emailTo.setError("Invalid Email");
                 } else {
-                    Log.e("jay text", emailTo.getText().toString());
+                    Log.e("jay text", emailTo.getText().toString().toLowerCase());
                     Log.e("jay id", id);
                     final ProgressDialog progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Loading...");
@@ -746,15 +746,11 @@ public class NoteFunctions {
                                 if (value.equals("true")) {
                                     shareDialog.dismiss();
                                     progressDialog.dismiss();
-
                                     shared = true;
-                                    //Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
                                 } else {
                                     shareDialog.dismiss();
                                     progressDialog.dismiss();
-
                                     shared = false;
-                                    //Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
                                 }
                             }
                             catch(JSONException e)
@@ -799,7 +795,6 @@ public class NoteFunctions {
             jsonObject.put("email",email);
             jsonObject.put("note", RegularFunctions.getServerNoteId(id).trim());
         }catch(JSONException je){
-
         }
         return jsonObject;
     }
