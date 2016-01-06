@@ -24,7 +24,7 @@ public class RegularFunctions {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
-    public static String SERVER_URL = "http://104.197.122.116/";
+    public static String SERVER_URL = "http://104.197.47.172/";
     //public static String SERVER_URL = "http://192.168.0.125:1337/";
 
     public static int pxFromDp(final Context context, final float dp) {

@@ -2,6 +2,7 @@ package com.tilak.noteshare;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +20,11 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
@@ -86,7 +89,6 @@ import com.itextpdf.text.pdf.PdfWriter;*/
 //import android.support.annotation.Keep;*/
 
 public class NoteMainActivity extends DrawerActivity implements OnClickListener {
-
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final int SELECT_PICTURE = 1;
@@ -107,7 +109,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public LinearLayout noteElements;
     public RelativeLayout noteScribbleElements;
     public ImageButton deleteCheckbox, deleteAudio;
-    public LinearLayout layOutDrawingView, textNoteControls,bottommenue,
+    public LinearLayout layOutDrawingView, textNoteControls, bottommenue,
             layout_note_more_Info, layout_audio_notechooser, audioElement;
     public TextView textViewAdd, textViewDuration;
     public ArrayList<NoteListDataModel> arrNoteListData;
@@ -152,13 +154,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public long noteElementId;
     ProgressBar progressRecord;
     SeekBar progressRecord1;
-
     public NoteFunctions noteFunctions = new NoteFunctions();
-
     // /Drawing Controls
     RelativeLayout LayoutAudioRecording;
     ImageButton bold = null, italic = null, underline = null, h1 = null, h2 = null, h3 = null, h4 = null, h5 = null, h6 = null, align_left = null, align_center = null, align_right = null, redo = null, undo = null;
-    ImageButton orderedList = null , unorderedList = null;
+    ImageButton orderedList = null, unorderedList = null;
     View viewText;
     List<RichEditor> allRe = new ArrayList<RichEditor>();
     List<View> allCheckboxText = new ArrayList<View>();
@@ -178,7 +178,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     View highlightview, brushview, eraserview;
     ImageButton buttonHighlight, buttonBrush, buttonEraser;
     GradientDrawable brushshape;
-
     // 8b241b selected bg
     int lastBrushSize = 3, lastHighlightSize = 3, lastEraserSize = 3,
             highlightViewSize = (lastHighlightSize * 4 + 20),
@@ -186,9 +185,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             eraserViewSize = (lastEraserSize * 4 + 20),
             lastBrushColor = 0, count = 0;
     int firstHighlightColor, lastHighlightColor = Color.parseColor("#77FF5B1E");
-
     int orderNumber = 1;
-
     private float smallBrush, mediumBrush, largeBrush;
     private AudioRecorder mAudioRecorder;
     private String audioName;
@@ -200,22 +197,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 
     //audio stopwatch
-
     private long startTime = 0L;
     private Handler myHandler = new Handler();
     long timeInMillies = 0L;
     long timeSwap = 0L;
     long finalTime = 0L;
     public TextView audio_text;
-
     //multiple delete
     List<String> multipleDeleteArray = new ArrayList<String>();
     List<View> multipleDeleteParentArray = new ArrayList<View>();
-
     //note element order and spacing
     boolean scribbleAdded = false;
     public static String background;
-
     boolean outsideNote = false;
     boolean out = false;
 
@@ -239,200 +232,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
-    public void loadBitmapFromView(View v) {
-
-        ScrollView scroll = (ScrollView) v;
-
-        int width = scroll.getChildAt(0).getWidth();
-        int height = scroll.getChildAt(0).getHeight();
-
-        int blankSpace = pxFromDp(this, 1500);
-
-        Log.e("jay sw",String.valueOf(width));
-        Log.e("jay sh",String.valueOf(height - blankSpace));
-
-        int screenShotHeight = height - blankSpace;
-
-        double j = ((double)screenShotHeight)/200;
-        int timesLoopShouldRun = (int) Math.ceil(j);
-
-
-        Canvas bitmapCanvas = new Canvas();
-        Bitmap bitmap = Bitmap.createBitmap(width, screenShotHeight, Bitmap.Config.ARGB_8888);
-
-        bitmapCanvas.setBitmap(bitmap);
-        bitmapCanvas.drawColor(Color.parseColor(background));
-        //bitmapCanvas.scale(1.0f, 3.0f);
-        scroll.draw(bitmapCanvas);
-
-
-        String fileName = noteIdForDetails +".png";
-        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
-        try {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-        Toast.makeText(context, "Screenshot taken", Toast.LENGTH_SHORT).show();
-        /*try
-        {
-            String fileName1 = "Note.pdf";
-            File file1 = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + fileName);
-
-            Document document = new Document();
-
-            PdfWriter.getInstance(document, new FileOutputStream(file));
-            document.open();
-
-            addImage(document,bitmap);
-            document.close();
-        }
-
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }*/
-
-
-    }
-
-
-
-
-
-
-
-    /*public void imgToPdf(){
-		*//*try {
-			Document  document = new Document();
-
-			PdfWriter.getInstance(document, new FileOutputStream(file));
-			document.open();
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			screen.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			byte[] byteArray = stream.toByteArray();
-			addImage(document,byteArray);
-			document.close();
-		}
-		catch (Exception e){
-			e.printStackTrace();
-		}*//*
-
-        try
-        {
-            String fileName = "Note.pdf";
-            File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/" + fileName);
-
-            Document document = new Document();
-
-            PdfWriter.getInstance(document, new FileOutputStream(file));
-            document.open();
-
-            addImage(document);
-            document.close();
-        }
-
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-    }*/
-
-    /*thisss private static void addImage(Document document, Bitmap bitmap)
-    {
-        int bytes = bitmap.getByteCount();
-        //or we can calculate bytes this way. Use a different value than 4 if you don't use 32bit images.
-        //int bytes = b.getWidth()*b.getHeight()*4;
-
-        ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
-        bitmap.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
-
-        byte[] bArray = buffer.array();
-
-        com.itextpdf.text.Image image = null;
-        try
-        {
-            image = com.itextpdf.text.Image.getInstance(bArray);  ///Here i set byte array..you can do bitmap to byte array and set in image...
-        }
-        catch (BadElementException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (MalformedURLException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // image.scaleAbsolute(150f, 150f);
-        try
-        {
-            document.add(image);
-        } catch (DocumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }*/
-
-    /*private static void addImage(Document document,byte[] byteArray)
-    {
-        Image image = null;
-        try
-        {
-            image = Image.getInstance(byteArray);
-        }
-        catch (BadElementException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (MalformedURLException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // image.scaleAbsolute(150f, 150f);
-        try
-        {
-            document.add(image);
-        } catch (DocumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }*/
-
-
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_main);
         Intent intent = this.getIntent();
         noteIdForDetails = intent.getStringExtra("NoteId");
-        out = intent.getBooleanExtra("Outside",false);
+        out = intent.getBooleanExtra("Outside", false);
 
         Log.v("select", "onCreate Note Id" + noteIdForDetails);
 
@@ -450,16 +256,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             e.printStackTrace();
         }
 
-        if(out){
+        if (out) {
             //noteFunctions.screenshot(scrollView,this,background);
             screenshot();
         }
-
-	/*List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT con from NoteElement where  NOTEID= '1' AND TYPE ='image'");
-    for(NoteElement n :ne){
-	name = n.content;
-	}*/
-
     }
 
     @Override
@@ -547,16 +347,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 .findViewById(R.id.imageButtonDeleteMode);
 
         final String[] updatedText = new String[1];
-        if(noteIdForDetails == null){
-            List<Note> notes = Note.findWithQuery(Note.class,"Select id from NOTE");
+        if (noteIdForDetails == null) {
+            List<Note> notes = Note.findWithQuery(Note.class, "Select id from NOTE");
             String num = null;
-            if(notes.size() > 0)
-                num = String.valueOf(((notes.get(notes.size() - 1).getId()) + 1L ));
+            if (notes.size() > 0)
+                num = String.valueOf(((notes.get(notes.size() - 1).getId()) + 1L));
             else
                 num = "1";
-            textViewheaderTitle.setText("Note "+ num +"");
-            updatedText[0] = "Note "+num;
-            noteTitle[0] = "Note "+num;
+            textViewheaderTitle.setText("Note " + num + "");
+            updatedText[0] = "Note " + num;
+            noteTitle[0] = "Note " + num;
         }
 
         final boolean[] initialNameSet = {false};
@@ -671,7 +471,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     void addAudioNoteListners() {
 
         audioButtondrawback.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
                 updateAudioNoteUI(arg0.getId());
@@ -680,7 +479,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         audioButtondrawnew.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
 
@@ -1170,7 +968,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     /*************
      * moreinfo control Here
      ************/
-
     Button buttonLock;
 
     void initlizesMoreInfoView(View contentView) {
@@ -1179,7 +976,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         layout_note_more_Info.setVisibility(View.GONE);
 
 	/*Button buttonLock = (Button) layout_note_more_Info
-	.findViewById(R.id.buttonLock);
+    .findViewById(R.id.buttonLock);
 	Button buttonDelete = (Button) layout_note_more_Info
 	.findViewById(R.id.buttonDelete);*/
         buttonLock = (Button) layout_note_more_Info.findViewById(R.id.buttonLock);
@@ -1190,26 +987,27 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Button buttonShare = (Button) layout_note_more_Info.findViewById(R.id.buttonShare);
     }
 
-    public void footerMenuGone(){
+    public void footerMenuGone() {
         isMoreShown = false;
         layout_note_more_Info.setVisibility(View.GONE);
         imageButtonMoreMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
     }
-    public void share (View v) {
+
+    public void share(View v) {
         //noteFunctions.share(this, noteIdForDetails, outsideNote);
         //noteFunctions.noteshareShare(this,noteIdForDetails);
-        share(this,noteIdForDetails,outsideNote);
+        share(this, noteIdForDetails, outsideNote);
         footerMenuGone();
     }
 
-    public void move (View v) {
+    public void move(View v) {
         if (noteIdForDetails == null)
             makeNote();
         noteFunctions.showMoveAlert(this, noteIdForDetails);
         footerMenuGone();
     }
 
-    public void timebomb (View v) {
+    public void timebomb(View v) {
         if (noteIdForDetails == null)
             makeNote();
         noteFunctions.showDate(this, noteIdForDetails, "SET TIMEBOMB", "timebomb");
@@ -1877,7 +1675,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         }
                         if (height[0] > editor.getHeight()) {
                             height[0] = editor.getHeight();
-                            scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this,20));
+                            scrollView.setScrollY(scrollView.getScrollY() - pxFromDp(NoteMainActivity.this, 20));
                         }
                         if (ne_added[0]) {
                             NoteElement ne = NoteElement.findById(NoteElement.class, thisnoteid[0]);
@@ -2370,7 +2168,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         final GradientDrawable shape = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_id);
         shape.setColor(lastHighlightColor);
         //aview.setBackgroundColor(lastHighlightColor);
-        if(lastHighlightSize == 0)
+        if (lastHighlightSize == 0)
             tvHighlightSize.setText("0.5");
         else
             tvHighlightSize.setText(hsize);
@@ -2385,15 +2183,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 //tvHighlightSize.setText(esize);
                 //highlightViewSize = (lastHighlightSize * 4 + 20);
 
-                if(lastHighlightSize == 0) {
+                if (lastHighlightSize == 0) {
                     drawView.setBrushSize(3);
                     tvHighlightSize.setText("0.5");
                     highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-                }
-                else {
+                } else {
                     drawView.setBrushSize((int) (lastHighlightSize * 6.299));
                     tvHighlightSize.setText(String.valueOf(lastHighlightSize));
-                    highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(progress * 6.299), getResources().getDisplayMetrics());
+                    highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) (progress * 6.299), getResources().getDisplayMetrics());
                 }
 
                 //highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(progress * 6.299), getResources().getDisplayMetrics());
@@ -2523,7 +2320,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         brushview.setBackground(brushshape);
 
         if (count == 0) {
-            drawView.setBrushSize((int)(lastBrushSize * 6.299));
+            drawView.setBrushSize((int) (lastBrushSize * 6.299));
             drawView.setDrawColor(Color.parseColor("#000000"));
             lastBrushColor = Color.BLACK;
             brushshape.setColor(lastBrushColor);
@@ -2533,13 +2330,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         final TextView tvBrushSize = (TextView) scribbleDialog.findViewById(R.id.tvBrushSize);
         String size = String.valueOf(lastBrushSize);
         tvBrushSize.setText(size);
-        drawView.setBrushSize((int)(lastBrushSize * 6.299));
+        drawView.setBrushSize((int) (lastBrushSize * 6.299));
 
         if (count > 0) {
             brushview.setBackgroundColor(color_selected);
         }
 
-        if(lastBrushSize == 0)
+        if (lastBrushSize == 0)
             tvBrushSize.setText("0.5");
         else
             tvBrushSize.setText(size);
@@ -2548,15 +2345,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 lastBrushSize = progress;
-                if(lastBrushSize == 0) {
+                if (lastBrushSize == 0) {
                     drawView.setBrushSize(3);
                     tvBrushSize.setText("0.5");
                     brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-                }
-                else {
+                } else {
                     drawView.setBrushSize((int) (lastBrushSize * 6.299));
                     tvBrushSize.setText(String.valueOf(lastBrushSize));
-                    brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(progress * 6.299), getResources().getDisplayMetrics());
+                    brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) (progress * 6.299), getResources().getDisplayMetrics());
                 }
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(brushViewSize, brushViewSize);
                 params.gravity = Gravity.CENTER;
@@ -2580,10 +2376,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
         String esize = String.valueOf(lastEraserSize);
-        if(lastEraserSize == 0) {
+        if (lastEraserSize == 0) {
             tvEraserSize.setText("0.5");
-        }
-        else
+        } else
             tvEraserSize.setText(esize);
         eraserview = layoutEraser.findViewById(R.id.eraser_view);
         LayerDrawable eraserDrawable = (LayerDrawable) eraserview.getBackground();
@@ -2594,15 +2389,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 lastEraserSize = progress;
-                if(lastEraserSize == 0) {
+                if (lastEraserSize == 0) {
                     drawView.setBrushSize(3);
                     tvEraserSize.setText("0.5");
                     eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-                }
-                else {
+                } else {
                     drawView.setBrushSize((int) (lastEraserSize * 6.299));
                     tvEraserSize.setText(String.valueOf(lastEraserSize));
-                    eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(progress * 6.299), getResources().getDisplayMetrics());
+                    eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) (progress * 6.299), getResources().getDisplayMetrics());
                 }
                 drawView.setDrawColor(lastBrushColor);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
@@ -2624,36 +2418,35 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     // TODO highlighter clicked
     public void highlightClicked(View view) {
-            String color = view.getTag().toString();
-            lastHighlightColor = Color.parseColor(color);
-            drawView.setDrawColor(lastHighlightColor);
-            drawView.setBrushSize((int) (lastBrushSize * 6.299));
-            brushshape.setColor(lastHighlightColor);
-            highlightview.setBackground(brushshape);
+        String color = view.getTag().toString();
+        lastHighlightColor = Color.parseColor(color);
+        drawView.setDrawColor(lastHighlightColor);
+        drawView.setBrushSize((int) (lastBrushSize * 6.299));
+        brushshape.setColor(lastHighlightColor);
+        highlightview.setBackground(brushshape);
     }
 
     // TODO brush clicked
     public void brushClicked(View view) {
-            String color = view.getTag().toString();
-            lastBrushColor = Color.parseColor(color);
-            drawView.setDrawColor(lastBrushColor);
-            drawView.setBrushSize((int) (lastBrushSize * 6.299));
-            brushshape.setColor(lastBrushColor);
-            brushview.setBackground(brushshape);
-            count++;
+        String color = view.getTag().toString();
+        lastBrushColor = Color.parseColor(color);
+        drawView.setDrawColor(lastBrushColor);
+        drawView.setBrushSize((int) (lastBrushSize * 6.299));
+        brushshape.setColor(lastBrushColor);
+        brushview.setBackground(brushshape);
+        count++;
     }
 
     // TODO open highlight
     public void openHighlight() {
         drawView.onClickEraser(1);
         drawView.setDrawColor(lastHighlightColor);
-        if(lastHighlightColor == 0) {
+        if (lastHighlightColor == 0) {
             drawView.setBrushSize(3);
             highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-        }
-        else {
+        } else {
             drawView.setBrushSize((int) (lastHighlightSize * 6.299));
-            highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(lastHighlightSize * 6.299), getResources().getDisplayMetrics());
+            highlightViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) (lastHighlightSize * 6.299), getResources().getDisplayMetrics());
         }
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(highlightViewSize, highlightViewSize);
         params.gravity = Gravity.CENTER;
@@ -2672,13 +2465,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void openBrush() {
         drawView.onClickEraser(1);
         drawView.setDrawColor(lastBrushColor);
-        if(lastBrushSize == 0) {
+        if (lastBrushSize == 0) {
             drawView.setBrushSize(3);
             brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-        }
-        else {
+        } else {
             drawView.setBrushSize((int) (lastBrushSize * 6.299));
-            brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(lastBrushSize * 6.299), getResources().getDisplayMetrics());
+            brushViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) (lastBrushSize * 6.299), getResources().getDisplayMetrics());
         }
         brushview.setBackgroundColor(lastBrushColor);
         brushshape.setColor(lastBrushColor);
@@ -2700,13 +2492,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         //drawView.setDrawColor(Color.parseColor("#FFFFFF"));
         drawView.setDrawColor(Color.WHITE);
         drawView.onClickEraser(0);
-        if(lastEraserSize == 0) {
+        if (lastEraserSize == 0) {
             drawView.setBrushSize(3);
             eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
-        }
-        else {
+        } else {
             drawView.setBrushSize((int) (lastEraserSize * 6.299));
-            eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)(lastEraserSize * 6.299), getResources().getDisplayMetrics());
+            eraserViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) (lastEraserSize * 6.299), getResources().getDisplayMetrics());
         }
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(eraserViewSize, eraserViewSize);
         params.gravity = Gravity.CENTER;
@@ -2761,7 +2552,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Button buttonAlertOk = (Button) contentView
                 .findViewById(R.id.buttonAlertOk);
         buttonAlertCancel.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
                 dialog.dismiss();
@@ -2785,19 +2575,20 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-        if(isRecordingAudio){
-            Toast.makeText(getApplicationContext(),"Audio recording is going on!", Toast.LENGTH_LONG).show();
-        }else {
+        if (isRecordingAudio) {
+            Toast.makeText(getApplicationContext(), "Audio recording is going on!", Toast.LENGTH_LONG).show();
+        } else {
             finish();
         }
     }
-
 
     public void paperButtonSelected(View view) {
         paperBackground(view.getTag().toString());
         String viewTag = view.getTag().toString();
 
-        if (noteIdForDetails == null) { makeNote(); }
+        if (noteIdForDetails == null) {
+            makeNote();
+        }
 
         if (noteIdForDetails != null) {
             Note note = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
@@ -2867,13 +2658,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
-    public void makeNote(){
+    public void makeNote() {
         String timestamp = currentDateStr;
         Note note = null;
-        try{
-            note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "0", 0L , "0", "#FFFFFF", timestamp, timestamp, "0", 0, stringToDate(timestamp), stringToDate(timestamp));
+        try {
+            note = new Note(textViewheaderTitle.getText().toString(), "", backgroundColor, "0", 0L, "0", "#FFFFFF", timestamp, timestamp, "0", 0, stringToDate(timestamp), stringToDate(timestamp));
             note.save();
-        }catch(ParseException pe){
+        } catch (ParseException pe) {
             pe.printStackTrace();
         }
         noteIdForDetails = note.getId().toString();
@@ -2884,14 +2675,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date).getTime();
     }
 
-    public void modifyNoteTime(){
+    public void modifyNoteTime() {
         String timestamp = currentDateStr;
         try {
             Note n = Note.findById(Note.class, Long.parseLong(noteIdForDetails));
             n.setModifytime(timestamp);
             n.setMtime(stringToDate(timestamp));
             n.save();
-        }catch(ParseException pe){
+        } catch (ParseException pe) {
             pe.printStackTrace();
         }
     }
@@ -2923,7 +2714,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
             background = note.getColor();
 
-            if (background.contains("#")){
+            if (background.contains("#")) {
                 background_bg.setBackgroundColor(Color.parseColor(background));
             } else {
                 paperBackground(background);
@@ -3012,11 +2803,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     editor.getContentHeight();
 
                     editor.setOnInitialLoadListener(new RichEditor.AfterInitialLoadListener() {
-
                         @Override
                         public void onAfterInitialLoad(boolean isReady) {
 
-                            if(isReady) {
+                            if (isReady) {
 
                                 textView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
                                     @SuppressLint("NewApi")
@@ -3147,7 +2937,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                 //we should remove this listener
                                 //I use the function to remove it based on the api level!
 
-                                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
                                     note_image.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                                 else
                                     note_image.getViewTreeObserver().removeGlobalOnLayoutListener(this);
@@ -3294,13 +3084,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                                 //we should remove this listener
                                 //I use the function to remove it based on the api level!
 
-                                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
                                     note_audio.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                                 else
                                     note_audio.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                             }
                         });
-
 
 
                     } else if (n.type.equals("checkbox")) {
@@ -3427,12 +3216,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
 
             noteScribbleElements = (RelativeLayout) findViewById(R.id.scribbleRelative);
-            int px = pxFromDp(this,1500);
-            noteScribbleElements.setPadding(0,0,0,px);
+            int px = pxFromDp(this, 1500);
+            noteScribbleElements.setPadding(0, 0, 0, px);
         }
     }
 
-    void showDeleteAlert(final String tag, Context context,final View v) {
+    void showDeleteAlert(final String tag, Context context, final View v) {
 
         final Dialog dialog = new Dialog(context);
 
@@ -3476,39 +3265,38 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         dialog.show();
     }
 
-
     public void deleteButton() {
         /*if(isRecordingAudio){
             Toast.makeText(getApplication(),"Oops can't delete while recording is on.", Toast.LENGTH_LONG).show();
         }else{*/
-            if (!isDeleteModeSelected) {
-                imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
-                for (int i = 0; i < allDelete.size(); i++) {
-                    //Log.e("jay i", String.valueOf(i));
-                    try {
-                        allDelete.get(i).setVisibility(View.VISIBLE);
-                    }catch(NullPointerException npe){
-                        Log.e("jay ", Log.getStackTraceString(npe));
-                    }
+        if (!isDeleteModeSelected) {
+            imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.A8b241b));
+            for (int i = 0; i < allDelete.size(); i++) {
+                //Log.e("jay i", String.valueOf(i));
+                try {
+                    allDelete.get(i).setVisibility(View.VISIBLE);
+                } catch (NullPointerException npe) {
+                    Log.e("jay ", Log.getStackTraceString(npe));
                 }
-                isDeleteModeSelected = true;
-            } else {
-                imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
-                for (int i = 0; i < allDelete.size(); i++) {
-                    try {
-                        allDelete.get(i).setVisibility(View.GONE);
-                    }catch(NullPointerException npe){
-                        Log.e("jay ", Log.getStackTraceString(npe));
-                    }
-                }
-                isDeleteModeSelected = false;
             }
+            isDeleteModeSelected = true;
+        } else {
+            imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
+            for (int i = 0; i < allDelete.size(); i++) {
+                try {
+                    allDelete.get(i).setVisibility(View.GONE);
+                } catch (NullPointerException npe) {
+                    Log.e("jay ", Log.getStackTraceString(npe));
+                }
+            }
+            isDeleteModeSelected = false;
+        }
         //}
     }
 
-    public String getPlainText(String htmlText){
+    public String getPlainText(String htmlText) {
         String plainText = htmlText.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
-        return plainText.replace("&nbsp;","");
+        return plainText.replace("&nbsp;", "");
     }
 
     private String getNextFileName(String name) {
@@ -3516,14 +3304,13 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     private Runnable updateTimerMethod = new Runnable() {
-
         public void run() {
             timeInMillies = SystemClock.uptimeMillis() - startTime;
             finalTime = timeSwap + timeInMillies;
 
             int seconds = (int) (finalTime / 1000);
             int minutes = seconds / 60;
-            int hours = minutes / 60 ;
+            int hours = minutes / 60;
             minutes = minutes - (hours * 60);
             seconds = seconds % 60;
             int milliseconds = (int) (finalTime % 1000);
@@ -3534,7 +3321,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     };
 
-    public void saveScribble(){
+    public void saveScribble() {
         drawingControls.setVisibility(View.GONE);
         layOutDrawingView.setVisibility(View.GONE);
         updateButtonUI(-1);
@@ -3545,15 +3332,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         String fileName = fileNameGenerator.getFileName("SCRIBBLE");
         File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + fileName);
 
-        int topCrop = (int) (drawView.getMinY() - pxFromDp(this,15));
-        int bottom = (int) (drawView.getMaxY() + pxFromDp(this,15));
+        int topCrop = (int) (drawView.getMinY() - pxFromDp(this, 15));
+        int bottom = (int) (drawView.getMaxY() + pxFromDp(this, 15));
         int difference = bottom - topCrop;
         int width = drawView.getWidth();
 
 
         try {
-            Bitmap bmp = Bitmap.createBitmap(drawView.getDrawingCache(),0,topCrop,width,difference);
-            bmp.compress(Bitmap.CompressFormat.PNG,100, new FileOutputStream(file));
+            Bitmap bmp = Bitmap.createBitmap(drawView.getDrawingCache(), 0, topCrop, width, difference);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -3568,12 +3355,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
             int top = scrollView.getScrollY() + topCrop;
 
-            if(isRecordingAudio){
-                int px = pxFromDp(this,80); //70 dp for recording and rest 10 for blank space
+            if (isRecordingAudio) {
+                int px = pxFromDp(this, 80); //70 dp for recording and rest 10 for blank space
                 top = top - px;
             }
 
-            NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails),getNoteElementOrderNumber(),"Yes","scribble", fileName,String.valueOf(top),"");
+            NoteElement noteElement = new NoteElement(Long.parseLong(noteIdForDetails), getNoteElementOrderNumber(), "Yes", "scribble", fileName, String.valueOf(top), "");
             noteElement.save();
             modifyNoteTime();
             drawView.destroyDrawingCache();
@@ -3593,6 +3380,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void onClick(View v) {
 
     }
+
     public int pxFromDp(final Context context, final float dp) {
         return (int) (dp * context.getResources().getDisplayMetrics().density);
     }
@@ -3601,16 +3389,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         return (int) (px / context.getResources().getDisplayMetrics().density);
     }
 
-    public int getNoteElementOrderNumber(){
-        int lastNumber=0;
+    public int getNoteElementOrderNumber() {
+        int lastNumber = 0;
         List<NoteElement> ne = NoteElement.findWithQuery(NoteElement.class, "SELECT ORDERNUMBER FROM NOTE_ELEMENT WHERE NOTEID = " + Long.parseLong(noteIdForDetails));
-        if(ne.size() > 0)
-            return lastNumber = (ne.get(ne.size()-1).getOrderNumber()) + 1;
+        if (ne.size() > 0)
+            return lastNumber = (ne.get(ne.size() - 1).getOrderNumber()) + 1;
         else
             return 1;
     }
 
-    public void saveRecording(){
+    public void saveRecording() {
         isRecordingAudio = false;
         NoteElement noteElement = NoteElement.findById(NoteElement.class, noteElementId);
         noteElement.setContentA("true");
@@ -3623,8 +3411,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         onResume();
     }
 
-
-    public void multipleDelete(View v,View parent){
+    public void multipleDelete(View v, View parent) {
         String tag = v.getTag().toString();
         //View  deleteView = v;
         String deleteView = String.valueOf(v.getId());
@@ -3632,25 +3419,24 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         CheckBox cb = (CheckBox) v;
 
-        if(!cb.isChecked()){
+        if (!cb.isChecked()) {
 
             for (int i = 0; i < multipleDeleteArray.size(); i++) {
-                if(multipleDeleteArray.get(i).equals(tag)){
+                if (multipleDeleteArray.get(i).equals(tag)) {
                     multipleDeleteArray.remove(i);
                     multipleDeleteParentArray.remove(i);
                     parent.setBackgroundColor(Color.TRANSPARENT);
                     break;
                 }
             }
-        }else{
+        } else {
             multipleDeleteArray.add(tag);
             multipleDeleteParentArray.add(parent);
             parent.setBackgroundColor(2013223710);
         }
     }
 
-
-    public void addNewCheckBox(){
+    public void addNewCheckBox() {
         imageButtoncalander.setVisibility(View.VISIBLE);
         noteElements = (LinearLayout) findViewById(R.id.noteElements);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
@@ -3668,7 +3454,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         checklistDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                multipleDelete(buttonView,checkbox);
+                multipleDelete(buttonView, checkbox);
             }
         });
 
@@ -3794,63 +3580,57 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
     }
 
-    public void screenshot(){
-        //screenshot(scrollView, background, noteIdForDetails);
-        loadBitmapFromView(scrollView);
+    public void screenshot() {
+
+        final ProgressDialog progressDialog = new ProgressDialog(NoteMainActivity.this);
+        progressDialog.setMessage("Taking Screenshot...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                new AsyncTask<Void,Void,String>(){
+                    boolean status = false;
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        if (Looper.myLooper() == null) {
+                            Looper.prepare();
+                        }
+
+                        String filename = takeScreenshot(scrollView);
+
+                        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + filename);
+
+                        Uri uriToImage = Uri.fromFile(mediaStorageDir);
+
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+                        shareIntent.setType("image/jpeg");
+                        startActivity(Intent.createChooser(shareIntent, "Send Screenshot to"));
+
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        progressDialog.dismiss();
+                    }
+                }.execute(null,null,null);
+            }
+
+
+        }, 5000);
     }
-
-    public void screenshot(View v, final String background, final String noteId) {
-
-        //ScrollView scroll = (ScrollView) scrollView;
-        ScrollView scroll = scrollView;
-
-        int width = scroll.getChildAt(0).getWidth();
-        int height = scroll.getChildAt(0).getHeight();
-
-        int blankSpace = RegularFunctions.pxFromDp(context, 1500);
-
-        Log.e("jay sw", String.valueOf(width));
-        Log.e("jay sh", String.valueOf(height - blankSpace));
-
-        int screenShotHeight = height - blankSpace;
-
-        double j = ((double) screenShotHeight) / 200;
-        int timesLoopShouldRun = (int) Math.ceil(j);
-
-
-        Canvas bitmapCanvas = new Canvas();
-        Bitmap bitmap = Bitmap.createBitmap(width, screenShotHeight, Bitmap.Config.ARGB_8888);
-
-        bitmapCanvas.setBitmap(bitmap);
-        bitmapCanvas.drawColor(Color.parseColor(background));
-        //bitmapCanvas.scale(1.0f, 3.0f);
-        scroll.draw(bitmapCanvas);
-
-        Random randomGenerator = new Random();
-        String randomNumber = String.valueOf(randomGenerator.nextInt(10000));
-
-        String fileName = noteId + ".png";
-        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
-        try {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-        Toast.makeText(context, "Screenshot taken", Toast.LENGTH_SHORT).show();
-        Log.e("jay ss", "generated");
-
-    }
-
-
 
     // SHARE
-    public void share(final Context context, final String id , final boolean outsideNote) {
+    public void share(final Context context, final String id, final boolean outsideNote) {
         final Dialog shareDialog = new Dialog(context);
         shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         shareDialog.setCancelable(false);
@@ -3863,9 +3643,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareWhatsapp);
         TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivWhatsapp = (ImageView) shareWhatsapp.findViewById(R.id.imageViewSlidemenu);
-        ivWhatsapp.setImageResource(R.drawable.ic_option_delete);
-        ivWhatsapp.setTag(id);
         tvWhatsapp.setText("Link");
         shareWhatsapp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3877,9 +3654,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
         TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
-        ivEmail.setImageResource(R.drawable.ic_option_delete);
-        ivEmail.setTag(id);
         tvEmail.setText("NoteShare");
         shareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3891,14 +3665,10 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareMessage);
         TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivMessage = (ImageView) shareMessage.findViewById(R.id.imageViewSlidemenu);
-        ivMessage.setImageResource(R.drawable.ic_option_delete);
-        ivMessage.setTag(id);
         tvMessage.setText("Screenshot");
         shareMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //textShare(context, id);
                 shareDialog.dismiss();
                 screenshot();
             }
@@ -3906,24 +3676,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
         TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivFacebook = (ImageView) shareFacebook.findViewById(R.id.imageViewSlidemenu);
-        ivFacebook.setImageResource(R.drawable.ic_option_delete);
-        ivFacebook.setTag(id);
         tvFacebook.setText("Text");
         shareFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //textShare(context, id);
-                /*if(outsideNote) {
-                    MainActivity mainActivity = new MainActivity();
-                    mainActivity.screenshot(v.getTag().toString());
-                }
-                else{
-                    NoteMainActivity noteMainActivity = new NoteMainActivity();
-                    noteMainActivity.screenshot();
-                }*/
+                noteFunctions.textShare(context, id);
                 shareDialog.dismiss();
-                //screenshot();
             }
         });
 
@@ -3936,9 +3694,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         shareDialog.show();
     }
-
-
-
 
     public void showShareActionSheet(View v) {
 
@@ -3978,9 +3733,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         layoutMoveImageView.setImageResource(R.drawable.ic_note_move_dark);
 
 
-        LinearLayout  layoutRemind = (LinearLayout) myDialog
+        LinearLayout layoutRemind = (LinearLayout) myDialog
                 .findViewById(R.id.optionLayoutRemind);
-        TextView layoutRemindTextView = (TextView)layoutRemind
+        TextView layoutRemindTextView = (TextView) layoutRemind
                 .findViewById(R.id.textViewSlideMenuName);
         layoutRemindTextView.setText("Remind");
         ImageView layoutRemindImageView = (ImageView) layoutRemind
@@ -4033,7 +3788,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         layoutRemind.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 myDialog.dismiss();
@@ -4050,7 +3804,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         layoutLock.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 myDialog.dismiss();
@@ -4073,5 +3826,48 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
+
+    public String takeScreenshot(View v) {
+
+        ScrollView scroll = (ScrollView) v;
+
+        int width = scroll.getChildAt(0).getWidth();
+        int height = scroll.getChildAt(0).getHeight();
+
+        int blankSpace = pxFromDp(this, 1500);
+
+        Log.e("jay sw", String.valueOf(width));
+        Log.e("jay sh", String.valueOf(height - blankSpace));
+
+        int screenShotHeight = height - blankSpace;
+
+        double j = ((double) screenShotHeight) / 200;
+
+        Canvas bitmapCanvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(width, screenShotHeight, Bitmap.Config.ARGB_8888);
+
+        bitmapCanvas.setBitmap(bitmap);
+        bitmapCanvas.drawColor(Color.parseColor(background));
+        //bitmapCanvas.scale(1.0f, 3.0f);
+        scroll.draw(bitmapCanvas);
+
+
+        String fileName = noteIdForDetails + ".png";
+        File file = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + fileName);
+        try {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Toast.makeText(context, "Screenshot taken", Toast.LENGTH_SHORT).show();
+
+        return fileName;
+    }
 
 }

@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Looper;
 import android.provider.CalendarContract;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -268,7 +269,7 @@ public class NoteFunctions {
 
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String currentDateStr = formatter.format(new Date());
-                try{
+                try {
                     Note n = Note.findById(Note.class, noteid);
                     n.folder = folderid;
                     n.setModifytime(currentDateStr);
@@ -276,7 +277,7 @@ public class NoteFunctions {
                     n.save();
                     move.dismiss();
                     Toast.makeText(context, "Note " + n.getTitle() + " moved to " + foldername + " folder.", Toast.LENGTH_SHORT).show();
-                }catch (ParseException pe){
+                } catch (ParseException pe) {
 
                 }
             }
@@ -459,7 +460,8 @@ public class NoteFunctions {
             @Override
             public void onClick(View v) {
                 // Share
-                noteshareShare(context, id);
+                //noteshareShare(context, id);
+                share(context,id, true);
                 dialog.dismiss();
             }
         });
@@ -484,9 +486,6 @@ public class NoteFunctions {
 
         LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareWhatsapp);
         TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivWhatsapp = (ImageView) shareWhatsapp.findViewById(R.id.imageViewSlidemenu);
-        ivWhatsapp.setImageResource(R.drawable.ic_option_delete);
-        ivWhatsapp.setTag(id);
         tvWhatsapp.setText("Link");
         shareWhatsapp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -498,9 +497,6 @@ public class NoteFunctions {
 
         LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
         TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
-        ivEmail.setImageResource(R.drawable.ic_option_delete);
-        ivEmail.setTag(id);
         tvEmail.setText("NoteShare");
         shareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -512,46 +508,38 @@ public class NoteFunctions {
 
         LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareMessage);
         TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivMessage = (ImageView) shareMessage.findViewById(R.id.imageViewSlidemenu);
-        ivMessage.setImageResource(R.drawable.ic_option_delete);
-        ivMessage.setTag(id);
         tvMessage.setText("Screenshot");
         shareMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textShare(context, id);
+                //textShare(context, id);
+                screenshotFromMain(context,id);
                 shareDialog.dismiss();
             }
         });
 
-        /*LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
+        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
         TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivFacebook = (ImageView) shareFacebook.findViewById(R.id.imageViewSlidemenu);
-        ivFacebook.setImageResource(R.drawable.ic_option_delete);
-        ivFacebook.setTag(id);
-        tvFacebook.setText("Facebook");
+        tvFacebook.setText("Text");
         shareFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //textShare(context, id);
-                if(outsideNote) {
+                textShare(context, id);
+                /*if(outsideNote) {
                     MainActivity mainActivity = new MainActivity();
-                    mainActivity.screenshot(v.getTag().toString());
+                    context.screenshot(v.getTag().toString());
                 }
                 else{
                     NoteMainActivity noteMainActivity = new NoteMainActivity();
                     noteMainActivity.screenshot();
-                }
+                }*/
 
                 shareDialog.dismiss();
             }
         });
 
-        LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
+        /*LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
         TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
-        ivTwitter.setImageResource(R.drawable.ic_option_delete);
-        ivTwitter.setTag(id);
         tvTwitter.setText("Twitter");*/
 
         shareDialog.show();
@@ -560,13 +548,37 @@ public class NoteFunctions {
     //text sharing
     public void textShare(final Context context, final String id){
 
-        String noteDesc;
+        String noteDesc = "";
 
-        List<NoteElement> noteElements = NoteElement.find(NoteElement.class,"type = ? and noteid = ?", "text", id);
+        List<NoteElement> noteElements = NoteElement.find(NoteElement.class,"(type = ? OR type = ?) AND noteid = ?", "text","checkbox", id);
 
         if(noteElements.size() != 0 && noteElements.get(0).getContentA() != null){
-            noteDesc = noteElements.get(0).getContent();
-            Log.e("jay og", noteDesc);
+
+            for(int i=0; i <noteElements.size(); i++){
+
+                Log.e("jay og", noteElements.get(i).getContent());
+                String j = noteElements.get(i).getContent();
+
+                j = j.replace("</li>","</li><br />");
+                j = j.replace("<ol>","<br /><ol>");
+                j = j.replace("<ul>","<br /><ul>");
+                
+                String abc = Html.fromHtml(j).toString();
+
+                noteDesc = noteDesc + abc;
+
+                if(i != noteElements.size() -1 ){
+                    noteDesc = noteDesc + "\n";
+                }
+            }
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, noteDesc);
+            context.startActivity(Intent.createChooser(shareIntent, "Send Text to"));
+
+
             /*Source source=new Source(noteDesc);
             String renderedText=source.getRenderer().toString();
             System.out.println("\nSimple rendering of the HTML document: jay\n");
@@ -576,6 +588,26 @@ public class NoteFunctions {
             noteDesc = "";
         }
 
+    }
+
+    public void screenshotFromMain(Context context,String noteid){
+        Note note = Note.findById(Note.class, Long.parseLong(noteid));
+        if (note.islocked == 0) {
+            Intent i = new Intent(context, NoteMainActivity.class);
+            i.putExtra("NoteId", noteid);
+            i.putExtra("Outside", true);
+            context.startActivity(i);
+            /*SearchLayout.setVisibility(View.GONE);
+            textViewheaderTitle.setText("");
+            searchLayoutOpen = false;*/
+            //editTextsearchNote.setText("");
+        } else {
+            Intent intent = new Intent(context, PasscodeActivity.class);
+            intent.putExtra("FileId", noteid);
+            intent.putExtra("Check", "4");
+            context.startActivity(intent);
+            //editTextsearchNote.setText("");
+        }
     }
 
     public void screenshot(View v, final Context context, final String background, final String noteId) {
@@ -637,7 +669,6 @@ public class NoteFunctions {
         //final String email = emailTo.getText().toString();
 
         new AsyncTask<Void, Void, String>() {
-
 
             @Override
             protected String doInBackground(Void... params) {

@@ -22,25 +22,46 @@
         android:id="@+id/shareWhatsapp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/view_row_list"/>
+        layout="@layout/view_row_list_wo_image_share"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="1.0dp"
+        android:background="#ccc" />
 
     <include
         android:id="@+id/shareEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/view_row_list"/>
+        layout="@layout/view_row_list_wo_image_share"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="1.0dp"
+        android:background="#ccc" />
 
     <include
         android:id="@+id/shareMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/view_row_list"/>
+        layout="@layout/view_row_list_wo_image_share"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="1.0dp"
+        android:background="#ccc" />
 
     <include
         android:id="@+id/shareFacebook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/view_row_list"/>
+        layout="@layout/view_row_list_wo_image_share"/>
 
     <!--<include
         android:id="@+id/shareTwitter"
