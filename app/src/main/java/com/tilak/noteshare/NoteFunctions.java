@@ -562,7 +562,7 @@ public class NoteFunctions {
                 j = j.replace("</li>","</li><br />");
                 j = j.replace("<ol>","<br /><ol>");
                 j = j.replace("<ul>","<br /><ul>");
-                
+
                 String abc = Html.fromHtml(j).toString();
 
                 noteDesc = noteDesc + abc;
@@ -680,9 +680,9 @@ public class NoteFunctions {
 
                 //RegularFunctions.syncNow();
 
-                String shareMessage = RegularFunctions.getUserName() + " has shared "+ RegularFunctions.getNoteName(id) + " note with you.\n"
+                String shareMessage = RegularFunctions.getUserName() + " has shared "+ RegularFunctions.getNoteName(id) + " note with you.\n\n"
                         +"http://www.noteshare.com/"+RegularFunctions.getUserId() +"/"+RegularFunctions.getServerNoteId(id)+".html"
-                        +"\n-via NoteShare";
+                        +"\n\n-via NoteShare";
                 Log.e("jay", shareMessage);
                 Toast.makeText(context, shareMessage, Toast.LENGTH_SHORT).show();
                 //progressDialog.dismiss();
@@ -704,11 +704,6 @@ public class NoteFunctions {
             }
         }.execute(null,null,null);
 
-
-
-        /*Jay Visariya has shared "History" note with you
-                http://www.noteshare.com/1234abcd.html
-                -via NoteShare app.*/
     }
 
     //noteshare to noteshare share // email
@@ -736,14 +731,10 @@ public class NoteFunctions {
         buttonShareOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(context,"Please wait!",Toast.LENGTH_LONG).show();
                 final String email = emailTo.getText().toString().toLowerCase();
-
                 if (email.equals("")) {
-                    //Toast.makeText(context, "Please enter Email id.", Toast.LENGTH_LONG).show();
                     emailTo.setError("Enter Email id.");
                 } else if (!RegularFunctions.isValidEmail(email)) {
-                    //Toast.makeText(context, "Please enter valid Email id.", Toast.LENGTH_LONG).show();
                     emailTo.setError("Invalid Email");
                 } else {
                     Log.e("jay text", emailTo.getText().toString().toLowerCase());

@@ -69,6 +69,7 @@ import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -77,7 +78,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -2863,10 +2863,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
                         String name = n.content;
                         File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/NoteShare Images/" + name);
-                        String filePath = f.toString();
                         //int deviceWidth = getWindowManager().getDefaultDisplay().getWidth();
                         //int deviceHeight = getWindowManager().getDefaultDisplay().getHeight();
-                        Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
+
+
+                        //Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 
                         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
@@ -2875,43 +2876,9 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         float height = dm.heightPixels;
                         float width = dm.widthPixels;
 
+                        Bitmap b = decodeFile(f, (float) (height/1.5), width);
 
-                    /*DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-                    float dpHeight = displayMetrics.heightPixels;// / displayMetrics.density;
-                    float dpWidth = displayMetrics.widthPixels;// / displayMetrics.density;
-                    Log.e("********","");
-                    Log.e("jay dpheight", String.valueOf(dpHeight));
-                    Log.e("jay dpwidth", String.valueOf(dpWidth));
-                    Log.e("jay densityDpi", String.valueOf(displayMetrics.densityDpi));
-                    Log.e("jay density", String.valueOf(displayMetrics.density));
-                    Log.e("jay bitmap pxheight", String.valueOf(b.getHeight() ));
-                    Log.e("jay bitmap pxwidth", String.valueOf(b.getWidth() ));
-
-                    Configuration configuration = this.getResources().getConfiguration();
-                    int screenWidthDp = configuration.screenWidthDp;
-                    int screenHeightDp = configuration.screenHeightDp;
-
-                    Log.e("jay screenWidthdp", String.valueOf(screenWidthDp));
-                    Log.e("jay screenHeightdp", String.valueOf(screenHeightDp));
-
-                    Log.e("jay h", String.valueOf((height / 1.5) - 40));
-                    Log.e("jay w", String.valueOf(width));*/
-
-                        //Toast.makeText(getApplication(), "Width: " + deviceWidth + ", Height: " + deviceHeight, Toast.LENGTH_LONG).show();
-                    /*BitmapFactory.Options op = new BitmapFactory.Options();
-					op.inJustDecodeBounds = true;
-					int imageWidth = b.getWidth();
-					int imageHeight = b.getHeight();
-					Matrix matrix = new Matrix();
-					matrix.postRotate(90);
-					//Bitmap scale;
-					Bitmap scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false); // portrait
-					//Bitmap scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false); //landscape
-					if (imageWidth > imageHeight) { // landscape
-						scale = b.createScaledBitmap(b, deviceHeight, deviceWidth, false);
-					} else if (imageWidth < imageHeight) { // portrait
-						scale = b.createScaledBitmap(b, deviceWidth, deviceHeight, false);
-					}*/
+                        //Bitmap scaledBitmap = compressImage(Uri.fromFile(f).toString());
 
                         note_imageview.setImageBitmap(b);
                         note_imageview.setMaxHeight((int) (height / 1.5));
@@ -3870,4 +3837,32 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         return fileName;
     }
 
+
+
+    private Bitmap decodeFile(File f, float height, float width) {
+        try {
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            // The new size we want to scale to
+            final int REQUIRED_SIZE=800;
+            final int h = (int) height;
+            final int w = (int) width;
+
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while(o.outWidth / scale / 2 >= w &&
+                    o.outHeight / scale / 2 >= h) {
+                scale *= 2;
+            }
+
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {}
+        return null;
+    }
 }
