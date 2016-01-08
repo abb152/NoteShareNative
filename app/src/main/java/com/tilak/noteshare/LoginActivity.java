@@ -478,108 +478,112 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             progressDialog.dismiss();
         }
     }
+    boolean once = false;
 
     public void sendLogin() throws JSONException, ClientProtocolException, IOException {
 
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        if(!isFinishing()){
-            progressDialog.show();
+        if(!once) {
+            once = true;
+            progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Please wait...");
+            progressDialog.setCanceledOnTouchOutside(false);
+            if (!isFinishing()) {
+                progressDialog.show();
+            }
+
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                }
+
+                @Override
+                protected String doInBackground(Void... params) {
+
+                    if (Looper.myLooper() == null) {
+                        Looper.prepare();
+                    }
+                    try {
+                        String loginjson = loginJson(loginType, socialid, fullname, useremail, profilePicture, regid).toString();
+                        String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "user/sociallogin1", loginjson);
+                        Log.e("jay response", response);
+
+                        String responseName = null;
+                        String responseEmail = null;
+                        String responseProfilePic = null;
+
+                        try {
+                            JSONObject responseJson = new JSONObject(response);
+
+                            responseServerId = responseJson.get("_id").toString();
+                            responseName = responseJson.get("name").toString();
+                            responseEmail = responseJson.get("email").toString();
+                            responseProfilePic = responseJson.get("profilepic").toString();
+
+                            createDirectory();
+
+                            if (loginType.equals("fb"))
+                                responseFbId = responseJson.get("fbid").toString();
+                            else if (loginType.equals("gp"))
+                                responseGpId = responseJson.get("googleid").toString();
+                        } catch (JSONException je) {
+
+                        }
+                        if (responseServerId.isEmpty()) {
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                            Toast.makeText(getApplicationContext(), "Something went wrong! Please try again.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Config c = Config.findById(Config.class, 1l);
+                            c.setFirstname(responseName);
+                            c.setEmail(responseEmail);
+                            c.setFbid(responseFbId);
+                            c.setGoogleid(responseGpId);
+                            c.setProfilepic(responseProfilePic);
+                            c.setServerid(responseServerId);
+                            c.setAppversion(getAppVersion(LoginActivity.this));
+                            c.setDeviceid(regid);
+                            c.save();
+
+                            Long currentTimeLong = RegularFunctions.getCurrentTimeLong();
+                            Long initialTimeLong = 1420113600000l;
+
+                            Sync s = Sync.findById(Sync.class, 1l);
+                            s.setFolderLocalToServer(initialTimeLong);
+                            s.setFolderServerToLocal(initialTimeLong);
+                            s.setNoteLocalToServer(initialTimeLong);
+                            s.setNoteServerToLocal(initialTimeLong);
+                            s.setLastSyncTime(0l);
+                            s.setSyncType(1);
+                            s.save();
+
+                            getBitmapFromURL(c.profilepic);
+
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                            goToMain();
+                            finish();
+                        }
+                    } catch (JSONException je) {
+
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(String s) {
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    finish();
+                }
+            }.execute(null, null, null);
         }
-
-       new AsyncTask<Void, Void, String>() {
-           @Override
-           protected void onPreExecute() {
-               super.onPreExecute();
-           }
-
-           @Override
-           protected String doInBackground(Void... params){
-
-               if (Looper.myLooper() == null) {
-                   Looper.prepare();
-               }
-               try {
-                   String loginjson = loginJson(loginType, socialid, fullname, useremail, profilePicture, regid).toString();
-                   String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "user/sociallogin1", loginjson);
-                   Log.e("jay response", response);
-
-                   String responseName = null;
-                   String responseEmail = null;
-                   String responseProfilePic = null;
-
-                   try {
-                       JSONObject responseJson = new JSONObject(response);
-
-                       responseServerId = responseJson.get("_id").toString();
-                       responseName = responseJson.get("name").toString();
-                       responseEmail = responseJson.get("email").toString();
-                       responseProfilePic = responseJson.get("profilepic").toString();
-
-                       createDirectory();
-
-                       if (loginType.equals("fb"))
-                           responseFbId = responseJson.get("fbid").toString();
-                       else if (loginType.equals("gp"))
-                           responseGpId = responseJson.get("googleid").toString();
-                   } catch (JSONException je) {
-
-                   }
-                   if (responseServerId.isEmpty()) {
-                       if(progressDialog.isShowing()){
-                            progressDialog.dismiss();
-                       }
-                       Toast.makeText(getApplicationContext(), "Something went wrong! Please try again.", Toast.LENGTH_LONG).show();
-                   } else {
-                       Config c = Config.findById(Config.class, 1l);
-                       c.setFirstname(responseName);
-                       c.setEmail(responseEmail);
-                       c.setFbid(responseFbId);
-                       c.setGoogleid(responseGpId);
-                       c.setProfilepic(responseProfilePic);
-                       c.setServerid(responseServerId);
-                       c.setAppversion(getAppVersion(LoginActivity.this));
-                       c.setDeviceid(regid);
-                       c.save();
-
-                       Long currentTimeLong = RegularFunctions.getCurrentTimeLong();
-                       Long initialTimeLong = 1420113600000l;
-
-                       Sync s = Sync.findById(Sync.class, 1l);
-                       s.setFolderLocalToServer(initialTimeLong);
-                       s.setFolderServerToLocal(initialTimeLong);
-                       s.setNoteLocalToServer(initialTimeLong);
-                       s.setNoteServerToLocal(initialTimeLong);
-                       s.setLastSyncTime(0l);
-                       s.setSyncType(1);
-                       s.save();
-
-                       getBitmapFromURL(c.profilepic);
-
-                       if(progressDialog.isShowing()){
-                           progressDialog.dismiss();
-                       }
-                       goToMain();
-                       finish();
-                   }
-               }catch (JSONException je){
-
-               } catch (IOException ioe) {
-                   ioe.printStackTrace();
-               }
-               return null;
-           }
-
-           @Override
-           protected void onPostExecute(String s) {
-               if(progressDialog.isShowing()){
-                   progressDialog.dismiss();
-               }
-               finish();
-           }
-       }.execute(null, null, null);
     }
 
     public JSONObject loginJson(String loginType, String socialid, String fullname, String useremail , String profilePicture, String regid) throws JSONException {
