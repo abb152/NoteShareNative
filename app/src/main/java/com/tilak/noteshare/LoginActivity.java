@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -41,11 +42,6 @@ import com.tilak.db.Config;
 import com.tilak.db.Sync;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,7 +51,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends Activity implements View.OnClickListener,
@@ -83,6 +78,10 @@ public class LoginActivity extends Activity implements View.OnClickListener,
     String msg;
     String regid;
     public String socialid, fullname, useremail, profilePicture, loginType;
+
+    String responseFbId = "", responseGpId ="";
+    static String responseServerId = "";
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,8 +232,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                                         .authority("graph.facebook.com")
                                         .appendPath(socialid)
                                         .appendPath("picture")
-                                        .appendQueryParameter("width", "1000")
-                                        .appendQueryParameter("height", "1000");
+                                        .appendQueryParameter("width", "200")
+                                        .appendQueryParameter("height", "200");
 
                                 Uri pictureUri = builder.build();
 
@@ -471,90 +470,132 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         }
     }
 
-    public void sendLogin() throws JSONException, ClientProtocolException, IOException {
-
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
-
-        ArrayList<String> stringData = new ArrayList<String>();
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        ResponseHandler<String> resonseHandler = new BasicResponseHandler();
-        HttpPost postMethod = new HttpPost(RegularFunctions.SERVER_URL+"user/sociallogin1");
-
-        JSONObject json = new JSONObject();
-        if (loginType.equals("fb")) {
-            json.put("fbid", socialid);
-        } else if (loginType.equals("gp")) {
-            json.put("googleid", socialid);
-        }
-        json.put("name", fullname);
-        json.put("email", useremail);
-        json.put("profilepic", profilePicture);
-        json.put("deviceid", regid);
-        //postMethod.setHeader("Content-Type", "application/json" );
-
-        Log.e("jay login json", json.toString());
-
-        postMethod.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
-        String response = httpClient.execute(postMethod,resonseHandler);
-
-        Log.e("jay response",response);
-
-        JSONObject responseJson = new JSONObject(response);
-
-        responseServerId = responseJson.get("_id").toString();
-        String responseName = responseJson.get("name").toString();
-        String responseEmail = responseJson.get("email").toString();
-        String responseProfilePic = responseJson.get("profilepic").toString();
-
-
-        createDirectory();
-
-
-        if (loginType.equals("fb"))
-            responseFbId = responseJson.get("fbid").toString();
-        else if (loginType.equals("gp"))
-            responseGpId = responseJson.get("googleid").toString();
-
-        if (responseServerId.isEmpty()) {
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if (progressDialog!=null && progressDialog.isShowing()){
             progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), "Something went wrong! Please try again.", Toast.LENGTH_LONG).show();
-        } else {
-            Config c = Config.findById(Config.class, 1l);
-            c.setFirstname(responseName);
-            c.setEmail(responseEmail);
-            c.setFbid(responseFbId);
-            c.setGoogleid(responseGpId);
-            c.setProfilepic(responseProfilePic);
-            c.setServerid(responseServerId);
-            c.setAppversion(getAppVersion(this));
-            c.setDeviceid(regid);
-            c.save();
-
-            Long currentTimeLong = RegularFunctions.getCurrentTimeLong();
-            Long initialTimeLong = 1420113600000l;
-
-            Sync s = Sync.findById(Sync.class, 1l);
-            s.setFolderLocalToServer(initialTimeLong);
-            s.setFolderServerToLocal(initialTimeLong);
-            s.setNoteLocalToServer(initialTimeLong);
-            s.setNoteServerToLocal(initialTimeLong);
-            s.setLastSyncTime(0l);
-            s.setSyncType(1);
-            s.save();
-
-            getBitmapFromURL(c.profilepic);
-            progressDialog.dismiss();
-            goToMain();
         }
     }
 
-    String responseFbId = "", responseGpId ="";
-    static String responseServerId = "";
+    public void sendLogin() throws JSONException, ClientProtocolException, IOException {
+
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        if(!isFinishing()){
+            progressDialog.show();
+        }
+
+       new AsyncTask<Void, Void, String>() {
+           @Override
+           protected void onPreExecute() {
+               super.onPreExecute();
+           }
+
+           @Override
+           protected String doInBackground(Void... params){
+
+               if (Looper.myLooper() == null) {
+                   Looper.prepare();
+               }
+               try {
+                   String loginjson = loginJson(loginType, socialid, fullname, useremail, profilePicture, regid).toString();
+                   String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "user/sociallogin1", loginjson);
+                   Log.e("jay response", response);
+
+                   String responseName = null;
+                   String responseEmail = null;
+                   String responseProfilePic = null;
+
+                   try {
+                       JSONObject responseJson = new JSONObject(response);
+
+                       responseServerId = responseJson.get("_id").toString();
+                       responseName = responseJson.get("name").toString();
+                       responseEmail = responseJson.get("email").toString();
+                       responseProfilePic = responseJson.get("profilepic").toString();
+
+                       createDirectory();
+
+                       if (loginType.equals("fb"))
+                           responseFbId = responseJson.get("fbid").toString();
+                       else if (loginType.equals("gp"))
+                           responseGpId = responseJson.get("googleid").toString();
+                   } catch (JSONException je) {
+
+                   }
+                   if (responseServerId.isEmpty()) {
+                       if(progressDialog.isShowing()){
+                            progressDialog.dismiss();
+                       }
+                       Toast.makeText(getApplicationContext(), "Something went wrong! Please try again.", Toast.LENGTH_LONG).show();
+                   } else {
+                       Config c = Config.findById(Config.class, 1l);
+                       c.setFirstname(responseName);
+                       c.setEmail(responseEmail);
+                       c.setFbid(responseFbId);
+                       c.setGoogleid(responseGpId);
+                       c.setProfilepic(responseProfilePic);
+                       c.setServerid(responseServerId);
+                       c.setAppversion(getAppVersion(LoginActivity.this));
+                       c.setDeviceid(regid);
+                       c.save();
+
+                       Long currentTimeLong = RegularFunctions.getCurrentTimeLong();
+                       Long initialTimeLong = 1420113600000l;
+
+                       Sync s = Sync.findById(Sync.class, 1l);
+                       s.setFolderLocalToServer(initialTimeLong);
+                       s.setFolderServerToLocal(initialTimeLong);
+                       s.setNoteLocalToServer(initialTimeLong);
+                       s.setNoteServerToLocal(initialTimeLong);
+                       s.setLastSyncTime(0l);
+                       s.setSyncType(1);
+                       s.save();
+
+                       getBitmapFromURL(c.profilepic);
+
+                       if(progressDialog.isShowing()){
+                           progressDialog.dismiss();
+                       }
+                       goToMain();
+                       finish();
+                   }
+               }catch (JSONException je){
+
+               } catch (IOException ioe) {
+                   ioe.printStackTrace();
+               }
+               return null;
+           }
+
+           @Override
+           protected void onPostExecute(String s) {
+               if(progressDialog.isShowing()){
+                   progressDialog.dismiss();
+               }
+               finish();
+           }
+       }.execute(null, null, null);
+    }
+
+    public JSONObject loginJson(String loginType, String socialid, String fullname, String useremail , String profilePicture, String regid) throws JSONException {
+
+        JSONObject login = new JSONObject();
+        if (loginType.equals("fb")) {
+            login.put("fbid", socialid);
+        } else if (loginType.equals("gp")) {
+            login.put("googleid", socialid);
+        }
+        login.put("name", fullname);
+        login.put("email", useremail);
+        login.put("profilepic", profilePicture);
+        login.put("deviceid", regid);
+        return login;
+    }
 
     /******* create directory start *******/
 

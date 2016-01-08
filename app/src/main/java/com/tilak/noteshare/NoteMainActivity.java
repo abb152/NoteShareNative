@@ -1166,7 +1166,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 isMoreShown = false;
 
                 // Color ICON
-                updateHeaderControls(v.getId());
+                //updateHeaderControls(v.getId());
 
                 // Show IN TEXT NOTE
                 showTextNoteDialog();
@@ -1489,7 +1489,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 drawingControls.setVisibility(View.VISIBLE);
 
                 isTextmodeSelected = false;
-                updateScribbleControlListners(R.id.imageButtondrawback);
+                //updateScribbleControlListners(R.id.imageButtondrawback);
                 imageButtonsquence.setVisibility(View.GONE);
                 imageButtoncheckbox.setVisibility(View.GONE);
                 layout_note_more_Info.setVisibility(View.GONE);
