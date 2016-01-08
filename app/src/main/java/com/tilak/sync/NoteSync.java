@@ -648,6 +648,7 @@ public class NoteSync {
         if(folderLocalId.equals("0")){
             return "0";
         }else{
+            Log.e("jay folder id", folderLocalId);
             Folder folder = Folder.findById(Folder.class, Long.parseLong(folderLocalId));
             return folder.getServerid();
         }

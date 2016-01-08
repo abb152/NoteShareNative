@@ -162,7 +162,14 @@ public class CameraActivity extends Activity {
             String filename = fileNameGenerator.getFileName("IMAGE");
 
             File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/NoteShare Images/" + filename);
-            croppedImage.compress(Bitmap.CompressFormat.JPEG, 87, new FileOutputStream(mediaStorageDir));
+
+            int originalHeight = croppedImage.getHeight();
+            int originalWidth = croppedImage.getWidth();
+
+            Bitmap scaledImage = createScaledBitmap(croppedImage, originalHeight, originalWidth);
+
+            scaledImage.compress(Bitmap.CompressFormat.JPEG, 87, new FileOutputStream(mediaStorageDir)); //87
+
 
             // Refreshing Gallery to view Image in Gallery
             ContentValues values = new ContentValues();
@@ -182,11 +189,26 @@ public class CameraActivity extends Activity {
         } catch (FileNotFoundException e) {}
     }
 
+    public Bitmap createScaledBitmap(Bitmap originalBitmap, int originalHeight, int originalWidth){
+
+        if(originalWidth > 800){
+            float originalRatio = originalWidth/originalHeight;
+            int newWidth = 800;
+            float widthRatio = originalWidth / newWidth;
+
+            int newHeight = Math.round(originalHeight / widthRatio);
+
+            return Bitmap.createScaledBitmap(originalBitmap,newWidth,newHeight,false);
+
+        }
+        return originalBitmap;
+    }
+
     public void makeNote() {
         SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateStr = formatter.format(new Date());
         try {
-            Note note = new Note("NOTE", "", "#FFFFFF", "", 0L, "", "#FFFFFF", currentDateStr, currentDateStr, "0", 0, stringToDate(currentDateStr), stringToDate(currentDateStr));
+            Note note = new Note("NOTE", "", "#FFFFFF", "0", 0L, "0", "#FFFFFF", currentDateStr, currentDateStr, "0", 0, stringToDate(currentDateStr), stringToDate(currentDateStr));
             note.save();
             noteMainActivity.noteIdForDetails = note.getId().toString();
             noteid = noteMainActivity.noteIdForDetails;

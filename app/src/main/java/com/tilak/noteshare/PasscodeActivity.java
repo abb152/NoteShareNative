@@ -162,14 +162,14 @@ public class PasscodeActivity extends DrawerActivity {
                         Config c = Config.findById(Config.class, Long.valueOf(1));
                         c.setPasscode(Integer.parseInt(confirm_passcode));
                         c.save();
-                        Toast.makeText(PasscodeActivity.this, "New Passcode Saved", Toast.LENGTH_LONG).show();
+                        Toast.makeText(PasscodeActivity.this, "New Passcode Saved", Toast.LENGTH_SHORT).show();
                         Note n = Note.findById(Note.class, Long.parseLong(fileId));
                         n.islocked = 1;
                         n.save();
                         finish();
                         //finish();
                     } else {
-                        Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                        Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_SHORT).show();
                         confirm = true;
                         shake();
                         clearBox();
@@ -246,10 +246,10 @@ public class PasscodeActivity extends DrawerActivity {
                     Config c = Config.findById(Config.class, Long.valueOf(1));
                     c.setPasscode(Integer.parseInt(confirm_passcode));
                     c.save();
-                    Toast.makeText(PasscodeActivity.this, "New Passcode Saved", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PasscodeActivity.this, "New Passcode Saved", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_SHORT).show();
                     confirm = true;
                     shake();
                     clearBox();
@@ -274,7 +274,7 @@ public class PasscodeActivity extends DrawerActivity {
                 shake();
                 clearBox();
                 t.setText("Invalid Passcode");
-                Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_LONG).show();
+                Toast.makeText(PasscodeActivity.this, "Invalid Passcode", Toast.LENGTH_SHORT).show();
             }
         }
         else{

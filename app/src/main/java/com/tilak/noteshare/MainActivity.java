@@ -1288,14 +1288,7 @@ public class MainActivity extends DrawerActivity {
 	public void passCode(View v) {
 		detailView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
-		Note n = Note.findById(Note.class, Long.parseLong(id));
-		/*if (n.getIslocked() == 0){
-			n.islocked = 1;
-			n.save();
-			onRestart();
-		}
-		else*/
-			noteFunctions.setPasscode(getApplicationContext(), id);
+		noteFunctions.setPasscode(getApplicationContext(), id);
 	}
 
 	public void searchSlide(){
@@ -1330,25 +1323,5 @@ public class MainActivity extends DrawerActivity {
 	public void openKeyboard(View v){
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
-	}
-
-	public void screenshot(String noteid){
-		Note note = Note.findById(Note.class, Long.parseLong(noteid));
-		if (note.islocked == 0) {
-			Intent i = new Intent(this, NoteMainActivity.class);
-			i.putExtra("NoteId", noteid);
-			i.putExtra("Outside", outsideNote);
-			startActivity(i);
-			SearchLayout.setVisibility(View.GONE);
-			textViewheaderTitle.setText("");
-			searchLayoutOpen = false;
-			//editTextsearchNote.setText("");
-		} else {
-			Intent intent = new Intent(MainActivity.this, PasscodeActivity.class);
-			intent.putExtra("FileId", noteid);
-			intent.putExtra("Check", "4");
-			startActivity(intent);
-			//editTextsearchNote.setText("");
-		}
 	}
 }

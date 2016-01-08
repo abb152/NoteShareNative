@@ -1199,7 +1199,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 drawingControls.setVisibility(View.GONE);
-                updateButtonUI(R.id.imageButtonAudioMode);
+                //updateButtonUI(R.id.imageButtonAudioMode);
 
                 if (isRecordingAudio) {
                     Toast.makeText(getApplication(), "Already recording previous audio!", Toast.LENGTH_LONG).show();
@@ -1452,7 +1452,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 System.out.println("image mode");
-                updateButtonUI(R.id.imageButtonImageMode);
+                //updateButtonUI(R.id.imageButtonImageMode);
                 // listviewNotes.setScrollContainer(true);
                 // startActivity(new
                 // Intent(getApplicationContext(),ImageChooserActivity.class));
@@ -1484,7 +1484,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 //scrollView.setVisibility(View.INVISIBLE);
 
                 isPaintMode = true;
-                updateButtonUI(R.id.imageButtonPaintMode);
+                //updateButtonUI(R.id.imageButtonPaintMode);
                 layOutDrawingView.setVisibility(View.VISIBLE);
                 drawingControls.setVisibility(View.VISIBLE);
 
@@ -1507,7 +1507,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 drawingControls.setVisibility(View.GONE);
-                updateButtonUI(R.id.imageButtonShareMode);
+                //updateButtonUI(R.id.imageButtonShareMode);
                 System.out.println("share mode");
                 layOutDrawingView.setVisibility(View.GONE);
                 // listviewNotes.setScrollContainer(true);
@@ -1520,7 +1520,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         imageButtonTextMode.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateButtonUI(R.id.imageButtonTextMode);
+                //updateButtonUI(R.id.imageButtonTextMode);
                 System.out.println("text mode");
                 //layOutDrawingView.setVisibility(View.GONE);
                 // startActivity(new

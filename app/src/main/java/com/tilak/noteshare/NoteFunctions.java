@@ -550,7 +550,7 @@ public class NoteFunctions {
 
         String noteDesc = "";
 
-        List<NoteElement> noteElements = NoteElement.find(NoteElement.class,"(type = ? OR type = ?) AND noteid = ?", "text","checkbox", id);
+        List<NoteElement> noteElements = NoteElement.find(NoteElement.class, "(type = ? OR type = ?) AND noteid = ?", "text", "checkbox", id);
 
         if(noteElements.size() != 0 && noteElements.get(0).getContentA() != null){
 
@@ -661,10 +661,10 @@ public class NoteFunctions {
     public void linkShare(final Context context, final String id){
 
         final ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage("Generating link...");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(true);
-        //progressDialog.show();
+        progressDialog.show();
 
         //final String email = emailTo.getText().toString();
 
@@ -678,9 +678,12 @@ public class NoteFunctions {
                     Looper.prepare();
                 }
 
-                //RegularFunctions.syncNow();
+                if(RegularFunctions.getServerNoteId(id).equals("0")){
+                    progressDialog.setMessage("Please wait while we Sync the Notes...");
+                    RegularFunctions.syncNow();
+                }
 
-                String shareMessage = RegularFunctions.getUserName() + " has shared "+ RegularFunctions.getNoteName(id) + " note with you.\n\n"
+                String shareMessage = RegularFunctions.getUserName() + " has shared \'"+ RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
                         +"http://www.noteshare.com/"+RegularFunctions.getUserId() +"/"+RegularFunctions.getServerNoteId(id)+".html"
                         +"\n\n-via NoteShare";
                 Log.e("jay", shareMessage);

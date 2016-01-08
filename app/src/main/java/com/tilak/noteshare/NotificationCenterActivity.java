@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,12 +60,6 @@ public class NotificationCenterActivity extends DrawerActivity {
 		listviewNotification=(ListView) contentView.findViewById(R.id.listviewNotification);
 		//adapter=new NotificationListAdapter(NotificationCenterActivity.this, arrnotificationItems);
 		getNotifications();
-
-		//Log.e("jay list size", String.valueOf(list.size()));
-		/*if(list.size() >0){
-			OurNotificationListAdapter adapter = new OurNotificationListAdapter(this, list);
-			listviewNotification.setAdapter(adapter);
-		}*/
 		addListners();
 	}
 
@@ -74,11 +69,11 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 	public void getNotifications(){
 
-		/*final ProgressDialog progressDialog = new ProgressDialog(this);
-		progressDialog.setMessage("Loading...");
+		final ProgressDialog progressDialog = new ProgressDialog(this);
+		progressDialog.setMessage("Fetching your Notifications...");
 		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.setCancelable(true);
-		progressDialog.show();*/
+		progressDialog.show();
 
 		new AsyncTask<Void, Void, String>(){
 
@@ -86,6 +81,11 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 			@Override
 			protected String doInBackground(Void... params) {
+
+				if (Looper.myLooper() == null) {
+					Looper.prepare();
+				}
+
 				String sample = "jay,visariya";
 
 				List<String> sampleList = Arrays.asList(sample.split(","));
@@ -125,12 +125,12 @@ public class NotificationCenterActivity extends DrawerActivity {
 							list.add(map);
 
 							received= true;
-							//progressDialog.dismiss();
+							progressDialog.dismiss();
 						}
 					} else {
 						received = false;
 
-						//progressDialog.dismiss();
+						progressDialog.dismiss();
 						Log.e("jay ", "no notifications");
 					}
 				} catch (JSONException e) {
@@ -144,6 +144,11 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 			@Override
 			protected void onPostExecute(String s) {
+
+				if(progressDialog.isShowing()){
+					progressDialog.dismiss();
+				}
+
 				if(received){
 					if(list.size() >0){
 						OurNotificationListAdapter adapter = new OurNotificationListAdapter(NotificationCenterActivity.this, list);
@@ -163,7 +168,7 @@ public class NotificationCenterActivity extends DrawerActivity {
 		imageButton.setClickable(false);
 
 		progressDialog = new ProgressDialog(NotificationCenterActivity.this);
-		progressDialog.setMessage("Sync...");
+		progressDialog.setMessage("Wait while we get your new Notes and Folders...");
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		progressDialog.setCancelable(false);
 		progressDialog.setCanceledOnTouchOutside(true);
