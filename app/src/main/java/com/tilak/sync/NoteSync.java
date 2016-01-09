@@ -56,7 +56,7 @@ public class NoteSync {
     public void localToServer() {
 
         Sync sync = RegularFunctions.getSyncTime();
-        Long time = sync.getNoteLocalToServer() - 10000;
+        Long time = sync.getNoteLocalToServer() - 3600000;
         List<Note> notes = getNoteList(time);
         if (notes.size() > 0) {
 
@@ -137,8 +137,13 @@ public class NoteSync {
 
         String notemodifytime = RegularFunctions.longToString(sync.getNoteLocalToServer() - 3600000);
 
+        Log.e("jay long", String.valueOf(sync.getNoteLocalToServer()));
+
+        Log.e("jay notemodifytime", notemodifytime);
+
         try {
             String json = serverToLocalJson(getUserId(), notemodifytime).toString();
+            Log.e("jay s2l json", json);
             String response = null;
             try {
                 response = post(RegularFunctions.SERVER_URL + "note/servertolocal", json);
@@ -152,12 +157,17 @@ public class NoteSync {
 
             Log.e("jay note len", String.valueOf(jsonArray.length()));
 
+
             if (jsonArray.length() > 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
 
+                    Log.e("jay note id", String.valueOf(jsonArray.getJSONObject(i).getString("_id")));
+                    Log.e("jay note title", String.valueOf(jsonArray.getJSONObject(i).optString("folder")));
+
+
                     String title = jsonArray.getJSONObject(i).getString("title");
                     String color = jsonArray.getJSONObject(i).getString("color");
-                    String folder = jsonArray.getJSONObject(i).getString("folder");
+                    String folder = jsonArray.getJSONObject(i).optString("folder");
                     String background = jsonArray.getJSONObject(i).getString("background");
                     String tags = jsonArray.getJSONObject(i).getString("tags");
                     String creationtime = jsonArray.getJSONObject(i).getString("creationtime");
@@ -169,6 +179,10 @@ public class NoteSync {
 
                     Log.e("jay i ", String.valueOf(i));
                     Log.e("jay name", title);
+                    Log.e("jay folder", folder);
+
+                    if(folder.isEmpty())
+                        folder = "0";
 
                     JSONArray noteElement = null;
                     try {
@@ -277,7 +291,6 @@ public class NoteSync {
             Log.e("jay exception io", String.valueOf(io));
             io.printStackTrace();
         }*/
-
         RegularFunctions.changeLastSyncTime();
     }
 

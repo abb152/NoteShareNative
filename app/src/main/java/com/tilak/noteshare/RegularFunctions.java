@@ -82,12 +82,30 @@ public class RegularFunctions {
         noteSync.serverToLocal();
     }
 
+    public static boolean checkLastSyncDifference(){
+        //boolean needToSync = false;
+
+        if (getCurrentTimeLong() - lastSyncLong() > 10800000000L) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static String lastSyncTime(){
         Sync sync = Sync.findById(Sync.class, 1l);
         if(sync.getLastSyncTime() == 0)
             return "Not Synced yet";
         else
             return "Last Synced: " + longToString(sync.getLastSyncTime());
+    }
+
+    public static long lastSyncLong(){
+        Sync sync = Sync.findById(Sync.class,1l);
+        if(sync.getLastSyncTime() == 0)
+            return 1451606400000L;
+        else
+            return sync.getLastSyncTime();
     }
 
     public static String longToString(long date){

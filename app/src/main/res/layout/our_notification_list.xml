@@ -3,42 +3,118 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
-              android:layout_marginBottom="10dp">
+              android:layout_marginBottom="10dp"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp">
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Note Shared"
-        android:id="@+id/tvNotiHeader"
-        android:textSize="18sp"
-        android:textColor="#636363"
-        android:textStyle="bold"
-        android:paddingLeft="10dp"
-        android:layout_toStartOf="@+id/ibAccept"/>
+        android:id="@+id/llContent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/tvDesc"
-        android:layout_below="@+id/tvNotiHeader"
-        android:layout_alignParentStart="true"
-        android:textSize="16sp"
-        android:textColor="#636363"
-        android:paddingLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        android:layout_toStartOf="@+id/ibAccept"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ibAccept"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="10dp"
-        android:layout_alignBottom="@+id/tvDesc"
-        android:src="@drawable/save_canvas"
-        android:background="@android:color/transparent"
-        android:layout_alignParentEnd="true"
-        android:onClick="acceptAndSync"/>
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/ivUserPic"
+                android:scaleType="fitCenter"
+                android:src="@drawable/com_facebook_profile_picture_blank_square"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Note Shared"
+                android:id="@+id/tvNotiHeader"
+                android:textSize="16sp"
+                android:textColor="#636363"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/tvDesc"
+                android:layout_below="@+id/tvNotiHeader"
+                android:layout_alignParentStart="true"
+                android:textSize="14sp"
+                android:textColor="#bbb"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llContent"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
+                android:gravity="right"
+                android:paddingBottom="10dp">
+
+                <!--<ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ibReject"
+                    android:src="@drawable/abc_ic_clear_mtrl_alpha"
+                    android:background="#ff5a60"
+                    android:onClick="acceptAndSync"
+                    android:padding="4dp"
+                    android:layout_marginRight="5dp"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ibAccept"
+                    android:src="@drawable/com_facebook_button_like_icon_selected"
+                    android:background="#ff5a60"
+                    android:onClick="acceptAndSync"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="5dp"/>-->
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:id="@+id/btReject"
+                    android:text="Reject"
+                    android:textSize="12sp"
+                    android:textColor="#fff"
+                    android:background="#F44336"
+                    android:onClick="reject"
+                    android:layout_marginLeft="5dp"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:id="@+id/btAccept"
+                    android:text="Accept"
+                    android:textSize="12sp"
+                    android:textColor="#fff"
+                    android:background="#4CAF50"
+                    android:onClick="acceptAndSync"
+                    android:layout_marginLeft="5dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
 </RelativeLayout>

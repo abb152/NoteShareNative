@@ -223,6 +223,15 @@ public class MainActivity extends DrawerActivity {
 			}
 		});
 
+		//syncOnStart();
+
+	}
+
+
+	public void syncOnStart(){
+		if(RegularFunctions.checkLastSyncDifference()){
+			RegularFunctions.syncNow();
+		}
 	}
 
 	@Override
@@ -786,12 +795,6 @@ public class MainActivity extends DrawerActivity {
 		sortallnotes = allnotes;
 		putInList();
 
-		/*String strCout = "(" + list.size() + ")";
-		try {
-			//textViewheaderTitle.setText("NOTE " + strCout);
-		}catch (Exception e){
-
-		}*/
 	}
 
 	void putInList(){

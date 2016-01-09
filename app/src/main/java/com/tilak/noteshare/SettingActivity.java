@@ -116,7 +116,7 @@ public class SettingActivity extends DrawerActivity {
 				tvLastSync.setText("Please wait.. Syncing..");
 				final ProgressDialog progressDialog = new ProgressDialog(SettingActivity.this);
 				progressDialog.setCancelable(false);
-				progressDialog.setMessage("Sync...");
+				progressDialog.setMessage("Please wait while we sync your Notes and Folders...");
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.show();
 

@@ -5,7 +5,9 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="22" />
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,19 +17,18 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-
-
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!--<uses-permission android:name="com.tilak.noteshare.permission.permission.RECEIVE" />-->
+    <!-- <uses-permission android:name="com.tilak.noteshare.permission.permission.RECEIVE" /> -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.tilak.noteshare.permission.C2D_MESSAGE" />
-    <permission android:name="com.tilak.noteshare.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+
+    <permission
+        android:name="com.tilak.noteshare.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
     <application
         android:name="com.orm.SugarApp"
@@ -112,8 +113,8 @@
         </activity>
         <activity
             android:name=".NotificationCenterActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".TermsAndConditionsActivity"
@@ -162,7 +163,7 @@
             android:label="@string/title_activity_passcode"
             android:screenOrientation="portrait" >
         </activity>
-       <!-- <activity android:name="com.soundcloud.android.crop.CropImageActivity" />-->
+        <!-- <activity android:name="com.soundcloud.android.crop.CropImageActivity" /> -->
         <activity
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera"
@@ -181,19 +182,19 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
         <receiver
-            android:name="com.tilak.noteshare.GcmBroadcastReceiver"
+            android:name=".GcmBroadcastReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.tilak.noteshare" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.tilak.noteshare.GcmIntentService" />
+        <service android:name=".GcmIntentService" />
 
     </application>
 

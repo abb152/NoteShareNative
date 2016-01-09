@@ -595,7 +595,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
             login.put("googleid", socialid);
         }
         login.put("name", fullname);
-        login.put("email", useremail);
+        login.put("email", useremail.toLowerCase());
         login.put("profilepic", profilePicture);
         login.put("deviceid", regid);
         return login;

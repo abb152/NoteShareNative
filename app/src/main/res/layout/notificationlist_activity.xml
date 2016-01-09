@@ -59,9 +59,11 @@
     <ListView
         android:id="@+id/listviewNotification"
         android:layout_width="match_parent"
-        android:divider="#d3d3d3"
-        android:dividerHeight="1dp"
-        android:layout_height="wrap_content" >
+        android:divider="@color/lvDividerColor"
+        android:dividerHeight="0.5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="match_parent" >
     </ListView>
 
 </LinearLayout>

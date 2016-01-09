@@ -326,14 +326,11 @@ public class NoteFunctions {
                         intent.putExtra("FileId", id);
                         intent.putExtra("Check", "6");
                         context.startActivity(intent);
-                    } else
+                    } else{
                         delete(id);
-
-                    //context.startActivity(new Intent(context, MainActivity.class));
+                        context.startActivity(new Intent(context, MainActivity.class));
+                    }
                 } else {
-
-                    //MainActivity mainActivity = new MainActivity();
-                    //mainActivity.delete(id);
 
                     dialog.dismiss();
                     Note n = Note.findById(Note.class, Long.parseLong(id));
@@ -345,8 +342,6 @@ public class NoteFunctions {
                     } else {
                         delete(id);
                         context.startActivity(new Intent(context, MainActivity.class));
-                        //MainActivity mainActivity = new MainActivity();
-                        //mainActivity.delete(id);
                     }
                 }
             }
@@ -679,13 +674,18 @@ public class NoteFunctions {
                 }
 
                 if(RegularFunctions.getServerNoteId(id).equals("0")){
-                    progressDialog.setMessage("Please wait while we Sync the Notes...");
+                    progressDialog.setMessage("Please wait while we Sync the Note...");
                     RegularFunctions.syncNow();
                 }
 
-                String shareMessage = RegularFunctions.getUserName() + " has shared \'"+ RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
+                /*String shareMessage = RegularFunctions.getUserName() + " has shared \'"+ RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
                         +"http://www.noteshare.com/"+RegularFunctions.getUserId() +"/"+RegularFunctions.getServerNoteId(id)+".html"
+                        +"\n\n-via NoteShare";*/
+
+                String shareMessage = RegularFunctions.getUserName() + " has shared \'"+ RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
+                        +"http://104.197.47.172/note/get#/app/note/"+RegularFunctions.getServerNoteId(id)
                         +"\n\n-via NoteShare";
+
                 Log.e("jay", shareMessage);
                 Toast.makeText(context, shareMessage, Toast.LENGTH_SHORT).show();
                 //progressDialog.dismiss();

@@ -217,6 +217,7 @@ WINDSONG
     </style>
     <string name="title_activity_passcode">PasscodeActivity</string>
     <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_tutorial">Tutorial</string>
 
    
 
