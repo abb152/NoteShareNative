@@ -3814,7 +3814,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Bitmap bitmap = Bitmap.createBitmap(width, screenShotHeight, Bitmap.Config.ARGB_8888);
 
         bitmapCanvas.setBitmap(bitmap);
-        bitmapCanvas.drawColor(Color.parseColor(background));
+
+        Log.e("jay bg",background);
+
+        boolean check = background.startsWith("#");
+
+        Log.e("jay bg check", String.valueOf(check));
+
+        if (background.startsWith("#"))
+            bitmapCanvas.drawColor(Color.parseColor(background));
+        else
+            bitmapCanvas.drawColor(Color.parseColor("#ffffff"));
+
         //bitmapCanvas.scale(1.0f, 3.0f);
         scroll.draw(bitmapCanvas);
 
