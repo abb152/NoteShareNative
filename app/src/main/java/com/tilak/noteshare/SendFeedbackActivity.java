@@ -97,7 +97,11 @@ public class SendFeedbackActivity extends DrawerActivity {
 			@Override
 			public void onClick(View v) {
 				try {
-					sendFeedback();
+					if(RegularFunctions.checkIsOnlineViaIP()){
+						sendFeedback();
+					}else{
+						Toast.makeText(SendFeedbackActivity.this, "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -117,6 +121,13 @@ public class SendFeedbackActivity extends DrawerActivity {
 
 	public void sendFeedback() throws JSONException, ClientProtocolException, IOException {
 
+		btSubmit.setClickable(false);
+
+		textViewFeedbackText.setKeyListener(null);
+		textViewFeedbackText.setCursorVisible(false);
+		textViewFeedbackText.setPressed(false);
+		textViewFeedbackText.setFocusable(false);
+
 		Config con = Config.findById(Config.class, 1L);
 		//String email = con.email;
 		String message = textViewFeedbackText.getText().toString();
@@ -126,7 +137,8 @@ public class SendFeedbackActivity extends DrawerActivity {
 		ArrayList<String> stringData = new ArrayList<String>();
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		ResponseHandler<String> resonseHandler = new BasicResponseHandler();
-		HttpPost postMethod = new HttpPost("http://104.197.122.116/feed/save");
+		String url = RegularFunctions.SERVER_URL + "feed/save";		//"http://104.197.47.172/feed/save"
+		HttpPost postMethod = new HttpPost(url);
 
 		JSONObject json = new JSONObject();
 		//json.put("user", "56120af8a89c4c8f043a0285");

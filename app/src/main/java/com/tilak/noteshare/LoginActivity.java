@@ -183,7 +183,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                         e.printStackTrace();
                     }
                 }else{
-                    Toast.makeText(LoginActivity.this,"Oops! Something went wrong!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this,"Oops! Something went wrong!",Toast.LENGTH_SHORT).show();
                 }
             }
         }.execute(null,null,null);
@@ -257,7 +257,10 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 
         @Override
         public void onError(FacebookException e) {
-            Toast.makeText(getApplication(), "Something went wrong, please try again later", Toast.LENGTH_LONG).show();
+            if(!RegularFunctions.checkIsOnlineViaIP())
+                Toast.makeText(getApplication(), "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getApplication(), "Something went wrong, please try again later", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -411,8 +414,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 getGcmId();
 
             } else {
-                Toast.makeText(getApplicationContext(),
-                        "Person information is null", Toast.LENGTH_LONG).show();
+                if(!RegularFunctions.checkIsOnlineViaIP())
+                    Toast.makeText(getApplication(), "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getApplication(), "Something went wrong, please try again later", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Please check your internet connection.", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             e.printStackTrace();

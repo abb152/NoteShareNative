@@ -76,7 +76,7 @@
     <string name="tclimitbody1">10.1. In no event will NoteShare Inc. be liable for any direct, indirect, special, punitive, exemplary or consequential losses or damages of whatsoever kind arising out of your use or access to the Application, including loss of profit or the like whether or not in the contemplation of the parties, whether based on breach of contract, tort (including negligence), product liability or otherwise.</string>
     <string name="tclimitbody2">10.2. NoteShare Inc. is not liable for any damage or alteration to your equipment including but not limited to computer equipment, handheld device or mobile telephones as a result of the installation or use of the Application</string>
 
-    <string name="invite_friends_text">Download NoteShare - Note Sharing app on Android/iOS</string>
+    <string name="invite_friends_text">Download NoteShare \n\nA Note Sharing app on Android/iOS \n\nhttp://104.197.47.172/note/getUrl</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Home</item>

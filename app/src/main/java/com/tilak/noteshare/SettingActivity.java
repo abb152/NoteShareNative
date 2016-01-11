@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tilak.db.Config;
 import com.tilak.db.Folder;
@@ -113,45 +114,52 @@ public class SettingActivity extends DrawerActivity {
 		lastSyncLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				tvLastSync.setText("Please wait.. Syncing..");
-				final ProgressDialog progressDialog = new ProgressDialog(SettingActivity.this);
-				progressDialog.setCancelable(false);
-				progressDialog.setMessage("Please wait while we sync your Notes and Folders...");
-				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.show();
 
-				new AsyncTask<Void, Void, String>() {
-					@Override
-					protected String doInBackground(Void... params) {
+				int type = RegularFunctions.checkInternetConnectivity(SettingActivity.this);
 
-						//Looper.loop();
-						if (Looper.myLooper() == null) {
-							Looper.prepare();
-						}
-						//Looper.prepare();
-						RegularFunctions.syncNow();
-						//Looper.myLooper().quit();
-						return null;
-					}
-
-					@Override
-					protected void onPostExecute(String s) {
-						String time = RegularFunctions.lastSyncTime();
-						tvLastSync.setText(time);
-						progressDialog.dismiss();
-					}
-				}.execute(null, null, null);
-
-				/*RegularFunctions.syncNow();
-				String time = RegularFunctions.lastSyncTime();
-
-				tvLastSync.setText(time);
-
-				progressDialog.dismiss();*/
+				if(type == 0){
+					Toast.makeText(SettingActivity.this, "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+				} else if (type == 1) {
+					startSync();
+				} else if (type == 2) {
+					Log.e("jay sync", "inside 2");
+					Toast.makeText(getApplicationContext(),"Only on wifi and now on mobile",Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
 	}
+
+	public void startSync(){
+		tvLastSync.setText("Please wait.. Syncing..");
+		final ProgressDialog progressDialog = new ProgressDialog(SettingActivity.this);
+		progressDialog.setCancelable(false);
+		progressDialog.setMessage("Please wait while we sync your Notes and Folders...");
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.show();
+
+		new AsyncTask<Void, Void, String>() {
+			@Override
+			protected String doInBackground(Void... params) {
+
+				if (Looper.myLooper() == null) {
+					Looper.prepare();
+				}
+				RegularFunctions.syncNow();
+
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String s) {
+				String time = RegularFunctions.lastSyncTime();
+				tvLastSync.setText(time);
+				progressDialog.dismiss();
+			}
+		}.execute(null, null, null);
+	}
+
+
 	public void setPasscode(View v){
 		Config con = Config.findById(Config.class, 1L);
 		if (con.getPasscode() == 0) {

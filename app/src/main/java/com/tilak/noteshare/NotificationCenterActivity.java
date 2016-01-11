@@ -83,101 +83,103 @@ public class NotificationCenterActivity extends DrawerActivity {
 	}
 
 	public void getNotifications(){
+		if(RegularFunctions.checkIsOnlineViaIP()) {
+			final ProgressDialog progressDialog = new ProgressDialog(this);
+			progressDialog.setMessage("Fetching your Notifications...");
+			progressDialog.setCanceledOnTouchOutside(false);
+			progressDialog.setCancelable(true);
 
-		final ProgressDialog progressDialog = new ProgressDialog(this);
-		progressDialog.setMessage("Fetching your Notifications...");
-		progressDialog.setCanceledOnTouchOutside(false);
-		progressDialog.setCancelable(true);
+			if (active)
+				progressDialog.show();
 
-		if(active)
-			progressDialog.show();
+			new AsyncTask<Void, Void, String>() {
+				boolean received = false;
 
-		new AsyncTask<Void, Void, String>(){
+				@Override
+				protected String doInBackground(Void... params) {
 
-			boolean received = false;
+					if (Looper.myLooper() == null) {
+						Looper.prepare();
+					}
 
-			@Override
-			protected String doInBackground(Void... params) {
+					String sample = "jay,visariya";
 
-				if (Looper.myLooper() == null) {
-					Looper.prepare();
+					List<String> sampleList = Arrays.asList(sample.split(","));
+
+					Log.e("sample1", sampleList.get(0));
+					Log.e("sample2", sampleList.get(1));
+
+
+					list = new ArrayList<HashMap<String, String>>();
+					try {
+						String notificationJson = getNotificationsJson().toString();
+						Log.e("jay sharejson", notificationJson);
+
+						String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/find", notificationJson);
+						Log.e("jay response", response);
+
+						JSONArray jsonArray = new JSONArray(response);
+
+						Log.e("jay json size", String.valueOf(jsonArray.length()));
+
+						//String value = jsonObject.get("value").toString();
+
+
+						if (jsonArray.length() > 0) {
+							for (int i = 0; i < jsonArray.length(); i++) {
+								JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+								String noteId = jsonObject.opt("note").toString();
+								String noteName = jsonObject.opt("notename").toString();
+								String username = jsonObject.opt("username").toString();
+
+								HashMap<String, String> map = new HashMap<String, String>();
+								map.put("note", noteId);
+								map.put("notename", noteName);
+								map.put("username", username);
+
+								list.add(map);
+
+								received = true;
+								if (progressDialog.isShowing())
+									progressDialog.dismiss();
+							}
+						} else {
+							received = false;
+							if (progressDialog.isShowing())
+								progressDialog.dismiss();
+							Log.e("jay ", "no notifications");
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					} catch (IOException io) {
+						io.printStackTrace();
+					}
+
+					return null;
 				}
 
-				String sample = "jay,visariya";
+				@Override
+				protected void onPostExecute(String s) {
 
-				List<String> sampleList = Arrays.asList(sample.split(","));
+					if (progressDialog.isShowing()) {
+						progressDialog.dismiss();
+					}
 
-				Log.e("sample1", sampleList.get(0));
-				Log.e("sample2", sampleList.get(1));
-
-
-				list = new ArrayList<HashMap<String, String>>();
-				try {
-					String notificationJson = getNotificationsJson().toString();
-					Log.e("jay sharejson", notificationJson);
-
-					String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/find", notificationJson);
-					Log.e("jay response", response);
-
-					JSONArray jsonArray = new JSONArray(response);
-
-					Log.e("jay json size", String.valueOf(jsonArray.length()));
-
-					//String value = jsonObject.get("value").toString();
-
-
-					if(jsonArray.length() > 0) {
-						for (int i = 0; i < jsonArray.length(); i++) {
-							JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-							String noteId = jsonObject.opt("note").toString();
-							String noteName = jsonObject.opt("notename").toString();
-							String username = jsonObject.opt("username").toString();
-
-							HashMap<String,String> map = new HashMap<String,String>();
-							map.put("note", noteId);
-							map.put("notename", noteName);
-							map.put("username", username);
-
-							list.add(map);
-
-							received= true;
-							if(progressDialog.isShowing())
-								progressDialog.dismiss();
+					if (received) {
+						if (list.size() > 0) {
+							OurNotificationListAdapter adapter = new OurNotificationListAdapter(NotificationCenterActivity.this, list);
+							listviewNotification.setAdapter(adapter);
 						}
 					} else {
-						received = false;
-						if(progressDialog.isShowing())
-							progressDialog.dismiss();
-						Log.e("jay ", "no notifications");
+
 					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				} catch (IOException io) {
-					io.printStackTrace();
 				}
+			}.execute(null, null, null);
 
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(String s) {
-
-				if(progressDialog.isShowing()){
-					progressDialog.dismiss();
-				}
-
-				if(received){
-					if(list.size() >0){
-						OurNotificationListAdapter adapter = new OurNotificationListAdapter(NotificationCenterActivity.this, list);
-						listviewNotification.setAdapter(adapter);
-					}
-				}else{
-
-				}
-			}
-		}.execute(null, null, null);
-
+		}else{
+			Toast.makeText(getApplicationContext(), "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	public void acceptAndSync(final View v){

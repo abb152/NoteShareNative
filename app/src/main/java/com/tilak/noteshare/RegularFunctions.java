@@ -1,6 +1,9 @@
 package com.tilak.noteshare;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -182,4 +185,114 @@ public class RegularFunctions {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
+
+    public static int getUserSyncType(){
+
+        Sync syncSet = Sync.findById(Sync.class,1l);
+        return syncSet.getSyncType();
+    }
+
+    public static int checkInternetConnectivity(Context context){
+
+        if(checkIsOnlineViaIP()){
+
+            int type = typeOfInternetConnection(context);
+
+            int userType = getUserSyncType();
+
+
+            Log.e("jay sync type", String.valueOf(type));
+            Log.e("jay sync userType", String.valueOf(userType));
+
+            if(userType == 3 && (type == 1 || type == 2)){ // if sync via both is selected
+                Log.e("jay sync via","both");
+                return 1;
+            } else if(type == userType){ // if sync via mobile or wifi selected and current network type is also same
+                Log.e("jay sync via is same", String.valueOf(type));
+                return 1;
+            } else if (type == 2 && userType == 2) { // if sync via only wifi is selected and current network type is mobile
+                Log.e("jay sync via type mob","and current mob");
+                return 2;
+            }
+            else
+                return 2;
+        }
+        return 0;
+    }
+
+
+    public static int typeOfInternetConnection(Context context) {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        int connectionType = 0; //0 for no connection, 1 for wifi, 2 for mobile
+
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE")){
+                if (ni.isConnected()){
+                    haveConnectedMobile = true;
+                    connectionType = 2;
+                }
+            }
+            if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
+                if (ni.isConnected()){
+                    haveConnectedWifi = true;
+                    connectionType = 1;
+                }
+            }
+        }
+        return connectionType;
+    }
+
+
+
+    public static boolean checkIsOnlineViaIP() {
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 104.197.47.172");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+
+    public static NetworkInfo getNetworkInfo(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo();
+    }
+
+    /**
+     * Check if there is any connectivity
+     */
+    public static boolean isConnected(Context context){
+        NetworkInfo info = getNetworkInfo(context);
+        return (info != null && info.isConnected());
+    }
+
+    /**
+     * Check if there is any connectivity to a Wifi network
+     */
+    public static boolean isConnectedWifi(Context context){
+        NetworkInfo info = getNetworkInfo(context);
+        return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI);
+    }
+
+    /**
+     * Check if there is any connectivity to a mobile network
+    */
+
+    public static boolean isConnectedMobile(Context context){
+        NetworkInfo info = getNetworkInfo(context);
+        return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE);
+    }
+
+
 }

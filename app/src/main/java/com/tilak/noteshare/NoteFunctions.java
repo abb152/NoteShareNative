@@ -734,7 +734,7 @@ public class NoteFunctions {
         buttonShareOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = emailTo.getText().toString().toLowerCase();
+                final String email = emailTo.getText().toString().toLowerCase().trim();
                 if (email.equals("")) {
                     emailTo.setError("Enter Email id.");
                 } else if (!RegularFunctions.isValidEmail(email)) {
