@@ -178,7 +178,7 @@ public class NotificationCenterActivity extends DrawerActivity {
 			}.execute(null, null, null);
 
 		}else{
-			Toast.makeText(getApplicationContext(), "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -246,12 +246,12 @@ public class NotificationCenterActivity extends DrawerActivity {
 					imageButton.setClickable(false);
 					imageButton.setText("Done");
 
-					Toast.makeText(NotificationCenterActivity.this, "Note Received", Toast.LENGTH_LONG).show();
+					Toast.makeText(NotificationCenterActivity.this, "Received", Toast.LENGTH_SHORT).show();
 					onRestart();
 
 				}else {
 					imageButton.setClickable(false);
-					Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_LONG).show();
+					Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_SHORT).show();
 				}
 			}
 		}.execute(null,null,null);
@@ -323,12 +323,12 @@ public class NotificationCenterActivity extends DrawerActivity {
 					//imageButton.setImageResource(R.drawable.ic_like);
 					imageButton.setClickable(false);
 
-					Toast.makeText(NotificationCenterActivity.this, "Note Rejected", Toast.LENGTH_LONG).show();
+					Toast.makeText(NotificationCenterActivity.this, "Rejected", Toast.LENGTH_SHORT).show();
 					onRestart();
 
 				}else {
 					imageButton.setClickable(false);
-					Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_LONG).show();
+					Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_SHORT).show();
 				}
 			}
 		}.execute(null,null,null);

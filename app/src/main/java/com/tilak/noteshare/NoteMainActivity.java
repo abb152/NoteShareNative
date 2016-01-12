@@ -996,7 +996,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public void share(View v) {
         //noteFunctions.share(this, noteIdForDetails, outsideNote);
         //noteFunctions.noteshareShare(this,noteIdForDetails);
-        share(this, noteIdForDetails, outsideNote);
+        noteFunctions.share(this, noteIdForDetails, outsideNote);
         footerMenuGone();
     }
 
@@ -3597,7 +3597,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     // SHARE
-    public void share(final Context context, final String id, final boolean outsideNote) {
+    /*public void share(final Context context, final String id, final boolean outsideNote) {
         final Dialog shareDialog = new Dialog(context);
         shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         shareDialog.setCancelable(false);
@@ -3608,7 +3608,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         tvShareTitleAlert.setText("SHARE NOTE VIA");
         tvShareTitleAlert.setTextColor(Color.WHITE);
 
-        LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareWhatsapp);
+        LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareLink);
         TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
         tvWhatsapp.setText("Link");
         shareWhatsapp.setOnClickListener(new View.OnClickListener() {
@@ -3625,12 +3625,16 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         shareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noteFunctions.noteshareShare(context, id);
-                shareDialog.dismiss();
+                if(RegularFunctions.checkIsOnlineViaIP()){
+                    noteFunctions.noteshareShare(context, id);
+                    shareDialog.dismiss();
+                }else{
+                    Toast.makeText(NoteMainActivity.this, "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
-        LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareMessage);
+        LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareScreenshot);
         TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
         tvMessage.setText("Screenshot");
         shareMessage.setOnClickListener(new View.OnClickListener() {
@@ -3641,7 +3645,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
 
-        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
+        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareText);
         TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
         tvFacebook.setText("Text");
         shareFacebook.setOnClickListener(new View.OnClickListener() {
@@ -3652,15 +3656,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             }
         });
 
-        /*LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
+        *//*LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
         TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
         ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
         ivTwitter.setImageResource(R.drawable.ic_option_delete);
         ivTwitter.setTag(id);
-        tvTwitter.setText("Twitter");*/
+        tvTwitter.setText("Twitter");*//*
 
         shareDialog.show();
-    }
+    }*/
 
     public void showShareActionSheet(View v) {
 

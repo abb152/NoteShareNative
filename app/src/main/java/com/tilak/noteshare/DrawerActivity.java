@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
@@ -227,14 +228,20 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				}
 				break;
 				case 7:{
-					System.out.println("invite friends");
-					Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
-					Intent share = new Intent(Intent.ACTION_SEND);
-					//share.setType("image/*");
-					share.setType("text/plain");
-					//share.putExtra(Intent.EXTRA_STREAM, uri);
-					share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
-					startActivity(Intent.createChooser(share, "Invite friends"));
+					final Handler handler = new Handler();
+					handler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							System.out.println("invite friends");
+							Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
+							Intent share = new Intent(Intent.ACTION_SEND);
+							//share.setType("image/*");
+							share.setType("text/plain");
+							//share.putExtra(Intent.EXTRA_STREAM, uri);
+							share.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friends_text));
+							startActivity(Intent.createChooser(share, "Invite friends"));
+						}
+					}, 300);
 					//finish();
 				}
 				break;

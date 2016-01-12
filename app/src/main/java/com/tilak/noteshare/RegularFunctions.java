@@ -11,6 +11,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.tilak.db.Config;
+import com.tilak.db.Folder;
 import com.tilak.db.Note;
 import com.tilak.db.Sync;
 import com.tilak.sync.FolderSync;
@@ -20,6 +21,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
 /**
  * Created by Jay on 16-12-2015.
  */
@@ -197,9 +200,7 @@ public class RegularFunctions {
         if(checkIsOnlineViaIP()){
 
             int type = typeOfInternetConnection(context);
-
             int userType = getUserSyncType();
-
 
             Log.e("jay sync type", String.valueOf(type));
             Log.e("jay sync userType", String.valueOf(userType));
@@ -236,7 +237,7 @@ public class RegularFunctions {
                     connectionType = 2;
                 }
             }
-            if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI")){
                 if (ni.isConnected()){
                     haveConnectedWifi = true;
                     connectionType = 1;
@@ -257,8 +258,12 @@ public class RegularFunctions {
             int     exitValue = ipProcess.waitFor();
             return (exitValue == 0);
 
-        } catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        catch (InterruptedException e){
+            e.printStackTrace();
+        }
 
         return false;
     }
@@ -292,6 +297,34 @@ public class RegularFunctions {
     public static boolean isConnectedMobile(Context context){
         NetworkInfo info = getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE);
+    }
+
+
+    public static boolean checkNeedForSync(){
+        Sync syncNote = RegularFunctions.getSyncTime();
+        Long timeNote = syncNote.getNoteLocalToServer() - 3600000;
+        List<Note> notes = getNoteList(timeNote);
+
+        Sync syncFolder = RegularFunctions.getSyncTime();
+        Long timeFolder = syncFolder.getFolderLocalToServer() - 3600000;
+        List<Folder> folders = getFolderList(timeFolder);
+
+        Log.e("jay sync notes", String.valueOf(notes.size()));
+        Log.e("jay sync folders",String.valueOf(folders.size()));
+
+        return notes.size() > 0 || folders.size() > 0;
+    }
+
+    public static List<Note> getNoteList(Long time) {
+        //Long time = 1448954670000L;
+        List<Note> notes = Note.findWithQuery(Note.class, "Select * from NOTE where MTIME > " + time + " ORDER BY MTIME ASC");
+        return notes;
+    }
+
+    public static List<Folder> getFolderList(Long time){
+        //Long time = 1448954670000L;
+        List<Folder> folders = Folder.findWithQuery(Folder.class, "Select * from FOLDER where MTIME > " + time + " ORDER BY MTIME ASC");
+        return folders;
     }
 
 

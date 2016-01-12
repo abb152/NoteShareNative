@@ -117,24 +117,43 @@ public class SettingActivity extends DrawerActivity {
 
 				int type = RegularFunctions.checkInternetConnectivity(SettingActivity.this);
 
-				if(type == 0){
-					Toast.makeText(SettingActivity.this, "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+				if (type == 0) {
+					Toast.makeText(SettingActivity.this, "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
 				} else if (type == 1) {
-					startSync();
+					startSync(false);
 				} else if (type == 2) {
 					Log.e("jay sync", "inside 2");
-					Toast.makeText(getApplicationContext(),"Only on wifi and now on mobile",Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Only on wifi and now on mobile", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
 
 	}
 
-	public void startSync(){
+	static boolean active = false;
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		active = true;
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		active = false;
+	}
+
+	public void startSync(final boolean logout){
 		tvLastSync.setText("Please wait.. Syncing..");
 		final ProgressDialog progressDialog = new ProgressDialog(SettingActivity.this);
 		progressDialog.setCancelable(false);
-		progressDialog.setMessage("Please wait while we sync your Notes and Folders...");
+
+		if(logout)
+			progressDialog.setMessage("Please wait while we sync your Notes and Folders before logging out...");
+		else
+			progressDialog.setMessage("Please wait while we sync your Notes and Folders...");
+
 		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.show();
 
@@ -152,9 +171,18 @@ public class SettingActivity extends DrawerActivity {
 
 			@Override
 			protected void onPostExecute(String s) {
-				String time = RegularFunctions.lastSyncTime();
-				tvLastSync.setText(time);
-				progressDialog.dismiss();
+
+				if(logout){
+					flushDatabase();
+					finish();
+					startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+				}
+				else {
+					String time = RegularFunctions.lastSyncTime();
+					tvLastSync.setText(time);
+				}
+				if(progressDialog.isShowing())
+					progressDialog.dismiss();
 			}
 		}.execute(null, null, null);
 	}
@@ -225,11 +253,6 @@ public class SettingActivity extends DrawerActivity {
 		dialog.show();
 	}
 
-	public void logout(){
-		showAlertWith("LOGOUT", "Are you sure you want to Log Out?", SettingActivity.this);
-	}
-
-
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
@@ -270,10 +293,18 @@ public class SettingActivity extends DrawerActivity {
 		buttonAlertOk.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				flushDatabase();
-
-				finish();
-				startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+				if(RegularFunctions.checkIsOnlineViaIP()){
+					dialog.dismiss();
+					Log.e("jay sync status", String.valueOf(RegularFunctions.checkNeedForSync()));
+					if(RegularFunctions.checkNeedForSync()){
+						startSync(true);
+					}else{
+						finish();
+						startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+					}
+				}else{
+					Toast.makeText(getApplicationContext(),"Please check you Internet Connection!",Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 

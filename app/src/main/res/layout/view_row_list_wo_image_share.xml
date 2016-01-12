@@ -11,7 +11,7 @@
         android:paddingLeft="25dp"
         android:orientation="horizontal">
 
-        <!--<ImageView
+        <ImageView
             android:id="@+id/imageViewSlidemenu"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -20,7 +20,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/note_menu_icon" />-->
+            android:src="@drawable/note_menu_icon" />
 
         <TextView
             android:id="@+id/textViewSlideMenuName"

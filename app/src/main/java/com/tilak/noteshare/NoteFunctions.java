@@ -479,10 +479,10 @@ public class NoteFunctions {
         tvShareTitleAlert.setText("SHARE NOTE VIA");
         tvShareTitleAlert.setTextColor(Color.WHITE);
 
-        LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareWhatsapp);
-        TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
-        tvWhatsapp.setText("Link");
-        shareWhatsapp.setOnClickListener(new View.OnClickListener() {
+        LinearLayout shareLink = (LinearLayout) shareDialog.findViewById(R.id.shareLink);
+        TextView tvLink = (TextView) shareLink.findViewById(R.id.textViewSlideMenuName);
+        tvLink.setText("URL");
+        shareLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linkShare(context, id);
@@ -496,46 +496,37 @@ public class NoteFunctions {
         shareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noteshareShare(context, id);
-                shareDialog.dismiss();
+                if(RegularFunctions.checkIsOnlineViaIP()){
+                    noteshareShare(context, id);
+                    shareDialog.dismiss();
+                }else{
+                    Toast.makeText(context, "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
-        LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareMessage);
-        TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
-        tvMessage.setText("Screenshot");
-        shareMessage.setOnClickListener(new View.OnClickListener() {
+        LinearLayout shareScreenshot = (LinearLayout) shareDialog.findViewById(R.id.shareScreenshot);
+        TextView tvScreenshot = (TextView) shareScreenshot.findViewById(R.id.textViewSlideMenuName);
+        tvScreenshot.setText("Screenshot");
+        shareScreenshot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //textShare(context, id);
-                screenshotFromMain(context,id);
+                screenshotFromMain(context, id);
                 shareDialog.dismiss();
             }
         });
 
-        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareFacebook);
-        TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
-        tvFacebook.setText("Text");
-        shareFacebook.setOnClickListener(new View.OnClickListener() {
+        LinearLayout shareText = (LinearLayout) shareDialog.findViewById(R.id.shareText);
+        TextView tvText = (TextView) shareText.findViewById(R.id.textViewSlideMenuName);
+        tvText.setText("Text");
+        shareText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textShare(context, id);
-                /*if(outsideNote) {
-                    MainActivity mainActivity = new MainActivity();
-                    context.screenshot(v.getTag().toString());
-                }
-                else{
-                    NoteMainActivity noteMainActivity = new NoteMainActivity();
-                    noteMainActivity.screenshot();
-                }*/
-
                 shareDialog.dismiss();
             }
         });
-
-        /*LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
-        TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
-        tvTwitter.setText("Twitter");*/
 
         shareDialog.show();
     }
@@ -675,7 +666,13 @@ public class NoteFunctions {
 
                 if(RegularFunctions.getServerNoteId(id).equals("0")){
                     progressDialog.setMessage("Please wait while we Sync the Note...");
-                    RegularFunctions.syncNow();
+                    if(RegularFunctions.checkIsOnlineViaIP()){
+                        RegularFunctions.syncNow();
+                    }
+                    else{
+                        Toast.makeText(context, "Need to Sync the Note. Please check your Internet Connection!", Toast.LENGTH_LONG).show();
+                        return null;
+                    }
                 }
 
                 /*String shareMessage = RegularFunctions.getUserName() + " has shared \'"+ RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
@@ -686,11 +683,11 @@ public class NoteFunctions {
                         +"http://104.197.47.172/note/get#/app/note/"+RegularFunctions.getServerNoteId(id)
                         +"\n\n-via NoteShare";
 
-                Log.e("jay", shareMessage);
+                /*Log.e("jay", shareMessage);
                 Toast.makeText(context, shareMessage, Toast.LENGTH_SHORT).show();
                 //progressDialog.dismiss();
 
-                //Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
+                //Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");*/
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 //share.putExtra(Intent.EXTRA_STREAM, uri);
