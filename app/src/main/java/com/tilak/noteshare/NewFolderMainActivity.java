@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
@@ -1366,5 +1367,16 @@ public class NewFolderMainActivity extends DrawerActivity {
 	public void openKeyboard(View v){
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+	}
+
+	public void shareFolder(View v){
+		listView.closeAnimate(lastItemOpened[0]);
+		String id = v.getTag().toString();
+		if(RegularFunctions.checkIsOnlineViaIP()) {
+			FolderFunctions.noteshareFolderShare(context, id);
+
+		}else{
+			Toast.makeText(context, "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
+		}
 	}
 }

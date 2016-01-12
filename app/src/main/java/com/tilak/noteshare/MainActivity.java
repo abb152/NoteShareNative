@@ -224,7 +224,6 @@ public class MainActivity extends DrawerActivity {
 		});
 
 		//syncOnStart();
-
 	}
 
 

@@ -129,14 +129,35 @@ public class NotificationCenterActivity extends DrawerActivity {
 							for (int i = 0; i < jsonArray.length(); i++) {
 								JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-								String noteId = jsonObject.opt("note").toString();
-								String noteName = jsonObject.opt("notename").toString();
-								String username = jsonObject.opt("username").toString();
+								String noteId = jsonObject.optString("note");
+								String folderId = jsonObject.optString("folder");
+
+								String type = "";
+								String id = "";
+								String name = "";
+
+								if(!noteId.isEmpty()){
+									type = "note";
+									name = jsonObject.optString("notename");
+									id = noteId;
+								}else if(!folderId.isEmpty()){
+									type = "folder";
+									id = folderId;
+									name = jsonObject.optString("foldername");
+								}
+
+								String username = jsonObject.optString("username");
+								String profilepic = jsonObject.optString("profilepic");
+								//String name = jsonObject.optString("notename");
+								String userid = jsonObject.optString("userid");
 
 								HashMap<String, String> map = new HashMap<String, String>();
-								map.put("note", noteId);
-								map.put("notename", noteName);
+								map.put("type", type);
+								map.put("name", name);
 								map.put("username", username);
+								map.put("profilepic", profilepic);
+								map.put("userid", userid);
+								map.put("id", id);
 
 								list.add(map);
 
@@ -182,7 +203,7 @@ public class NotificationCenterActivity extends DrawerActivity {
 		}
 	}
 
-	public void acceptAndSync(final View v){
+	public void acceptRejectAndSync(final View v){
 
 		final Button imageButton = (Button) v;
 		imageButton.setClickable(false);
@@ -194,7 +215,20 @@ public class NotificationCenterActivity extends DrawerActivity {
 		progressDialog.setCanceledOnTouchOutside(true);
 		progressDialog.show();
 
-		final String serverNoteId = imageButton.getTag().toString();
+		/*String sample = "jay,visariya";
+
+		List<String> sampleList = Arrays.asList(sample.split(","));
+
+		Log.e("sample1", sampleList.get(0));
+		Log.e("sample2", sampleList.get(1));*/
+
+		String tag = imageButton.getTag().toString();
+		List<String> tagList = Arrays.asList(tag.split(","));
+
+		final String type = tagList.get(0);
+		final String elementid = tagList.get(1);					// note/folder id
+		final String userid = tagList.get(2);						// user id who has shared the note
+		final String valueTF = tagList.get(3);						//true or false
 
 		new AsyncTask<Void,Void,String>(){
 
@@ -204,8 +238,13 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 				try{
 
-					String json = getNotificationsJson(serverNoteId, "true").toString();
+					String json = getNotificationsJson(elementid, valueTF, type, userid).toString();
+
+					Log.e("jay noti json", json);
+
 					String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/noteStatus", json);
+
+					Log.e("jay response", response);
 
 					JSONObject jsonObject = new JSONObject(response);
 
@@ -215,7 +254,8 @@ public class NotificationCenterActivity extends DrawerActivity {
 					if(value.equals("true")){
 						//Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
 
-						RegularFunctions.syncNow();
+						if(valueTF.equals("true"))
+							RegularFunctions.syncNow();
 
 						received = true;
 
@@ -243,10 +283,26 @@ public class NotificationCenterActivity extends DrawerActivity {
 				if(received){
 					//ImageButton ib = (ImageButton) v;
 					//imageButton.setImageResource(R.drawable.ic_like);
-					imageButton.setClickable(false);
-					imageButton.setText("Done");
+					//View v = findViewById(layoutID);
+					//v.setVisibility(View.GONE);
+					//imageButton.setClickable(false);
+					//imageButton.setText("Done");
+					View v = (View )imageButton.getParent();
+					v.setVisibility(View.GONE);
 
-					Toast.makeText(NotificationCenterActivity.this, "Received", Toast.LENGTH_SHORT).show();
+					String message = "";
+
+					if(type.equals("note"))
+						message = "Note ";
+					else
+						message = "Folder ";
+
+					if(valueTF.equals("true"))
+						message = message +"Accepted";
+					else
+						message = message + "Rejected";
+
+					Toast.makeText(NotificationCenterActivity.this, message, Toast.LENGTH_SHORT).show();
 					onRestart();
 
 				}else {
@@ -259,92 +315,13 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 	}
 
-
-	public void reject(final View v){
-
-		final Button imageButton = (Button) v;
-		imageButton.setClickable(false);
-
-		progressDialog = new ProgressDialog(NotificationCenterActivity.this);
-		progressDialog.setMessage("Rejecting...");
-		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		progressDialog.setCancelable(false);
-		progressDialog.setCanceledOnTouchOutside(true);
-		progressDialog.show();
-
-		final String serverNoteId = imageButton.getTag().toString();
-
-		new AsyncTask<Void,Void,String>(){
-
-			boolean received = false;
-			@Override
-			protected String doInBackground(Void... params) {
-
-				try{
-
-					String json = getNotificationsJson(serverNoteId, "false").toString();
-					String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/noteStatus", json);
-
-					JSONObject jsonObject = new JSONObject(response);
-
-					String value = jsonObject.optString("value");
-					Log.e("jay value", value);
-
-					if(value.equals("true")){
-						//Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
-
-						//RegularFunctions.syncNow();
-
-						received = true;
-
-						progressDialog.dismiss();
-
-					}else{
-						progressDialog.dismiss();
-						received = false;
-
-						//Toast.makeText(NotificationCenterActivity.this,"Oops something went wrong",Toast.LENGTH_LONG).show();
-					}
-
-				}catch(JSONException je){
-
-				}catch (IOException io){
-
-				}
-
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(String s) {
-
-				if(received){
-					//ImageButton ib = (ImageButton) v;
-					//imageButton.setImageResource(R.drawable.ic_like);
-					imageButton.setClickable(false);
-
-					Toast.makeText(NotificationCenterActivity.this, "Rejected", Toast.LENGTH_SHORT).show();
-					onRestart();
-
-				}else {
-					imageButton.setClickable(false);
-					Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_SHORT).show();
-				}
-			}
-		}.execute(null,null,null);
-
-
-	}
-
-
-
-	public JSONObject getNotificationsJson(String serverNoteId, String status) {
+	public JSONObject getNotificationsJson(String elementid, String status, String type, String senderid) {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put("user", RegularFunctions.getUserId());
+			jsonObject.put(type,elementid);
+			jsonObject.put("userid",senderid);
 			jsonObject.put("status", status);
-			jsonObject.put("note", serverNoteId);
-
 		} catch (JSONException je) {
 
 		}

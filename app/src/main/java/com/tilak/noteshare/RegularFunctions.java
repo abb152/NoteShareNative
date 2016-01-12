@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by Jay on 16-12-2015.
@@ -30,8 +31,8 @@ public class RegularFunctions {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
-    public static String SERVER_URL = "http://104.197.47.172/";
-    //public static String SERVER_URL = "http://192.168.0.125:1337/";
+    //public static String SERVER_URL = "http://104.197.47.172/";
+    public static String SERVER_URL = "http://192.168.0.122:1337/";
 
     public static int pxFromDp(final Context context, final float dp) {
         return (int) (dp * context.getResources().getDisplayMetrics().density);
@@ -55,6 +56,12 @@ public class RegularFunctions {
         Note note = Note.findById(Note.class, Long.parseLong(localNoteid));
         return note.getServerid();
     }
+
+    public static String getServerFolderId(String localFolderid){
+        Folder folder = Folder.findById(Folder.class, Long.parseLong(localFolderid));
+        return folder.getServerid();
+    }
+
 
     public static String getUserId(){
         Config config = Config.findById(Config.class,1L);
@@ -103,20 +110,34 @@ public class RegularFunctions {
         if(sync.getLastSyncTime() == 0)
             return "Not Synced yet";
         else
-            return "Last Synced: " + longToString(sync.getLastSyncTime());
+            return "Last Synced: " + longToStringWithUTC(sync.getLastSyncTime());
     }
 
     public static long lastSyncLong(){
         Sync sync = Sync.findById(Sync.class,1l);
         if(sync.getLastSyncTime() == 0)
-            return 1451606400000L;
+            return 1451610000000L;
         else
             return sync.getLastSyncTime();
     }
 
-    public static String longToString(long date){
+    public static String longToStringWithUTC(long date){
 
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        TimeZone tz = TimeZone.getDefault();
+        String time = "TimeZone   " + tz.getDisplayName(false, TimeZone.SHORT) + " Timezon id :: " + tz.getID();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        /*if (tz == null || "".equalsIgnoreCase(tz.trim())) {
+            tz = Calendar.getInstance().getTimeZone().getID();
+        }*/
+
+
+        // set timezone to SimpleDateFormat
+        //simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+
+        return simpleDateFormat.format(date);
     }
 
     public static long getCurrentTimeLong(){

@@ -64,7 +64,8 @@
                 android:layout_alignParentEnd="false"
                 android:layout_alignParentRight="false"
                 android:gravity="right"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+                android:id="@+id/buttonLayout">
 
                 <!--<ImageButton
                     android:layout_width="wrap_content"
@@ -72,7 +73,7 @@
                     android:id="@+id/ibReject"
                     android:src="@drawable/abc_ic_clear_mtrl_alpha"
                     android:background="#ff5a60"
-                    android:onClick="acceptAndSync"
+                    android:onClick="acceptRejectAndSync"
                     android:padding="4dp"
                     android:layout_marginRight="5dp"/>
 
@@ -82,7 +83,7 @@
                     android:id="@+id/ibAccept"
                     android:src="@drawable/com_facebook_button_like_icon_selected"
                     android:background="#ff5a60"
-                    android:onClick="acceptAndSync"
+                    android:onClick="acceptRejectAndSync"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:paddingTop="10dp"
@@ -97,9 +98,8 @@
                     android:textSize="12sp"
                     android:textColor="#fff"
                     android:background="#F44336"
-                    android:onClick="reject"
-                    android:layout_marginLeft="5dp"
-                    android:visibility="gone"/>
+                    android:onClick="acceptRejectAndSync"
+                    android:layout_marginLeft="5dp"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
                     android:textSize="12sp"
                     android:textColor="#fff"
                     android:background="#4CAF50"
-                    android:onClick="acceptAndSync"
+                    android:onClick="acceptRejectAndSync"
                     android:layout_marginLeft="5dp"/>
 
             </LinearLayout>

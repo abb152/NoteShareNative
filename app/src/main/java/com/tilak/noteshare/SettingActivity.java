@@ -299,6 +299,7 @@ public class SettingActivity extends DrawerActivity {
 					if(RegularFunctions.checkNeedForSync()){
 						startSync(true);
 					}else{
+						flushDatabase();
 						finish();
 						startActivity(new Intent(SettingActivity.this, LoginActivity.class));
 					}

@@ -122,7 +122,7 @@ public class FolderSync {
         Sync sync = RegularFunctions.getSyncTime();
         //Long time = sync.getFolderLocalToServer();
 
-        String foldermodifytime = RegularFunctions.longToString(sync.getFolderLocalToServer() - 3600000);
+        String foldermodifytime = RegularFunctions.longToStringWithUTC(sync.getFolderLocalToServer() - 3600000);
 
         try {
             String json = serverToLocalJson(getUserId(), foldermodifytime).toString();

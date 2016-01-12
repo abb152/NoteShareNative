@@ -85,14 +85,20 @@ public class OurNotificationListAdapter extends BaseAdapter {
         }
 
         HashMap<String,String> map = list.get(position);
-        String note = map.get("note");
+        String type = map.get("type");
 
-        String notename = map.get("notename");
+        String name = map.get("name");
         String username = map.get("username");
-        holder.tvNotiHeader.setText(notename);
-        holder.tvDesc.setText((Html.fromHtml("<b>" + username + "</b> has shared <b>" + notename + "</b> note with you."))); //set the hash maps
-        holder.btAccept.setTag(note);
-        holder.btReject.setTag(note);
+        String profilepic = map.get("profilepic");
+        String userid = map.get("userid");          // shared by whom
+        String id = map.get("id");                  // folder/note id
+
+        String tag = type+","+id+","+userid;
+
+        holder.tvNotiHeader.setText(name);
+        holder.tvDesc.setText((Html.fromHtml("<b>" + username + "</b> has shared <b>" + name + "</b> "+ type +" with you."))); //set the hash maps
+        holder.btAccept.setTag(tag +",true");
+        holder.btReject.setTag(tag +",false");
 
         //String name = "profile.jpg";
         //File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + name);

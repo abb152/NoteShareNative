@@ -53,6 +53,9 @@ public class NoteSync {
     private int type = 0; //1 create //2 delete //0 edit
     NOTESYNCFUNCTION funcType;
 
+
+
+
     public void localToServer() {
 
         Sync sync = RegularFunctions.getSyncTime();
@@ -135,7 +138,7 @@ public class NoteSync {
         Sync sync = RegularFunctions.getSyncTime();
         //Long time = sync.getFolderLocalToServer();
 
-        String notemodifytime = RegularFunctions.longToString(sync.getNoteLocalToServer() - 3600000);
+        String notemodifytime = RegularFunctions.longToStringWithUTC(sync.getNoteLocalToServer() - 3600000);
 
         Log.e("jay long", String.valueOf(sync.getNoteLocalToServer()));
 
