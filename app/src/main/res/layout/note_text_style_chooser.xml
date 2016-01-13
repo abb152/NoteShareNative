@@ -249,7 +249,7 @@
                     android:tag="paper_bg_2" />
 
                 <ImageButton
-                    android:id="@+id/paper_bg_4"
+                    android:id="@+id/paper_bg_3"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -258,6 +258,18 @@
                     android:background="#d0d0d0"
                     android:scaleType="fitCenter"
                     android:src="@drawable/paper_bg_14"
+                    android:tag="paper_bg_3" />
+
+                <ImageButton
+                    android:id="@+id/paper_bg_4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="#d0d0d0"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/paper_bg_15"
                     android:tag="paper_bg_4" />
 
                 <ImageButton
@@ -269,20 +281,8 @@
                     android:layout_weight="1"
                     android:background="#d0d0d0"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/paper_bg_15"
-                    android:tag="paper_bg_5" />
-
-                <ImageButton
-                    android:id="@+id/paper_bg_6"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#d0d0d0"
-                    android:scaleType="fitCenter"
                     android:src="@drawable/paper_bg_16"
-                    android:tag="paper_bg_6" />
+                    android:tag="paper_bg_5" />
 
             </LinearLayout>
 

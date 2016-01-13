@@ -11,9 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Shader;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.media.MediaPlayer;
@@ -1894,11 +1892,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });*/
 
         ImageButton paper_bg_6 = (ImageButton) dialog
-                .findViewById(R.id.paper_bg_6);
-        ImageButton paper_bg_5 = (ImageButton) dialog
                 .findViewById(R.id.paper_bg_5);
-        ImageButton paper_bg_4 = (ImageButton) dialog
+        ImageButton paper_bg_5 = (ImageButton) dialog
                 .findViewById(R.id.paper_bg_4);
+        ImageButton paper_bg_4 = (ImageButton) dialog
+                .findViewById(R.id.paper_bg_3);
         ImageButton paper_bg_2 = (ImageButton) dialog
                 .findViewById(R.id.paper_bg_2);
         ImageButton paper_bg_1 = (ImageButton) dialog
@@ -2600,42 +2598,42 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     public void paperBackground(String background) {
         if (background.equals("paper_bg_1")) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1111);
+            /*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1111);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);
-            //background_bg.setBackgroundResource(R.drawable.paper_bg_1);
+            background_bg.setBackgroundDrawable(bitmapDrawable);*/
+            background_bg.setBackgroundResource(R.drawable.paper_bg_1);
         } else if (background.equals("paper_bg_2")) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1222);
+            /*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1222);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);
-            //background_bg.setBackgroundResource(R.drawable.paper_bg_2);
+            background_bg.setBackgroundDrawable(bitmapDrawable);*/
+            background_bg.setBackgroundResource(R.drawable.paper_bg_2);
         } else if (background.equals("paper_bg_3")) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1333);
+           /* Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1333);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);
-            //background_bg.setBackgroundResource(R.drawable.paper_bg_3);
+            background_bg.setBackgroundDrawable(bitmapDrawable);*/
+            background_bg.setBackgroundResource(R.drawable.paper_bg_3);
         } else if (background.equals("paper_bg_4")) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1444);
+            /*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1444);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);
-            //background_bg.setBackgroundResource(R.drawable.paper_bg_4);
+            background_bg.setBackgroundDrawable(bitmapDrawable);*/
+            background_bg.setBackgroundResource(R.drawable.paper_bg_4);
         } else if (background.equals("paper_bg_5")) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1555);
+            /*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1555);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);
-            //background_bg.setBackgroundResource(R.drawable.paper_bg_5);
-        } else if (background.equals("paper_bg_6")) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1666);
+            background_bg.setBackgroundDrawable(bitmapDrawable);*/
+            background_bg.setBackgroundResource(R.drawable.paper_bg_5);
+        }/* else if (background.equals("paper_bg_6")) {
+            *//*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1666);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);
-            //background_bg.setBackgroundResource(R.drawable.paper_bg_6);
-        }
+            background_bg.setBackgroundDrawable(bitmapDrawable);*//*
+            background_bg.setBackgroundResource(R.drawable.paper_bg_6);
+        }*/
     }
 
     public void colorButtonSelected(View view) {
@@ -3595,76 +3593,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         }, 5000);
     }
-
-    // SHARE
-    /*public void share(final Context context, final String id, final boolean outsideNote) {
-        final Dialog shareDialog = new Dialog(context);
-        shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        shareDialog.setCancelable(false);
-        shareDialog.setContentView(R.layout.alert_share_view);
-        shareDialog.setCanceledOnTouchOutside(true);
-
-        TextView tvShareTitleAlert = (TextView) shareDialog.findViewById(R.id.tvShareTitleAlert);
-        tvShareTitleAlert.setText("SHARE NOTE VIA");
-        tvShareTitleAlert.setTextColor(Color.WHITE);
-
-        LinearLayout shareWhatsapp = (LinearLayout) shareDialog.findViewById(R.id.shareLink);
-        TextView tvWhatsapp = (TextView) shareWhatsapp.findViewById(R.id.textViewSlideMenuName);
-        tvWhatsapp.setText("Link");
-        shareWhatsapp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                noteFunctions.linkShare(context, id);
-                shareDialog.dismiss();
-            }
-        });
-
-        LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
-        TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
-        tvEmail.setText("NoteShare");
-        shareEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(RegularFunctions.checkIsOnlineViaIP()){
-                    noteFunctions.noteshareShare(context, id);
-                    shareDialog.dismiss();
-                }else{
-                    Toast.makeText(NoteMainActivity.this, "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        LinearLayout shareMessage = (LinearLayout) shareDialog.findViewById(R.id.shareScreenshot);
-        TextView tvMessage = (TextView) shareMessage.findViewById(R.id.textViewSlideMenuName);
-        tvMessage.setText("Screenshot");
-        shareMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareDialog.dismiss();
-                screenshot();
-            }
-        });
-
-        LinearLayout shareFacebook = (LinearLayout) shareDialog.findViewById(R.id.shareText);
-        TextView tvFacebook = (TextView) shareFacebook.findViewById(R.id.textViewSlideMenuName);
-        tvFacebook.setText("Text");
-        shareFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                noteFunctions.textShare(context, id);
-                shareDialog.dismiss();
-            }
-        });
-
-        *//*LinearLayout shareTwitter = (LinearLayout) shareDialog.findViewById(R.id.shareTwitter);
-        TextView tvTwitter = (TextView) shareTwitter.findViewById(R.id.textViewSlideMenuName);
-        ImageView ivTwitter = (ImageView) shareTwitter.findViewById(R.id.imageViewSlidemenu);
-        ivTwitter.setImageResource(R.drawable.ic_option_delete);
-        ivTwitter.setTag(id);
-        tvTwitter.setText("Twitter");*//*
-
-        shareDialog.show();
-    }*/
 
     public void showShareActionSheet(View v) {
 
