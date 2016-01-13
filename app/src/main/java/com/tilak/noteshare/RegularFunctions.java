@@ -1,8 +1,11 @@
 package com.tilak.noteshare;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.util.Log;
 
 import com.squareup.okhttp.MediaType;
@@ -17,7 +20,12 @@ import com.tilak.db.Sync;
 import com.tilak.sync.FolderSync;
 import com.tilak.sync.NoteSync;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,8 +39,8 @@ public class RegularFunctions {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
-    //public static String SERVER_URL = "http://104.197.47.172/";
-    public static String SERVER_URL = "http://192.168.0.122:1337/";
+    public static String SERVER_URL = "http://104.197.47.172/";
+    //public static String SERVER_URL = "http://192.168.0.122:1337/";
 
     public static int pxFromDp(final Context context, final float dp) {
         return (int) (dp * context.getResources().getDisplayMetrics().density);
@@ -348,5 +356,25 @@ public class RegularFunctions {
         return folders;
     }
 
+
+    public static void getBitmapFromURL(String src, String picname) {
+        try {
+            java.net.URL url = new java.net.URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            try {
+                // Saving Image file
+                //String profilePicture = String.valueOf("profile");
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "/NoteShare/.NoteShare/" + picname);
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(mediaStorageDir));
+            } catch (FileNotFoundException e) {}
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

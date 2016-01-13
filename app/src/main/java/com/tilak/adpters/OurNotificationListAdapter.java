@@ -2,12 +2,14 @@ package com.tilak.adpters;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Environment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tilak.noteshare.R;
+import com.tilak.noteshare.RegularFunctions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -100,14 +104,18 @@ public class OurNotificationListAdapter extends BaseAdapter {
         holder.btAccept.setTag(tag +",true");
         holder.btReject.setTag(tag +",false");
 
-        //String name = "profile.jpg";
-        //File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + name);
-        //Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
+        String profilename = userid+".jpg";
+        File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + profilename);
+
+        if(!f.exists()){
+            RegularFunctions.getBitmapFromURL(profilepic,profilename);
+        }
+
+        Bitmap b = BitmapFactory.decodeFile(String.valueOf(f));
 
         //Bitmap b = BitmapFactory.decodeResource(get, R.drawable.large_icon);
 
-
-        //holder.userPic.setImageBitmap(getRoundedCornerImage(getSquareImage(b)));
+        holder.userPic.setImageBitmap(getRoundedCornerImage(getSquareImage(b)));
 
         return convertView;
     }

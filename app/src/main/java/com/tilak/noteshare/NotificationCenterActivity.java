@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,8 +61,15 @@ public class NotificationCenterActivity extends DrawerActivity {
 
 		listviewNotification=(ListView) contentView.findViewById(R.id.listviewNotification);
 		//adapter=new NotificationListAdapter(NotificationCenterActivity.this, arrnotificationItems);
-		getNotifications();
 		addListners();
+
+		final Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				getNotifications();
+			}
+		},300);
 	}
 
 	public void test(){
@@ -212,15 +220,8 @@ public class NotificationCenterActivity extends DrawerActivity {
 		progressDialog.setMessage("Wait while we get your new Notes and Folders...");
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		progressDialog.setCancelable(false);
-		progressDialog.setCanceledOnTouchOutside(true);
+		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.show();
-
-		/*String sample = "jay,visariya";
-
-		List<String> sampleList = Arrays.asList(sample.split(","));
-
-		Log.e("sample1", sampleList.get(0));
-		Log.e("sample2", sampleList.get(1));*/
 
 		String tag = imageButton.getTag().toString();
 		List<String> tagList = Arrays.asList(tag.split(","));
