@@ -479,36 +479,43 @@ public class NoteFunctions {
         tvShareTitleAlert.setText("SHARE NOTE VIA");
         tvShareTitleAlert.setTextColor(Color.WHITE);
 
-        LinearLayout shareLink = (LinearLayout) shareDialog.findViewById(R.id.shareLink);
-        TextView tvLink = (TextView) shareLink.findViewById(R.id.textViewSlideMenuName);
-        tvLink.setText("URL");
-        shareLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linkShare(context, id);
-                shareDialog.dismiss();
-            }
-        });
-
         LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
         TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
         tvEmail.setText("NoteShare");
+        ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
+        ivEmail.setImageResource(R.drawable.ic_noteshare_share);
         shareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(RegularFunctions.checkIsOnlineViaIP()){
+                if (RegularFunctions.checkIsOnlineViaIP()) {
                     noteshareShare(context, id);
                     shareDialog.dismiss();
-                }else{
+                } else {
                     Toast.makeText(context, "Please check your Internet Connection!", Toast.LENGTH_LONG).show();
                 }
 
             }
         });
 
+        LinearLayout shareText = (LinearLayout) shareDialog.findViewById(R.id.shareText);
+        TextView tvText = (TextView) shareText.findViewById(R.id.textViewSlideMenuName);
+        tvText.setText("Text");
+        ImageView ivText = (ImageView) shareText.findViewById(R.id.imageViewSlidemenu);
+        ivText.setImageResource(R.drawable.ic_text_share);
+        shareText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textShare(context, id);
+                shareDialog.dismiss();
+            }
+        });
+
+
         LinearLayout shareScreenshot = (LinearLayout) shareDialog.findViewById(R.id.shareScreenshot);
         TextView tvScreenshot = (TextView) shareScreenshot.findViewById(R.id.textViewSlideMenuName);
         tvScreenshot.setText("Screenshot");
+        ImageView ivScreenshot = (ImageView) shareScreenshot.findViewById(R.id.imageViewSlidemenu);
+        ivScreenshot.setImageResource(R.drawable.ic_screenshot_share);
         shareScreenshot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -517,16 +524,20 @@ public class NoteFunctions {
             }
         });
 
-        LinearLayout shareText = (LinearLayout) shareDialog.findViewById(R.id.shareText);
-        TextView tvText = (TextView) shareText.findViewById(R.id.textViewSlideMenuName);
-        tvText.setText("Text");
-        shareText.setOnClickListener(new View.OnClickListener() {
+
+        LinearLayout shareLink = (LinearLayout) shareDialog.findViewById(R.id.shareLink);
+        TextView tvLink = (TextView) shareLink.findViewById(R.id.textViewSlideMenuName);
+        tvLink.setText("URL");
+        ImageView ivLink = (ImageView) shareLink.findViewById(R.id.imageViewSlidemenu);
+        ivLink.setImageResource(R.drawable.ic_url_share);
+        shareLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textShare(context, id);
+                linkShare(context, id);
                 shareDialog.dismiss();
             }
         });
+
 
         shareDialog.show();
     }
