@@ -21,7 +21,7 @@
     <EditText
         android:id="@+id/textViewTitleAlertMessage"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="66dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:paddingLeft="10dp"

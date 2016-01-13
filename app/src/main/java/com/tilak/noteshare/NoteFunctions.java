@@ -702,7 +702,7 @@ public class NoteFunctions {
                     progressDialog.dismiss();
                 }
             }
-        }.execute(null,null,null);
+        }.execute(null, null, null);
 
     }
 
@@ -731,73 +731,117 @@ public class NoteFunctions {
         buttonShareOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = emailTo.getText().toString().toLowerCase().trim();
-                if (email.equals("")) {
-                    emailTo.setError("Enter Email id.");
-                } else if (!RegularFunctions.isValidEmail(email)) {
-                    emailTo.setError("Invalid Email");
-                } else {
-                    Log.e("jay text", emailTo.getText().toString().toLowerCase());
-                    Log.e("jay id", id);
-                    final ProgressDialog progressDialog = new ProgressDialog(context);
-                    progressDialog.setMessage("Loading...");
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.setCancelable(true);
-                    progressDialog.show();
 
-                    //final String email = emailTo.getText().toString();
+                String emails = emailTo.getText().toString();
+                if(!emailTo.getText().toString().isEmpty()) {
+                    emails = emails.replace(";", ",");
+                    emails = emails.replace(":", ",");
 
-                    new AsyncTask<Void, Void, String>() {
+                    String[] emailids = emails.split(",");
 
-                        boolean shared = false;
+                    Log.e("jay emailids len", String.valueOf(emailids.length));
 
-                        @Override
-                        protected String doInBackground(Void... params) {
-                            RegularFunctions.syncNow();
-                            try
-                            {
-                                String shareEmailJson = shareJson(id, email).toString();
-                                Log.e("jay sharejson", shareEmailJson);
+                    boolean valid = false;
+                    for (int i = 0; i < emailids.length; i++) {
+                        Log.e("jay emailids", emailids[i]);
 
-                                String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "share/save", shareEmailJson);
-                                Log.e("jay response", response);
+                        emailids[i] = emailids[i].toLowerCase().trim();
 
-                                JSONObject jsonObject = new JSONObject(response);
+                        Log.e("jay emailids trimmed", emailids[i]);
 
-                                String value = jsonObject.optString("value");
-                                if (value.equals("true")) {
-                                    shareDialog.dismiss();
+                        if (!RegularFunctions.isValidEmail(emailids[i])) {
+                            emailTo.setError("Invalid Email");
+                            valid = false;
+                            break;
+                        } else{
+                            valid = true;
+                        }
+
+                        if(emailids.length > 5){
+                            emailTo.setError("Max 5 Email ID");
+                            valid = false;
+                            break;
+                        }
+                    }
+
+                    if(valid){
+                        String finalEmailList = "";
+                        for (int i = 0; i < emailids.length; i++) {
+                            if(!emailids[i].isEmpty()){
+                                finalEmailList = finalEmailList + emailids[i];
+
+                                if(i != emailids.length-1)
+                                    finalEmailList = finalEmailList + ",";
+                            }
+                        }
+
+                        Log.e("jay email final", finalEmailList);
+
+                        final ProgressDialog progressDialog = new ProgressDialog(context);
+                        progressDialog.setMessage("Loading...");
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.setCancelable(true);
+                        progressDialog.show();
+
+                        //final String email = emailTo.getText().toString();
+
+                        final String finalEmailList1 = finalEmailList;
+                        new AsyncTask<Void, Void, String>() {
+
+                            boolean shared = false;
+
+                            @Override
+                            protected String doInBackground(Void... params) {
+                                RegularFunctions.syncNow();
+                                try
+                                {
+                                    String shareEmailJson = shareJson(id, finalEmailList1).toString();
+                                    Log.e("jay sharejson", shareEmailJson);
+
+                                    String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "share/save", shareEmailJson);
+                                    Log.e("jay response", response);
+
+                                    JSONObject jsonObject = new JSONObject(response);
+
+                                    String value = jsonObject.optString("value");
+                                    if (value.equals("true")) {
+                                        shareDialog.dismiss();
+                                        progressDialog.dismiss();
+                                        shared = true;
+                                    } else {
+                                        shareDialog.dismiss();
+                                        progressDialog.dismiss();
+                                        shared = false;
+                                    }
+                                }
+                                catch(JSONException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                                catch(IOException io)
+                                {
+                                    io.printStackTrace();
+                                }
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                if(shared)
+                                    Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
+                                else
+                                    Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
+
+                                if(progressDialog.isShowing()) {
                                     progressDialog.dismiss();
-                                    shared = true;
-                                } else {
-                                    shareDialog.dismiss();
-                                    progressDialog.dismiss();
-                                    shared = false;
                                 }
                             }
-                            catch(JSONException e)
-                            {
-                                e.printStackTrace();
-                            }
-                            catch(IOException io)
-                            {
-                                io.printStackTrace();
-                            }
-                            return null;
-                        }
+                        }.execute(null, null, null);
+                    }
 
-                        @Override
-                        protected void onPostExecute(String s) {
-                            if(shared)
-                                Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
-                            else
-                                Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
+                }else{
+                    emailTo.setError("Enter Email");
 
-                            if(progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
-                        }
-                    }.execute(null,null,null);
                 }
             }
         });
@@ -805,7 +849,7 @@ public class NoteFunctions {
         shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         shareDialog.setCancelable(false);
         shareDialog.setContentView(contentView);
-        shareDialog.setCanceledOnTouchOutside(true);
+        shareDialog.setCanceledOnTouchOutside(false);
 
         shareDialog.show();
     }
