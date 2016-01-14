@@ -83,7 +83,7 @@
         android:divider="@android:color/white"
         android:dividerHeight="0dp"
         android:scrollbars="none"
-
+        android:layout_marginTop="3dp"
 
         swipe:swipeFrontView="@+id/front"
         swipe:swipeBackView="@+id/back"

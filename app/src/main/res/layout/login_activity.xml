@@ -41,7 +41,8 @@
             android:layout_marginBottom="40dp"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/llConnect">
 
             <View
                 android:layout_width="40dp"
@@ -51,7 +52,7 @@
                 android:background="#fff" />
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/tvConnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

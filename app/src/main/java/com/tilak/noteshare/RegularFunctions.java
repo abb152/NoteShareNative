@@ -1,8 +1,10 @@
 package com.tilak.noteshare;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -81,7 +83,7 @@ public class RegularFunctions {
         return note.getTitle();
     }
 
-    static String post(String url, String json) throws IOException {
+    public static String post(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
@@ -377,4 +379,21 @@ public class RegularFunctions {
         }
     }
 
+    public static Typeface getAgendaBoldFont(Activity activity){
+        return Typeface.createFromAsset(activity.getAssets(), "fonts/AgendaBold.ttf");
+    }
+
+    public static Typeface getAgendaMediumFont(Activity activity){
+        return Typeface.createFromAsset(activity.getAssets(), "fonts/Agenda-Medium.ttf");
+    }
+
+    /*public static void setViewFont(int type,View view){
+        if(type == 1){ //
+            view.setTy
+        }
+        if(type == 2){
+
+        }
+    }
+*/
 }

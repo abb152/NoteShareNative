@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,7 +75,7 @@ public class NoteSync {
 
                 try {
                     String json = localToServerNoteJson(notes.get(i).getTitle(), notes.get(i).getTags(), notes.get(i).getColor(), notes.get(i).getFolder(), String.valueOf(notes.get(i).getRemindertime()), notes.get(i).getTimebomb(), notes.get(i).getBackground(), notes.get(i).getCreationtime(), notes.get(i).getModifytime(), String.valueOf(notes.get(i).getIslocked()), notes.get(i).getCtime(), notes.get(i).getMtime(), getUserId(), funcType, notes.get(i).getServerid(), notes.get(i).getId()).toString();
-                    String response = post(RegularFunctions.SERVER_URL + "note/localtoserver", json);
+                    String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "note/localtoserver", json);
 
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -149,7 +148,7 @@ public class NoteSync {
             Log.e("jay s2l json", json);
             String response = null;
             try {
-                response = post(RegularFunctions.SERVER_URL + "note/servertolocal", json);
+                response = RegularFunctions.post(RegularFunctions.SERVER_URL + "note/servertolocal", json);
             } catch (IOException io) {
                 Log.e("jay exception io", Log.getStackTraceString(io));
             }
@@ -338,12 +337,13 @@ public class NoteSync {
                 .url(url)
                 .post(body)
                 .build();
-        Response response = null;
+        /*Response response = null;
         try {
             response = client.newCall(request).execute();
         }catch (SocketTimeoutException se){
 
-        }
+        }*/
+        Response response = client.newCall(request).execute();
         return response.body().string();
     }
 

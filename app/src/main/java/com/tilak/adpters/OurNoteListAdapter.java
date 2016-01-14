@@ -2,6 +2,7 @@ package com.tilak.adpters;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,12 +63,9 @@ public class OurNoteListAdapter extends BaseAdapter {
 
         ViewHolder holder;
 
-        String fontBold = "agendabold.ttf";
-        String fontMedium = "agendamedium.ttf";
+        Typeface faceBold = Typeface.createFromAsset(activity.getAssets(), "fonts/AgendaBold.ttf");
+        Typeface faceMedium = Typeface.createFromAsset(activity.getAssets(), "fonts/Agenda-Medium.ttf");
 
-        // Loading Font Face
-        //Typeface tfBold = Typeface.createFromAsset(getAssets(), fontBold);
-        //Typeface tfMedium = Typeface.createFromAsset(activity.getAssets(), fontMedium);
 
         LayoutInflater inflater=activity.getLayoutInflater();
         if(convertView == null){
@@ -91,20 +89,9 @@ public class OurNoteListAdapter extends BaseAdapter {
             holder.main = (LinearLayout) convertView.findViewById(R.id.noteMain);
 
             if(listview == "LIST") {
-                //holder.txtNoteName.setHeight(50);
-                //holder.txtNoteName.setTextSize(18F);
-                //holder.txtNoteDesc.setVisibility(View.GONE);
-                //holder.txtNoteDate.setVisibility(View.GONE);
-                //holder.linearLayout.setPadding(20, 30, 20, 20);
             }
             if(listview == "DETAIL"){
                 holder.isLockedIcon = (ImageView) convertView.findViewById(R.id.isLockedIcon);
-                //holder.txtNoteName.setHeight(50);
-                /*FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT);*/
-
-                //LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, 160);
-                //holder.main.setLayoutParams(params);
             }
 
             if(listview != "GRID") {
@@ -118,7 +105,6 @@ public class OurNoteListAdapter extends BaseAdapter {
             }
 
             if(listview == "GRID"){
-                //holder.btnDelete = (ImageButton) convertView.findViewById(R.id.deleteInGrid);
                 holder.btnOption = (ImageButton) convertView.findViewById(R.id.optionInGrid);
                 holder.btnShare = (ImageButton) convertView.findViewById(R.id.shareInGrid);
             }
@@ -129,12 +115,13 @@ public class OurNoteListAdapter extends BaseAdapter {
 
         HashMap<String,String> map = list.get(position);
         holder.txtNoteName.setText(map.get("noteName")); //set the hash maps
-        //holder.txtNoteName.setTypeface(tfBold);
+        holder.txtNoteName.setTypeface(faceBold);
 
         holder.txtNoteDesc.setText(map.get("noteDesc"));
-        //holder.txtNoteDesc.setTypeface(tfMedium);
+        holder.txtNoteDesc.setTypeface(faceMedium);
 
         holder.txtNoteDate.setText(dbToAdapterDate(map.get("noteDate")));
+        holder.txtNoteDate.setTypeface(faceMedium);
 
         if(map.get("noteBgColor").toString().equals("#FFFFFF") && listview == "GRID")
             holder.linearLayout.setBackgroundColor(Color.parseColor("#F0F0F0"));

@@ -50,7 +50,8 @@
                     android:layout_marginLeft="5dp"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
-                    android:typeface="normal" />
+                    android:typeface="normal"
+                    android:id="@+id/tvSort"/>
             </LinearLayout>
         </LinearLayout>
 

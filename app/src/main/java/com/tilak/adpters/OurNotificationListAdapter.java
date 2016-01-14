@@ -101,8 +101,13 @@ public class OurNotificationListAdapter extends BaseAdapter {
 
         holder.tvNotiHeader.setText(name);
         holder.tvDesc.setText((Html.fromHtml("<b>" + username + "</b> has shared <b>" + name + "</b> "+ type +" with you."))); //set the hash maps
-        holder.btAccept.setTag(tag +",true");
+        holder.btAccept.setTag(tag + ",true");
         holder.btReject.setTag(tag +",false");
+
+        holder.tvNotiHeader.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
+        holder.tvDesc.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
+        holder.btAccept.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
+        holder.btReject.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
 
         String profilename = userid+".jpg";
         File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + profilename);

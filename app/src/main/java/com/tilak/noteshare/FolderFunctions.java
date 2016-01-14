@@ -1,5 +1,6 @@
 package com.tilak.noteshare;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -26,18 +27,24 @@ public class FolderFunctions {
 
     //noteshare to noteshare share // email
     public static void noteshareFolderShare(final Context context, final String id) {
+        Activity activity = (Activity) context;
         final Dialog shareDialog = new Dialog(context);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.share_noteshare_email, null, false);
         TextView tvShareTitleAlert = (TextView) contentView.findViewById(R.id.tvEmailShareTitle);
         tvShareTitleAlert.setText("SHARE FOLDER");
+        tvShareTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
         tvShareTitleAlert.setTextColor(Color.WHITE);
 
         final EditText emailTo = (EditText) contentView.findViewById(R.id.textViewTitleAlertMessage);
+        emailTo.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         Button buttonShareCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
         Button buttonShareOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+
+        buttonShareCancel.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
+        buttonShareOk.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         buttonShareCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +166,6 @@ public class FolderFunctions {
 
                 }else{
                     emailTo.setError("Enter Email");
-
                 }
             }
         });

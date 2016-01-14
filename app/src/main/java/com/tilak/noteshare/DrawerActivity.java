@@ -104,7 +104,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					items.setResourceId(R.drawable.ic_feedback);
 					break;
 				case 7:
-				items.setResourceId(R.drawable.ic_action_invite);
+					items.setResourceId(R.drawable.ic_action_invite);
 					break;
 				case 8:
 					items.setResourceId(R.drawable.ic_action_setting);

@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,9 @@ public class SlideMenuAdapter extends BaseAdapter {
 		// TODO Auto-generated method stub
 
 		View vi = convertView=null;
+
+		Typeface faceBold = Typeface.createFromAsset(activity.getAssets(), "fonts/AgendaBold.ttf");
+		Typeface faceMedium = Typeface.createFromAsset(activity.getAssets(), "fonts/Agenda-Medium.ttf");
 		
 		switch (position) {
 		case 0:
@@ -99,6 +103,7 @@ public class SlideMenuAdapter extends BaseAdapter {
 			holder1.imageViewUserImage.setImageBitmap(getRoundedCornerImage(getSquareImage(b)));
 			holder1.textViewusername = (TextView) vi.findViewById(R.id.textViewUsername);
 			holder1.textViewusername.setText(RegularFunctions.getUserName());
+			holder1.textViewusername.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
 			//holder1.textViewUserbalance.setText("");
 			
 			/*Bitmap bm =DataManager.sharedDataManager().getUserImageBitMap();
@@ -144,6 +149,7 @@ public class SlideMenuAdapter extends BaseAdapter {
 
 			SideMenuitems model = arrDataMenu.get(position - 1);
 			holder.textViewSlideMenuName.setText(model.getMenuName());
+			holder.textViewSlideMenuName.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 			holder.imageViewSlideMenuImage.setImageResource(model.resourceId);
 
 		

@@ -84,14 +84,19 @@ public class UserProfileActivity extends Activity {
 		}
 
 		btnnext = (Button) findViewById(R.id.btnprofileNext);
+		btnnext.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
 		//btnUploadprofilepic = (Button) findViewById(R.id.btnprofileuploadProfile1);
 		chooseImage = (TextView) findViewById(R.id.btnprofileuploadProfile1);
+		chooseImage.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
 		layoutusernickname = (LinearLayout) findViewById(R.id.usernickname);
 
 		textnickname = (EditText) layoutusernickname
 				.findViewById(R.id.editTextlogin);
 		textnickname.setText(fname);
 		textnickname.setHint("Select a User Name");
+		textnickname.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
 		addlistners();
 

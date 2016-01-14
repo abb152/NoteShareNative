@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tilak.adpters.OurNotificationListAdapter;
@@ -32,341 +33,339 @@ import java.util.HashMap;
 import java.util.List;
 
 public class NotificationCenterActivity extends DrawerActivity {
-	public LinearLayout layoutHeder;
-	public ImageButton btnheaderMenu;
-	public ListView listviewNotification;
-	private ArrayList<HashMap<String,String>> list;
-	//public static String SERVER_URL = "http://104.197.122.116/";
-	public static String SERVER_URL = "http://192.168.0.125:1337/";
-	View contentView;
+    public LinearLayout layoutHeder;
+    public ImageButton btnheaderMenu;
+    public ListView listviewNotification;
+    private ArrayList<HashMap<String, String>> list;
+    View contentView;
+    private ProgressDialog progressDialog;
 
-	private ProgressDialog progressDialog;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // inflate your activity layout here!
+        contentView = inflater.inflate(R.layout.notificationlist_activity, null, false);
+        mDrawerLayout.addView(contentView, 0);
 
+        initlizeUIElement(contentView);
+    }
+
+    void initlizeUIElement(View contentView) {
+        //mainHeadermenue
+        layoutHeder = (LinearLayout) contentView.findViewById(R.id.actionBar);
+        btnheaderMenu = (ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
+
+        listviewNotification = (ListView) contentView.findViewById(R.id.listviewNotification);
+        addListners();
+
+        TextView tvNotificationHead = (TextView) contentView.findViewById(R.id.tvNotificationHead);
+        tvNotificationHead.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getNotifications();
+            }
+        }, 300);
+    }
+
+    public void test() {
+        initlizeUIElement(contentView);
+    }
+
+    static boolean active = false;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
+    }
+
+    public void getNotifications() {
+        if (RegularFunctions.checkIsOnlineViaIP()) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Fetching your Notifications...");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(true);
+
+            if (active)
+                progressDialog.show();
+
+            new AsyncTask<Void, Void, String>() {
+                boolean received = false;
+
+                @Override
+                protected String doInBackground(Void... params) {
+
+                    if (Looper.myLooper() == null) {
+                        Looper.prepare();
+                    }
+
+                    String sample = "jay,visariya";
+
+                    List<String> sampleList = Arrays.asList(sample.split(","));
+
+                    Log.e("sample1", sampleList.get(0));
+                    Log.e("sample2", sampleList.get(1));
+
+
+                    list = new ArrayList<HashMap<String, String>>();
+                    try {
+                        String notificationJson = getNotificationsJson().toString();
+                        Log.e("jay sharejson", notificationJson);
+
+                        String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/find", notificationJson);
+                        Log.e("jay response", response);
+
+                        JSONArray jsonArray = new JSONArray(response);
+
+                        Log.e("jay json size", String.valueOf(jsonArray.length()));
+
+                        //String value = jsonObject.get("value").toString();
+
+
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                String noteId = jsonObject.optString("note");
+                                String folderId = jsonObject.optString("folder");
+
+                                String type = "";
+                                String id = "";
+                                String name = "";
+
+                                if (!noteId.isEmpty()) {
+                                    type = "note";
+                                    name = jsonObject.optString("notename");
+                                    id = noteId;
+                                } else if (!folderId.isEmpty()) {
+                                    type = "folder";
+                                    id = folderId;
+                                    name = jsonObject.optString("foldername");
+                                }
+
+                                String username = jsonObject.optString("username");
+                                String profilepic = jsonObject.optString("profilepic");
+                                //String name = jsonObject.optString("notename");
+                                String userid = jsonObject.optString("userid");
+
+                                HashMap<String, String> map = new HashMap<String, String>();
+                                map.put("type", type);
+                                map.put("name", name);
+                                map.put("username", username);
+                                map.put("profilepic", profilepic);
+                                map.put("userid", userid);
+                                map.put("id", id);
 
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflate your activity layout here!
-		contentView = inflater.inflate(R.layout.notificationlist_activity, null, false);
-		mDrawerLayout.addView(contentView, 0);
-
-		initlizeUIElement(contentView);
-	}
-	void  initlizeUIElement(View contentView)
-	{
-		//mainHeadermenue
-		layoutHeder=(LinearLayout) contentView.findViewById(R.id.actionBar);
-		btnheaderMenu=(ImageButton) layoutHeder.findViewById(R.id.imageButtonHamburg);
-
-		listviewNotification=(ListView) contentView.findViewById(R.id.listviewNotification);
-		//adapter=new NotificationListAdapter(NotificationCenterActivity.this, arrnotificationItems);
-		addListners();
-
-		final Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				getNotifications();
-			}
-		},300);
-	}
-
-	public void test(){
-		initlizeUIElement(contentView);
-	}
-
-	static boolean active = false;
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		active = true;
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		active = false;
-	}
-
-	public void getNotifications(){
-		if(RegularFunctions.checkIsOnlineViaIP()) {
-			final ProgressDialog progressDialog = new ProgressDialog(this);
-			progressDialog.setMessage("Fetching your Notifications...");
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
-
-			if (active)
-				progressDialog.show();
-
-			new AsyncTask<Void, Void, String>() {
-				boolean received = false;
-
-				@Override
-				protected String doInBackground(Void... params) {
-
-					if (Looper.myLooper() == null) {
-						Looper.prepare();
-					}
-
-					String sample = "jay,visariya";
-
-					List<String> sampleList = Arrays.asList(sample.split(","));
-
-					Log.e("sample1", sampleList.get(0));
-					Log.e("sample2", sampleList.get(1));
-
-
-					list = new ArrayList<HashMap<String, String>>();
-					try {
-						String notificationJson = getNotificationsJson().toString();
-						Log.e("jay sharejson", notificationJson);
-
-						String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/find", notificationJson);
-						Log.e("jay response", response);
-
-						JSONArray jsonArray = new JSONArray(response);
-
-						Log.e("jay json size", String.valueOf(jsonArray.length()));
-
-						//String value = jsonObject.get("value").toString();
-
-
-						if (jsonArray.length() > 0) {
-							for (int i = 0; i < jsonArray.length(); i++) {
-								JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-								String noteId = jsonObject.optString("note");
-								String folderId = jsonObject.optString("folder");
-
-								String type = "";
-								String id = "";
-								String name = "";
-
-								if(!noteId.isEmpty()){
-									type = "note";
-									name = jsonObject.optString("notename");
-									id = noteId;
-								}else if(!folderId.isEmpty()){
-									type = "folder";
-									id = folderId;
-									name = jsonObject.optString("foldername");
-								}
-
-								String username = jsonObject.optString("username");
-								String profilepic = jsonObject.optString("profilepic");
-								//String name = jsonObject.optString("notename");
-								String userid = jsonObject.optString("userid");
-
-								HashMap<String, String> map = new HashMap<String, String>();
-								map.put("type", type);
-								map.put("name", name);
-								map.put("username", username);
-								map.put("profilepic", profilepic);
-								map.put("userid", userid);
-								map.put("id", id);
+                                list.add(map);
+
+                                received = true;
+                                if (progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                            }
+                        } else {
+                            received = false;
+                            if (progressDialog.isShowing())
+                                progressDialog.dismiss();
+                            Log.e("jay ", "no notifications");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException io) {
+                        io.printStackTrace();
+                    }
 
-								list.add(map);
+                    return null;
+                }
 
-								received = true;
-								if (progressDialog.isShowing())
-									progressDialog.dismiss();
-							}
-						} else {
-							received = false;
-							if (progressDialog.isShowing())
-								progressDialog.dismiss();
-							Log.e("jay ", "no notifications");
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					} catch (IOException io) {
-						io.printStackTrace();
-					}
+                @Override
+                protected void onPostExecute(String s) {
 
-					return null;
-				}
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
 
-				@Override
-				protected void onPostExecute(String s) {
+                    if (received) {
+                        if (list.size() > 0) {
+                            OurNotificationListAdapter adapter = new OurNotificationListAdapter(NotificationCenterActivity.this, list);
+                            listviewNotification.setAdapter(adapter);
+                        }
+                    } else {
 
-					if (progressDialog.isShowing()) {
-						progressDialog.dismiss();
-					}
+                    }
+                }
+            }.execute(null, null, null);
 
-					if (received) {
-						if (list.size() > 0) {
-							OurNotificationListAdapter adapter = new OurNotificationListAdapter(NotificationCenterActivity.this, list);
-							listviewNotification.setAdapter(adapter);
-						}
-					} else {
+        } else {
+            Toast.makeText(getApplicationContext(), "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-					}
-				}
-			}.execute(null, null, null);
+    public void acceptRejectAndSync(final View v) {
+
+        final Button imageButton = (Button) v;
+        imageButton.setClickable(false);
 
-		}else{
-			Toast.makeText(getApplicationContext(), "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
-		}
-	}
+        progressDialog = new ProgressDialog(NotificationCenterActivity.this);
+        progressDialog.setMessage("Wait while we get your new Notes and Folders...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
-	public void acceptRejectAndSync(final View v){
+        String tag = imageButton.getTag().toString();
+        List<String> tagList = Arrays.asList(tag.split(","));
 
-		final Button imageButton = (Button) v;
-		imageButton.setClickable(false);
+        final String type = tagList.get(0);
+        final String elementid = tagList.get(1);                    // note/folder id
+        final String userid = tagList.get(2);                        // user id who has shared the note
+        final String valueTF = tagList.get(3);                        //true or false
 
-		progressDialog = new ProgressDialog(NotificationCenterActivity.this);
-		progressDialog.setMessage("Wait while we get your new Notes and Folders...");
-		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		progressDialog.setCancelable(false);
-		progressDialog.setCanceledOnTouchOutside(false);
-		progressDialog.show();
-
-		String tag = imageButton.getTag().toString();
-		List<String> tagList = Arrays.asList(tag.split(","));
-
-		final String type = tagList.get(0);
-		final String elementid = tagList.get(1);					// note/folder id
-		final String userid = tagList.get(2);						// user id who has shared the note
-		final String valueTF = tagList.get(3);						//true or false
-
-		new AsyncTask<Void,Void,String>(){
-
-			boolean received = false;
-			@Override
-			protected String doInBackground(Void... params) {
-
-				try{
-
-					String json = getNotificationsJson(elementid, valueTF, type, userid).toString();
-
-					Log.e("jay noti json", json);
-
-					String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/noteStatus", json);
-
-					Log.e("jay response", response);
-
-					JSONObject jsonObject = new JSONObject(response);
-
-					String value = jsonObject.optString("value");
-					Log.e("jay value", value);
-
-					if(value.equals("true")){
-						//Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
-
-						if(valueTF.equals("true"))
-							RegularFunctions.syncNow();
-
-						received = true;
-
-						progressDialog.dismiss();
-
-					}else{
-						progressDialog.dismiss();
-						received = false;
-
-						//Toast.makeText(NotificationCenterActivity.this,"Oops something went wrong",Toast.LENGTH_LONG).show();
-					}
-
-				}catch(JSONException je){
-
-				}catch (IOException io){
-
-				}
-
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(String s) {
-
-				if(received){
-					//ImageButton ib = (ImageButton) v;
-					//imageButton.setImageResource(R.drawable.ic_like);
-					//View v = findViewById(layoutID);
-					//v.setVisibility(View.GONE);
-					//imageButton.setClickable(false);
-					//imageButton.setText("Done");
-					View v = (View )imageButton.getParent();
-					v.setVisibility(View.GONE);
-
-					String message = "";
-
-					if(type.equals("note"))
-						message = "Note ";
-					else
-						message = "Folder ";
-
-					if(valueTF.equals("true"))
-						message = message +"Accepted";
-					else
-						message = message + "Rejected";
-
-					Toast.makeText(NotificationCenterActivity.this, message, Toast.LENGTH_SHORT).show();
-					onRestart();
-
-				}else {
-					imageButton.setClickable(false);
-					Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_SHORT).show();
-				}
-			}
-		}.execute(null,null,null);
-
-
-	}
-
-	public JSONObject getNotificationsJson(String elementid, String status, String type, String senderid) {
-		JSONObject jsonObject = new JSONObject();
-		try {
-			jsonObject.put("user", RegularFunctions.getUserId());
-			jsonObject.put(type,elementid);
-			jsonObject.put("userid",senderid);
-			jsonObject.put("status", status);
-		} catch (JSONException je) {
-
-		}
-		return jsonObject;
-	}
-
-	public JSONObject getNotificationsJson(){
-		JSONObject jsonObject = new JSONObject();
-		try {
-			jsonObject.put("user", RegularFunctions.getUserId().trim());
-		}catch (JSONException je){
-
-		}
-		return jsonObject;
-	}
-
-	@Override
-	public void addListners() {
-		// TODO Auto-generated method stub
-		super.addListners();
-		btnheaderMenu.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				openSlideMenu();
-			}
-		});
-
-		listviewNotification.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-									long arg3) {
-				// TODO Auto-generated method stub
-				//Toast.makeText(NotificationCenterActivity.this, "pos"+arg2, Toast.LENGTH_SHORT).show();
-			}
-		});
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		Intent i = new Intent(getApplication(), MainActivity.class);
-		//i.putExtra("FolderId","-1");
-		startActivity(i);
-		finish();
-	}
+        new AsyncTask<Void, Void, String>() {
+            boolean received = false;
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                try {
+
+                    String json = getNotificationsJson(elementid, valueTF, type, userid).toString();
+
+                    Log.e("jay noti json", json);
+
+                    String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/noteStatus", json);
+
+                    Log.e("jay response", response);
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String value = jsonObject.optString("value");
+                    Log.e("jay value", value);
+
+                    if (value.equals("true")) {
+                        //Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
+
+                        if (valueTF.equals("true"))
+                            RegularFunctions.syncNow();
+
+                        received = true;
+
+                        progressDialog.dismiss();
+
+                    } else {
+                        progressDialog.dismiss();
+                        received = false;
+
+                        //Toast.makeText(NotificationCenterActivity.this,"Oops something went wrong",Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException je) {
+
+                } catch (IOException io) {
+
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+
+                if (received) {
+                    //ImageButton ib = (ImageButton) v;
+                    //imageButton.setImageResource(R.drawable.ic_like);
+                    //View v = findViewById(layoutID);
+                    //v.setVisibility(View.GONE);
+                    //imageButton.setClickable(false);
+                    //imageButton.setText("Done");
+                    View v = (View) imageButton.getParent();
+                    v.setVisibility(View.GONE);
+
+                    String message = "";
+
+                    if (type.equals("note"))
+                        message = "Note ";
+                    else
+                        message = "Folder ";
+
+                    if (valueTF.equals("true"))
+                        message = message + "Accepted";
+                    else
+                        message = message + "Rejected";
+
+                    Toast.makeText(NotificationCenterActivity.this, message, Toast.LENGTH_SHORT).show();
+                    onRestart();
+
+                } else {
+                    imageButton.setClickable(false);
+                    Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute(null, null, null);
+
+
+    }
+
+    public JSONObject getNotificationsJson(String elementid, String status, String type, String senderid) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("user", RegularFunctions.getUserId());
+            jsonObject.put(type, elementid);
+            jsonObject.put("userid", senderid);
+            jsonObject.put("status", status);
+        } catch (JSONException je) {
+
+        }
+        return jsonObject;
+    }
+
+    public JSONObject getNotificationsJson() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("user", RegularFunctions.getUserId().trim());
+        } catch (JSONException je) {
+
+        }
+        return jsonObject;
+    }
+
+    @Override
+    public void addListners() {
+        // TODO Auto-generated method stub
+        super.addListners();
+        btnheaderMenu.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                openSlideMenu();
+            }
+        });
+
+        listviewNotification.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                // TODO Auto-generated method stub
+                //Toast.makeText(NotificationCenterActivity.this, "pos"+arg2, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(getApplication(), MainActivity.class);
+        //i.putExtra("FolderId","-1");
+        startActivity(i);
+        finish();
+    }
 }

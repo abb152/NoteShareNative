@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.tilak.noteshare.R;
+import com.tilak.noteshare.RegularFunctions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +71,7 @@ public class OurMoveMenuAdapter extends BaseAdapter {
 
         HashMap<String,String> map = list.get(position);
         holder.tvFolderName.setText(map.get("folderName")); //set the hash maps
+        holder.tvFolderName.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
         holder.tvHiddenFolderId.setText(map.get("folderId"));
         holder.tvHiddenNoteId.setText(map.get("noteId"));
 

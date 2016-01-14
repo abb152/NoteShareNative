@@ -14,7 +14,7 @@
         android:id="@+id/tvFolderName"
         android:text=""
         android:textSize="18sp"
-        android:textColor="#323232"
+        android:textColor="@color/nsTextColor"
         android:layout_weight="1" />
 
     <TextView

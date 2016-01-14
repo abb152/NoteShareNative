@@ -116,8 +116,12 @@ public class LoginActivity extends Activity implements View.OnClickListener,
         setContentView(R.layout.login_activity);
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.btnFacebookSignin);
+        loginButton.setTypeface(RegularFunctions.getAgendaMediumFont(this));
         loginButton.setReadPermissions("public_profile, email");
         loginButton.registerCallback(callbackManager, facebookCallback);
+
+        TextView tvConnect = (TextView) findViewById(R.id.tvConnect);
+        tvConnect.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
         // Google Plus
         btnSignIn = (SignInButton) findViewById(R.id.btnGoogleSignIn);
@@ -198,6 +202,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
                 TextView tv = (TextView) v;
                 tv.setPadding(-1,0,0,0);
                 tv.setText(buttonText);
+                tv.setTypeface(RegularFunctions.getAgendaMediumFont(this));
                 return;
             }
         }

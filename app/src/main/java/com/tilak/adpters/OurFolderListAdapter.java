@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tilak.noteshare.R;
+import com.tilak.noteshare.RegularFunctions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +76,8 @@ public class OurFolderListAdapter extends BaseAdapter {
 
         HashMap<String,String> map = list.get(position);
         holder.txtFolderName.setText(map.get("folderName")); //set the hash maps
+        holder.txtFolderName.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
+
         holder.txtFolderDesc.setText(map.get("folderDesc"));
         holder.txtFolderDate.setText(map.get("folderDate"));
         holder.tvIdHidden.setText(map.get("folderId"));

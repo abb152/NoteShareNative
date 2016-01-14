@@ -68,6 +68,9 @@ public class SettingActivity extends DrawerActivity {
 
 		tvLastSync.setText(time);
 
+		TextView tvSettingHead = (TextView) contentView.findViewById(R.id.tvSettingHead);
+		tvSettingHead.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
 		addListners();
 	}
 

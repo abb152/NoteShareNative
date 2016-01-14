@@ -32,6 +32,8 @@ public class InteroductionActivity extends Activity {
         btnNext = (Button)findViewById(R.id.next);
 		layoutButton = (LinearLayout) findViewById(R.id.layoutButton);
 
+		btnNext.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
         btnNext.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {

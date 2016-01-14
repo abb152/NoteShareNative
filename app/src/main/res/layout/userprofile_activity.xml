@@ -110,7 +110,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:background="@android:color/white"
-                android:text="NEXT"
+                android:text="DONE"
                 android:textColor="@color/header_bg"
                 android:textSize="18sp" />
 

@@ -68,8 +68,8 @@ public class SendFeedbackActivity extends DrawerActivity {
 		textViewFeedbackText = (EditText) findViewById(R.id.etFeedback);
 
 
-		///textheadertitle=(TextView) layoutHeder.findViewById(R.id.textViewheaderTitle);
-		//textheadertitle.setText("");
+		textheadertitle=(TextView) layoutHeder.findViewById(R.id.textViewheaderTitle);
+		textheadertitle.setText("");
 
 
 		layoutTitleHeaderview = (LinearLayout) contentView.findViewById(R.id.titleHeaderview1);
@@ -78,6 +78,17 @@ public class SendFeedbackActivity extends DrawerActivity {
 
 		btSubmit = (Button) findViewById(R.id.btSubmit);
 		btCancel = (Button) findViewById(R.id.btCancel);
+
+		TextView tvFeedbackDesc = (TextView) findViewById(R.id.tvFeedbackDesc);
+		tvFeedbackDesc.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
+		TextView tvHead = (TextView) findViewById(R.id.tvHead);
+		tvHead.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
+		btSubmit.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+		btCancel.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
+		textViewFeedbackText.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
 		addListners();
 	}

@@ -144,6 +144,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		});
 
 		editTextsearchNote = (EditText)findViewById(R.id.editTextsearchNote);
+		editTextsearchNote.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 		editTextsearchNote.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -200,6 +201,8 @@ public class NewFolderMainActivity extends DrawerActivity {
 		notefoleserPintrestList = (ScrollView) findViewById(R.id.notefoleserPintrestList);
 		Layout1 = (LinearLayout) findViewById(R.id.Layout1);
 		Layout2 = (LinearLayout) findViewById(R.id.Layout2);
+
+		textViewheaderTitle.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 
 		// Grid adapter
 
@@ -583,16 +586,23 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		TextView textViewTitleAlert = (TextView) contentView
 				.findViewById(R.id.textViewTitleAlert);
-		textViewTitleAlert.setText("ALERT");
+		textViewTitleAlert.setText("DELETE FOLDER");
+		textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 		textViewTitleAlert.setTextColor(Color.WHITE);
 		TextView textViewTitleAlertMessage = (TextView) contentView
 				.findViewById(R.id.textViewTitleAlertMessage);
 		textViewTitleAlertMessage.setText(message);
+		textViewTitleAlertMessage.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
 
 		Button buttonAlertCancel = (Button) contentView
 				.findViewById(R.id.buttonAlertCancel);
 		Button buttonAlertOk = (Button) contentView
 				.findViewById(R.id.buttonAlertOk);
+
+		buttonAlertCancel.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		buttonAlertOk.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
 		buttonAlertCancel.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -637,15 +647,21 @@ public class NewFolderMainActivity extends DrawerActivity {
 		TextView textViewTitleAlert = (TextView) contentView
 				.findViewById(R.id.textViewTitleAlert);
 		textViewTitleAlert.setText("CREATE A FOLDER");
+		textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 		textViewTitleAlert.setTextColor(Color.WHITE);
 		final EditText textViewTitleAlertMessage = (EditText) contentView
 				.findViewById(R.id.textViewTitleAlertMessage);
-		// textViewTitleAlertMessage.setText(message);
+		textViewTitleAlertMessage.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
 
 		Button buttonAlertCancel = (Button) contentView
 				.findViewById(R.id.buttonAlertCancel);
 		Button buttonAlertOk = (Button) contentView
 				.findViewById(R.id.buttonAlertOk);
+
+		buttonAlertCancel.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		buttonAlertOk.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
 		buttonAlertCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -1264,6 +1280,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 	}
 
 	public void deleteFolder(View v){
+		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		tvIdHidden = (TextView) v.findViewById(R.id.tvIdHidden);
 		//Long noteid = (long) tvIdHidden.getText();
@@ -1272,6 +1289,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 	}
 
 	public void editFolder(View v) {
+		listView.closeAnimate(lastItemOpened[0]);
 		String id = v.getTag().toString();
 		showEditAlert(this, id);
 	}
@@ -1283,6 +1301,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 		View contentView = inflater.inflate(R.layout.edit_alert_view, null, false);
 		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
 		textViewTitleAlert.setText("EDIT FOLDER");
+		textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 		textViewTitleAlert.setTextColor(Color.WHITE);
 		final EditText textViewTitleAlertMessage = (EditText) contentView.findViewById(R.id.textViewTitleAlertMessage);
 		// textViewTitleAlertMessage.setText(message);
@@ -1290,9 +1309,14 @@ public class NewFolderMainActivity extends DrawerActivity {
 		Folder folder = Folder.findById(Folder.class, Long.parseLong(id));
 		String folderName = folder.getName();
 		textViewTitleAlertMessage.setText(folderName);
+		textViewTitleAlertMessage.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
 		Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
 		Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+
+		buttonAlertCancel.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		buttonAlertOk.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
 		buttonAlertCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {

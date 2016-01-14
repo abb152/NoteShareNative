@@ -56,27 +56,25 @@ import java.util.List;
 import java.util.Random;
 
 public class NoteFunctions {
-
     //MainActivity mainActivity = new MainActivity();
     //public static String SERVER_URL = "http://104.197.122.116/";
     //public static String SERVER_URL = "http://192.168.0.125:1337/";
     // LOCK / PASS CODE
     public void setPasscode(Context context, String id) {
         Note n = Note.findById(Note.class, Long.parseLong(id));
-        if(n.islocked == 1){
+        if (n.islocked == 1) {
             passcode(context, id, 3);
         } else {
             Config con = Config.findById(Config.class, 1L);
             //Log.e("jay con.passcode", String.valueOf(con.getPasscode()));
-            if (con.getPasscode() == 0){
+            if (con.getPasscode() == 0) {
                 Toast.makeText(context, "Please set passcode first.", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context, PasscodeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("FileId", id);
                 intent.putExtra("Check", "5");
                 context.startActivity(intent);
-            }
-            else {
+            } else {
                 n.islocked = 1;
                 n.save();
                 //passcode(context, id, 1);
@@ -84,7 +82,7 @@ public class NoteFunctions {
         }
     }
 
-    public void passcode(Context context, String id, int i){
+    public void passcode(Context context, String id, int i) {
         Intent intent = new Intent(context, PasscodeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("FileId", id);
@@ -98,7 +96,10 @@ public class NoteFunctions {
 
     // TIME BOMB & REMINDER
     Dialog move;
-    public void showDate(final Context context, final String noteid, String title, final String type){
+
+    public void showDate(final Context context, final String noteid, String title, final String type) {
+
+        Activity activity = (Activity) context;
 
         move = new Dialog(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -108,6 +109,7 @@ public class NoteFunctions {
         LinearLayout ll = (LinearLayout) contentView.findViewById(R.id.layoutAlertbox);
         TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
         textViewTitleAlert.setText(title);
+        textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
         textViewTitleAlert.setTextColor(Color.WHITE);
 
         DatePicker dp = (DatePicker) contentView.findViewById(R.id.dp);
@@ -119,12 +121,11 @@ public class NoteFunctions {
 
         final int[] date = new int[3];
         date[0] = dp.getDayOfMonth();
-        date[1] = dp.getMonth() +1;
+        date[1] = dp.getMonth() + 1;
         date[2] = dp.getYear();
 
 
         tp.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 time[0] = hourOfDay;
                 time[1] = minute;
@@ -134,9 +135,12 @@ public class NoteFunctions {
         Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
         Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
 
+        buttonAlertOk.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
+        buttonAlertCancel.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
+
         dp.setMinDate(System.currentTimeMillis() - (60 * 48 * 1000));
 
-        if(android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.HONEYCOMB) {
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.HONEYCOMB) {
             dp.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                 @Override
                 public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -214,17 +218,20 @@ public class NoteFunctions {
         //System.out.println("Event URI ["+uri+"]");
     }
 
-    public String check(int value){
+    public String check(int value) {
         String newvalue;
         if (value < 10) // minute
             newvalue = "0" + String.valueOf(value);
         else
-            newvalue =  String.valueOf(value);
+            newvalue = String.valueOf(value);
         return newvalue;
     }
 
     // MOVE
     public void showMoveAlert(final Context context, String noteid) {
+
+        Activity activity = (Activity) context;
+
         move = new Dialog(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // inflate your activity layout here!
@@ -233,17 +240,18 @@ public class NoteFunctions {
         LinearLayout ll = (LinearLayout) contentView.findViewById(R.id.layoutAlertbox);
         TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
         textViewTitleAlert.setText("MOVE TO");
+        textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
         textViewTitleAlert.setTextColor(Color.WHITE);
 
         ListView lvFolder = (ListView) contentView.findViewById(R.id.lvFolder);
         TextView empty = (TextView) contentView.findViewById(R.id.empty);
         lvFolder.setEmptyView(empty);
 
-        ArrayList<HashMap<String,String>> folderList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> folderList = new ArrayList<HashMap<String, String>>();
 
         List<Folder> folder = Folder.findWithQuery(Folder.class, "Select * from Folder where CREATIONTIME != '0' ORDER BY ID DESC");
-        for(Folder folderloop : folder){
-            HashMap<String,String> map = new HashMap<String,String>();
+        for (Folder folderloop : folder) {
+            HashMap<String, String> map = new HashMap<String, String>();
             map.put("folderName", folderloop.getName());
             map.put("folderId", String.valueOf(folderloop.getId()));
             map.put("noteId", noteid);
@@ -292,6 +300,8 @@ public class NoteFunctions {
     // DELETE
     public void showDeleteAlert(final Context context, final String id, final boolean insideNote) {
 
+        Activity activity = (Activity) context;
+
         final Dialog dialog = new Dialog(context);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -299,12 +309,17 @@ public class NoteFunctions {
 
         TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
         textViewTitleAlert.setText("DELETE NOTE");
+        textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView.findViewById(R.id.textViewTitleAlertMessage);
         textViewTitleAlertMessage.setText("Are you sure you want to Delete \n this Note?");
+        textViewTitleAlertMessage.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         Button buttonAlertCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
         Button buttonAlertOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+
+        buttonAlertCancel.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
+        buttonAlertOk.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,7 +341,7 @@ public class NoteFunctions {
                         intent.putExtra("FileId", id);
                         intent.putExtra("Check", "6");
                         context.startActivity(intent);
-                    } else{
+                    } else {
                         delete(id);
                         context.startActivity(new Intent(context, MainActivity.class));
                     }
@@ -348,12 +363,11 @@ public class NoteFunctions {
         });
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
         dialog.setContentView(contentView);
         dialog.show();
     }
 
-    public void delete(String id){
+    public void delete(String id) {
         Note n = Note.findById(Note.class, Long.parseLong(id));
         n.setCreationtime("0");
         n.setCtime(0l);
@@ -363,6 +377,8 @@ public class NoteFunctions {
     public void showOptionAlert(final Context context, final String id) {
         final Dialog dialog = new Dialog(context);
 
+        Activity activity = (Activity) context;
+
         //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //View contentView = inflater.inflate(R.layout.alert_option_view, null, false);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -370,6 +386,7 @@ public class NoteFunctions {
 
         TextView tvOptionTitleAlert = (TextView) dialog.findViewById(R.id.tvOptionTitleAlert);
         tvOptionTitleAlert.setText("OPTIONS");
+        tvOptionTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
         tvOptionTitleAlert.setTextColor(Color.WHITE);
 
         LinearLayout optionLock = (LinearLayout) dialog.findViewById(R.id.optionLock);
@@ -377,6 +394,7 @@ public class NoteFunctions {
         ImageView ivOptionLock = (ImageView) optionLock.findViewById(R.id.imageViewSlidemenu);
         ivOptionLock.setImageResource(R.drawable.ic_note_lock_dark);
         tvOptionLock.setText("Lock");
+        tvOptionLock.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         optionLock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,6 +409,7 @@ public class NoteFunctions {
         ImageView ivOptionTimebomb = (ImageView) optionTimebomb.findViewById(R.id.imageViewSlidemenu);
         ivOptionTimebomb.setImageResource(R.drawable.ic_note_timebomb_dark);
         tvOptionTimebomb.setText("Timebomb");
+        tvOptionTimebomb.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         optionTimebomb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -405,6 +424,7 @@ public class NoteFunctions {
         ImageView ivOptionReminder = (ImageView) optionReminder.findViewById(R.id.imageViewSlidemenu);
         ivOptionReminder.setImageResource(R.drawable.ic_note_remainder_dark);
         tvOptionReminder.setText("Reminder");
+        tvOptionReminder.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         optionReminder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -419,6 +439,7 @@ public class NoteFunctions {
         ImageView ivOptionMove = (ImageView) optionMove.findViewById(R.id.imageViewSlidemenu);
         ivOptionMove.setImageResource(R.drawable.ic_note_move_dark);
         tvOptionMove.setText("Move");
+        tvOptionMove.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         optionMove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -433,6 +454,7 @@ public class NoteFunctions {
         ImageView ivOptionDelete = (ImageView) optionDelete.findViewById(R.id.imageViewSlidemenu);
         ivOptionDelete.setImageResource(R.drawable.ic_note_delete_dark);
         tvOptionDelete.setText("Delete");
+        tvOptionDelete.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         optionDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -448,6 +470,7 @@ public class NoteFunctions {
         ivOptionShare.setImageResource(R.drawable.ic_note_share_dark);
         ivOptionShare.setPadding(2, 2, 2, 2);
         tvOptionShare.setText("Share");
+        tvOptionShare.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
         View layoutsepreter = optionShare.findViewById(R.id.layoutsepreter);
         layoutsepreter.setVisibility(View.GONE);
 
@@ -456,7 +479,7 @@ public class NoteFunctions {
             public void onClick(View v) {
                 // Share
                 //noteshareShare(context, id);
-                share(context,id, true);
+                share(context, id, true);
                 dialog.dismiss();
             }
         });
@@ -468,8 +491,11 @@ public class NoteFunctions {
     }
 
     // SHARE
-    public void share(final Context context, final String id , final boolean outsideNote) {
+    public void share(final Context context, final String id, final boolean outsideNote) {
         final Dialog shareDialog = new Dialog(context);
+
+        Activity activity = (Activity) context;
+
         shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         shareDialog.setCancelable(false);
         shareDialog.setContentView(R.layout.alert_share_view);
@@ -477,11 +503,13 @@ public class NoteFunctions {
 
         TextView tvShareTitleAlert = (TextView) shareDialog.findViewById(R.id.tvShareTitleAlert);
         tvShareTitleAlert.setText("SHARE NOTE VIA");
+        tvShareTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
         tvShareTitleAlert.setTextColor(Color.WHITE);
 
         LinearLayout shareEmail = (LinearLayout) shareDialog.findViewById(R.id.shareEmail);
         TextView tvEmail = (TextView) shareEmail.findViewById(R.id.textViewSlideMenuName);
         tvEmail.setText("NoteShare");
+        tvEmail.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
         ImageView ivEmail = (ImageView) shareEmail.findViewById(R.id.imageViewSlidemenu);
         ivEmail.setImageResource(R.drawable.ic_noteshare_share);
         shareEmail.setOnClickListener(new View.OnClickListener() {
@@ -500,6 +528,7 @@ public class NoteFunctions {
         LinearLayout shareText = (LinearLayout) shareDialog.findViewById(R.id.shareText);
         TextView tvText = (TextView) shareText.findViewById(R.id.textViewSlideMenuName);
         tvText.setText("Text");
+        tvText.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
         ImageView ivText = (ImageView) shareText.findViewById(R.id.imageViewSlidemenu);
         ivText.setImageResource(R.drawable.ic_text_share);
         shareText.setOnClickListener(new View.OnClickListener() {
@@ -514,6 +543,7 @@ public class NoteFunctions {
         LinearLayout shareScreenshot = (LinearLayout) shareDialog.findViewById(R.id.shareScreenshot);
         TextView tvScreenshot = (TextView) shareScreenshot.findViewById(R.id.textViewSlideMenuName);
         tvScreenshot.setText("Screenshot");
+        tvScreenshot.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
         ImageView ivScreenshot = (ImageView) shareScreenshot.findViewById(R.id.imageViewSlidemenu);
         ivScreenshot.setImageResource(R.drawable.ic_screenshot_share);
         shareScreenshot.setOnClickListener(new View.OnClickListener() {
@@ -528,6 +558,7 @@ public class NoteFunctions {
         LinearLayout shareLink = (LinearLayout) shareDialog.findViewById(R.id.shareLink);
         TextView tvLink = (TextView) shareLink.findViewById(R.id.textViewSlideMenuName);
         tvLink.setText("URL");
+        tvLink.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
         ImageView ivLink = (ImageView) shareLink.findViewById(R.id.imageViewSlidemenu);
         ivLink.setImageResource(R.drawable.ic_url_share);
         shareLink.setOnClickListener(new View.OnClickListener() {
@@ -543,28 +574,28 @@ public class NoteFunctions {
     }
 
     //text sharing
-    public void textShare(final Context context, final String id){
+    public void textShare(final Context context, final String id) {
 
         String noteDesc = "";
 
         List<NoteElement> noteElements = NoteElement.find(NoteElement.class, "(type = ? OR type = ?) AND noteid = ?", "text", "checkbox", id);
 
-        if(noteElements.size() != 0 && noteElements.get(0).getContentA() != null){
+        if (noteElements.size() != 0 && noteElements.get(0).getContentA() != null) {
 
-            for(int i=0; i <noteElements.size(); i++){
+            for (int i = 0; i < noteElements.size(); i++) {
 
                 Log.e("jay og", noteElements.get(i).getContent());
                 String j = noteElements.get(i).getContent();
 
-                j = j.replace("</li>","</li><br />");
-                j = j.replace("<ol>","<br /><ol>");
-                j = j.replace("<ul>","<br /><ul>");
+                j = j.replace("</li>", "</li><br />");
+                j = j.replace("<ol>", "<br /><ol>");
+                j = j.replace("<ul>", "<br /><ul>");
 
                 String abc = Html.fromHtml(j).toString();
 
                 noteDesc = noteDesc + abc;
 
-                if(i != noteElements.size() -1 ){
+                if (i != noteElements.size() - 1) {
                     noteDesc = noteDesc + "\n";
                 }
             }
@@ -581,13 +612,13 @@ public class NoteFunctions {
             System.out.println("\nSimple rendering of the HTML document: jay\n");
             System.out.println("jay" +renderedText);
             Log.e("jay", renderedText);*/
-        }else{
+        } else {
             noteDesc = "";
         }
 
     }
 
-    public void screenshotFromMain(Context context,String noteid){
+    public void screenshotFromMain(Context context, String noteid) {
         Note note = Note.findById(Note.class, Long.parseLong(noteid));
         if (note.islocked == 0) {
             Intent i = new Intent(context, NoteMainActivity.class);
@@ -655,7 +686,7 @@ public class NoteFunctions {
     }
 
     //link sharing
-    public void linkShare(final Context context, final String id){
+    public void linkShare(final Context context, final String id) {
 
         final ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Generating link...");
@@ -666,21 +697,18 @@ public class NoteFunctions {
         //final String email = emailTo.getText().toString();
 
         new AsyncTask<Void, Void, String>() {
-
             @Override
             protected String doInBackground(Void... params) {
 
-                if (Looper.myLooper() == null)
-                {
+                if (Looper.myLooper() == null) {
                     Looper.prepare();
                 }
 
-                if(RegularFunctions.getServerNoteId(id).equals("0")){
+                if (RegularFunctions.getServerNoteId(id).equals("0")) {
                     progressDialog.setMessage("Please wait while we Sync the Note...");
-                    if(RegularFunctions.checkIsOnlineViaIP()){
+                    if (RegularFunctions.checkIsOnlineViaIP()) {
                         RegularFunctions.syncNow();
-                    }
-                    else{
+                    } else {
                         Toast.makeText(context, "Need to Sync the Note. Please check your Internet Connection!", Toast.LENGTH_LONG).show();
                         return null;
                     }
@@ -690,9 +718,9 @@ public class NoteFunctions {
                         +"http://www.noteshare.com/"+RegularFunctions.getUserId() +"/"+RegularFunctions.getServerNoteId(id)+".html"
                         +"\n\n-via NoteShare";*/
 
-                String shareMessage = RegularFunctions.getUserName() + " has shared \'"+ RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
-                        +"http://104.197.47.172/note/get#/app/note/"+RegularFunctions.getServerNoteId(id)
-                        +"\n\n-via NoteShare";
+                String shareMessage = RegularFunctions.getUserName() + " has shared \'" + RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
+                        + "http://104.197.47.172/note/get#/app/note/" + RegularFunctions.getServerNoteId(id)
+                        + "\n\n-via NoteShare";
 
                 /*Log.e("jay", shareMessage);
                 Toast.makeText(context, shareMessage, Toast.LENGTH_SHORT).show();
@@ -709,7 +737,7 @@ public class NoteFunctions {
 
             @Override
             protected void onPostExecute(String s) {
-                if(progressDialog.isShowing()) {
+                if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
             }
@@ -721,16 +749,24 @@ public class NoteFunctions {
     public void noteshareShare(final Context context, final String id) {
         final Dialog shareDialog = new Dialog(context);
 
+        Activity activity = (Activity) context;
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.share_noteshare_email, null, false);
         TextView tvShareTitleAlert = (TextView) contentView.findViewById(R.id.tvEmailShareTitle);
         tvShareTitleAlert.setText("SHARE NOTE");
         tvShareTitleAlert.setTextColor(Color.WHITE);
+        tvShareTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
 
         final EditText emailTo = (EditText) contentView.findViewById(R.id.textViewTitleAlertMessage);
 
+        emailTo.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
+
         Button buttonShareCancel = (Button) contentView.findViewById(R.id.buttonAlertCancel);
         Button buttonShareOk = (Button) contentView.findViewById(R.id.buttonAlertOk);
+
+        buttonShareCancel.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
+        buttonShareOk.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
 
         buttonShareCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -744,7 +780,7 @@ public class NoteFunctions {
             public void onClick(View v) {
 
                 String emails = emailTo.getText().toString();
-                if(!emailTo.getText().toString().isEmpty()) {
+                if (!emailTo.getText().toString().isEmpty()) {
                     emails = emails.replace(";", ",");
                     emails = emails.replace(":", ",");
 
@@ -764,24 +800,24 @@ public class NoteFunctions {
                             emailTo.setError("Invalid Email");
                             valid = false;
                             break;
-                        } else{
+                        } else {
                             valid = true;
                         }
 
-                        if(emailids.length > 5){
+                        if (emailids.length > 5) {
                             emailTo.setError("Max 5 Email ID");
                             valid = false;
                             break;
                         }
                     }
 
-                    if(valid){
+                    if (valid) {
                         String finalEmailList = "";
                         for (int i = 0; i < emailids.length; i++) {
-                            if(!emailids[i].isEmpty()){
+                            if (!emailids[i].isEmpty()) {
                                 finalEmailList = finalEmailList + emailids[i];
 
-                                if(i != emailids.length-1)
+                                if (i != emailids.length - 1)
                                     finalEmailList = finalEmailList + ",";
                             }
                         }
@@ -798,14 +834,12 @@ public class NoteFunctions {
 
                         final String finalEmailList1 = finalEmailList;
                         new AsyncTask<Void, Void, String>() {
-
                             boolean shared = false;
 
                             @Override
                             protected String doInBackground(Void... params) {
                                 RegularFunctions.syncNow();
-                                try
-                                {
+                                try {
                                     String shareEmailJson = shareJson(id, finalEmailList1).toString();
                                     Log.e("jay sharejson", shareEmailJson);
 
@@ -824,13 +858,9 @@ public class NoteFunctions {
                                         progressDialog.dismiss();
                                         shared = false;
                                     }
-                                }
-                                catch(JSONException e)
-                                {
+                                } catch (JSONException e) {
                                     e.printStackTrace();
-                                }
-                                catch(IOException io)
-                                {
+                                } catch (IOException io) {
                                     io.printStackTrace();
                                 }
                                 return null;
@@ -838,19 +868,19 @@ public class NoteFunctions {
 
                             @Override
                             protected void onPostExecute(String s) {
-                                if(shared)
+                                if (shared)
                                     Toast.makeText(context, "Note shared successfully!", Toast.LENGTH_LONG).show();
                                 else
                                     Toast.makeText(context, "Oops, Something went wrong!", Toast.LENGTH_LONG).show();
 
-                                if(progressDialog.isShowing()) {
+                                if (progressDialog.isShowing()) {
                                     progressDialog.dismiss();
                                 }
                             }
                         }.execute(null, null, null);
                     }
 
-                }else{
+                } else {
                     emailTo.setError("Enter Email");
 
                 }
@@ -865,13 +895,13 @@ public class NoteFunctions {
         shareDialog.show();
     }
 
-    public JSONObject shareJson(String id, String email){
+    public JSONObject shareJson(String id, String email) {
         JSONObject jsonObject = new JSONObject();
-        try{
-            jsonObject.put("userfrom",RegularFunctions.getUserId());
-            jsonObject.put("email",email);
+        try {
+            jsonObject.put("userfrom", RegularFunctions.getUserId());
+            jsonObject.put("email", email);
             jsonObject.put("note", RegularFunctions.getServerNoteId(id).trim());
-        }catch(JSONException je){
+        } catch (JSONException je) {
         }
         return jsonObject;
     }
