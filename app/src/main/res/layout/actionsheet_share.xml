@@ -51,7 +51,8 @@
                     android:layout_marginLeft="15dp"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
-                    android:typeface="normal" />
+                    android:typeface="normal"
+                    android:id="@+id/tvOptions"/>
             </LinearLayout>
         </LinearLayout>
 

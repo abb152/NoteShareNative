@@ -189,7 +189,8 @@
             android:gravity="center"
             android:text="@string/size"
             android:id="@+id/tvHighSize"
-            android:layout_below="@+id/paint_highlight1"/>
+            android:layout_below="@+id/paint_highlight1"
+            android:textColor="@color/nsTextColor"/>
 
         <TextView
             android:id="@+id/tvHighlightSize"
@@ -199,7 +200,8 @@
             android:layout_marginLeft="10dp"
             android:text="@string/zero"
             android:layout_below="@+id/paint_highlight1"
-            android:layout_toEndOf="@+id/tvHighSize"/>
+            android:layout_toEndOf="@+id/tvHighSize"
+            android:textColor="@color/nsTextColor"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -389,7 +391,8 @@
             android:gravity="center"
             android:text="@string/size"
             android:id="@+id/tvPaintSize"
-            android:layout_below="@+id/paint_brush1"/>
+            android:layout_below="@+id/paint_brush1"
+            android:textColor="@color/nsTextColor"/>
 
         <TextView
             android:id="@+id/tvBrushSize"
@@ -399,7 +402,8 @@
             android:layout_marginLeft="10dp"
             android:text="@string/zero"
             android:layout_below="@+id/paint_brush1"
-            android:layout_toEndOf="@+id/tvPaintSize"/>
+            android:layout_toEndOf="@+id/tvPaintSize"
+            android:textColor="@color/nsTextColor"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -458,7 +462,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:text="@string/size"/>
+            android:text="@string/size"
+            android:textColor="@color/nsTextColor"/>
 
         <TextView
             android:id="@+id/tvEraserSize"
@@ -467,7 +472,8 @@
             android:gravity="center"
             android:layout_toEndOf="@+id/tvSize"
             android:text="@string/zero"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/nsTextColor"/>
 
         <LinearLayout
             android:layout_width="match_parent"

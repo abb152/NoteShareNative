@@ -86,7 +86,8 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:inputType="textMultiLine"
-            android:gravity="start">
+            android:gravity="start"
+            android:textColor="@color/nsTextColor">
         </EditText>
     </LinearLayout>
 

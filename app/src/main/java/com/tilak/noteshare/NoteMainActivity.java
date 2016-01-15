@@ -79,13 +79,6 @@ import java.util.List;
 
 import jp.wasabeef.richeditor.RichEditor;
 
-/*import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfWriter;*/
-
-//import android.support.annotation.Keep;*/
-
 public class NoteMainActivity extends DrawerActivity implements OnClickListener {
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -255,7 +248,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
 
         if (out) {
-            //noteFunctions.screenshot(scrollView,this,background);
             screenshot();
         }
     }
@@ -296,21 +288,18 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
         textViewheaderTitle = (EditText) layoutHeader
                 .findViewById(R.id.textViewheaderTitle);
+        textViewheaderTitle.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
         imageButtonHamburg = (ImageButton) layoutHeader
                 .findViewById(R.id.imageButtonHamburg);
         imageButtonsquence = (ImageButton) layoutHeader
                 .findViewById(R.id.imageButtonsquence);
 
-        //imageButtonsquence.setImageResource(R.drawable.color_header_icon);
         imageButtonHamburg.setImageResource(R.drawable.back_icon_1);
         imageButtoncalander.setImageResource(R.drawable.done_icon);
 
         horizontal_scroll_editor = (HorizontalScrollView) contentview.findViewById(R.id.horizontal_scroll_editor);
         horizontal_scroll_editor.setVisibility(View.GONE);
-
-        //imageView53 = (ImageView) findViewById(R.id.imageView53);
-
-        // textViewAdd = (im) findViewById(R.id.textViewAdd);
 
         // audio controls
         //audioRecording(contentView);
@@ -508,9 +497,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/NoteShare/NoteShare Audio/" + audioName;
 
         myAudioRecorder = new MediaRecorder();
-        //myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        //myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        //myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
 
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -518,9 +504,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         myAudioRecorder.setAudioSamplingRate(44100);
         myAudioRecorder.setAudioEncodingBitRate(320000);
         myAudioRecorder.setAudioChannels(2);
-
-        //myAudioRecorder.setAudioSamplingRate(16000);
-        //myAudioRecorder.setAudioChannels(1);
 
         myAudioRecorder.setOutputFile(outputFile);
     }
@@ -760,7 +743,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         imageButtondrawnew.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateScribbleControlListners(v.getId());
                 showNewDrawingDialog();
 
             }
@@ -769,27 +751,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
-                //drawView.setErase(false);
-                //drawView.setBrushSize(drawView.getLastBrushSize());
-                //onCreateBrushDialog();
                 showScribbleDialog("brush");
                 openBrush();
                 updateScribbleButtonColor("brush");
             }
         });
-        /*imageButtondrawcolors.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateScribbleControlListners(v.getId());
-                //showColorAlert("", NoteMainActivity.this);
-            }
-        });*/
         imageButtonhighlightdraw.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
-                //showBrushSizeDialog(false);
-                //showHighLightAlert("", NoteMainActivity.this);
                 showScribbleDialog("highlight");
                 openHighlight();
                 updateScribbleButtonColor("highlight");
@@ -799,24 +769,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             @Override
             public void onClick(View v) {
                 updateScribbleControlListners(v.getId());
-                // showEraserDialog();
-                //showBrushSizeDialog(true);
-                //onCreateEraserDialog();
                 showScribbleDialog("eraser");
                 openEraser();
                 updateScribbleButtonColor("eraser");
             }
         });
-        /*imageButtondrawMore.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateScribbleControlListners(v.getId());
-
-            }
-        });*/
     }
 
-    void updateTextNoteControlListners(int elementId) {
+    /*void updateTextNoteControlListners(int elementId) {
 
         bold.setBackgroundColor(getResources().getColor(R.color.header_bg));
         italic.setBackgroundColor(getResources().getColor(R.color.header_bg));
@@ -880,7 +840,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 break;
         }
 
-    }
+    }*/
 
     void updateScribbleControlListners(int elementId) {
 
@@ -992,8 +952,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     }
 
     public void share(View v) {
-        //noteFunctions.share(this, noteIdForDetails, outsideNote);
-        //noteFunctions.noteshareShare(this,noteIdForDetails);
         noteFunctions.share(this, noteIdForDetails, outsideNote);
         footerMenuGone();
     }
@@ -1024,13 +982,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             makeNote();
         noteFunctions.setPasscode(this, noteIdForDetails);
         updateButtonUI(R.id.imageButtonMoreMode);
-        /*if (isMoreShown == false) {
-            isMoreShown = true;
-            layout_note_more_Info.setVisibility(View.VISIBLE);
-        } else {
-            isMoreShown = false;
-            layout_note_more_Info.setVisibility(View.GONE);
-        }*/
+
         footerMenuGone();
     }
 
@@ -1209,6 +1161,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     LinearLayout note_audio = (LinearLayout) viewAudio.findViewById(R.id.note_audio_recording);
                     final ImageView audio_play = (ImageView) viewAudio.findViewById(R.id.audio_play);
                     audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
+                    audio_text.setTypeface(RegularFunctions.getAgendaMediumFont(NoteMainActivity.this));
+
                     audio_play.setImageResource(R.drawable.ic_audio_record);
                     //final ImageButton audioDelete = (ImageButton) viewAudio.findViewById(R.id.deleteAudio);
 
@@ -1341,108 +1295,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                     });
 
                     audioElement.addView(note_audio);
-
-
-                    /*if (noteIdForDetails == null) {
-                        makeNote();
-                    }
-                    if (noteIdForDetails != null) {
-                        ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
-                        ne.save();
-                        modifyNoteTime();
-                    }*/
-
-
-/*
-                    try {
-                        initlizeAudiorecoder();
-
-                        if (noteIdForDetails == null) {
-                            makeNote();
-                        }
-                        if (noteIdForDetails != null) {
-                            ne = new NoteElement(Long.parseLong(noteIdForDetails), 1, "yes", "audio", audioName, "false", "");
-                            ne.save();
-                            modifyNoteTime();
-                        }
-
-                        isRecordingAudio = true;
-
-                        myAudioRecorder.prepare();
-                        myAudioRecorder.start();
-
-                        audio_play.setTag(1);
-
-                        final Long startTime = System.currentTimeMillis();
-                        final Date startTimeDate = new Date(startTime);
-
-
-                        //audio_seek.setMax(mp.getDuration() / 1000);
-                        final Handler mHandler = new Handler();
-                        // Make sure you update Seekbar on UI thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                String tag = audio_play.getTag().toString();
-                                if (myAudioRecorder != null && tag.equals("1")) {
-                                    final Long currentTime = System.currentTimeMillis();
-                                    Date currentTimeDate = new Date(currentTime);
-
-                                    Long timeDifference = currentTimeDate.getTime() - startTimeDate.getTime();
-
-                                    long diffSeconds = timeDifference / 1000 % 60;
-                                    long diffMinutes = timeDifference / (60 * 1000) % 60;
-                                    long diffHours = timeDifference / (60 * 60 * 1000) % 24;
-
-                                    //String duration = "0" + diffHours +":"+ diffMinutes +":"+diffSeconds;
-                                    String duration = String.format("%02d:%02d:%02d", diffHours, diffMinutes, diffSeconds);
-
-                                    record_text.setText(String.valueOf(duration));
-                                    record_text.setVisibility(View.VISIBLE);
-                                }
-                                mHandler.postDelayed(this, 1000);
-                                //mHandler.removeCallbacksAndMessages(this);
-
-
-                            }
-                        });
-
-                        //audio_text.setText(myAudioRecorder.get);
-
-                    } catch (IllegalStateException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    final NoteElement finalNe = ne;
-                    audio_play.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            audio_play.setImageResource(R.drawable.play_audio);
-                            myAudioRecorder.stop();
-                            myAudioRecorder.release();
-                            myAudioRecorder = null;
-                            record_text.setVisibility(View.GONE);
-
-                            finalNe.contentA = "true";
-                            finalNe.save();
-
-                            isRecordingAudio = false;
-
-                            Toast.makeText(NoteMainActivity.this, "Recording Saved", Toast.LENGTH_SHORT).show();
-
-                            System.out.println("Current Index:" + currentAudioIndex);
-
-                            audioElement.removeAllViews();
-                            onResume();
-                        }
-                    });
-
-                    //fetchNoteElementsFromDb();
-                    */
                 }
             }
         });
@@ -1797,30 +1649,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
     }
 
-    private Uri getOutputMediaFileUri(int mediaType) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-        // 3. Create a file name
-        // 4. Create the file
-        String imgDir = "NoteShare Images";
-        String appName = "NoteShare";
-        appName = "../" + appName;
-        String p = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString().trim();
-        File mediaStorageDir = new File(p, appName);
-        String path = mediaStorageDir.getPath() + File.separator + imgDir + File.separator;
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        if (mediaType == MEDIA_TYPE_IMAGE) {
-            mediaStorageDir = new File(path + "IMG-" + timestamp + ".jpg");
-        } else {
-            return null;
-        }
-
-        Log.d("", "File: " + Uri.fromFile(mediaStorageDir));
-
-        // 5. Return the file's URI
-        return Uri.fromFile(mediaStorageDir);
-    }
-
     /*************
      * text control Here
      ************/
@@ -1833,63 +1661,12 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         dialog.setContentView(R.layout.note_text_style_chooser);
 
         final LinearLayout layoutPapers = (LinearLayout) dialog.findViewById(R.id.layoutPapers);
-        //final LinearLayout layoutColors1 = (LinearLayout) dialog.findViewById(R.id.layoutColors1);
-        //final ListView ListViewItems = (ListView) dialog
-        //.findViewById(R.id.ListViewItems);
 
-        //final Button buttonFont = (Button) dialog.findViewById(R.id.buttonFont);
-        //final Button buttonSize = (Button) dialog.findViewById(R.id.buttonSize);
-        //final Button buttonColors = (Button) dialog.findViewById(R.id.buttonColors);
-        //final Button buttonPaper = (Button) dialog.findViewById(R.id.buttonPaper);
+        Button buttonPaper = (Button) dialog.findViewById(R.id.buttonPaper);
+        buttonPaper.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
 
         layoutPapers.setVisibility(View.VISIBLE);
-        //layoutColors1.setVisibility(View.VISIBLE);
-
-        /*buttonColors.setBackgroundColor(getResources().getColor(
-                R.color.eaeaea));
-        buttonColors.setTextColor(getResources().getColor(
-                R.color.header_bg));
-
-        buttonColors.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                layoutPapers.setVisibility(View.GONE);
-                layoutColors1.setVisibility(View.VISIBLE);
-                //ListViewItems.setVisibility(View.GONE);
-
-                buttonColors.setBackgroundColor(getResources().getColor(
-                        R.color.eaeaea));
-                buttonColors.setTextColor(getResources().getColor(
-                        R.color.header_bg));
-
-                buttonPaper.setBackgroundColor(getResources().getColor(
-                        R.color.header_bg));
-                buttonPaper.setTextColor(getResources()
-                        .getColor(R.color.ffffff));
-            }
-        });*/
-
-        /*buttonPaper.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                layoutPapers.setVisibility(View.VISIBLE);
-                layoutColors1.setVisibility(View.GONE);
-                //ListViewItems.setVisibility(View.GONE);
-
-                buttonColors.setBackgroundColor(getResources().getColor(
-                        R.color.header_bg));
-                buttonColors.setTextColor(getResources().getColor(
-                        R.color.ffffff));
-
-                buttonPaper.setBackgroundColor(getResources().getColor(
-                        R.color.eaeaea));
-                buttonPaper.setTextColor(getResources().getColor(
-                        R.color.header_bg));
-
-            }
-        });*/
 
         ImageButton paper_bg_6 = (ImageButton) dialog
                 .findViewById(R.id.paper_bg_5);
@@ -2156,6 +1933,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         });
 
         final TextView tvHighlightSize = (TextView) layoutHighlight.findViewById(R.id.tvHighlightSize);
+        tvHighlightSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
+        TextView tvHighSize = (TextView) layoutHighlight.findViewById(R.id.tvHighSize);
+        tvHighSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
         String hsize = String.valueOf(lastHighlightSize);
         tvHighlightSize.setText(hsize);
         SeekBar hightlight_sizeSeekBar = (SeekBar) layoutHighlight.findViewById(R.id.hightlight_sizeSeekBar);
@@ -2177,9 +1959,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 lastHighlightSize = progress;
                 //drawView.setBrushSize((int)(progress * 6.299));
                 drawView.setDrawColor(lastHighlightColor);
-                //String esize = String.valueOf(lastHighlightSize);
-                //tvHighlightSize.setText(esize);
-                //highlightViewSize = (lastHighlightSize * 4 + 20);
 
                 if (lastHighlightSize == 0) {
                     drawView.setBrushSize(3);
@@ -2326,6 +2105,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         }
 
         final TextView tvBrushSize = (TextView) scribbleDialog.findViewById(R.id.tvBrushSize);
+        tvBrushSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
+        TextView tvPaintSize = (TextView) scribbleDialog.findViewById(R.id.tvPaintSize);
+        tvPaintSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
         String size = String.valueOf(lastBrushSize);
         tvBrushSize.setText(size);
         drawView.setBrushSize((int) (lastBrushSize * 6.299));
@@ -2373,6 +2157,11 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         sizeEraserSeekBar.setProgress(lastEraserSize);
 
         final TextView tvEraserSize = (TextView) scribbleDialog.findViewById(R.id.tvEraserSize);
+        tvEraserSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
+        TextView tvSize = (TextView) scribbleDialog.findViewById(R.id.tvSize);
+        tvSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
         String esize = String.valueOf(lastEraserSize);
         if (lastEraserSize == 0) {
             tvEraserSize.setText("0.5");
@@ -2539,16 +2328,22 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
         textViewTitleAlert.setText("REFRESH PAINTING");
+        textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(this));
         textViewTitleAlert.setTextColor(Color.WHITE);
         TextView textViewTitleAlertMessage = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlertMessage);
         textViewTitleAlertMessage
                 .setText("Are you sure?");
+        textViewTitleAlertMessage.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
         Button buttonAlertCancel = (Button) contentView
                 .findViewById(R.id.buttonAlertCancel);
         Button buttonAlertOk = (Button) contentView
                 .findViewById(R.id.buttonAlertOk);
+
+        buttonAlertCancel.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+        buttonAlertOk.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
         buttonAlertCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -2604,36 +2399,14 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             background_bg.setBackgroundDrawable(bitmapDrawable);*/
             background_bg.setBackgroundResource(R.drawable.paper_bg_1);
         } else if (background.equals("paper_bg_2")) {
-            /*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1222);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);*/
             background_bg.setBackgroundResource(R.drawable.paper_bg_2);
         } else if (background.equals("paper_bg_3")) {
-           /* Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1333);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);*/
             background_bg.setBackgroundResource(R.drawable.paper_bg_3);
         } else if (background.equals("paper_bg_4")) {
-            /*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1444);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);*/
             background_bg.setBackgroundResource(R.drawable.paper_bg_4);
         } else if (background.equals("paper_bg_5")) {
-            /*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1555);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);*/
             background_bg.setBackgroundResource(R.drawable.paper_bg_5);
-        }/* else if (background.equals("paper_bg_6")) {
-            *//*Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.paper_bg_1666);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-            background_bg.setBackgroundDrawable(bitmapDrawable);*//*
-            background_bg.setBackgroundResource(R.drawable.paper_bg_6);
-        }*/
+        }
     }
 
     public void colorButtonSelected(View view) {
@@ -2967,6 +2740,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         final SeekBar audio_seek = (SeekBar) viewAudio.findViewById(R.id.audio_seek);
                         final TextView audio_text = (TextView) viewAudio.findViewById(R.id.audio_text);
                         final CheckBox audioDelete = (CheckBox) viewAudio.findViewById(R.id.cbDelete);
+                        audio_text.setTypeface(RegularFunctions.getAgendaMediumFont(this));
                         allDelete.add(audioDelete);
                         audioDelete.setTag(n.getId());
 
@@ -3077,6 +2851,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                         final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
 
                         checklist_text.setText(text);
+                        checklist_text.setTypeface(RegularFunctions.getAgendaMediumFont(this));
                         //checklist_text.setTag(allCheckboxText.size()-1);
 
                         Log.e("jay height", String.valueOf(checkbox.getMeasuredHeight()));
@@ -3184,50 +2959,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
             int px = pxFromDp(this, 1500);
             noteScribbleElements.setPadding(0, 0, 0, px);
         }
-    }
-
-    void showDeleteAlert(final String tag, Context context, final View v) {
-
-        final Dialog dialog = new Dialog(context);
-
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View contentView = inflater.inflate(R.layout.alert_view, null, false);
-
-        TextView textViewTitleAlert = (TextView) contentView
-                .findViewById(R.id.textViewTitleAlert);
-        textViewTitleAlert.setText("ALERT");
-        textViewTitleAlert.setTextColor(Color.WHITE);
-        TextView textViewTitleAlertMessage = (TextView) contentView
-                .findViewById(R.id.textViewTitleAlertMessage);
-        textViewTitleAlertMessage.setText("ARE YOU SURE?");
-
-        Button buttonAlertCancel = (Button) contentView
-                .findViewById(R.id.buttonAlertCancel);
-        Button buttonAlertOk = (Button) contentView
-                .findViewById(R.id.buttonAlertOk);
-        buttonAlertCancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                dialog.dismiss();
-            }
-        });
-        buttonAlertOk.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                //dialog.dismiss();
-                deleteElements(tag);
-                v.setVisibility(View.GONE);
-                dialog.dismiss();
-            }
-        });
-
-        imageButtonDeleteMode.setBackgroundColor(getResources().getColor(R.color.header_bg));
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(contentView);
-        dialog.show();
     }
 
     public void deleteButton() {
@@ -3411,6 +3142,8 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         checklist_icon.setTag("0");
         final EditText checklist_text = (EditText) viewChecklist.findViewById(R.id.checkboxText);
         final CheckBox checklistDelete = (CheckBox) viewChecklist.findViewById(R.id.cbDelete);
+
+        checklist_text.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
         checklist_icon.setImageResource(R.drawable.ic_checkbox_uncheck);
 
@@ -3602,11 +3335,15 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         Button buttonDissmiss = (Button) myDialog
                 .findViewById(R.id.buttonDissmiss);
 
+        TextView tvOptions = (TextView) myDialog.findViewById(R.id.tvOptions);
+        tvOptions.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
         LinearLayout layoutShare = (LinearLayout) myDialog
                 .findViewById(R.id.optionLayoutShare);
         TextView layoutShareTextView = (TextView) layoutShare
                 .findViewById(R.id.textViewSlideMenuName);
         layoutShareTextView.setText("Share");
+        layoutShareTextView.setTypeface(RegularFunctions.getAgendaMediumFont(this));
         ImageView layoutShareImageView = (ImageView) layoutShare
                 .findViewById(R.id.imageViewSlidemenu);
         layoutShareImageView.setImageResource(R.drawable.ic_note_share_dark);
@@ -3617,6 +3354,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         TextView layoutDeleteTextView = (TextView) layoutDelete
                 .findViewById(R.id.textViewSlideMenuName);
         layoutDeleteTextView.setText("Delete");
+        layoutDeleteTextView.setTypeface(RegularFunctions.getAgendaMediumFont(this));
         ImageView layoutDeleteImageView = (ImageView) layoutDelete
                 .findViewById(R.id.imageViewSlidemenu);
         layoutDeleteImageView.setImageResource(R.drawable.ic_note_delete_dark);
@@ -3627,6 +3365,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         TextView layoutMoveTextView = (TextView) layoutMove
                 .findViewById(R.id.textViewSlideMenuName);
         layoutMoveTextView.setText("Move");
+        layoutMoveTextView.setTypeface(RegularFunctions.getAgendaMediumFont(this));
         ImageView layoutMoveImageView = (ImageView) layoutMove
                 .findViewById(R.id.imageViewSlidemenu);
         layoutMoveImageView.setImageResource(R.drawable.ic_note_move_dark);
@@ -3637,6 +3376,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         TextView layoutRemindTextView = (TextView) layoutRemind
                 .findViewById(R.id.textViewSlideMenuName);
         layoutRemindTextView.setText("Remind");
+        layoutRemindTextView.setTypeface(RegularFunctions.getAgendaMediumFont(this));
         ImageView layoutRemindImageView = (ImageView) layoutRemind
                 .findViewById(R.id.imageViewSlidemenu);
         layoutRemindImageView.setImageResource(R.drawable.ic_note_remainder_dark);
@@ -3647,6 +3387,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         TextView layoutTimeBombTextView = (TextView) layoutTimeBomb
                 .findViewById(R.id.textViewSlideMenuName);
         layoutTimeBombTextView.setText("Timebomb");
+        layoutTimeBombTextView.setTypeface(RegularFunctions.getAgendaMediumFont(this));
         ImageView layoutTimeBombImageView = (ImageView) layoutTimeBomb
                 .findViewById(R.id.imageViewSlidemenu);
         layoutTimeBombImageView.setImageResource(R.drawable.ic_note_timebomb_dark);
@@ -3657,6 +3398,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
         TextView layoutLockTextView = (TextView) layoutLock
                 .findViewById(R.id.textViewSlideMenuName);
         layoutLockTextView.setText("Lock");
+        layoutLockTextView.setTypeface(RegularFunctions.getAgendaMediumFont(this));
         ImageView layoutLockImageView = (ImageView) layoutLock
                 .findViewById(R.id.imageViewSlidemenu);
         layoutLockImageView.setImageResource(R.drawable.ic_note_lock_dark);

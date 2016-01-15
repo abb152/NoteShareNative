@@ -87,7 +87,8 @@
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:text="Sync via"
-                    style="@style/settingTextViewSubTitle"/>
+                    style="@style/settingTextViewSubTitle"
+                    android:textColor="@color/nsTextColor"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -107,15 +108,17 @@
                         android:layout_height="wrap_content"
                         android:text="Sync"
                         style="@style/settingTextViewSubTitle"
-                        android:id="@+id/tvSyncIn"/>
+                        android:id="@+id/tvSyncIn"
+                        android:textColor="@color/nsTextColor"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Last Synced:"
+                        android:text="Last Synced: Loading..."
                         android:id="@+id/tvLastSync"
-                        style="@style/settingTextViewSubTitle2"/>
+                        style="@style/settingTextViewSubTitle2"
+                        android:textColor="@color/nsTextColor"/>
 
                 </LinearLayout>
 
@@ -129,18 +132,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Security"
-                        style="@style/settingTextViewTitle"/>
+                        style="@style/settingTextViewTitle"
+                        android:id="@+id/tvSecurity"/>
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="5dp"
                         android:text="Set / Change Passcode"
-                        android:id="@+id/button"
+                        android:id="@+id/btPasscode"
                         android:textSize="16sp"
                         android:background="@android:color/transparent"
                         android:gravity="left|center_vertical"
-                        android:onClick="setPasscode"/>
+                        android:onClick="setPasscode"
+                        android:textColor="@color/nsTextColor"/>
 
                 </LinearLayout>
 
@@ -155,7 +160,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="15dp"
                         android:text="Others"
-                        style="@style/settingTextViewTitle"/>
+                        style="@style/settingTextViewTitle"
+                        android:id="@+id/tvOthers"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -185,7 +191,8 @@
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:text="Terms &amp; Condition"
-                        style="@style/settingTextViewSubTitle"/>
+                        style="@style/settingTextViewSubTitle"
+                        android:textColor="@color/nsTextColor"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -198,7 +205,8 @@
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:text="Logout"
-                        style="@style/settingTextViewSubTitle"/>
+                        style="@style/settingTextViewSubTitle"
+                        android:textColor="@color/nsTextColor"/>
 
                     <View
                         android:layout_width="match_parent"

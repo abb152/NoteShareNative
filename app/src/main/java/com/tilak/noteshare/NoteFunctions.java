@@ -245,6 +245,7 @@ public class NoteFunctions {
 
         ListView lvFolder = (ListView) contentView.findViewById(R.id.lvFolder);
         TextView empty = (TextView) contentView.findViewById(R.id.empty);
+        empty.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
         lvFolder.setEmptyView(empty);
 
         ArrayList<HashMap<String, String>> folderList = new ArrayList<HashMap<String, String>>();

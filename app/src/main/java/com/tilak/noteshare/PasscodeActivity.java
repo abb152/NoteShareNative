@@ -47,6 +47,8 @@ public class PasscodeActivity extends DrawerActivity {
         et4 = (EditText) findViewById(R.id.et4);
         t=(TextView) findViewById(R.id.textView);
 
+        t.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
         Config con = Config.findById(Config.class, 1L);
         dbPass = con.passcode;
         if(check.equals("1") || check.equals("2") || check.equals("3")){

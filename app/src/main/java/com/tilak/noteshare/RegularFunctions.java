@@ -106,12 +106,15 @@ public class RegularFunctions {
     }
 
     public static boolean checkLastSyncDifference(){
-        //boolean needToSync = false;
 
-        if (getCurrentTimeLong() - lastSyncLong() > 10800000000L) {
+        long currentTime = getCurrentTimeLong();
+        long lastTime = lastSyncLong();
+
+        long difference = currentTime - lastTime;
+
+        if (difference > 10800000L) {
             return true;
         }
-
         return false;
     }
 
@@ -308,27 +311,27 @@ public class RegularFunctions {
     /**
      * Check if there is any connectivity
      */
-    public static boolean isConnected(Context context){
+    /*public static boolean isConnected(Context context){
         NetworkInfo info = getNetworkInfo(context);
         return (info != null && info.isConnected());
     }
 
-    /**
+    *//**
      * Check if there is any connectivity to a Wifi network
-     */
+     *//*
     public static boolean isConnectedWifi(Context context){
         NetworkInfo info = getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI);
-    }
+    }*/
 
     /**
      * Check if there is any connectivity to a mobile network
     */
 
-    public static boolean isConnectedMobile(Context context){
+    /*public static boolean isConnectedMobile(Context context){
         NetworkInfo info = getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_MOBILE);
-    }
+    }*/
 
 
     public static boolean checkNeedForSync(){

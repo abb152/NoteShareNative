@@ -360,6 +360,8 @@ public class CameraActivity extends Activity {
         TextView textViewTitleAlert = (TextView) contentView
                 .findViewById(R.id.textViewTitleAlert);
         textViewTitleAlert.setText(message);
+        textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
         textViewTitleAlert.setTextColor(Color.WHITE);
 
         TextView tvFullSize = (TextView) contentView
@@ -370,6 +372,9 @@ public class CameraActivity extends Activity {
 
         TextView tvCancel = (TextView) contentView
                 .findViewById(R.id.tvCancel);
+
+        tvFullSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+        tvCropSize.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
 

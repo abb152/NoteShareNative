@@ -1,11 +1,14 @@
 package com.tilak.noteshare;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -218,7 +221,13 @@ public class MainActivity extends DrawerActivity {
             }
         });
 
-        //syncOnStart();
+        /*final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                syncOnStart();
+            }
+        }, 1000);*/
     }
 
     public void setFonts() {
@@ -227,9 +236,42 @@ public class MainActivity extends DrawerActivity {
     }
 
     public void syncOnStart() {
-        if (RegularFunctions.checkLastSyncDifference()) {
-            RegularFunctions.syncNow();
+        if(RegularFunctions.checkLastSyncDifference()){
+            Log.e("jay sync status", String.valueOf(RegularFunctions.checkLastSyncDifference()));
+            startSync();
         }
+    }
+
+    public void startSync(){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+
+        progressDialog.setMessage("Please wait while we sync your Notes and Folders...");
+
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+
+                if (Looper.myLooper() == null) {
+                    Looper.prepare();
+                }
+                RegularFunctions.syncNow();
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
+                Toast.makeText(MainActivity.this, "Notes and folders Synced!", Toast.LENGTH_SHORT).show();
+
+                onRestart();
+            }
+        }.execute(null, null, null);
     }
 
     @Override
@@ -307,50 +349,6 @@ public class MainActivity extends DrawerActivity {
         populate();
         sortingArray();
         swipeListView();
-    }
-
-    void updatePintrestView() {
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        // inflate your activity layout here!
-        sortingArray();
-        Layout1.removeAllViews();
-        Layout2.removeAllViews();
-
-
-        for (int i = 0; i < arrDataNote.size(); i++) {
-
-            View contentView = inflater.inflate(R.layout.notefoldepintrestrow,
-                    null, false);
-
-            //LinearLayout contentView=(LinearLayout) findViewById(R.id.PintrestViews);
-            //LinearLayout contentViewSub=(LinearLayout) findViewById(R.id.PintrestSubViews);
-
-
-            TextView textViewSlideMenuName = (TextView) contentView
-                    .findViewById(R.id.textViewSlideMenuName);
-            TextView textViewSlideMenuNameSubTitle = (TextView) contentView
-                    .findViewById(R.id.textViewSlideMenuNameSubTitle);
-            View layoutsepreter = (View) contentView
-                    .findViewById(R.id.layoutsepreter);
-            layoutsepreter.setVisibility(View.VISIBLE);
-
-            SideMenuitems model = arrDataNote.get(i);
-            textViewSlideMenuName.setText(model.getMenuName());
-            textViewSlideMenuNameSubTitle.setText(model.getMenuNameDetail());
-
-            if (i % 2 == 0) {
-                Layout1.addView(contentView);
-                contentView.setBackgroundColor(Color
-                        .parseColor(model.getColours()));
-            } else {
-                Layout2.addView(contentView);
-                contentView.setBackgroundColor(Color
-                        .parseColor(model.getColours()));
-            }
-
-        }
-
     }
 
     void sortingArray() {

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +50,9 @@ public class SettingActivity extends DrawerActivity {
 		View contentView = inflater
 				.inflate(R.layout.activity_setting, null, false);
 		mDrawerLayout.addView(contentView, 0);
+
 		initlizeUIElement(contentView);
+
 	}
 	void  initlizeUIElement(View contentView)
 	{
@@ -64,12 +67,40 @@ public class SettingActivity extends DrawerActivity {
 
 		tvLastSync = (TextView) findViewById(R.id.tvLastSync);
 
-		String time = RegularFunctions.lastSyncTime();
-
-		tvLastSync.setText(time);
+		final Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				String time = RegularFunctions.lastSyncTime();
+				tvLastSync.setText(time);
+			}
+		}, 200);
 
 		TextView tvSettingHead = (TextView) contentView.findViewById(R.id.tvSettingHead);
 		tvSettingHead.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
+		TextView tvSyncIn = (TextView) contentView.findViewById(R.id.tvSyncIn);
+		tvSyncIn.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
+		TextView tvSecurity = (TextView) contentView.findViewById(R.id.tvSecurity);
+		tvSecurity.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
+		Button btPasscode = (Button) contentView.findViewById(R.id.btPasscode);
+		btPasscode.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		btPasscode.setTransformationMethod(null);
+
+		TextView tvOthers = (TextView) contentView.findViewById(R.id.tvOthers);
+		tvOthers.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
+		TextView tvSync = (TextView) contentView.findViewById(R.id.tvSync);
+		tvSync.setTypeface(RegularFunctions.getAgendaBoldFont(this));
+
+
+
+		tvTerms.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		tvSyncVia.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		tvLogout.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		tvLastSync.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
 		addListners();
 	}
@@ -126,7 +157,7 @@ public class SettingActivity extends DrawerActivity {
 					startSync(false);
 				} else if (type == 2) {
 					Log.e("jay sync", "inside 2");
-					Toast.makeText(getApplicationContext(), "Only on wifi and now on mobile", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Sync only on wifi and now on mobile", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -214,7 +245,15 @@ public class SettingActivity extends DrawerActivity {
 
 		TextView textViewTitleAlert = (TextView) contentView.findViewById(R.id.textViewTitleAlert);
 		textViewTitleAlert.setText("Sync Via");
+		textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 		textViewTitleAlert.setTextColor(Color.WHITE);
+
+		RadioButton rb1 = (RadioButton) contentView.findViewById(R.id.sync1);
+		rb1.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		RadioButton rb2 = (RadioButton) contentView.findViewById(R.id.sync2);
+		rb2.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		RadioButton rb3 = (RadioButton) contentView.findViewById(R.id.sync3);
+		rb3.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
 		Sync sync = Sync.findById(Sync.class, 1l);
 		int syncType = sync.getSyncType();
@@ -278,15 +317,21 @@ public class SettingActivity extends DrawerActivity {
 		TextView textViewTitleAlert = (TextView) contentView
 				.findViewById(R.id.textViewTitleAlert);
 		textViewTitleAlert.setText(title);
+		textViewTitleAlert.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 		textViewTitleAlert.setTextColor(Color.WHITE);
 		TextView textViewTitleAlertMessage = (TextView) contentView
 				.findViewById(R.id.textViewTitleAlertMessage);
 		textViewTitleAlertMessage.setText(message);
+		textViewTitleAlertMessage.setTypeface(RegularFunctions.getAgendaMediumFont(this));
 
 		Button buttonAlertCancel = (Button) contentView
 				.findViewById(R.id.buttonAlertCancel);
 		Button buttonAlertOk = (Button) contentView
 				.findViewById(R.id.buttonAlertOk);
+
+		buttonAlertCancel.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+		buttonAlertOk.setTypeface(RegularFunctions.getAgendaMediumFont(this));
+
 		buttonAlertCancel.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {

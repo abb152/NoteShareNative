@@ -44,6 +44,7 @@ public class FolderSync {
     public void localToServer(){
         Sync sync = RegularFunctions.getSyncTime();
         Long time = sync.getFolderLocalToServer() - 3600000;
+        //Long time = sync.getFolderLocalToServer() - 86400000;
 
         List<Folder> folders = getFolderList(time);
         if(folders.size() > 0) {
@@ -122,7 +123,8 @@ public class FolderSync {
         Sync sync = RegularFunctions.getSyncTime();
         //Long time = sync.getFolderLocalToServer();
 
-        String foldermodifytime = RegularFunctions.longToStringWithUTC(sync.getFolderLocalToServer() - 3600000);
+        //String foldermodifytime = RegularFunctions.longToStringWithUTC(sync.getFolderLocalToServer() - 3600000);
+        String foldermodifytime = RegularFunctions.longToStringWithUTC(sync.getFolderLocalToServer() - 86400000);
 
         try {
             String json = serverToLocalJson(getUserId(), foldermodifytime).toString();

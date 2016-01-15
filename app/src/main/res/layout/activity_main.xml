@@ -33,7 +33,8 @@
                 android:background="@android:color/transparent"
                 android:ems="8"
                 android:textSize="14sp"
-                android:hint="Search a Note.." >
+                android:hint="Search a Note.."
+                android:textColor="@color/nsTextColor">
 
                 <!--<requestFocus />-->
             </EditText>

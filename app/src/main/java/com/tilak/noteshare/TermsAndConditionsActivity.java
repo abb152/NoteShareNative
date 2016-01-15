@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class TermsAndConditionsActivity extends DrawerActivity {
 	public LinearLayout layoutHeder;
@@ -30,6 +31,9 @@ public class TermsAndConditionsActivity extends DrawerActivity {
 				.findViewById(R.id.actionBar);
 		btnheaderMenu = (ImageButton) layoutHeder
 				.findViewById(R.id.imageButtonHamburg);
+
+		TextView tvTCHead = (TextView) contentView.findViewById(R.id.tvTCHead);
+		tvTCHead.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 
 		/*btnsequence = (ImageButton) layoutHeder
 				.findViewById(R.id.imageButtonsquence);

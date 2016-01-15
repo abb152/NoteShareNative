@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,7 +59,9 @@ public class OurNotificationListAdapter extends BaseAdapter {
         TextView tvNotiHeader,tvDesc;
         ImageButton ibAccept;
         ImageView userPic;
-        Button btReject, btAccept;
+        ImageButton btReject, btAccept;
+        //ImageButton btAccept;
+        //Button btReject;
     }
 
     @Override
@@ -78,8 +79,8 @@ public class OurNotificationListAdapter extends BaseAdapter {
             holder.tvNotiHeader= (TextView) convertView.findViewById(R.id.tvNotiHeader); //find the different Views
             holder.tvDesc= (TextView) convertView.findViewById(R.id.tvDesc);
 
-            holder.btReject = (Button) convertView.findViewById(R.id.btReject);
-            holder.btAccept = (Button) convertView.findViewById(R.id.btAccept);
+            holder.btReject = (ImageButton) convertView.findViewById(R.id.btReject);
+            holder.btAccept = (ImageButton) convertView.findViewById(R.id.btAccept);
 
             holder.userPic = (ImageView) convertView.findViewById(R.id.ivUserPic);
 
@@ -100,14 +101,14 @@ public class OurNotificationListAdapter extends BaseAdapter {
         String tag = type+","+id+","+userid;
 
         holder.tvNotiHeader.setText(name);
-        holder.tvDesc.setText((Html.fromHtml("<b>" + username + "</b> has shared <b>" + name + "</b> "+ type +" with you."))); //set the hash maps
+        holder.tvDesc.setText((Html.fromHtml("<b>" + username + "</b> has shared <b>" + name + "</b> " + type + " with you."))); //set the hash maps
         holder.btAccept.setTag(tag + ",true");
-        holder.btReject.setTag(tag +",false");
+        holder.btReject.setTag(tag + ",false");
 
         holder.tvNotiHeader.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
         holder.tvDesc.setTypeface(RegularFunctions.getAgendaMediumFont(activity));
-        holder.btAccept.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
-        holder.btReject.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
+        //holder.btAccept.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
+        //holder.btReject.setTypeface(RegularFunctions.getAgendaBoldFont(activity));
 
         String profilename = userid+".jpg";
         File f = new File(Environment.getExternalStorageDirectory() + "/NoteShare/.NoteShare/" + profilename);

@@ -12,31 +12,28 @@
 
     <ImageView
         android:id="@+id/checkboxIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_weight="0.1"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:paddingLeft="-15dp"
-        android:paddingRight="-15dp"
-        android:layout_gravity="top"
-        android:src="@drawable/checkbox_uncheck_sq"/>
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/checkbox_uncheck_sq"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/checkboxText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:layout_gravity="center_vertical"
         android:background="@null"
-        android:textColor="@android:color/black"
+        android:textColor="@color/nsTextColor"
         android:inputType="textImeMultiLine"
         android:minLines="1"
         android:maxLines="10"
+        android:textSize="20sp"
         android:textCursorDrawable="@null"
-        android:imeOptions="actionDone">
+        android:imeOptions="actionDone"
+        android:layout_marginRight="10dp">
     </EditText>
 
     </LinearLayout>

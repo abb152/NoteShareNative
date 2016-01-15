@@ -90,27 +90,23 @@
                     android:paddingBottom="10dp"
                     android:layout_marginLeft="5dp"/>-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:id="@+id/btReject"
-                    android:text="Reject"
-                    android:textSize="12sp"
-                    android:textColor="#fff"
                     android:background="#F44336"
+                    android:drawableTop="@drawable/ic_action_cross"
                     android:onClick="acceptRejectAndSync"
-                    android:layout_marginLeft="5dp"/>
+                    android:src="@drawable/ic_action_cross"/>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:id="@+id/btAccept"
-                    android:text="Accept"
-                    android:textSize="12sp"
-                    android:textColor="#fff"
                     android:background="#4CAF50"
                     android:onClick="acceptRejectAndSync"
-                    android:layout_marginLeft="5dp"/>
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_action_download"/>
 
             </LinearLayout>
 

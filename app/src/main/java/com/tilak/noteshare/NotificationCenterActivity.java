@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -108,14 +107,6 @@ public class NotificationCenterActivity extends DrawerActivity {
                     if (Looper.myLooper() == null) {
                         Looper.prepare();
                     }
-
-                    String sample = "jay,visariya";
-
-                    List<String> sampleList = Arrays.asList(sample.split(","));
-
-                    Log.e("sample1", sampleList.get(0));
-                    Log.e("sample2", sampleList.get(1));
-
 
                     list = new ArrayList<HashMap<String, String>>();
                     try {
@@ -212,11 +203,11 @@ public class NotificationCenterActivity extends DrawerActivity {
 
     public void acceptRejectAndSync(final View v) {
 
-        final Button imageButton = (Button) v;
+        final ImageButton imageButton = (ImageButton) v;
         imageButton.setClickable(false);
 
         progressDialog = new ProgressDialog(NotificationCenterActivity.this);
-        progressDialog.setMessage("Wait while we get your new Notes and Folders...");
+        progressDialog.setMessage("Please wait...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -254,8 +245,8 @@ public class NotificationCenterActivity extends DrawerActivity {
                     if (value.equals("true")) {
                         //Toast.makeText(this,"Wait to sync",Toast.LENGTH_LONG).show();
 
-                        if (valueTF.equals("true"))
-                            RegularFunctions.syncNow();
+                        //if (valueTF.equals("true"))
+                            //RegularFunctions.syncNow();
 
                         received = true;
 
@@ -264,7 +255,6 @@ public class NotificationCenterActivity extends DrawerActivity {
                     } else {
                         progressDialog.dismiss();
                         received = false;
-
                         //Toast.makeText(NotificationCenterActivity.this,"Oops something went wrong",Toast.LENGTH_LONG).show();
                     }
 
@@ -281,12 +271,6 @@ public class NotificationCenterActivity extends DrawerActivity {
             protected void onPostExecute(String s) {
 
                 if (received) {
-                    //ImageButton ib = (ImageButton) v;
-                    //imageButton.setImageResource(R.drawable.ic_like);
-                    //View v = findViewById(layoutID);
-                    //v.setVisibility(View.GONE);
-                    //imageButton.setClickable(false);
-                    //imageButton.setText("Done");
                     View v = (View) imageButton.getParent();
                     v.setVisibility(View.GONE);
 
@@ -303,10 +287,13 @@ public class NotificationCenterActivity extends DrawerActivity {
                         message = message + "Rejected";
 
                     Toast.makeText(NotificationCenterActivity.this, message, Toast.LENGTH_SHORT).show();
-                    onRestart();
+                    //onRestart();
+
+                    if (valueTF.equals("true"))
+                        syncNowOrLater();
 
                 } else {
-                    imageButton.setClickable(false);
+                    //imageButton.setClickable(false);
                     Toast.makeText(NotificationCenterActivity.this, "Oops something went wrong", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -337,6 +324,54 @@ public class NotificationCenterActivity extends DrawerActivity {
         }
         return jsonObject;
     }
+
+    public void syncNowOrLater(){
+        int type = RegularFunctions.checkInternetConnectivity(NotificationCenterActivity.this);
+
+        if (type == 0) {
+            Toast.makeText(NotificationCenterActivity.this, "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
+        } else if (type == 1) {
+            //RegularFunctions.syncNow();
+            startSync();
+        } else if (type == 2) {
+            Log.e("jay sync", "inside 2");
+            Toast.makeText(getApplicationContext(), "Sync your new Notes and Folders later when you are on wifi!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public void startSync(){
+        final ProgressDialog progressDialog = new ProgressDialog(NotificationCenterActivity.this);
+        progressDialog.setCancelable(false);
+
+        progressDialog.setMessage("Please wait while we sync your new Notes and Folders...");
+
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+
+                if (Looper.myLooper() == null) {
+                    Looper.prepare();
+                }
+                RegularFunctions.syncNow();
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
+
+                Toast.makeText(NotificationCenterActivity.this, "New Notes and Folders received", Toast.LENGTH_SHORT).show();
+            }
+        }.execute(null, null, null);
+    }
+
+
 
     @Override
     public void addListners() {

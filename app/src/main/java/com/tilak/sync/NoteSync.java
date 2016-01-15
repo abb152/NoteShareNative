@@ -59,6 +59,7 @@ public class NoteSync {
 
         Sync sync = RegularFunctions.getSyncTime();
         Long time = sync.getNoteLocalToServer() - 3600000;
+        //Long time = sync.getNoteLocalToServer() - 86400000;
         List<Note> notes = getNoteList(time);
         if (notes.size() > 0) {
 
@@ -137,7 +138,8 @@ public class NoteSync {
         Sync sync = RegularFunctions.getSyncTime();
         //Long time = sync.getFolderLocalToServer();
 
-        String notemodifytime = RegularFunctions.longToStringWithUTC(sync.getNoteLocalToServer() - 3600000);
+        //String notemodifytime = RegularFunctions.longToStringWithUTC(sync.getNoteLocalToServer() - 3600000);
+        String notemodifytime = RegularFunctions.longToStringWithUTC(sync.getNoteLocalToServer() - 86400000);
 
         Log.e("jay long", String.valueOf(sync.getNoteLocalToServer()));
 
