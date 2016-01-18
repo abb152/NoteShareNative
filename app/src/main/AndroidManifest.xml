@@ -104,10 +104,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".LikeUsOnFacebookActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".RateUsActivity"
             android:screenOrientation="portrait" >
         </activity>
@@ -129,14 +125,8 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ProfileSettingActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".ImageChooserActivity"
             android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".AudioChooserActivity" >
         </activity>
         <activity
             android:name=".DrawingActivity"
@@ -148,14 +138,6 @@
         </activity>
         <activity
             android:name=".InteroductionActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".NoteItemFullScreen"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".NoteTextIItemFullScreen"
             android:screenOrientation="portrait" >
         </activity>
         <activity

@@ -2,6 +2,7 @@ package com.tilak.noteshare;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -21,6 +22,10 @@ import com.tilak.db.Note;
 import com.tilak.db.Sync;
 import com.tilak.sync.FolderSync;
 import com.tilak.sync.NoteSync;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,6 +48,8 @@ public class RegularFunctions {
     private static OkHttpClient client = new OkHttpClient();
     public static String SERVER_URL = "http://104.197.47.172/";
     //public static String SERVER_URL = "http://192.168.0.122:1337/";
+
+    public static  String PREFERENCES = "NotesharePreferences";
 
     public static int pxFromDp(final Context context, final float dp) {
         return (int) (dp * context.getResources().getDisplayMetrics().density);
@@ -103,6 +110,8 @@ public class RegularFunctions {
         NoteSync noteSync = new NoteSync();
         noteSync.localToServer();
         noteSync.serverToLocal();
+
+        changeLastSyncTime();
     }
 
     public static boolean checkLastSyncDifference(){
@@ -173,7 +182,7 @@ public class RegularFunctions {
         long currentTime = getCurrentTimeLong();
 
         s.setFolderLocalToServer(currentTime);
-        s.setLastSyncTime(currentTime);
+        //s.setLastSyncTime(currentTime);
         s.save();
     }
 
@@ -183,7 +192,7 @@ public class RegularFunctions {
         long currentTime = getCurrentTimeLong();
 
         s.setNoteServerToLocal(currentTime);
-        s.setLastSyncTime(currentTime);
+        //s.setLastSyncTime(currentTime);
         s.save();
     }
 
@@ -193,7 +202,7 @@ public class RegularFunctions {
         long currentTime = getCurrentTimeLong();
 
         s.setNoteLocalToServer(currentTime);
-        s.setLastSyncTime(currentTime);
+        //s.setLastSyncTime(currentTime);
         s.save();
     }
 
@@ -203,7 +212,7 @@ public class RegularFunctions {
         long currentTime = getCurrentTimeLong();
 
         s.setFolderServerToLocal(currentTime);
-        s.setLastSyncTime(currentTime);
+        //s.setLastSyncTime(currentTime);
         s.save();
     }
 
@@ -390,13 +399,52 @@ public class RegularFunctions {
         return Typeface.createFromAsset(activity.getAssets(), "fonts/Agenda-Medium.ttf");
     }
 
-    /*public static void setViewFont(int type,View view){
-        if(type == 1){ //
-            view.setTy
-        }
-        if(type == 2){
+    public static JSONObject getNotificationsJson() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("user", RegularFunctions.getUserId().trim());
+        } catch (JSONException je) {
 
         }
+        return jsonObject;
     }
-*/
+
+    public static int getNotificationCount(Context context){
+
+        try {
+            String notificationJson = getNotificationsJson().toString();
+            Log.e("jay sharejson", notificationJson);
+
+            String response = RegularFunctions.post(RegularFunctions.SERVER_URL + "notification/find", notificationJson);
+            Log.e("jay response", response);
+
+            JSONArray jsonArray = new JSONArray(response);
+
+            Log.e("jay json size", String.valueOf(jsonArray.length()));
+
+            //String value = jsonObject.get("value").toString();
+
+            if (jsonArray.length() >= 0) {
+
+                SharedPreferences sharedpreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putInt("NotificationCount", jsonArray.length());
+                editor.apply();
+
+                Log.e("jay count", String.valueOf(sharedpreferences.getInt("NotificationCount",0)));
+
+                return jsonArray.length();
+            } else {
+                Log.e("jay ", "no notifications");
+                return 0;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+
+        return 0;
+    }
 }

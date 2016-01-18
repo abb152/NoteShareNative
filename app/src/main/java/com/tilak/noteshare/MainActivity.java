@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,8 +34,6 @@ import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
-import com.tilak.adpters.NoteFolderAdapter;
-import com.tilak.adpters.NoteFolderGridAdapter;
 import com.tilak.adpters.OurNoteListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
@@ -81,8 +80,6 @@ public class MainActivity extends DrawerActivity {
     public ScrollView notefoleserPintrestList;
     public LinearLayout Layout1;
     public LinearLayout Layout2;
-    public NoteFolderAdapter adapter;
-    public NoteFolderGridAdapter gridAdapter;
     public ArrayList<SideMenuitems> arrDataNote;
     final Context context = this;
     public RelativeLayout textNoteSort, textNoteView;
@@ -221,13 +218,19 @@ public class MainActivity extends DrawerActivity {
             }
         });
 
-        /*final Handler handler = new Handler();
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                syncOnStart();
+                //syncOnStart();
             }
-        }, 1000);*/
+        }, 300);
+
+        getNotificationCount();
+    }
+
+    public void getNotificationCount(){
+        RegularFunctions.getNotificationCount(this);
     }
 
     public void setFonts() {
@@ -237,19 +240,33 @@ public class MainActivity extends DrawerActivity {
 
     public void syncOnStart() {
         if(RegularFunctions.checkLastSyncDifference()){
+
+            int type = RegularFunctions.checkInternetConnectivity(MainActivity.this);
+
+            if (type == 0) {
+                //Toast.makeText(MainActivity.this, "Can't Sync. Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
+            } else if (type == 1) {
+                Toast.makeText(MainActivity.this, "Syncing your Notes and Folders in background...", Toast.LENGTH_SHORT).show();
+                startSync();
+            } else if (type == 2) {
+                Log.e("jay sync", "inside 2");
+                //Toast.makeText(getApplicationContext(), "Sync only on wifi option selected.", Toast.LENGTH_SHORT).show();
+            }
+
+
             Log.e("jay sync status", String.valueOf(RegularFunctions.checkLastSyncDifference()));
-            startSync();
+            //startSync();
         }
     }
 
     public void startSync(){
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setCancelable(false);
 
         progressDialog.setMessage("Please wait while we sync your Notes and Folders...");
 
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        //progressDialog.show();
 
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -265,11 +282,14 @@ public class MainActivity extends DrawerActivity {
 
             @Override
             protected void onPostExecute(String s) {
-                if(progressDialog.isShowing())
-                    progressDialog.dismiss();
+                //if(progressDialog.isShowing())
+                //    progressDialog.dismiss();
+
+                RegularFunctions.changeLastSyncTime();
                 Toast.makeText(MainActivity.this, "Notes and folders Synced!", Toast.LENGTH_SHORT).show();
 
-                onRestart();
+
+                //onRestart();
             }
         }.execute(null, null, null);
     }

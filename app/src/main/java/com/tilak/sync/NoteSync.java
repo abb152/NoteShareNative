@@ -129,7 +129,7 @@ public class NoteSync {
 
         }
 
-        RegularFunctions.changeLastSyncTime();
+        //RegularFunctions.changeLastSyncTime();
     }
 
     public void serverToLocal() {

@@ -32,8 +32,6 @@ import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
-import com.tilak.adpters.NewNoteFolderAdapter;
-import com.tilak.adpters.NewNoteFolderGridAdapter;
 import com.tilak.adpters.OurFolderListAdapter;
 import com.tilak.dataAccess.DataManager;
 import com.tilak.datamodels.SideMenuitems;
@@ -69,8 +67,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 	public LinearLayout Layout1;
 	public LinearLayout Layout2;
 
-	public NewNoteFolderAdapter adapter;
-	public NewNoteFolderGridAdapter gridAdapter;
 	public ArrayList<SideMenuitems> arrDataNote;
 	final Context context = this;
 //	public TextView textNoteSort, textNoteView;
@@ -204,17 +200,7 @@ public class NewFolderMainActivity extends DrawerActivity {
 
 		textViewheaderTitle.setTypeface(RegularFunctions.getAgendaBoldFont(this));
 
-		// Grid adapter
 
-//		gridAdapter = new NewNoteFolderGridAdapter(this, arrDataNote);
-//		notefoleserGridList.setAdapter(gridAdapter);
-//		notefoleserGridList.setLongClickable(true);
-
-		// list adapter
-
-//		adapter = new NewNoteFolderAdapter(this, arrDataNote);
-//		notefoleserList.setAdapter(adapter);
-//		notefoleserList.setLongClickable(true);
 		
 		//search
 		//searchbuttonclick=(ImageButton) contentview.findViewById(R.id.searchbuttonclick);
@@ -377,10 +363,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 		}
 	}
 
-	void updateGridView() {
-
-		gridAdapter.notifyDataSetChanged();
-	}
 
 	void getDeafultNote() {
 
@@ -407,7 +389,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 		String strCout = "(" + arrDataNote.size() + ")";
 		textViewheaderTitle.setText("");
 		sortType = SORTTYPE_NEW.ALPHABET;
-		updateGridView();
 		updatePintrestView();
 
 	}
@@ -1166,8 +1147,6 @@ public class NewFolderMainActivity extends DrawerActivity {
 		SideMenuitems item1 = arrDataNote.get(pos);
 		item1.setColours(coloString);
 		adapter.notifyDataSetChanged();
-		gridAdapter.notifyDataSetChanged();
-
 	}
 	void filterWithSearchString(String filterString)
 	{

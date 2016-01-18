@@ -60,9 +60,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.lassana.recorder.AudioRecorderBuilder;
-import com.tilak.adpters.NotesListAdapter;
-import com.tilak.adpters.TextFont_Size_ChooseAdapter;
-import com.tilak.datamodels.NoteListDataModel;
 import com.tilak.db.Note;
 import com.tilak.db.NoteElement;
 
@@ -103,9 +100,7 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public LinearLayout layOutDrawingView, textNoteControls, bottommenue,
             layout_note_more_Info, layout_audio_notechooser, audioElement;
     public TextView textViewAdd, textViewDuration;
-    public ArrayList<NoteListDataModel> arrNoteListData;
     public ListView listviewNotes;
-    public NotesListAdapter adapter;
     public DrawingView drawView;
     public Dialog dialogColor;
     public Dialog move;
@@ -125,7 +120,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
     public boolean isMoreShown = false;
     public boolean isTextmodeSelected = false;
     public boolean isDeleteModeSelected = false;
-    public TextFont_Size_ChooseAdapter TextFont_sizeAdapter;
     public String[] fonts_sizeName, fonts_Name_Display, arrStrings;
     public String[] fontSizes;
     public String[] editortext = new String[1];
@@ -272,7 +266,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
 
 	/* Default Initlization */
         currentFontSize = 8;
-        currentFontTypeface = NoteShareFonts.arial;
         currentFontColor = Color.BLACK;
 
         bottommenue = (LinearLayout) findViewById(R.id.bottommenue);
@@ -1376,7 +1369,6 @@ public class NoteMainActivity extends DrawerActivity implements OnClickListener 
                 // startActivity(new
                 // Intent(getApplicationContext(),TextChooserActivity.class));
 
-                // updatenoteList(NOTETYPE.TEXTMODE);
                 // listviewNotes.setScrollContainer(true);
                 //LayoutTextWritingView.setVisibility(View.VISIBLE);
                 //isTextmodeSelected = true;
