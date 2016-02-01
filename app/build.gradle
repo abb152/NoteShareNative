@@ -6,7 +6,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.tilak.noteshare"
+        applicationId "com.noteshareapp.noteshare"
         minSdkVersion 17
         targetSdkVersion 22
         //multiDexEnabled true
@@ -47,5 +47,4 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'com.google.android.gms:play-services:8.1.0'
     //compile 'com.android.support:multidex:1.0.1'
-
 }

@@ -58,7 +58,7 @@
             android:src="@drawable/save_canvas" />
     </LinearLayout>
 
-    <com.tilak.noteshare.DrawingView
+    <com.noteshareapp.noteshare.DrawingView
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
