@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.noteshareapp.noteshare.R;
+import com.tilak.noteshare.R;
 
 import java.util.List;
 
