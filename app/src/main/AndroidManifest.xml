@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tilak.noteshare"
+    package="com.noteshareapp.noteshare"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -27,7 +27,7 @@
     <uses-permission android:name="com.tilak.noteshare.permission.C2D_MESSAGE" />
 
     <permission
-        android:name="com.tilak.noteshare.permission.C2D_MESSAGE"
+        android:name="com.noteshareapp.noteshare.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <application
@@ -52,7 +52,7 @@
             android:value="com.tilak.db" />
 
         <activity
-            android:name=".SplashActivity"
+            android:name="com.noteshareapp.noteshare.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -62,92 +62,92 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.noteshareapp.noteshare.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".DrawerActivity"
+            android:name="com.noteshareapp.noteshare.DrawerActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.noteshareapp.noteshare.LoginActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name="com.noteshareapp.noteshare.RegistrationActivity"
             android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".UserProfileActivity"
+            android:name="com.noteshareapp.noteshare.UserProfileActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".NoteMainActivity"
+            android:name="com.noteshareapp.noteshare.NoteMainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".CheckListActivity"
+            android:name="com.noteshareapp.noteshare.CheckListActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".SettingActivity"
+            android:name="com.noteshareapp.noteshare.SettingActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".InviteFriendsActivity"
+            android:name="com.noteshareapp.noteshare.InviteFriendsActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".SendFeedbackActivity"
+            android:name="com.noteshareapp.noteshare.SendFeedbackActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".RateUsActivity"
+            android:name="com.noteshareapp.noteshare.RateUsActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".NotificationCenterActivity"
+            android:name="com.noteshareapp.noteshare.NotificationCenterActivity"
             android:exported="true"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".TermsAndConditionsActivity"
+            android:name="com.noteshareapp.noteshare.TermsAndConditionsActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".AboutNoteShareActivity"
+            android:name="com.noteshareapp.noteshare.AboutNoteShareActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".FolderActivity"
+            android:name="com.noteshareapp.noteshare.FolderActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ImageChooserActivity"
+            android:name="com.noteshareapp.noteshare.ImageChooserActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".DrawingActivity"
+            android:name="com.noteshareapp.noteshare.DrawingActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".NewFolderMainActivity"
+            android:name="com.noteshareapp.noteshare.NewFolderMainActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".InteroductionActivity"
+            android:name="com.noteshareapp.noteshare.InteroductionActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".PasscodeActivity"
+            android:name="com.noteshareapp.noteshare.PasscodeActivity"
             android:label="@string/title_activity_passcode"
             android:screenOrientation="portrait" >
         </activity>
         <!-- <activity android:name="com.soundcloud.android.crop.CropImageActivity" /> -->
         <activity
-            android:name=".CameraActivity"
+            android:name="com.noteshareapp.noteshare.CameraActivity"
             android:label="@string/title_activity_camera"
             android:screenOrientation="portrait" >
         </activity>
@@ -165,7 +165,7 @@
             android:value="@integer/google_play_services_version" />
 
         <receiver
-            android:name=".GcmBroadcastReceiver"
+            android:name="com.noteshareapp.noteshare.GcmBroadcastReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -176,7 +176,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".GcmIntentService" />
+        <service android:name="com.noteshareapp.noteshare.GcmIntentService" />
 
     </application>
 
