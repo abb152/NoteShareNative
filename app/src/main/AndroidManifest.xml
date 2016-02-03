@@ -24,7 +24,7 @@
 
     <!-- <uses-permission android:name="com.tilak.noteshare.permission.permission.RECEIVE" /> -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.tilak.noteshare.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.noteshareapp.noteshare.permission.C2D_MESSAGE" />
 
     <permission
         android:name="com.noteshareapp.noteshare.permission.C2D_MESSAGE"
@@ -49,7 +49,7 @@
             android:value="true" />
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="com.tilak.db" />
+            android:value="com.noteshareapp.db" />
 
         <activity
             android:name="com.noteshareapp.noteshare.SplashActivity"
@@ -172,7 +172,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.tilak.noteshare" />
+                <category android:name="com.noteshareapp.noteshare" />
             </intent-filter>
         </receiver>
 
