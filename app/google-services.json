@@ -1,25 +1,33 @@
 {
   "project_info": {
-    "project_id": "noteshare-1121",
-    "project_number": "54026670441",
-    "name": "NoteShare"
+    "project_id": "noteshare-1202",
+    "project_number": "529631001533",
+    "name": "Noteshare"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:54026670441:android:36f3444e7a5de3ea",
-        "client_id": "android:com.tilak.noteshare",
+        "mobilesdk_app_id": "1:529631001533:android:519a2aa4a75f1341",
+        "client_id": "android:com.noteshareapp.noteshare",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.tilak.noteshare"
+          "package_name": "com.noteshareapp.noteshare"
         }
       },
       "oauth_client": [
         {
-          "client_id": "54026670441-5r16d21al29tiq1h0ig534k460bb9ffs.apps.googleusercontent.com",
+          "client_id": "529631001533-nlcl13d32ost2k0cf3elnbm0f74dq5ir.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.tilak.noteshare",
+            "package_name": "com.noteshareapp.noteshare",
+            "certificate_hash": "0F7E74DA73D618EB57032F97AFDDD6A844A13AB6"
+          }
+        },
+        {
+          "client_id": "529631001533-1tl2strksulkrvm13kchqdvi8tamnrva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noteshareapp.noteshare",
             "certificate_hash": "9B04D6C07CCACED2EAC4F4C95581B7F490DA5504"
           }
         }

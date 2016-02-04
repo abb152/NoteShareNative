@@ -56,9 +56,7 @@ import java.util.List;
 import java.util.Random;
 
 public class NoteFunctions {
-    //MainActivity mainActivity = new MainActivity();
-    //public static String SERVER_URL = "http://104.197.122.116/";
-    //public static String SERVER_URL = "http://192.168.0.125:1337/";
+
     // LOCK / PASS CODE
     public void setPasscode(Context context, String id) {
         Note n = Note.findById(Note.class, Long.parseLong(id));
@@ -720,7 +718,7 @@ public class NoteFunctions {
                         +"\n\n-via NoteShare";*/
 
                 String shareMessage = RegularFunctions.getUserName() + " has shared \'" + RegularFunctions.getNoteName(id) + "\' note with you.\n\n"
-                        + "http://104.197.47.172/note/get#/app/note/" + RegularFunctions.getServerNoteId(id)
+                        + RegularFunctions.SERVER_URL + "/view/" + RegularFunctions.getServerNoteId(id)
                         + "\n\n-via NoteShare";
 
                 /*Log.e("jay", shareMessage);

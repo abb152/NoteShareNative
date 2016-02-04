@@ -46,8 +46,8 @@ public class RegularFunctions {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
-    public static String SERVER_URL = "http://104.197.47.172/";
-    //public static String SERVER_URL = "http://192.168.0.122:1337/";
+    public static String SERVER_URL = "http://api.noteshareapp.com/";
+    //public static String SERVER_URL = "http://192.168.0.126:1337/";
 
     public static  String PREFERENCES = "NotesharePreferences";
 
@@ -297,7 +297,7 @@ public class RegularFunctions {
         Runtime runtime = Runtime.getRuntime();
         try {
 
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 104.197.47.172");
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 104.154.85.233");
             int     exitValue = ipProcess.waitFor();
             return (exitValue == 0);
 

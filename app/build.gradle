@@ -46,6 +46,7 @@ dependencies {
     compile 'com.github.lassana:continuous-audiorecorder:1.1.0'
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'com.google.android.gms:play-services:8.1.0'
+    //compile 'com.google.android.gms:play-services-auth:8.1.0'
     //compile 'com.android.support:multidex:1.0.1'
 
 }

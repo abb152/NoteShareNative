@@ -205,7 +205,7 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 				}
 				break;
 				case 4:{
-					Uri uri = Uri.parse("market://details?id=" + "com.wohlig.stakes");
+					Uri uri = Uri.parse("market://details?id=" + "com.noteshareapp.noteshare");
 					Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 					// To count with Play market backstack, After pressing back button,
 					// to taken back to our application, we need to add following flags to intent.
@@ -213,12 +213,12 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 					try {
 						startActivity(goToMarket);
 					} catch (ActivityNotFoundException e) {
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.wohlig.stakes")));
+						//startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.wohlig.stakes")));
 					}
 				}
 				break;
 				case 5:{
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/wohlig/")));
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/")));
 					//finish();
 				}
 				break;
@@ -233,7 +233,6 @@ public class DrawerActivity extends Activity implements MenuOpenInterface {
 						@Override
 						public void run() {
 							System.out.println("invite friends");
-							Uri uri = Uri.parse("android.resource://com.tilak.noteshare/drawable/ic_launcher");
 							Intent share = new Intent(Intent.ACTION_SEND);
 							//share.setType("image/*");
 							share.setType("text/plain");
